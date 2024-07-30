@@ -311,3 +311,11 @@
       isArray: false
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.CombustionEngine.BoostPressureActual
+  goType: ""
+  conversions:
+    - originalName: boostPressureActual
+      originalType: float64
+      isArray: false
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
