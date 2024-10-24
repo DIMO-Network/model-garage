@@ -188,6 +188,20 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 			sig.SetValue(val0)
 			ret = append(ret, sig)
 		}
+	case "dcConveterRequestedVoltage":
+		val0, err := PowertrainTractionBatteryChargingChargeVoltageDCFromV2Data(originalDoc, valResult)
+		if err != nil {
+			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'dcConveterRequestedVoltage': %w", err))
+		} else {
+			sig := vss.Signal{
+				TokenID:   baseSignal.TokenID,
+				Timestamp: baseSignal.Timestamp,
+				Source:    baseSignal.Source,
+				Name:      "powertrainTractionBatteryChargingChargeVoltageDC",
+			}
+			sig.SetValue(val0)
+			ret = append(ret, sig)
+		}
 	case "distanceSinceDtcClear":
 		val0, err := OBDDistanceSinceDTCClearFromV2Data(originalDoc, valResult)
 		if err != nil {
@@ -425,6 +439,20 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 			sig.SetValue(val0)
 			ret = append(ret, sig)
 		}
+	case "hvBatteryVoltage":
+		val0, err := PowertrainTractionBatteryCurrentVoltageFromV2Data(originalDoc, valResult)
+		if err != nil {
+			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'hvBatteryVoltage': %w", err))
+		} else {
+			sig := vss.Signal{
+				TokenID:   baseSignal.TokenID,
+				Timestamp: baseSignal.Timestamp,
+				Source:    baseSignal.Source,
+				Name:      "powertrainTractionBatteryCurrentVoltage",
+			}
+			sig.SetValue(val0)
+			ret = append(ret, sig)
+		}
 	case "intakePressure":
 		val0, err := OBDMAPFromV2Data(originalDoc, valResult)
 		if err != nil {
@@ -658,6 +686,20 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 				Timestamp: baseSignal.Timestamp,
 				Source:    baseSignal.Source,
 				Name:      "obdRunTime",
+			}
+			sig.SetValue(val0)
+			ret = append(ret, sig)
+		}
+	case "serviceInterval":
+		val0, err := ServiceDistanceToServiceFromV2Data(originalDoc, valResult)
+		if err != nil {
+			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'serviceInterval': %w", err))
+		} else {
+			sig := vss.Signal{
+				TokenID:   baseSignal.TokenID,
+				Timestamp: baseSignal.Timestamp,
+				Source:    baseSignal.Source,
+				Name:      "serviceDistanceToService",
 			}
 			sig.SetValue(val0)
 			ret = append(ret, sig)
@@ -1782,6 +1824,23 @@ func PowertrainTractionBatteryChargingChargeLimitFromV2Data(originalDoc []byte, 
 	return ret, errs
 }
 
+// PowertrainTractionBatteryChargingChargeVoltageDCFromData converts the given JSON data to a float64.
+func PowertrainTractionBatteryChargingChargeVoltageDCFromV2Data(originalDoc []byte, result gjson.Result) (ret float64, err error) {
+	var errs error
+	val0, ok := result.Value().(float64)
+	if ok {
+		ret, err = ToPowertrainTractionBatteryChargingChargeVoltageDC0(originalDoc, val0)
+		if err == nil {
+			return ret, nil
+		}
+		errs = errors.Join(errs, fmt.Errorf("failed to convert 'dcConveterRequestedVoltage': %w", err))
+	} else {
+		errs = errors.Join(errs, fmt.Errorf("%w, field 'dcConveterRequestedVoltage' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+	}
+
+	return ret, errs
+}
+
 // PowertrainTractionBatteryChargingIsChargingFromData converts the given JSON data to a float64.
 func PowertrainTractionBatteryChargingIsChargingFromV2Data(originalDoc []byte, result gjson.Result) (ret float64, err error) {
 	var errs error
@@ -1811,6 +1870,23 @@ func PowertrainTractionBatteryCurrentPowerFromV2Data(originalDoc []byte, result 
 		errs = errors.Join(errs, fmt.Errorf("failed to convert 'charger.power': %w", err))
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'charger.power' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+	}
+
+	return ret, errs
+}
+
+// PowertrainTractionBatteryCurrentVoltageFromData converts the given JSON data to a float64.
+func PowertrainTractionBatteryCurrentVoltageFromV2Data(originalDoc []byte, result gjson.Result) (ret float64, err error) {
+	var errs error
+	val0, ok := result.Value().(float64)
+	if ok {
+		ret, err = ToPowertrainTractionBatteryCurrentVoltage0(originalDoc, val0)
+		if err == nil {
+			return ret, nil
+		}
+		errs = errors.Join(errs, fmt.Errorf("failed to convert 'hvBatteryVoltage': %w", err))
+	} else {
+		errs = errors.Join(errs, fmt.Errorf("%w, field 'hvBatteryVoltage' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
 
 	return ret, errs
@@ -1930,6 +2006,23 @@ func PowertrainTypeFromV2Data(originalDoc []byte, result gjson.Result) (ret stri
 		errs = errors.Join(errs, fmt.Errorf("failed to convert 'fuelType': %w", err))
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'fuelType' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+	}
+
+	return ret, errs
+}
+
+// ServiceDistanceToServiceFromData converts the given JSON data to a float64.
+func ServiceDistanceToServiceFromV2Data(originalDoc []byte, result gjson.Result) (ret float64, err error) {
+	var errs error
+	val0, ok := result.Value().(float64)
+	if ok {
+		ret, err = ToServiceDistanceToService0(originalDoc, val0)
+		if err == nil {
+			return ret, nil
+		}
+		errs = errors.Join(errs, fmt.Errorf("failed to convert 'serviceInterval': %w", err))
+	} else {
+		errs = errors.Join(errs, fmt.Errorf("%w, field 'serviceInterval' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
 
 	return ret, errs

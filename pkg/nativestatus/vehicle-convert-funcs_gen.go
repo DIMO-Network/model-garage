@@ -410,6 +410,13 @@ func ToPowertrainTractionBatteryChargingChargeLimit0(originalDoc []byte, val flo
 	return val * 100, nil
 }
 
+// ToPowertrainTractionBatteryChargingChargeVoltageDC0 converts data from field 'dcConveterRequestedVoltage' of type float64 to 'Vehicle.Powertrain.TractionBattery.Charging.ChargeVoltage.DC' of type float64.
+// Vehicle.Powertrain.TractionBattery.Charging.ChargeVoltage.DC: Current DC charging voltage at charging inlet.
+// Unit: 'V'
+func ToPowertrainTractionBatteryChargingChargeVoltageDC0(originalDoc []byte, val float64) (float64, error) {
+	return val, nil
+}
+
 // ToPowertrainTractionBatteryChargingIsCharging0 converts data from field 'charging' of type bool to 'Vehicle.Powertrain.TractionBattery.Charging.IsCharging' of type float64.
 // Vehicle.Powertrain.TractionBattery.Charging.IsCharging: True if charging is ongoing. Charging is considered to be ongoing if energy is flowing from charger to vehicle.
 func ToPowertrainTractionBatteryChargingIsCharging0(originalDoc []byte, val bool) (float64, error) {
@@ -425,6 +432,13 @@ func ToPowertrainTractionBatteryChargingIsCharging0(originalDoc []byte, val bool
 func ToPowertrainTractionBatteryCurrentPower0(originalDoc []byte, val float64) (float64, error) {
 	// V1 field is in kilowatts (kW), VSS field is in watts (W).
 	return 1000 * val, nil
+}
+
+// ToPowertrainTractionBatteryCurrentVoltage0 converts data from field 'hvBatteryVoltage' of type float64 to 'Vehicle.Powertrain.TractionBattery.CurrentVoltage' of type float64.
+// Vehicle.Powertrain.TractionBattery.CurrentVoltage: Current Voltage of the battery.
+// Unit: 'V'
+func ToPowertrainTractionBatteryCurrentVoltage0(originalDoc []byte, val float64) (float64, error) {
+	return val, nil
 }
 
 // ToPowertrainTractionBatteryGrossCapacity0 converts data from field 'batteryCapacity' of type float64 to 'Vehicle.Powertrain.TractionBattery.GrossCapacity' of type float64.
@@ -488,6 +502,13 @@ func ToPowertrainType0(originalDoc []byte, val string) (string, error) {
 		return "ELECTRIC", nil
 	}
 	return "COMBUSTION", nil
+}
+
+// ToServiceDistanceToService0 converts data from field 'serviceInterval' of type float64 to 'Vehicle.Service.DistanceToService' of type float64.
+// Vehicle.Service.DistanceToService: Remaining distance to service (of any kind). Negative values indicate service overdue.
+// Unit: 'km'
+func ToServiceDistanceToService0(originalDoc []byte, val float64) (float64, error) {
+	return val, nil
 }
 
 // ToSpeed0 converts data from field 'vehicleSpeed' of type float64 to 'Vehicle.Speed' of type float64.

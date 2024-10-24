@@ -421,3 +421,24 @@
      isArray: false
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Service.DistanceToService
+  conversions: 
+   - originalName: serviceInterval
+     originalType: float64
+     isArray: false
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.CurrentVoltage
+  conversions: 
+   - originalName: hvBatteryVoltage 
+     originalType: float64
+     isArray: false
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.ChargeVoltage.DC
+  conversions: 
+   - originalName: dcConveterRequestedVoltage
+     originalType: float64
+     isArray: false
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
