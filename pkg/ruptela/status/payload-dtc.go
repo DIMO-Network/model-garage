@@ -36,7 +36,7 @@ func SignalsFromDTCPayload(jsonData []byte) ([]vss.Signal, error) {
 		TokenID:   tokenID,
 		Timestamp: ts,
 		Source:    source,
-		Name:      "obdDTCList",
+		Name:      vss.FieldOBDDTCList,
 	}
 	dtcSignal.SetValue(dtcValue)
 

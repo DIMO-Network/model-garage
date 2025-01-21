@@ -42,6 +42,8 @@ const (
 	FieldOBDCommandedEGR = "obdCommandedEGR"
 	// FieldOBDCommandedEVAP PID 2E - Commanded evaporative purge (EVAP) valve
 	FieldOBDCommandedEVAP = "obdCommandedEVAP"
+	// FieldOBDDTCList List of currently active DTCs formatted according OBD II (SAE-J2012DA_201812) standard ([P|C|B|U]XXXXX )
+	FieldOBDDTCList = "obdDTCList"
 	// FieldOBDDistanceSinceDTCClear PID 31 - Distance traveled since codes cleared
 	FieldOBDDistanceSinceDTCClear = "obdDistanceSinceDTCClear"
 	// FieldOBDDistanceWithMIL PID 21 - Distance traveled with MIL on

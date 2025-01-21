@@ -137,6 +137,9 @@
 - vspecName: Vehicle.OBD.WarmupsSinceDTCClear
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.DTCList
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.AngularVelocity.Yaw
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
@@ -154,19 +157,19 @@
     - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.Transmission.CurrentGear
   requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA 
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.OBD.FuelPressure
   requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA 
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.Transmission.Temperature
   requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA 
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.OBD.O2WR.Sensor1.Voltage
   requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA 
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.OBD.O2WR.Sensor2.Voltage
   requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA 
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.OBD.CommandedEVAP
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
