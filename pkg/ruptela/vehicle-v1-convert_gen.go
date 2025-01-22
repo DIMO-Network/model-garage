@@ -197,6 +197,22 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 		retSignals = append(retSignals, sig)
 	}
 
+	val, err = OBDDTCListFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDDTCList': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdDTCList",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = OBDDistanceWithMILFromV1Data(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -725,6 +741,40 @@ func LowVoltageBatteryCurrentVoltageFromV1Data(jsonData []byte) (ret float64, er
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'LowVoltageBatteryCurrentVoltage'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDDTCListFromV1Data converts the given JSON data to a string.
+func OBDDTCListFromV1Data(jsonData []byte) (ret string, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "data.dtc_codes")
+	if result.Exists() && result.Value() != nil {
+		if result.IsArray() {
+			sliceOBDDTCList := make([]any, len(result.Array()))
+			for i, res := range result.Array() {
+				v, ok := res.Value().(any)
+				if ok {
+					sliceOBDDTCList[i] = v
+				} else {
+					errs = errors.Join(errs, fmt.Errorf("%w, field 'data.dtc_codes' array element %d is not of type 'any' got '%v' of type '%T'", convert.InvalidTypeError(), i, res.Value(), res.Value()))
+				}
+			}
+			retVal, err := ToOBDDTCList0(jsonData, sliceOBDDTCList)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert ': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.dtc_codes' is not an array", convert.InvalidTypeError()))
+		}
+
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDDTCList'", errNotFound)
 	}
 
 	return ret, errs

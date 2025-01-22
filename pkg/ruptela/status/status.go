@@ -27,6 +27,8 @@ func DecodeStatusSignals(msgBytes []byte) ([]vss.Signal, error) {
 		signals, err = SignalsFromV1Payload(msgBytes)
 	case ruptela.LocationEventDS:
 		signals, err = SignalsFromLocationPayload(msgBytes)
+	case ruptela.DTCEventDS:
+		signals, err = SignalsFromDTCPayload(msgBytes)
 	default:
 		return nil, fmt.Errorf("unknown data version: %s", event.DataVersion)
 	}

@@ -9,6 +9,8 @@ const (
 	DevStatusDS = "r/v0/dev"
 	// LocationEventDS is the data version for location events.
 	LocationEventDS = "r/v0/loc"
+	// DTCEventDS is the data version for DTC events.
+	DTCEventDS = "r/v0/dtc"
 )
 
 // fuelTypeConversion Encodings taken from https://en.wikipedia.org/wiki/OBD-II_PIDs#Fuel_Type_Coding

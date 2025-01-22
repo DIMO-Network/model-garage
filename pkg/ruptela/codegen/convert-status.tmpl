@@ -57,13 +57,13 @@ func {{ $sig.GOName }}FromV1Data(jsonData []byte) (ret {{ $sig.GOType }}, err er
 					errs = errors.Join(errs, fmt.Errorf("%w, field 'data.{{ $conv.OriginalName }}' array element %d is not of type '{{ $conv.OriginalType }}' got '%v' of type '%T'",  convert.InvalidTypeError(), i, res.Value(), res.Value()))
 				}
 			}
-			retVal, err = To{{ $sig.GOName }}{{ $j }}(jsonData, slice{{ $sig.GOName}})
+			retVal, err := To{{ $sig.GOName }}{{ $j }}(jsonData, slice{{ $sig.GOName}})
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.{{ $sig.Conversion.OriginalName }}': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert ': %w", err))
 		} else {
-			errs = errros.Join(errs, fmt.Errorf("%w, field 'data.{{ $conv.OriginalName }}' is not an array", convert.InvalidTypeError()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.{{ $conv.OriginalName }}' is not an array", convert.InvalidTypeError()))
 		}
 		{{ else -}}
         val, ok := result.Value().({{ $conv.OriginalType }})
@@ -79,7 +79,7 @@ func {{ $sig.GOName }}FromV1Data(jsonData []byte) (ret {{ $sig.GOType }}, err er
 		{{- end }}
     }
 	{{- end }}
-	
+
 	if errs == nil {
 		return ret, fmt.Errorf("%w '{{ $sig.GOName }}'", errNotFound)
 	}

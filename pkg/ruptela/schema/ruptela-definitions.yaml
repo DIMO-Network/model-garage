@@ -140,10 +140,10 @@
       originalType: float64
 
 - vspecName: Vehicle.OBD.DistanceWithMIL
-  conversions: 
+  conversions:
     - originalName: "signals.102" # OBD distance traveled while MIL is activated
       originalType: string
-    
+
 - vspecName: Vehicle.LowVoltageBattery.CurrentVoltage
   conversions:
     - originalName: "signals.29"
@@ -167,6 +167,12 @@
   conversions:
     - originalName: "signals.1150" # OBD AdBlue level
       originalType: string
+
+- vspecName: Vehicle.OBD.DTCList
+  conversions:
+    - originalName: "dtc_codes" # OBD DTC List
+      originalType: any
+      isArray: true
 
 # TODO we only get batteryCapacity in percent SOH
 # - vspecName: Vehicle.Powertrain.TractionBattery.GrossCapacity
@@ -267,7 +273,7 @@
 
 #  # TODO haven't found a good value for this
 # - vspecName: Vehicle.OBD.LongTermFuelTrim1
-#   conversions: 
+#   conversions:
 #     - originalName: "Unknown"
 #       originalType: string
 #   requiredPrivileges:
@@ -276,7 +282,7 @@
 
 # # TODO haven't found a good value for this
 # - vspecName: Vehicle.OBD.ShortTermFuelTrim1
-#   conversions: 
+#   conversions:
 #     - originalName: "Unknown"
 #       originalType: string
 #   requiredPrivileges:
@@ -284,7 +290,7 @@
 
 # # TODO haven't found a good value for this
 # - vspecName: Vehicle.OBD.DistanceSinceDTCClear
-#   conversions: 
+#   conversions:
 #     - originalName: "Unknown"
 #       originalType: string
 #   requiredPrivileges:
@@ -292,7 +298,7 @@
 
 # # TODO haven't found a good value for this
 # - vspecName: Vehicle.OBD.CommandedEGR
-#   conversions: 
+#   conversions:
 #     - originalName: "Unknown"
 #       originalType: string
 #   requiredPrivileges:
@@ -300,7 +306,7 @@
 
 # # TODO haven't found a good value for this
 # - vspecName: Vehicle.OBD.WarmupsSinceDTCClear
-#   conversions: 
+#   conversions:
 #     - originalName: "Unknown"
 #       originalType: string
 #   requiredPrivileges:
