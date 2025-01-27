@@ -1,0 +1,78 @@
+# This file defines mappings from Tesla /vehicle_data responses to VSS. See
+# https://developer.tesla.com/docs/fleet-api/endpoints/vehicle-endpoints#vehicle-data
+
+- vspecName: Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure
+  conversions:
+    - originalName: TpmsPressureFl # In bars
+      originalType: "*Value_StringValue"
+- vspecName: Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
+  conversions:
+    - originalName: TpmsPressureFr # In bars
+      originalType: "*Value_StringValue"
+- vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure
+  conversions:
+    - originalName: TpmsPressureRl # In bars
+      originalType: "*Value_StringValue"
+- vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
+  conversions:
+    - originalName: "TpmsPressureRr" # In bars
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.CurrentLocation.Latitude
+  conversions:
+    - originalName: Location
+      originalType: "*Value_LocationValue"
+
+- vspecName: Vehicle.CurrentLocation.Longitude
+  conversions:
+    - originalName: Location
+      originalType: "*Value_LocationValue"
+
+- vspecName: Vehicle.Exterior.AirTemperature
+  conversions:
+    - originalName: OutsideTemp # I believe this is in Celsius.
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.Powertrain.Range
+  conversions:
+    - originalName: EstBatteryRange # In miles
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
+  conversions:
+    - originalName: ACChargingEnergyIn # In kilowatt-hours.
+      originalType: "*Value_StringValue"
+    - originalName: DCChargingEnergyIn # In kilowatt-hours.
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit
+  conversions:
+    - originalName: ChargeLimitSoc # In percent
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.IsCharging
+  conversions:
+    - originalName: ChargeState # Observed values: "Disconnected", "NoPower", "Starting", "Charging", "Complete", "Stopped"
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.Powertrain.TractionBattery.CurrentPower
+  conversions:
+    - originalName: ACChargingPower
+      originalType: "*Value_StringValue"
+    - originalName: DCChargingPower
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.Powertrain.TractionBattery.StateOfCharge.Current
+  conversions:
+    - originalName: Soc # In percent
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.Powertrain.Transmission.TravelledDistance
+  conversions:
+    - originalName: Odometer # In miles.
+      originalType: "*Value_StringValue"
+
+- vspecName: Vehicle.Speed
+  conversions:
+    - originalName: VehicleSpeed # In miles per hour.
+      originalType: "*Value_StringValue"

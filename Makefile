@@ -95,3 +95,7 @@ generate-autopi: # Generate all files for autopi
 generate-tesla: # Generate all files for tesla
 	go run ./cmd/codegen -convert.package=tesla -generators=convert -convert.output-file=./pkg/tesla/vehicle-convert-funcs_gen.go -definitions=./pkg/tesla/schema/tesla-definitions.yaml
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/tesla/tesla-convert_gen.go -custom.template-file=./pkg/tesla/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/tesla/schema/tesla-definitions.yaml
+
+generate-teslatelem: # Generate all files for tesla
+	go run ./cmd/codegen -convert.package=teslatelem -generators=convert -convert.output-file=./pkg/teslatelem/vehicle-convert-funcs_gen.go -definitions=./pkg/teslatelem/schema/tesla-definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/teslatelem/tesla-convert_gen.go -custom.template-file=./pkg/teslatelem/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/teslatelem/schema/tesla-definitions.yaml
