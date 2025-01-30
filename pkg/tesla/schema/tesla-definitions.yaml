@@ -5,78 +5,56 @@
   conversions:
     - originalName: "vehicle_state.tpms_pressure_fl" # In bars
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
   conversions:
     - originalName: "vehicle_state.tpms_pressure_fr" # In bars
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure
   conversions:
     - originalName: "vehicle_state.tpms_pressure_rl" # In bars
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
   conversions:
     - originalName: "vehicle_state.tpms_pressure_rr" # In bars
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.CurrentLocation.Latitude
   conversions:
     - originalName: drive_state.latitude
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
 
 - vspecName: Vehicle.CurrentLocation.Longitude
   conversions:
     - originalName: drive_state.longitude
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
 
 - vspecName: Vehicle.Exterior.AirTemperature
   conversions:
     - originalName: "climate_state.outside_temp" # I believe this is in Celsius.
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Powertrain.Range
   conversions:
     - originalName: "charge_state.battery_range" # In miles
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
   conversions:
     - originalName: "charge_state.charge_energy_added" # In kilowatt-hours.
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit
   conversions:
     - originalName: "charge_state.charge_limit_soc" # In percent
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Powertrain.TractionBattery.Charging.IsCharging
   conversions:
     - originalName: "charge_state.charging_state" # Observed values: "Disconnected", "NoPower", "Starting", "Charging", "Complete", "Stopped"
       originalType: "string"
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Powertrain.TractionBattery.CurrentPower
   conversions:
@@ -84,26 +62,18 @@
                                         # It's negative when charging, positive when expending energy driving. Note that because of regenerative braking
                                         # this may be negative even while driving.
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Powertrain.TractionBattery.StateOfCharge.Current
   conversions:
     - originalName: "charge_state.battery_level" # In percent
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Powertrain.Transmission.TravelledDistance
   conversions:
     - originalName: "vehicle_state.odometer" # In miles.
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Speed
   conversions:
     - originalName: drive_state.speed # In miles per hour.
       originalType: float64
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
