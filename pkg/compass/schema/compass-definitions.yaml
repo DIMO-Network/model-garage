@@ -1,0 +1,5 @@
+# This file contains the mapping of the vehicle to the VSpecs for the Compass-iot
+- vspecName: Vehicle.Powertrain.Transmission.TravelledDistance
+  conversions:
+    - originalName: "labels.odometer.value" # OBD Odometer, Km
+      originalType: string
