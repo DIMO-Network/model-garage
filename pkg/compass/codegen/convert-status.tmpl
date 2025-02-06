@@ -3,9 +3,9 @@ package compass
 
 var errNotFound = errors.New("field not found")
 
-// SignalsFromV1Data creates a slice of vss.Signal from the given v1 status JSON data.
+// SignalsFromCompass creates a slice of vss.Signal from the given v1 status JSON data.
 // On error, partial results may be returned.
-func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []error) {
+func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []error) {
 	var retSignals []vss.Signal
 {{ $first := true -}}
 {{- $root := . }}
@@ -17,7 +17,7 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 	var errs []error
 	{{ $first = false }} {{ end }}
 
-	val, err = {{ $sig.GOName }}FromV1Data(jsonData)
+	val, err = {{ $sig.GOName }}FromCompass(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
 			errs = append(errs, fmt.Errorf("failed to get '{{ $sig.GOName }}': %w", err))
@@ -38,13 +38,19 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 
 
 {{- range $i, $sig := .Signals }}
-// {{ $sig.GOName }}FromV1Data converts the given JSON data to a {{ $sig.GOType }}.
-func {{ $sig.GOName }}FromV1Data(jsonData []byte) (ret {{ $sig.GOType }}, err error) {
+// {{ $sig.GOName }}FromCompass converts the given JSON data to a {{ $sig.GOType }}.
+func {{ $sig.GOName }}FromCompass(jsonData []byte) (ret {{ $sig.GOType }}, err error) {
     var errs error
     var result gjson.Result
 
 	{{- range $j, $conv := .Conversions }}
-    result = gjson.GetBytes(jsonData, "data.{{ $conv.OriginalName }}")
+    orName := "{{ $conv.OriginalName }}"
+    if strings.HasPrefix(orName, "labels") {
+   		labels := gjson.GetBytes(jsonData, "data.labels")
+   		result = labels.Get(gjson.Escape(orName[len("labels."):]))
+   	} else {
+   		result = gjson.GetBytes(jsonData, "data."+ orName)
+   	}
     if result.Exists() && result.Value() != nil {
 		{{ if $conv.IsArray -}}
 		if result.IsArray() {

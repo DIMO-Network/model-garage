@@ -32,7 +32,7 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 		Source:  source,
 	}
 
-	sigs, errs := compass.SignalsFromV1Data(baseSignal, msgBytes)
+	sigs, errs := compass.SignalsFromCompass(baseSignal, msgBytes)
 	if len(errs) != 0 {
 		return nil, convert.ConversionError{
 			TokenID:        tokenID,
