@@ -73,7 +73,7 @@ tools: tools-golangci-lint
 clickhouse:
 	go run ./cmd/clickhouse-container
 
-generate: generate-nativestatus generate-ruptela generate-tesla # Generate all files for the repository
+generate: generate-nativestatus generate-ruptela generate-tesla generate-compass # Generate all files for the repository
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/vss/vehicle-structs.go -custom.template-file=./internal/generator/vehicle.tmpl -custom.format=true
 
 generate-nativestatus: # Generate all files for nativestatus
