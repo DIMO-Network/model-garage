@@ -12,7 +12,7 @@ import (
 var baseDoc = []byte(`
 {
    "subject":"did:nft:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_37",
-   "source":"0x983110309620D911731Ac0932219af06091b6744",
+   "source":"0x55BF1c27d468314Ea119CF74979E2b59F962295c",
    "time": "2024-09-27T08:33:26Z",
    "data":{
       "id":"Ktd6b9VETWCtWr07joo74Q==",
@@ -99,24 +99,13 @@ var baseDoc = []byte(`
 }
 `)
 
-// TODO change this to the correct connection once available
-const compassConnection = "0x983110309620D911731Ac0932219af06091b6744"
+const compassConnection = "0x55BF1c27d468314Ea119CF74979E2b59F962295c"
 
 var ts = time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC)
 var expSignals = []vss.Signal{
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728805000), Name: "chassisAxleRow1WheelLeftTirePressure", ValueNumber: 312, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728805000), Name: "chassisAxleRow1WheelRightTirePressure", ValueNumber: 309, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728805000), Name: "chassisAxleRow2WheelLeftTirePressure", ValueNumber: 298, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728805000), Name: "chassisAxleRow2WheelRightTirePressure", ValueNumber: 299, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730738800000), Name: "currentLocationLatitude", ValueNumber: 38.89, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730738800000), Name: "currentLocationLongitude", ValueNumber: 77.03, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728802000), Name: "exteriorAirTemperature", ValueNumber: 19, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728800000), Name: "powertrainRange", ValueNumber: 548.7863040000001, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728800000), Name: "powertrainTractionBatteryChargingAddedEnergy", ValueNumber: 42, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728800000), Name: "powertrainTractionBatteryChargingChargeLimit", ValueNumber: 80, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728800000), Name: "powertrainTractionBatteryChargingIsCharging", ValueNumber: 1, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730738800000), Name: "powertrainTractionBatteryCurrentPower", ValueNumber: 7000, Source: compassConnection},
-	//{TokenID: 37, Timestamp: time.UnixMilli(1730728800000), Name: "powertrainTractionBatteryStateOfChargeCurrent", ValueNumber: 23, Source: compassConnection},
+	{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationLatitude, ValueNumber: 34.878016, Source: compassConnection},
+	{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationLongitude, ValueNumber: -82.223566, Source: compassConnection},
+	{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 277.100006, Source: compassConnection},
 	{TokenID: 37, Timestamp: ts, Name: vss.FieldPowertrainTransmissionTravelledDistance, ValueNumber: 20446, Source: compassConnection},
 	{TokenID: 37, Timestamp: ts, Name: vss.FieldSpeed, ValueNumber: 40.2336, Source: compassConnection},
 	{TokenID: 37, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 13, Source: compassConnection}}

@@ -22,6 +22,54 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	var err error
 	var errs []error
 
+	val, err = CurrentLocationAltitudeFromCompass(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'CurrentLocationAltitude': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "currentLocationAltitude",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = CurrentLocationLatitudeFromCompass(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'CurrentLocationLatitude': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "currentLocationLatitude",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = CurrentLocationLongitudeFromCompass(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'CurrentLocationLongitude': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "currentLocationLongitude",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = LowVoltageBatteryCurrentVoltageFromCompass(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -70,6 +118,99 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 		retSignals = append(retSignals, sig)
 	}
 	return retSignals, errs
+}
+
+// CurrentLocationAltitudeFromCompass converts the given JSON data to a float64.
+func CurrentLocationAltitudeFromCompass(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	orName := "labels.geolocation.altitude.value"
+	if strings.HasPrefix(orName, "labels") {
+		labels := gjson.GetBytes(jsonData, "data.labels")
+		result = labels.Get(gjson.Escape(orName[len("labels."):]))
+	} else {
+		result = gjson.GetBytes(jsonData, "data."+orName)
+	}
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToCurrentLocationAltitude0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.geolocation.altitude.value': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.geolocation.altitude.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'CurrentLocationAltitude'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// CurrentLocationLatitudeFromCompass converts the given JSON data to a float64.
+func CurrentLocationLatitudeFromCompass(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	orName := "labels.geolocation.latitude"
+	if strings.HasPrefix(orName, "labels") {
+		labels := gjson.GetBytes(jsonData, "data.labels")
+		result = labels.Get(gjson.Escape(orName[len("labels."):]))
+	} else {
+		result = gjson.GetBytes(jsonData, "data."+orName)
+	}
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToCurrentLocationLatitude0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.geolocation.latitude': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.geolocation.latitude' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'CurrentLocationLatitude'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// CurrentLocationLongitudeFromCompass converts the given JSON data to a float64.
+func CurrentLocationLongitudeFromCompass(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	orName := "labels.geolocation.longitude"
+	if strings.HasPrefix(orName, "labels") {
+		labels := gjson.GetBytes(jsonData, "data.labels")
+		result = labels.Get(gjson.Escape(orName[len("labels."):]))
+	} else {
+		result = gjson.GetBytes(jsonData, "data."+orName)
+	}
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToCurrentLocationLongitude0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.geolocation.longitude': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.geolocation.longitude' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'CurrentLocationLongitude'", errNotFound)
+	}
+
+	return ret, errs
 }
 
 // LowVoltageBatteryCurrentVoltageFromCompass converts the given JSON data to a float64.

@@ -20,3 +20,22 @@
       isArray: false
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+## Location
+- vspecName: Vehicle.CurrentLocation.Altitude
+  conversions:
+    - originalName: labels.geolocation.altitude.value
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION
+- vspecName: Vehicle.CurrentLocation.Latitude
+  conversions:
+    - originalName: labels.geolocation.latitude
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION
+- vspecName: Vehicle.CurrentLocation.Longitude
+  conversions:
+    - originalName: labels.geolocation.longitude
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION

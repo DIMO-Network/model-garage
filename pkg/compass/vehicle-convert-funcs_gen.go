@@ -7,6 +7,27 @@ import "strconv"
 // any conversion functions already defined in this package will be coppied through.
 // note: DO NOT mutate the orginalDoc parameter which is shared between all conversion functions.
 
+// ToCurrentLocationAltitude0 converts data from field 'labels.geolocation.altitude.value' of type string to 'Vehicle.CurrentLocation.Altitude' of type float64.
+// Vehicle.CurrentLocation.Altitude: Current altitude relative to WGS 84 reference ellipsoid, as measured at the position of GNSS receiver antenna.
+// Unit: 'm'
+func ToCurrentLocationAltitude0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
+// ToCurrentLocationLatitude0 converts data from field 'labels.geolocation.latitude' of type string to 'Vehicle.CurrentLocation.Latitude' of type float64.
+// Vehicle.CurrentLocation.Latitude: Current latitude of vehicle in WGS 84 geodetic coordinates, as measured at the position of GNSS receiver antenna.
+// Unit: 'degrees' Min: '-90' Max: '90'
+func ToCurrentLocationLatitude0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
+// ToCurrentLocationLongitude0 converts data from field 'labels.geolocation.longitude' of type string to 'Vehicle.CurrentLocation.Longitude' of type float64.
+// Vehicle.CurrentLocation.Longitude: Current longitude of vehicle in WGS 84 geodetic coordinates, as measured at the position of GNSS receiver antenna.
+// Unit: 'degrees' Min: '-180' Max: '180'
+func ToCurrentLocationLongitude0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
 // ToLowVoltageBatteryCurrentVoltage0 converts data from field 'labels.engine.battery.voltage.value' of type string to 'Vehicle.LowVoltageBattery.CurrentVoltage' of type float64.
 // Vehicle.LowVoltageBattery.CurrentVoltage: Current Voltage of the low voltage battery.
 // Unit: 'V'
