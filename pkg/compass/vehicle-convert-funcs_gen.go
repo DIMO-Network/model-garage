@@ -7,6 +7,13 @@ import "strconv"
 // any conversion functions already defined in this package will be coppied through.
 // note: DO NOT mutate the orginalDoc parameter which is shared between all conversion functions.
 
+// ToLowVoltageBatteryCurrentVoltage0 converts data from field 'labels.engine.battery.voltage.value' of type string to 'Vehicle.LowVoltageBattery.CurrentVoltage' of type float64.
+// Vehicle.LowVoltageBattery.CurrentVoltage: Current Voltage of the low voltage battery.
+// Unit: 'V'
+func ToLowVoltageBatteryCurrentVoltage0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
 // ToPowertrainTransmissionTravelledDistance0 converts data from field 'labels.odometer.value' of type string to 'Vehicle.Powertrain.Transmission.TravelledDistance' of type float64.
 // Vehicle.Powertrain.Transmission.TravelledDistance: Odometer reading, total distance travelled during the lifetime of the transmission.
 // Unit: 'km'
@@ -14,7 +21,7 @@ func ToPowertrainTransmissionTravelledDistance0(originalDoc []byte, val string) 
 	return strconv.ParseFloat(val, 64)
 }
 
-// ToSpeed0 converts data from field 'speed.value' of type string to 'Vehicle.Speed' of type float64.
+// ToSpeed0 converts data from field 'labels.speed.value' of type string to 'Vehicle.Speed' of type float64.
 // Vehicle.Speed: Vehicle speed.
 // Unit: 'km/h'
 func ToSpeed0(originalDoc []byte, val string) (float64, error) {

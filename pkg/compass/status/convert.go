@@ -28,8 +28,9 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 	source := ce.Source
 
 	baseSignal := vss.Signal{
-		TokenID: tokenID,
-		Source:  source,
+		TokenID:   tokenID,
+		Source:    source,
+		Timestamp: ce.Time,
 	}
 
 	sigs, errs := compass.SignalsFromCompass(baseSignal, msgBytes)

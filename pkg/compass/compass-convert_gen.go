@@ -22,6 +22,22 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	var err error
 	var errs []error
 
+	val, err = LowVoltageBatteryCurrentVoltageFromCompass(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'LowVoltageBatteryCurrentVoltage': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "lowVoltageBatteryCurrentVoltage",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = PowertrainTransmissionTravelledDistanceFromCompass(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -54,6 +70,37 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 		retSignals = append(retSignals, sig)
 	}
 	return retSignals, errs
+}
+
+// LowVoltageBatteryCurrentVoltageFromCompass converts the given JSON data to a float64.
+func LowVoltageBatteryCurrentVoltageFromCompass(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	orName := "labels.engine.battery.voltage.value"
+	if strings.HasPrefix(orName, "labels") {
+		labels := gjson.GetBytes(jsonData, "data.labels")
+		result = labels.Get(gjson.Escape(orName[len("labels."):]))
+	} else {
+		result = gjson.GetBytes(jsonData, "data."+orName)
+	}
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToLowVoltageBatteryCurrentVoltage0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.engine.battery.voltage.value': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.engine.battery.voltage.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'LowVoltageBatteryCurrentVoltage'", errNotFound)
+	}
+
+	return ret, errs
 }
 
 // PowertrainTransmissionTravelledDistanceFromCompass converts the given JSON data to a float64.
@@ -91,7 +138,7 @@ func PowertrainTransmissionTravelledDistanceFromCompass(jsonData []byte) (ret fl
 func SpeedFromCompass(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	orName := "speed.value"
+	orName := "labels.speed.value"
 	if strings.HasPrefix(orName, "labels") {
 		labels := gjson.GetBytes(jsonData, "data.labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
@@ -105,9 +152,9 @@ func SpeedFromCompass(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.speed.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.speed.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.speed.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.speed.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 

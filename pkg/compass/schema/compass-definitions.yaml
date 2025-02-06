@@ -8,7 +8,15 @@
     - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Speed
   conversions:
-    - originalName: speed.value # In km per hour.
+    - originalName: labels.speed.value # In km per hour.
       originalType: string
+      isArray: false
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.LowVoltageBattery.CurrentVoltage
+  conversions:
+    - originalName: labels.engine.battery.voltage.value
+      originalType: string
+      isArray: false
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
