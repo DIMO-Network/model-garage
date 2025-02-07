@@ -110,6 +110,8 @@ var (
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldPowertrainTransmissionTravelledDistance, ValueNumber: 20446, Source: compassConnection},
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldSpeed, ValueNumber: 40.2336, Source: compassConnection},
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 13, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAbsoluteLevel, ValueNumber: 113.85, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemRelativeLevel, ValueNumber: 99, Source: compassConnection},
 	}
 )
 

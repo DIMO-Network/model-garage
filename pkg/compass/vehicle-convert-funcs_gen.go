@@ -35,6 +35,20 @@ func ToLowVoltageBatteryCurrentVoltage0(originalDoc []byte, val string) (float64
 	return strconv.ParseFloat(val, 64)
 }
 
+// ToPowertrainFuelSystemAbsoluteLevel0 converts data from field 'labels.fuel.level.value' of type string to 'Vehicle.Powertrain.FuelSystem.AbsoluteLevel' of type float64.
+// Vehicle.Powertrain.FuelSystem.AbsoluteLevel: Current available fuel in the fuel tank expressed in liters.
+// Unit: 'l'
+func ToPowertrainFuelSystemAbsoluteLevel0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
+// ToPowertrainFuelSystemRelativeLevel0 converts data from field 'labels.fuel.level.percentage' of type string to 'Vehicle.Powertrain.FuelSystem.RelativeLevel' of type float64.
+// Vehicle.Powertrain.FuelSystem.RelativeLevel: Level in fuel tank as percent of capacity. 0 = empty. 100 = full.
+// Unit: 'percent' Min: '0' Max: '100'
+func ToPowertrainFuelSystemRelativeLevel0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
 // ToPowertrainTransmissionTravelledDistance0 converts data from field 'labels.odometer.value' of type string to 'Vehicle.Powertrain.Transmission.TravelledDistance' of type float64.
 // Vehicle.Powertrain.Transmission.TravelledDistance: Odometer reading, total distance travelled during the lifetime of the transmission.
 // Unit: 'km'

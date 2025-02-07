@@ -86,6 +86,38 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 		retSignals = append(retSignals, sig)
 	}
 
+	val, err = PowertrainFuelSystemAbsoluteLevelFromCompass(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'PowertrainFuelSystemAbsoluteLevel': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "powertrainFuelSystemAbsoluteLevel",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = PowertrainFuelSystemRelativeLevelFromCompass(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'PowertrainFuelSystemRelativeLevel': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "powertrainFuelSystemRelativeLevel",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = PowertrainTransmissionTravelledDistanceFromCompass(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -239,6 +271,68 @@ func LowVoltageBatteryCurrentVoltageFromCompass(jsonData []byte) (ret float64, e
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'LowVoltageBatteryCurrentVoltage'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// PowertrainFuelSystemAbsoluteLevelFromCompass converts the given JSON data to a float64.
+func PowertrainFuelSystemAbsoluteLevelFromCompass(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	orName := "labels.fuel.level.value"
+	if strings.HasPrefix(orName, "labels") {
+		labels := gjson.GetBytes(jsonData, "data.labels")
+		result = labels.Get(gjson.Escape(orName[len("labels."):]))
+	} else {
+		result = gjson.GetBytes(jsonData, "data."+orName)
+	}
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToPowertrainFuelSystemAbsoluteLevel0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.fuel.level.value': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.fuel.level.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'PowertrainFuelSystemAbsoluteLevel'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// PowertrainFuelSystemRelativeLevelFromCompass converts the given JSON data to a float64.
+func PowertrainFuelSystemRelativeLevelFromCompass(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	orName := "labels.fuel.level.percentage"
+	if strings.HasPrefix(orName, "labels") {
+		labels := gjson.GetBytes(jsonData, "data.labels")
+		result = labels.Get(gjson.Escape(orName[len("labels."):]))
+	} else {
+		result = gjson.GetBytes(jsonData, "data."+orName)
+	}
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToPowertrainFuelSystemRelativeLevel0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.fuel.level.percentage': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.fuel.level.percentage' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'PowertrainFuelSystemRelativeLevel'", errNotFound)
 	}
 
 	return ret, errs

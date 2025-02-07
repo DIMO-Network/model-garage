@@ -20,6 +20,18 @@
       isArray: false
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.FuelSystem.AbsoluteLevel
+  conversions:
+    - originalName: labels.fuel.level.value #  Fuel Level, L
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.FuelSystem.RelativeLevel
+  conversions:
+    - originalName: labels.fuel.level.percentage
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
 ## Location
 - vspecName: Vehicle.CurrentLocation.Altitude
   conversions:
