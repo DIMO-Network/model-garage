@@ -4,6 +4,7 @@ package status
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/DIMO-Network/model-garage/pkg/compass"
 
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"

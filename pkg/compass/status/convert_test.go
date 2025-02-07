@@ -101,14 +101,17 @@ var baseDoc = []byte(`
 
 const compassConnection = "0x55BF1c27d468314Ea119CF74979E2b59F962295c"
 
-var ts = time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC)
-var expSignals = []vss.Signal{
-	{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationLatitude, ValueNumber: 34.878016, Source: compassConnection},
-	{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationLongitude, ValueNumber: -82.223566, Source: compassConnection},
-	{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 277.100006, Source: compassConnection},
-	{TokenID: 37, Timestamp: ts, Name: vss.FieldPowertrainTransmissionTravelledDistance, ValueNumber: 20446, Source: compassConnection},
-	{TokenID: 37, Timestamp: ts, Name: vss.FieldSpeed, ValueNumber: 40.2336, Source: compassConnection},
-	{TokenID: 37, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 13, Source: compassConnection}}
+var (
+	ts         = time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC)
+	expSignals = []vss.Signal{
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationLatitude, ValueNumber: 34.878016, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationLongitude, ValueNumber: -82.223566, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 277.100006, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldPowertrainTransmissionTravelledDistance, ValueNumber: 20446, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldSpeed, ValueNumber: 40.2336, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 13, Source: compassConnection},
+	}
+)
 
 func TestSignalsFromCompass(t *testing.T) {
 	computedSignals, err := Decode(baseDoc)

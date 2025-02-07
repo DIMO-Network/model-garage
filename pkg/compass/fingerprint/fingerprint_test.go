@@ -2,9 +2,10 @@ package fingerprint_test
 
 import (
 	"encoding/json"
+	"testing"
+
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/compass/fingerprint"
-	"testing"
 
 	"github.com/stretchr/testify/require"
 )
@@ -15,6 +16,7 @@ func TestFullFromDataConversion(t *testing.T) {
 	event := cloudevent.CloudEvent[json.RawMessage]{}
 
 	err := json.Unmarshal([]byte(fullInputJSON), &event)
+	require.NoError(t, err, "error unmarshalling JSON")
 
 	fp, err := fingerprint.DecodeFingerprintFromData(event.Data)
 	require.NoError(t, err, "error decoding fingerprint")
