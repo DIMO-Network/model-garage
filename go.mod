@@ -2,8 +2,6 @@ module github.com/DIMO-Network/model-garage
 
 go 1.23.5
 
-toolchain go1.24.0
-
 require (
 	github.com/99designs/gqlgen v0.17.57
 	github.com/DIMO-Network/clickhouse-infra v0.0.3
