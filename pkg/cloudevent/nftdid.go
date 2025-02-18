@@ -25,24 +25,27 @@ func DecodeNFTDID(did string) (NFTDID, error) {
 	if len(parts) != 4 {
 		return NFTDID{}, errInvalidDID
 	}
-	if parts[0] != "did" || parts[1] != "nft" {
-		return NFTDID{}, errInvalidDID
+	if parts[0] != "did" {
+		return NFTDID{}, fmt.Errorf("%w, incorrect DID prefix %s", errInvalidDID, parts[0])
+	}
+	if parts[1] != "nft" {
+		return NFTDID{}, fmt.Errorf("%w, incorrect DID method %s", errInvalidDID, parts[1])
 	}
 	nftParts := strings.Split(parts[3], "_")
 	if len(nftParts) != 2 {
-		return NFTDID{}, errInvalidDID
+		return NFTDID{}, fmt.Errorf("%w, incorrect NFT format %s", errInvalidDID, parts[3])
 	}
 	tokenID, err := strconv.ParseUint(nftParts[1], 10, 32)
 	if err != nil {
-		return NFTDID{}, fmt.Errorf("invalid tokenID: %w", err)
+		return NFTDID{}, fmt.Errorf("%w, invalid token ID %s", errInvalidDID, nftParts[1])
 	}
 	addrBytes := nftParts[0]
 	if !common.IsHexAddress(addrBytes) {
-		return NFTDID{}, errors.New("invalid contract address")
+		return NFTDID{}, fmt.Errorf("%w, invalid contract address %s", errInvalidDID, addrBytes)
 	}
 	chainID, err := strconv.ParseUint(parts[2], 10, 64)
 	if err != nil {
-		return NFTDID{}, fmt.Errorf("invalid chainID: %w", err)
+		return NFTDID{}, fmt.Errorf("%w, invalid chain ID %s", errInvalidDID, parts[2])
 	}
 
 	return NFTDID{
@@ -53,6 +56,6 @@ func DecodeNFTDID(did string) (NFTDID, error) {
 }
 
 // String returns the string representation of the NFTDID.
-func (d NFTDID) String() string {
-	return fmt.Sprintf("did:nft:%d:%s_%d", d.ChainID, d.ContractAddress.Hex(), d.TokenID)
+func (n NFTDID) String() string {
+	return fmt.Sprintf("did:nft:%d:%s_%d", n.ChainID, n.ContractAddress.Hex(), n.TokenID)
 }

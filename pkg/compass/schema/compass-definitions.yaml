@@ -1,0 +1,53 @@
+# This file contains the mapping of the vehicle to the VSpecs for the Compass-iot
+- vspecName: Vehicle.Powertrain.Transmission.TravelledDistance
+  conversions:
+    - originalName: labels.odometer.value # OBD Odometer, Km
+      originalType: string
+      isArray: false
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Speed
+  conversions:
+    - originalName: labels.speed.value # In km per hour.
+      originalType: string
+      isArray: false
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.LowVoltageBattery.CurrentVoltage
+  conversions:
+    - originalName: labels.engine.battery.voltage.value
+      originalType: string
+      isArray: false
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.FuelSystem.AbsoluteLevel
+  conversions:
+    - originalName: labels.fuel.level.value #  Fuel Level, L
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.FuelSystem.RelativeLevel
+  conversions:
+    - originalName: labels.fuel.level.percentage
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+## Location
+- vspecName: Vehicle.CurrentLocation.Altitude
+  conversions:
+    - originalName: labels.geolocation.altitude.value
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION
+- vspecName: Vehicle.CurrentLocation.Latitude
+  conversions:
+    - originalName: labels.geolocation.latitude
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION
+- vspecName: Vehicle.CurrentLocation.Longitude
+  conversions:
+    - originalName: labels.geolocation.longitude
+      originalType: string
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION
