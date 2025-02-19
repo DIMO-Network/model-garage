@@ -74,14 +74,14 @@ const (
 	FieldPowertrainCombustionEngineDieselExhaustFluidLevel = "powertrainCombustionEngineDieselExhaustFluidLevel"
 	// FieldPowertrainCombustionEngineECT Engine coolant temperature.
 	FieldPowertrainCombustionEngineECT = "powertrainCombustionEngineECT"
-	// FieldPowertrainCombustionEngineEngineOilLevel Engine oil level.
-	FieldPowertrainCombustionEngineEngineOilLevel = "powertrainCombustionEngineEngineOilLevel"
-	// FieldPowertrainCombustionEngineEngineOilRelativeLevel Engine oil level as a percentage.
-	FieldPowertrainCombustionEngineEngineOilRelativeLevel = "powertrainCombustionEngineEngineOilRelativeLevel"
 	// FieldPowertrainCombustionEngineEOP Engine oil pressure.
 	FieldPowertrainCombustionEngineEOP = "powertrainCombustionEngineEOP"
 	// FieldPowertrainCombustionEngineEOT Engine oil temperature.
 	FieldPowertrainCombustionEngineEOT = "powertrainCombustionEngineEOT"
+	// FieldPowertrainCombustionEngineEngineOilLevel Engine oil level.
+	FieldPowertrainCombustionEngineEngineOilLevel = "powertrainCombustionEngineEngineOilLevel"
+	// FieldPowertrainCombustionEngineEngineOilRelativeLevel Engine oil level as a percentage.
+	FieldPowertrainCombustionEngineEngineOilRelativeLevel = "powertrainCombustionEngineEngineOilRelativeLevel"
 	// FieldPowertrainCombustionEngineMAF Grams of air drawn into engine per second.
 	FieldPowertrainCombustionEngineMAF = "powertrainCombustionEngineMAF"
 	// FieldPowertrainCombustionEngineSpeed Engine speed measured as rotations per minute.
