@@ -117,14 +117,11 @@ func ConvertToCloudEvents(msgData []byte, chainID uint64, aftermarketContractAdd
 	}.String()
 
 	// Construct the subject
-	var subject string
-	if event.VehicleTokenID != nil {
-		subject = cloudevent.NFTDID{
-			ChainID:         chainID,
-			ContractAddress: common.HexToAddress(vehicleContractAddr),
-			TokenID:         *event.VehicleTokenID,
-		}.String()
-	}
+	subject := cloudevent.NFTDID{
+		ChainID:         chainID,
+		ContractAddress: common.HexToAddress(vehicleContractAddr),
+		TokenID:         *event.VehicleTokenID,
+	}.String()
 
 	cloudEvent, err := convertToCloudEvent(event, producer, subject, eventType)
 	if err != nil {

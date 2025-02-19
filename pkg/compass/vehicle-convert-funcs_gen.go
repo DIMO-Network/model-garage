@@ -7,6 +7,50 @@ import "strconv"
 // any conversion functions already defined in this package will be coppied through.
 // note: DO NOT mutate the orginalDoc parameter which is shared between all conversion functions.
 
+// ToChassisAxleRow1WheelLeftTirePressure0 converts data from field 'labels.tirePressure.front.left.value' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow1WheelLeftTirePressure0(originalDoc []byte, val string) (float64, error) {
+	value, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return 0, err
+	}
+	return ConvertPSIToKPa(value), nil
+}
+
+// ToChassisAxleRow1WheelRightTirePressure0 converts data from field 'labels.tirePressure.front.right.value' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow1WheelRightTirePressure0(originalDoc []byte, val string) (float64, error) {
+	value, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return 0, err
+	}
+	return ConvertPSIToKPa(value), nil
+}
+
+// ToChassisAxleRow2WheelLeftTirePressure0 converts data from field 'labels.tirePressure.rear.left.value' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow2WheelLeftTirePressure0(originalDoc []byte, val string) (float64, error) {
+	value, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return 0, err
+	}
+	return ConvertPSIToKPa(value), nil
+}
+
+// ToChassisAxleRow2WheelRightTirePressure0 converts data from field 'labels.tirePressure.rear.right.value' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow2WheelRightTirePressure0(originalDoc []byte, val string) (float64, error) {
+	value, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return 0, err
+	}
+	return ConvertPSIToKPa(value), nil
+}
+
 // ToCurrentLocationAltitude0 converts data from field 'labels.geolocation.altitude.value' of type string to 'Vehicle.CurrentLocation.Altitude' of type float64.
 // Vehicle.CurrentLocation.Altitude: Current altitude relative to WGS 84 reference ellipsoid, as measured at the position of GNSS receiver antenna.
 // Unit: 'm'
@@ -32,6 +76,38 @@ func ToCurrentLocationLongitude0(originalDoc []byte, val string) (float64, error
 // Vehicle.LowVoltageBattery.CurrentVoltage: Current Voltage of the low voltage battery.
 // Unit: 'V'
 func ToLowVoltageBatteryCurrentVoltage0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
+// ToPowertrainCombustionEngineECT0 converts data from field 'labels.engine.coolant.temperature.value' of type string to 'Vehicle.Powertrain.CombustionEngine.ECT' of type float64.
+// Vehicle.Powertrain.CombustionEngine.ECT: Engine coolant temperature.
+// Unit: 'celsius'
+func ToPowertrainCombustionEngineECT0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
+// ToPowertrainCombustionEngineEOP0 converts data from field 'labels.engine.oil.pressure.value' of type string to 'Vehicle.Powertrain.CombustionEngine.EOP' of type float64.
+// Vehicle.Powertrain.CombustionEngine.EOP: Engine oil pressure.
+// Unit: 'kPa'
+func ToPowertrainCombustionEngineEOP0(originalDoc []byte, val string) (float64, error) {
+	value, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return 0, err
+	}
+	return ConvertBarToKPa(value), nil
+}
+
+// ToPowertrainCombustionEngineEOT0 converts data from field 'labels.engine.oil.temperature.value' of type string to 'Vehicle.Powertrain.CombustionEngine.EOT' of type float64.
+// Vehicle.Powertrain.CombustionEngine.EOT: Engine oil temperature.
+// Unit: 'celsius'
+func ToPowertrainCombustionEngineEOT0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
+// ToPowertrainCombustionEngineSpeed0 converts data from field 'labels.engine.speed.value' of type string to 'Vehicle.Powertrain.CombustionEngine.Speed' of type float64.
+// Vehicle.Powertrain.CombustionEngine.Speed: Engine speed measured as rotations per minute.
+// Unit: 'rpm'
+func ToPowertrainCombustionEngineSpeed0(originalDoc []byte, val string) (float64, error) {
 	return strconv.ParseFloat(val, 64)
 }
 
