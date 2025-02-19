@@ -23,7 +23,6 @@ endif
 
 # Dependency versions
 GOLANGCI_VERSION := latest
-CLICKHOUSE_INFRA_VERSION := $(shell go list -m -f '{{.Version}}' github.com/DIMO-Network/clickhouse-infra)
 
 build:
 	@CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(ARCH) \
@@ -63,10 +62,6 @@ migration:
 tools-golangci-lint:
 	@mkdir -p $(PATHINSTBIN)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | BINARY=golangci-lint bash -s -- ${GOLANGCI_VERSION}
-
-tools-migration: ## Install migration tool
-	@mkdir -p $(PATHINSTBIN)
-	GOBIN=$(PATHINSTBIN) go install github.com/DIMO-Network/clickhouse-infra/cmd/migration@${CLICKHOUSE_INFRA_VERSION}
 
 tools: tools-golangci-lint
 	go install tool
