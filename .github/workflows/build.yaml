@@ -9,22 +9,16 @@ on:
 jobs:
   install-tools:
     if: "!contains(github.event.head_commit.message, 'Merge pull request')"
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - name: Install all tools
         run: make tools
+      - name: tidy
+        run: go mod tidy
       - uses: actions/upload-artifact@v4
         with:
           name: tools
@@ -33,20 +27,12 @@ jobs:
   tests:
     needs: install-tools
     if: "!contains(github.event.head_commit.message, 'Merge pull request')"
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - uses: actions/download-artifact@v4
         with:
           name: tools
@@ -59,20 +45,12 @@ jobs:
   lint:
     needs: install-tools
     if: "!contains(github.event.head_commit.message, 'Merge pull request')"
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - uses: actions/download-artifact@v4
         with:
           name: tools
@@ -85,20 +63,12 @@ jobs:
   generate:
     needs: install-tools
     if: "!contains(github.event.head_commit.message, 'Merge pull request')"
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - uses: actions/download-artifact@v4
         with:
           name: tools
@@ -117,4 +87,3 @@ jobs:
             echo "${dirty_files}"
             exit 1
           fi
-          
