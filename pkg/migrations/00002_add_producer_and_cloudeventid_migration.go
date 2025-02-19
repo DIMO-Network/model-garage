@@ -11,12 +11,12 @@ import (
 func init() {
 	_, filename, _, _ := runtime.Caller(0)
 	registerFunc := func() {
-		goose.AddNamedMigrationContext(filename, upAddProducerAndCloudEventId, downAddProducerAndCloudEventId)
+		goose.AddNamedMigrationContext(filename, upAddProducerAndCloudEventID, downAddProducerAndCloudEventID)
 	}
 	registerFuncs = append(registerFuncs, registerFunc)
 }
 
-func upAddProducerAndCloudEventId(ctx context.Context, tx *sql.Tx) error {
+func upAddProducerAndCloudEventID(ctx context.Context, tx *sql.Tx) error {
 	// This code is executed when the migration is applied.
 	upStatements := []string{
 		"ALTER TABLE signal ADD COLUMN producer String COMMENT 'producer of the collected signal.' AFTER source",
@@ -31,7 +31,7 @@ func upAddProducerAndCloudEventId(ctx context.Context, tx *sql.Tx) error {
 	return nil
 }
 
-func downAddProducerAndCloudEventId(ctx context.Context, tx *sql.Tx) error {
+func downAddProducerAndCloudEventID(ctx context.Context, tx *sql.Tx) error {
 	// This code is executed when the migration is rolled back.
 	downStatements := []string{
 		"ALTER TABLE signal DROP COLUMN producer",
