@@ -9,11 +9,18 @@ import (
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/tesla"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	ftconv "github.com/DIMO-Network/tesla-vss/pkg/convert"
+	"github.com/teslamotors/fleet-telemetry/protos"
+	"google.golang.org/protobuf/proto"
+)
+
+const (
+	FleetTelemetryDataVersion = "fleet_telemetry/v1.0.0"
 )
 
 func Decode(msgBytes []byte) ([]vss.Signal, error) {
 	// Only interested in the top-level CloudEvent fields.
-	var ce cloudevent.CloudEventHeader
+	var ce cloudevent.CloudEvent[json.RawMessage]
 
 	if err := json.Unmarshal(msgBytes, &ce); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal payload: %w", err)
@@ -32,15 +39,51 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 		Source:  source,
 	}
 
-	sigs, errs := tesla.SignalsFromTesla(baseSignal, msgBytes)
-	if len(errs) != 0 {
-		return nil, convert.ConversionError{
-			TokenID:        tokenID,
-			Source:         source,
-			DecodedSignals: sigs,
-			Errors:         errs,
+	switch ce.DataVersion {
+	case FleetTelemetryDataVersion:
+		var td TelemetryData
+		if err := json.Unmarshal(ce.Data, &td); err != nil {
+			return nil, fmt.Errorf("failed to unmarshal telemetry wrapper: %w", err)
 		}
-	}
 
-	return sigs, nil
+		var batchedSigs []vss.Signal
+		var batchedErrs []error
+		for i, payload := range td.Payloads {
+			var pl protos.Payload
+			err := proto.Unmarshal(payload, &pl)
+			if err != nil {
+				batchedErrs = append(batchedErrs, fmt.Errorf("failed to unmarshal payload at index %d: %w", i, err))
+				continue
+			}
+			sigs, errs := ftconv.ProcessPayload(&pl, tokenID, source)
+			batchedSigs = append(batchedSigs, sigs...)
+			batchedErrs = append(batchedErrs, errs...)
+		}
+
+		if len(batchedErrs) != 0 {
+			return nil, convert.ConversionError{
+				TokenID:        tokenID,
+				Source:         source,
+				DecodedSignals: batchedSigs,
+				Errors:         batchedErrs,
+			}
+		}
+		return batchedSigs, nil
+	default:
+		sigs, errs := tesla.SignalsFromTesla(baseSignal, msgBytes)
+		if len(errs) != 0 {
+			return nil, convert.ConversionError{
+				TokenID:        tokenID,
+				Source:         source,
+				DecodedSignals: sigs,
+				Errors:         errs,
+			}
+		}
+
+		return sigs, nil
+	}
+}
+
+type TelemetryData struct {
+	Payloads [][]byte `json:"payloads"`
 }
