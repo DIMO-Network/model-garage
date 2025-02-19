@@ -1,6 +1,6 @@
 module github.com/DIMO-Network/model-garage
 
-go 1.23.5
+go 1.24
 
 require (
 	github.com/99designs/gqlgen v0.17.64
@@ -98,3 +98,5 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240318140521-94a12d6c2237 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
 )
+
+tool github.com/DIMO-Network/clickhouse-infra/cmd/migration

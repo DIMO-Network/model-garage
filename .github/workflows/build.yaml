@@ -1,0 +1,89 @@
+name: Build
+on:
+  pull_request:
+    branches: ["**"]
+  push:
+    branches:
+      - main
+
+jobs:
+  install-tools:
+    if: "!contains(github.event.head_commit.message, 'Merge pull request')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - name: Install all tools
+        run: make tools
+      - name: tidy
+        run: go mod tidy
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tools
+          path: bin/
+
+  tests:
+    needs: install-tools
+    if: "!contains(github.event.head_commit.message, 'Merge pull request')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tools
+          path: bin/
+      - name: Set bin as executable
+        run: chmod +x bin/*
+      - name: Run tests
+        run: make test
+
+  lint:
+    needs: install-tools
+    if: "!contains(github.event.head_commit.message, 'Merge pull request')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tools
+          path: bin/
+      - name: Set bin as executable
+        run: chmod +x bin/*
+      - name: Run linter
+        run: make lint
+
+  generate:
+    needs: install-tools
+    if: "!contains(github.event.head_commit.message, 'Merge pull request')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tools
+          path: bin/
+      - name: Set bin as executable
+        run: chmod +x bin/*
+      - run: go mod download
+      - name: Run generate
+        run: make generate
+      - name: Porcelain
+        shell: bash
+        run: |
+          dirty_files="$(git status --porcelain)"
+          if [[ `git status --porcelain` ]]; then
+            echo "The following files are dirty after running generators:"
+            echo "${dirty_files}"
+            exit 1
+          fi
