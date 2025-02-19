@@ -38,6 +38,8 @@ func TestMigration(t *testing.T) {
 		{Name: vss.TimestampCol, Type: "DateTime64(6, 'UTC')", Comment: "timestamp of when this data was collected."},
 		{Name: vss.NameCol, Type: "LowCardinality(String)", Comment: "name of the signal collected."},
 		{Name: vss.SourceCol, Type: "String", Comment: "source of the signal collected."},
+		{Name: vss.ProducerCol, Type: "String", Comment: "producer of the collected signal."},
+		{Name: vss.CloudEventIDCol, Type: "String", Comment: "Id of the Cloud Event that this signal was extracted from."},
 		{Name: vss.ValueNumberCol, Type: "Float64", Comment: "float64 value of the signal collected."},
 		{Name: vss.ValueStringCol, Type: "String", Comment: "string value of the signal collected."},
 	}

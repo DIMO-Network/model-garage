@@ -69,6 +69,7 @@ tools-migration: ## Install migration tool
 	GOBIN=$(PATHINSTBIN) go install github.com/DIMO-Network/clickhouse-infra/cmd/migration@${CLICKHOUSE_INFRA_VERSION}
 
 tools: tools-golangci-lint
+	go install tool
 
 clickhouse:
 	go run ./cmd/clickhouse-container

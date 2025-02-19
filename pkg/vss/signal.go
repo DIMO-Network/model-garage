@@ -9,7 +9,6 @@ import (
 const (
 	// TableName is the name of the distributed table in Clickhouse.
 	TableName = "signal"
-
 	// TokenIDCol is the name of the token_id column in Clickhouse.
 	TokenIDCol = "token_id"
 	// TimestampCol is the name of the timestamp column in Clickhouse.
@@ -18,6 +17,10 @@ const (
 	SourceCol = "source"
 	// NameCol is the name of the name column in Clickhouse.
 	NameCol = "name"
+	// ProducerCol is the name of the producer column in Clickhouse.
+	ProducerCol = "producer"
+	// CloudEventIDCol is the name of the cloud_event_id column in Clickhouse.
+	CloudEventIDCol = "cloud_event_id"
 	// ValueNumberCol is the name of the value_number column in Clickhouse.
 	ValueNumberCol = "value_number"
 	// ValueStringCol is the name of the value_string column in Clickhouse.
@@ -44,6 +47,12 @@ type Signal struct {
 
 	// Source is the source of the signal collected.
 	Source string `ch:"source" json:"source"`
+
+	// Producer is the producer of the signal collected.
+	Producer string `ch:"producer" json:"producer"`
+
+	// CloudEventID is the ID of the CloudEvent that this signal was extracted from.
+	CloudEventID string `ch:"cloud_event_id" json:"cloudEventId"`
 }
 
 // SetValue dynamically set the appropriate value field based on the type of the value.
@@ -66,6 +75,8 @@ func SignalToSlice(obj Signal) []any {
 		obj.Timestamp,
 		obj.Name,
 		obj.Source,
+		obj.Producer,
+		obj.CloudEventID,
 		obj.ValueNumber,
 		obj.ValueString,
 	}
@@ -78,6 +89,8 @@ func SignalColNames() []string {
 		TimestampCol,
 		NameCol,
 		SourceCol,
+		ProducerCol,
+		CloudEventIDCol,
 		ValueNumberCol,
 		ValueStringCol,
 	}
