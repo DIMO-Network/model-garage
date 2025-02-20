@@ -74,6 +74,10 @@ const (
 	FieldPowertrainCombustionEngineDieselExhaustFluidLevel = "powertrainCombustionEngineDieselExhaustFluidLevel"
 	// FieldPowertrainCombustionEngineECT Engine coolant temperature.
 	FieldPowertrainCombustionEngineECT = "powertrainCombustionEngineECT"
+	// FieldPowertrainCombustionEngineEOP Engine oil pressure.
+	FieldPowertrainCombustionEngineEOP = "powertrainCombustionEngineEOP"
+	// FieldPowertrainCombustionEngineEOT Engine oil temperature.
+	FieldPowertrainCombustionEngineEOT = "powertrainCombustionEngineEOT"
 	// FieldPowertrainCombustionEngineEngineOilLevel Engine oil level.
 	FieldPowertrainCombustionEngineEngineOilLevel = "powertrainCombustionEngineEngineOilLevel"
 	// FieldPowertrainCombustionEngineEngineOilRelativeLevel Engine oil level as a percentage.
