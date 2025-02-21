@@ -139,13 +139,13 @@ func ToDIMOAftermarketSSID1(originalDoc []byte, val string) (string, error) {
 }
 
 // ToDIMOAftermarketWPAState0 converts data from field 'wpa_state' of type string to 'Vehicle.DIMO.Aftermarket.WPAState' of type string.
-// Vehicle.DIMO.Aftermarket.WPAState: Indicate the current WPA state for the device's wifi
+// Vehicle.DIMO.Aftermarket.WPAState: Indicate the current WPA state for the device's wifi, e.g. "CONNECTED", "SCANNING", "DISCONNECTED"
 func ToDIMOAftermarketWPAState0(originalDoc []byte, val string) (string, error) {
 	return val, nil
 }
 
 // ToDIMOAftermarketWPAState1 converts data from field 'wifi.wpaState' of type string to 'Vehicle.DIMO.Aftermarket.WPAState' of type string.
-// Vehicle.DIMO.Aftermarket.WPAState: Indicate the current WPA state for the device's wifi
+// Vehicle.DIMO.Aftermarket.WPAState: Indicate the current WPA state for the device's wifi, e.g. "CONNECTED", "SCANNING", "DISCONNECTED"
 func ToDIMOAftermarketWPAState1(originalDoc []byte, val string) (string, error) {
 	return val, nil
 }

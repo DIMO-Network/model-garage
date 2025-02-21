@@ -4,106 +4,83 @@
     - originalName: labels.odometer.value # OBD Odometer, Km
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Speed
   conversions:
     - originalName: labels.speed.value # In km per hour.
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.LowVoltageBattery.CurrentVoltage
   conversions:
     - originalName: labels.engine.battery.voltage.value
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.FuelSystem.AbsoluteLevel
   conversions:
     - originalName: labels.fuel.level.value #  Fuel Level, L
       originalType: string
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.FuelSystem.RelativeLevel
   conversions:
     - originalName: labels.fuel.level.percentage
       originalType: string
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 ## Location
 - vspecName: Vehicle.CurrentLocation.Altitude
   conversions:
     - originalName: labels.geolocation.altitude.value
       originalType: string
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
 - vspecName: Vehicle.CurrentLocation.Latitude
   conversions:
     - originalName: labels.geolocation.latitude
       originalType: string
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
 - vspecName: Vehicle.CurrentLocation.Longitude
   conversions:
     - originalName: labels.geolocation.longitude
       originalType: string
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
+- vspecName: Vehicle.CurrentLocation.Heading
+  conversions:
+    - originalName: labels.heading
+      originalType: string
 - vspecName:  Vehicle.Powertrain.CombustionEngine.EOP
   conversions:
     - originalName: labels.engine.oil.pressure.value # In bar, so we need to convert to kPa
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.CombustionEngine.EOT
   conversions:
     - originalName: labels.engine.oil.temperature.value
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.CombustionEngine.ECT
   conversions:
     - originalName: labels.engine.coolant.temperature.value
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.CombustionEngine.Speed
   conversions:
     - originalName: labels.engine.speed.value
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure
   conversions:
     - originalName: labels.tirePressure.front.left.value # In psi, so we need to convert to kPa
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
   conversions:
     - originalName: labels.tirePressure.front.right.value # In psi, so we need to convert to kPa
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure
   conversions:
     - originalName: labels.tirePressure.rear.left.value # In psi, so we need to convert to kPa
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
   conversions:
     - originalName: labels.tirePressure.rear.right.value # In psi, so we need to convert to kPa
       originalType: string
       isArray: false
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.IsIgnitionOn
+  conversions:
+    - originalName: labels.engine.ignition # true or false
+      originalType: string
+      isArray: false

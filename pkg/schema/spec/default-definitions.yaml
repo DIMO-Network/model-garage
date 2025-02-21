@@ -23,7 +23,13 @@
 - vspecName: Vehicle.CurrentLocation.Longitude
   requiredPrivileges:
     - VEHICLE_ALL_TIME_LOCATION
+- vspecName: Vehicle.CurrentLocation.Heading
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION
 - vspecName: Vehicle.Exterior.AirTemperature
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.IsIgnitionOn
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.LowVoltageBattery.CurrentVoltage
