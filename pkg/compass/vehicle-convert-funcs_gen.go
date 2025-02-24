@@ -58,6 +58,13 @@ func ToCurrentLocationAltitude0(originalDoc []byte, val string) (float64, error)
 	return strconv.ParseFloat(val, 64)
 }
 
+// ToCurrentLocationHeading0 converts data from field 'labels.heading' of type string to 'Vehicle.CurrentLocation.Heading' of type float64.
+// Vehicle.CurrentLocation.Heading: Current heading relative to geographic north. 0 = North, 90 = East, 180 = South, 270 = West.
+// Unit: 'degrees' Min: '0' Max: '360'
+func ToCurrentLocationHeading0(originalDoc []byte, val string) (float64, error) {
+	return strconv.ParseFloat(val, 64)
+}
+
 // ToCurrentLocationLatitude0 converts data from field 'labels.geolocation.latitude' of type string to 'Vehicle.CurrentLocation.Latitude' of type float64.
 // Vehicle.CurrentLocation.Latitude: Current latitude of vehicle in WGS 84 geodetic coordinates, as measured at the position of GNSS receiver antenna.
 // Unit: 'degrees' Min: '-90' Max: '90'
@@ -70,6 +77,21 @@ func ToCurrentLocationLatitude0(originalDoc []byte, val string) (float64, error)
 // Unit: 'degrees' Min: '-180' Max: '180'
 func ToCurrentLocationLongitude0(originalDoc []byte, val string) (float64, error) {
 	return strconv.ParseFloat(val, 64)
+}
+
+// ToIsIgnitionOn0 converts data from field 'labels.engine.ignition' of type string to 'Vehicle.IsIgnitionOn' of type float64.
+// Vehicle.IsIgnitionOn: Vehicle ignition status. False - off, True - on.
+func ToIsIgnitionOn0(originalDoc []byte, val string) (float64, error) {
+	boolVal, err := strconv.ParseBool(val)
+	if err != nil {
+		return 0, err
+	}
+
+	if boolVal {
+		return 1.0, nil
+	}
+
+	return 0.0, nil
 }
 
 // ToLowVoltageBatteryCurrentVoltage0 converts data from field 'labels.engine.battery.voltage.value' of type string to 'Vehicle.LowVoltageBattery.CurrentVoltage' of type float64.

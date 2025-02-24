@@ -111,6 +111,8 @@ var (
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationLatitude, ValueNumber: 34.878016, Source: compassConnection},
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationLongitude, ValueNumber: -82.223566, Source: compassConnection},
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 277.100006, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 16, Source: compassConnection},
+		{TokenID: 37, Timestamp: ts, Name: vss.FieldIsIgnitionOn, ValueNumber: 0, Source: compassConnection},
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 13, Source: compassConnection},
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 92, Source: compassConnection},
 		{TokenID: 37, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEOP, ValueNumber: 4, Source: compassConnection},
