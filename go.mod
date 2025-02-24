@@ -3,21 +3,21 @@ module github.com/DIMO-Network/model-garage
 go 1.24
 
 require (
-	github.com/99designs/gqlgen v0.17.64
+	github.com/99designs/gqlgen v0.17.66
 	github.com/DIMO-Network/clickhouse-infra v0.0.3
 	github.com/DIMO-Network/tesla-vss v0.0.0-20250214202426-020776dd68b5
 	github.com/Masterminds/sprig/v3 v3.3.0
-	github.com/ethereum/go-ethereum v1.14.13
+	github.com/ethereum/go-ethereum v1.15.2
 	github.com/pressly/goose/v3 v3.24.1
 	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.10.0
-	github.com/teslamotors/fleet-telemetry v0.6.0
+	github.com/teslamotors/fleet-telemetry v0.7.2
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
-	golang.org/x/mod v0.22.0
-	golang.org/x/text v0.21.0
-	golang.org/x/tools v0.29.0
-	google.golang.org/protobuf v1.36.4
+	golang.org/x/mod v0.23.0
+	golang.org/x/text v0.22.0
+	golang.org/x/tools v0.30.0
+	google.golang.org/protobuf v1.36.5
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -47,7 +47,7 @@ require (
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/holiman/uint256 v1.3.1 // indirect
+	github.com/holiman/uint256 v1.3.2 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/klauspost/compress v1.17.7 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
@@ -70,7 +70,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
-	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sethvargo/go-retry v0.3.0 // indirect
 	github.com/shirou/gopsutil/v3 v3.23.12 // indirect
@@ -92,9 +91,9 @@ require (
 	go.opentelemetry.io/otel/trace v1.26.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.0.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.31.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/crypto v0.32.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240318140521-94a12d6c2237 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
 )
