@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/99designs/gqlgen v0.17.64
 	github.com/DIMO-Network/clickhouse-infra v0.0.3
-	github.com/DIMO-Network/tesla-vss v0.0.0-20250214202426-020776dd68b5
+	github.com/DIMO-Network/tesla-vss v0.1.0
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/ethereum/go-ethereum v1.14.13
 	github.com/pressly/goose/v3 v3.24.1
