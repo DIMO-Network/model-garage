@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tidwall/gjson"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/lorawan"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/tidwall/gjson"
 )
 
 // SignalsFromV2Payload extracts signals from a V2 payload.
