@@ -1,4 +1,4 @@
-// Package autopi holds decoding functions for Ruptela status payloads.
+// Package lorawan holds decoding functions for lorawan (Macaron) status payloads.
 package lorawan
 
 import (
