@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
-
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/segmentio/ksuid"
