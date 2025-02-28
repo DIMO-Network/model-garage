@@ -1,6 +1,14 @@
 package tesla
 
+const (
+	FleetTelemetryDataVersion = "fleet_telemetry/v1.0.0"
+)
+
 const kilometersPerMile = 1.609344
+
+type TelemetryData struct {
+	Payloads [][]byte `json:"payloads"`
+}
 
 func barsToKilopascals(bars float64) float64 {
 	return 100 * bars
