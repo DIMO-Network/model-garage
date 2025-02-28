@@ -33,7 +33,6 @@ func TestFullFromDataConversion(t *testing.T) {
 		require.Equal(t, test.ExpectedError, err, "error decoding fingerprint")
 		require.Equal(t, test.ExpectedVin, fp.VIN, "decoded VIN does not match expected VIN")
 	}
-
 }
 
 var streamingPayload = `{
