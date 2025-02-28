@@ -92,6 +92,9 @@
 - vspecName: Vehicle.Powertrain.TractionBattery.StateOfCharge.Current
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.StateOfCharge.CurrentEnergy
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.Transmission.TravelledDistance
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA

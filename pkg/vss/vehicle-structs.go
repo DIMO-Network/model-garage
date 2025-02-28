@@ -118,6 +118,8 @@ const (
 	FieldPowertrainTractionBatteryRange = "powertrainTractionBatteryRange"
 	// FieldPowertrainTractionBatteryStateOfChargeCurrent Physical state of charge of the high voltage battery, relative to net capacity. This is not necessarily the state of charge being displayed to the customer.
 	FieldPowertrainTractionBatteryStateOfChargeCurrent = "powertrainTractionBatteryStateOfChargeCurrent"
+	// FieldPowertrainTractionBatteryStateOfChargeCurrentEnergy Physical state of charge of high voltage battery expressed in kWh.
+	FieldPowertrainTractionBatteryStateOfChargeCurrentEnergy = "powertrainTractionBatteryStateOfChargeCurrentEnergy"
 	// FieldPowertrainTractionBatteryTemperatureAverage Current average temperature of the battery cells.
 	FieldPowertrainTractionBatteryTemperatureAverage = "powertrainTractionBatteryTemperatureAverage"
 	// FieldPowertrainTransmissionCurrentGear The current gear. 0=Neutral, 1/2/..=Forward, -1/-2/..=Reverse.
