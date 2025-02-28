@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/tidwall/gjson"
-
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/lorawan"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
