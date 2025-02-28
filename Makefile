@@ -69,7 +69,7 @@ tools: tools-golangci-lint
 clickhouse:
 	go run ./cmd/clickhouse-container
 
-generate: generate-nativestatus generate-ruptela generate-tesla generate-compass # Generate all files for the repository
+generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-lorawan# Generate all files for the repository
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/vss/vehicle-structs.go -custom.template-file=./internal/generator/vehicle.tmpl -custom.format=true
 
 generate-nativestatus: # Generate all files for nativestatus
@@ -87,6 +87,11 @@ generate-autopi: # Generate all files for autopi
 	go run ./cmd/codegen -convert.package=autopi -generators=convert -convert.output-file=./pkg/autopi/vehicle-convert-funcs_gen.go -definitions=./pkg/autopi/schema/autopi-definitions.yaml
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/vehicle-v1-convert_gen.go -custom.template-file=./pkg/autopi/codegen/convertv1.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi-definitions.yaml
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/vehicle-v2-convert_gen.go -custom.template-file=./pkg/autopi/codegen/convertv2.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi-definitions.yaml
+
+generate-lorawan: # Generate all files for lorawan (macaron)
+	go run ./cmd/codegen -convert.package=lorawan -generators=convert -convert.output-file=./pkg/lorawan/vehicle-convert-funcs_gen.go -definitions=./pkg/lorawan/schema/lorawan-definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/lorawan/lorawan-convert_gen.go -custom.template-file=./pkg/lorawan/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/lorawan/schema/lorawan-definitions.yaml
+
 
 generate-tesla: # Generate all files for tesla
 	go run ./cmd/codegen -convert.package=tesla -generators=convert -convert.output-file=./pkg/tesla/vehicle-convert-funcs_gen.go -definitions=./pkg/tesla/schema/tesla-definitions.yaml
