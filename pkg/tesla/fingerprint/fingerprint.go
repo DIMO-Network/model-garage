@@ -18,18 +18,18 @@ func DecodeFingerprintFromData(ce cloudevent.CloudEvent[json.RawMessage]) (cloud
 	fingerPrint := cloudevent.Fingerprint{}
 	switch ce.DataVersion {
 	case tesla.FleetTelemetryDataVersion:
-		var payloads tesla.TelemetryData
-		if err := json.Unmarshal(ce.Data, &payloads); err != nil {
-			return fingerPrint, err
+		var tlmData tesla.TelemetryData
+		if err := json.Unmarshal(ce.Data, &tlmData); err != nil {
+			return fingerPrint, fmt.Errorf("failed to unmarshal telemetry payload: %w", err)
 		}
 
-		if len(payloads.Payloads) == 0 {
+		if len(tlmData.Payloads) == 0 {
 			return fingerPrint, errors.New("no payload to evaluate")
 		}
 
 		var pl protos.Payload
-		if err := proto.Unmarshal(payloads.Payloads[0], &pl); err != nil {
-			return fingerPrint, err
+		if err := proto.Unmarshal(tlmData.Payloads[0], &pl); err != nil {
+			return fingerPrint, fmt.Errorf("failed to unmarshal tesla payload: %w", err)
 		}
 
 		fingerPrint.VIN = pl.Vin
