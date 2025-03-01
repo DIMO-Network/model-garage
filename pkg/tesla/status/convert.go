@@ -14,10 +14,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-const (
-	FleetTelemetryDataVersion = "fleet_telemetry/v1.0.0"
-)
-
 func Decode(msgBytes []byte) ([]vss.Signal, error) {
 	// Only interested in the top-level CloudEvent fields.
 	var ce cloudevent.CloudEvent[json.RawMessage]
@@ -40,8 +36,8 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 	}
 
 	switch ce.DataVersion {
-	case FleetTelemetryDataVersion:
-		var td TelemetryData
+	case tesla.FleetTelemetryDataVersion:
+		var td tesla.TelemetryData
 		if err := json.Unmarshal(ce.Data, &td); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal telemetry wrapper: %w", err)
 		}
@@ -82,8 +78,4 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 
 		return sigs, nil
 	}
-}
-
-type TelemetryData struct {
-	Payloads [][]byte `json:"payloads"`
 }
