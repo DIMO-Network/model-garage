@@ -68,6 +68,9 @@ func ConvertToCloudEvents(msgData []byte, chainID uint64, aftermarketContractAdd
 
 	var statusData Data
 	err = json.Unmarshal(event.Data, &statusData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal event data field: %w", err)
+	}
 
 	if statusData.Header <= 0 {
 		return nil, fmt.Errorf("unknown event frame header: %d", statusData.Header)
