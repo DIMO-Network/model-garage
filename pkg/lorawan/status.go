@@ -66,8 +66,11 @@ func ConvertToCloudEvents(msgData []byte, chainID uint64, aftermarketContractAdd
 		return nil, fmt.Errorf("device token id is missing")
 	}
 
-	if event.Data.Header <= 0 {
-		return nil, fmt.Errorf("unknown event frame header: %d", event.Data.Header)
+	var statusData Data
+	err = json.Unmarshal(event.Data, &statusData)
+
+	if statusData.Header <= 0 {
+		return nil, fmt.Errorf("unknown event frame header: %d", statusData.Header)
 	}
 
 	// Construct the producer DID
@@ -87,7 +90,7 @@ func ConvertToCloudEvents(msgData []byte, chainID uint64, aftermarketContractAdd
 		}.String()
 	}
 
-	if event.Data.Header == FingerprintFrame {
+	if statusData.Header == FingerprintFrame {
 		cloudEvent, err := convertToCloudEvent(event, producer, subject, cloudevent.TypeFingerprint)
 		if err != nil {
 			return nil, err
@@ -137,10 +140,7 @@ func createCloudEvent(event LorawanEvent, producer, subject, eventType string) (
 	if err != nil {
 		return cloudevent.CloudEvent[json.RawMessage]{}, fmt.Errorf("failed to parse time: %v", err)
 	}
-	rawData, err := json.Marshal(event.Data)
-	if err != nil {
-		return cloudevent.CloudEvent[json.RawMessage]{}, fmt.Errorf("failed to marshall data: %v", err)
-	}
+
 	return cloudevent.CloudEvent[json.RawMessage]{
 		CloudEventHeader: cloudevent.CloudEventHeader{
 			DataContentType: "application/json",
@@ -155,6 +155,6 @@ func createCloudEvent(event LorawanEvent, producer, subject, eventType string) (
 				"signature": event.Signature,
 			},
 		},
-		Data: rawData,
+		Data: event.Data,
 	}, nil
 }
