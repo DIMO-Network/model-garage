@@ -6,12 +6,12 @@ import (
 )
 
 type LorawanEvent struct {
-	Data           Data    `json:"data"`
-	VehicleTokenID *uint32 `json:"vehicleTokenId"`
-	DeviceTokenID  *uint32 `json:"deviceTokenId"`
-	Signature      string  `json:"signature"`
-	Time           string  `json:"time"`
-	Type           string  `json:"type"`
+	Data           json.RawMessage `json:"data"`
+	VehicleTokenID *uint32         `json:"vehicleTokenId"`
+	DeviceTokenID  *uint32         `json:"deviceTokenId"`
+	Signature      string          `json:"signature"`
+	Time           string          `json:"time"`
+	Type           string          `json:"type"`
 }
 
 // Data represents the data field of a lorawan payload
