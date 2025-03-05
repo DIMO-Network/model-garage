@@ -27,6 +27,9 @@ const (
 	SpecVersion = "1.0"
 )
 
+// RawEvent is a cloudevent with a json.RawMessage data field.
+type RawEvent = CloudEvent[json.RawMessage]
+
 var definedCloudeEventHdrFields = getJSONFieldNames(reflect.TypeOf(CloudEventHeader{}))
 
 // CloudEvent represents an event according to the CloudEvents spec.
