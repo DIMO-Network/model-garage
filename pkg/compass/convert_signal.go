@@ -1,25 +1,15 @@
-// Package status converts Compass CloudEvents to ClickHouse-ready slices of signals.
-package status
+package compass
 
 import (
-	"encoding/json"
 	"fmt"
-
-	"github.com/DIMO-Network/model-garage/pkg/compass"
 
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 )
 
-func Decode(msgBytes []byte) ([]vss.Signal, error) {
-	// Only interested in the top-level CloudEvent fields.
-	var ce cloudevent.CloudEventHeader
-
-	if err := json.Unmarshal(msgBytes, &ce); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal payload: %w", err)
-	}
-
+// DecodeSignals decodes a compass message into signals.
+func DecodeSignals(ce cloudevent.RawEvent) ([]vss.Signal, error) {
 	did, err := cloudevent.DecodeNFTDID(ce.Subject)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
@@ -34,7 +24,7 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 		Timestamp: ce.Time,
 	}
 
-	sigs, errs := compass.SignalsFromCompass(baseSignal, msgBytes)
+	sigs, errs := SignalsFromCompass(baseSignal, ce.Data)
 	if len(errs) != 0 {
 		return nil, convert.ConversionError{
 			TokenID:        tokenID,
@@ -45,4 +35,14 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 	}
 
 	return sigs, nil
+}
+
+// ConvertPSIToKPa converts a pressure value from psi to kPa.
+func ConvertPSIToKPa(psi float64) float64 {
+	return psi * 6.89476
+}
+
+// ConvertBarToKPa converts a pressure value from bar to kPa.
+func ConvertBarToKPa(bar float64) float64 {
+	return bar * 100
 }

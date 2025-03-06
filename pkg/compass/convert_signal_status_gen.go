@@ -318,10 +318,10 @@ func ChassisAxleRow1WheelLeftTirePressureFromCompass(jsonData []byte) (ret float
 	var result gjson.Result
 	orName := "labels.tirePressure.front.left.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -330,9 +330,9 @@ func ChassisAxleRow1WheelLeftTirePressureFromCompass(jsonData []byte) (ret float
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.tirePressure.front.left.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.tirePressure.front.left.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.tirePressure.front.left.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.tirePressure.front.left.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -349,10 +349,10 @@ func ChassisAxleRow1WheelRightTirePressureFromCompass(jsonData []byte) (ret floa
 	var result gjson.Result
 	orName := "labels.tirePressure.front.right.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -361,9 +361,9 @@ func ChassisAxleRow1WheelRightTirePressureFromCompass(jsonData []byte) (ret floa
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.tirePressure.front.right.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.tirePressure.front.right.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.tirePressure.front.right.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.tirePressure.front.right.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -380,10 +380,10 @@ func ChassisAxleRow2WheelLeftTirePressureFromCompass(jsonData []byte) (ret float
 	var result gjson.Result
 	orName := "labels.tirePressure.rear.left.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -392,9 +392,9 @@ func ChassisAxleRow2WheelLeftTirePressureFromCompass(jsonData []byte) (ret float
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.tirePressure.rear.left.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.tirePressure.rear.left.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.tirePressure.rear.left.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.tirePressure.rear.left.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -411,10 +411,10 @@ func ChassisAxleRow2WheelRightTirePressureFromCompass(jsonData []byte) (ret floa
 	var result gjson.Result
 	orName := "labels.tirePressure.rear.right.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -423,9 +423,9 @@ func ChassisAxleRow2WheelRightTirePressureFromCompass(jsonData []byte) (ret floa
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.tirePressure.rear.right.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.tirePressure.rear.right.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.tirePressure.rear.right.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.tirePressure.rear.right.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -442,10 +442,10 @@ func CurrentLocationAltitudeFromCompass(jsonData []byte) (ret float64, err error
 	var result gjson.Result
 	orName := "labels.geolocation.altitude.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -454,9 +454,9 @@ func CurrentLocationAltitudeFromCompass(jsonData []byte) (ret float64, err error
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.geolocation.altitude.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.geolocation.altitude.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.geolocation.altitude.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.geolocation.altitude.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -473,10 +473,10 @@ func CurrentLocationHeadingFromCompass(jsonData []byte) (ret float64, err error)
 	var result gjson.Result
 	orName := "labels.heading"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -485,9 +485,9 @@ func CurrentLocationHeadingFromCompass(jsonData []byte) (ret float64, err error)
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.heading': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.heading': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.heading' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.heading' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -504,10 +504,10 @@ func CurrentLocationLatitudeFromCompass(jsonData []byte) (ret float64, err error
 	var result gjson.Result
 	orName := "labels.geolocation.latitude"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -516,9 +516,9 @@ func CurrentLocationLatitudeFromCompass(jsonData []byte) (ret float64, err error
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.geolocation.latitude': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.geolocation.latitude': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.geolocation.latitude' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.geolocation.latitude' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -535,10 +535,10 @@ func CurrentLocationLongitudeFromCompass(jsonData []byte) (ret float64, err erro
 	var result gjson.Result
 	orName := "labels.geolocation.longitude"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -547,9 +547,9 @@ func CurrentLocationLongitudeFromCompass(jsonData []byte) (ret float64, err erro
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.geolocation.longitude': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.geolocation.longitude': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.geolocation.longitude' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.geolocation.longitude' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -566,10 +566,10 @@ func IsIgnitionOnFromCompass(jsonData []byte) (ret float64, err error) {
 	var result gjson.Result
 	orName := "labels.engine.ignition"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -578,9 +578,9 @@ func IsIgnitionOnFromCompass(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.engine.ignition': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.engine.ignition': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.engine.ignition' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.engine.ignition' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -597,10 +597,10 @@ func LowVoltageBatteryCurrentVoltageFromCompass(jsonData []byte) (ret float64, e
 	var result gjson.Result
 	orName := "labels.engine.battery.voltage.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -609,9 +609,9 @@ func LowVoltageBatteryCurrentVoltageFromCompass(jsonData []byte) (ret float64, e
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.engine.battery.voltage.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.engine.battery.voltage.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.engine.battery.voltage.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.engine.battery.voltage.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -628,10 +628,10 @@ func PowertrainCombustionEngineECTFromCompass(jsonData []byte) (ret float64, err
 	var result gjson.Result
 	orName := "labels.engine.coolant.temperature.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -640,9 +640,9 @@ func PowertrainCombustionEngineECTFromCompass(jsonData []byte) (ret float64, err
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.engine.coolant.temperature.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.engine.coolant.temperature.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.engine.coolant.temperature.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.engine.coolant.temperature.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -659,10 +659,10 @@ func PowertrainCombustionEngineEOPFromCompass(jsonData []byte) (ret float64, err
 	var result gjson.Result
 	orName := "labels.engine.oil.pressure.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -671,9 +671,9 @@ func PowertrainCombustionEngineEOPFromCompass(jsonData []byte) (ret float64, err
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.engine.oil.pressure.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.engine.oil.pressure.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.engine.oil.pressure.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.engine.oil.pressure.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -690,10 +690,10 @@ func PowertrainCombustionEngineEOTFromCompass(jsonData []byte) (ret float64, err
 	var result gjson.Result
 	orName := "labels.engine.oil.temperature.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -702,9 +702,9 @@ func PowertrainCombustionEngineEOTFromCompass(jsonData []byte) (ret float64, err
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.engine.oil.temperature.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.engine.oil.temperature.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.engine.oil.temperature.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.engine.oil.temperature.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -721,10 +721,10 @@ func PowertrainCombustionEngineSpeedFromCompass(jsonData []byte) (ret float64, e
 	var result gjson.Result
 	orName := "labels.engine.speed.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -733,9 +733,9 @@ func PowertrainCombustionEngineSpeedFromCompass(jsonData []byte) (ret float64, e
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.engine.speed.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.engine.speed.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.engine.speed.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.engine.speed.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -752,10 +752,10 @@ func PowertrainFuelSystemAbsoluteLevelFromCompass(jsonData []byte) (ret float64,
 	var result gjson.Result
 	orName := "labels.fuel.level.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -764,9 +764,9 @@ func PowertrainFuelSystemAbsoluteLevelFromCompass(jsonData []byte) (ret float64,
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.fuel.level.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.fuel.level.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.fuel.level.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.fuel.level.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -783,10 +783,10 @@ func PowertrainFuelSystemRelativeLevelFromCompass(jsonData []byte) (ret float64,
 	var result gjson.Result
 	orName := "labels.fuel.level.percentage"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -795,9 +795,9 @@ func PowertrainFuelSystemRelativeLevelFromCompass(jsonData []byte) (ret float64,
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.fuel.level.percentage': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.fuel.level.percentage': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.fuel.level.percentage' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.fuel.level.percentage' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -814,10 +814,10 @@ func PowertrainTransmissionTravelledDistanceFromCompass(jsonData []byte) (ret fl
 	var result gjson.Result
 	orName := "labels.odometer.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -826,9 +826,9 @@ func PowertrainTransmissionTravelledDistanceFromCompass(jsonData []byte) (ret fl
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.odometer.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.odometer.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.odometer.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.odometer.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -845,10 +845,10 @@ func SpeedFromCompass(jsonData []byte) (ret float64, err error) {
 	var result gjson.Result
 	orName := "labels.speed.value"
 	if strings.HasPrefix(orName, "labels") {
-		labels := gjson.GetBytes(jsonData, "data.labels")
+		labels := gjson.GetBytes(jsonData, "labels")
 		result = labels.Get(gjson.Escape(orName[len("labels."):]))
 	} else {
-		result = gjson.GetBytes(jsonData, "data."+orName)
+		result = gjson.GetBytes(jsonData, ""+orName)
 	}
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
@@ -857,9 +857,9 @@ func SpeedFromCompass(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.labels.speed.value': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'labels.speed.value': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.labels.speed.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'labels.speed.value' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
