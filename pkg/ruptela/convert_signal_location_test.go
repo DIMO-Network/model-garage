@@ -1,19 +1,24 @@
-package status_test
+package ruptela_test
 
 import (
 	"cmp"
+	"encoding/json"
 	"slices"
 	"testing"
 	"time"
 
-	"github.com/DIMO-Network/model-garage/pkg/ruptela/status"
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/require"
 )
 
 func TestLocationPayload(t *testing.T) {
 	t.Parallel()
-	actualSignals, err := status.SignalsFromLocationPayload([]byte(locationInputJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(locationInputJSON), &event)
+	require.NoError(t, err)
+	actualSignals, err := ruptela.SignalsFromLocationPayload(event)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 
 	// sort the signals so diffs are easier to read

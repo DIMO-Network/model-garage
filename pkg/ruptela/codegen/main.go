@@ -76,7 +76,7 @@ func createFuncs(records map[string]Record) error {
 			"bigText": bigText,
 		},
 	).Parse(functionsTemplate)
-	outputFile := "pkg/ruptela/multiplier-offset.go"
+	outputFile := "pkg/ruptela/multiplier_offset.go"
 	customFileOutputFile, err := os.Create(outputFile)
 	if err != nil {
 		return fmt.Errorf("error creating Custom output file: %w", err)

@@ -6,7 +6,7 @@ import _ "embed"
 //go:embed oids.csv
 var oidCSV string
 
-//go:embed ruptela-definitions.yaml
+//go:embed ruptela_definitions.yaml
 var ruptelaDefinitions string
 
 // OIDCSV is the embedded CSV file containing ruptela OID definitions.

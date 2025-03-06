@@ -1,21 +1,26 @@
-package fingerprint_test
+package ruptela_test
 
 import (
+	"encoding/json"
 	"testing"
 
-	"github.com/DIMO-Network/model-garage/pkg/ruptela/fingerprint"
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/stretchr/testify/require"
 )
 
-func TestFullFromDataConversion(t *testing.T) {
+func TestFullFPFromDataConversion(t *testing.T) {
 	t.Parallel()
 	expectedVIN := "UALLAAAF3AA444482"
-	fp, err := fingerprint.DecodeFingerprint([]byte(fullInputJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(fullFPInputJSON), &event)
+	require.NoError(t, err)
+	fp, err := ruptela.DecodeFingerprint(event)
 	require.NoError(t, err, "error decoding fingerprint")
-	require.Equal(t, expectedVIN, fp.Data.VIN, "decoded VIN does not match expected VIN")
+	require.Equal(t, expectedVIN, fp.VIN, "decoded VIN does not match expected VIN")
 }
 
-var fullInputJSON = `
+var fullFPInputJSON = `
 {
 	"source": "ruptela/TODO",
 	"data": {

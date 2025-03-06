@@ -1,36 +1,27 @@
-package status
+package ruptela
 
 import (
 	"errors"
 	"fmt"
 	"time"
 
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
-	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/tidwall/gjson"
 )
 
 // SignalsFromLocationPayload extracts signals from a V2 payload.
-func SignalsFromLocationPayload(jsonData []byte) ([]vss.Signal, error) {
-	tokenID, err := TokenIDFromData(jsonData)
+func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error) {
+	did, err := cloudevent.DecodeNFTDID(event.Subject)
 	if err != nil {
-		return nil, convert.ConversionError{
-			Errors: []error{fmt.Errorf("error getting tokenId: %w", err)},
-		}
+		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
 	}
-	source, err := SourceFromData(jsonData)
-	if err != nil {
-		return nil, convert.ConversionError{
-			TokenID: tokenID,
-			Errors:  []error{fmt.Errorf("error getting source: %w", err)},
-		}
-	}
-	signals := gjson.GetBytes(jsonData, "data.location")
+	signals := gjson.GetBytes(event.Data, "location")
 	if !signals.Exists() {
 		return nil, convert.ConversionError{
-			TokenID: tokenID,
-			Source:  source,
+			TokenID: did.TokenID,
+			Source:  event.Source,
 			Errors:  []error{convert.FieldNotFoundError{Field: "signals", Lookup: "data.location"}},
 		}
 	}
@@ -40,20 +31,20 @@ func SignalsFromLocationPayload(jsonData []byte) ([]vss.Signal, error) {
 			return []vss.Signal{}, nil
 		}
 		return nil, convert.ConversionError{
-			TokenID: tokenID,
-			Source:  source,
+			TokenID: did.TokenID,
+			Source:  event.Source,
 			Errors:  []error{errors.New("signals field is not an array")},
 		}
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		TokenID: tokenID,
-		Source:  source,
+		TokenID: did.TokenID,
+		Source:  event.Source,
 	}
 
 	conversionErrors := convert.ConversionError{
-		TokenID: tokenID,
-		Source:  source,
+		TokenID: did.TokenID,
+		Source:  event.Source,
 	}
 	for _, sigData := range signals.Array() {
 		if !sigData.IsObject() {
@@ -75,7 +66,7 @@ func SignalsFromLocationPayload(jsonData []byte) ([]vss.Signal, error) {
 				return true
 			}
 			signalMeta.Timestamp = ts
-			sigs, err := ruptela.SignalsFromLocationData(jsonData, signalMeta, key.String(), value)
+			sigs, err := SignalsFromLocationData(event.Data, signalMeta, key.String(), value)
 			if err != nil {
 				conversionErrors.Errors = append(conversionErrors.Errors, err)
 				return true
