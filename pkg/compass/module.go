@@ -103,7 +103,7 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 func createCloudEventHdr(event *compassEvent, producer, subject, eventType string) (cloudevent.CloudEventHeader, error) {
 	timeValue, err := time.Parse(time.RFC3339, event.Time)
 	if err != nil {
-		return cloudevent.CloudEventHeader{}, fmt.Errorf("Failed to parse time: %v\n", err)
+		return cloudevent.CloudEventHeader{}, fmt.Errorf("failed to parse time: %w", err)
 	}
 	return cloudevent.CloudEventHeader{
 		DataContentType: "application/json",

@@ -123,5 +123,4 @@ func TestFingerprintConvert(t *testing.T) {
 			}
 		})
 	}
-
 }
