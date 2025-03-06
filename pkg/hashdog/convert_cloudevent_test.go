@@ -1,10 +1,9 @@
-package lorawan
+package hashdog
 
 import (
-	"encoding/json"
 	"testing"
 
-	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -61,21 +60,15 @@ func TestConvertToCloudEvents(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			events, err := ConvertToCloudEvents(tt.input, 2, "0x325b45949C833986bC98e98a49F3CA5C5c4643B5", "0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8")
+			hdrs, _, err := ConvertToCloudEvents(tt.input, 2, common.HexToAddress("0x325b45949C833986bC98e98a49F3CA5C5c4643B5"), common.HexToAddress("0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8"))
 			if tt.expectError {
 				assert.Error(t, err)
 			} else {
 				require.NoError(t, err)
-				require.Len(t, events, tt.length)
+				require.Len(t, hdrs, tt.length)
 
-				var cloudEvent cloudevent.CloudEvent[json.RawMessage]
-				errUnmarshal := json.Unmarshal(events[0], &cloudEvent)
-				if errUnmarshal != nil {
-					t.Fatalf("Failed to unmarshal cloud event: %v", errUnmarshal)
-				}
-
-				assert.Equal(t, tt.expectedSubject, cloudEvent.Subject)
-				assert.Equal(t, tt.expectedProducer, cloudEvent.Producer)
+				assert.Equal(t, tt.expectedSubject, hdrs[0].Subject)
+				assert.Equal(t, tt.expectedProducer, hdrs[0].Producer)
 			}
 		})
 	}

@@ -1,17 +1,21 @@
-package status
+package hashdog
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
-
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFullFromV2DataConversion(t *testing.T) {
 	t.Parallel()
-	actualSignals, err := SignalsFromV2Payload([]byte(fullV2InputJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(fullV2InputJSON), &event)
+	require.NoErrorf(t, err, "error unmarshalling full input data: %v", err)
+	actualSignals, err := SignalsFromV2Payload(event)
 
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 	require.Len(t, actualSignals, len(expectedV2Signals), "actual signals length does not match expected")
@@ -139,7 +143,7 @@ var fullV2InputJSON = `{
                     "timestamp": 1713460846435,
                     "name": "fuelLevel",
                     "value": 50
-                },
+                }
             ]
         }
     },
@@ -178,7 +182,9 @@ var (
 
 func TestNullSignals(t *testing.T) {
 	t.Parallel()
-	actualSignals, err := SignalsFromV2Payload([]byte(nilSignalsJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(nilSignalsJSON), &event)
+	actualSignals, err := SignalsFromV2Payload(event)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 	require.Equalf(t, []vss.Signal{}, actualSignals, "converted vehicle does not match expected vehicle")
 }
@@ -200,5 +206,5 @@ var nilSignalsJSON = `{
         "vehicle": {
             "signals": null
         }
-    },
+    }
 }`

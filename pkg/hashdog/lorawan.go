@@ -1,5 +1,4 @@
-// Package lorawan provides types for working with LoRaWAN payloads.
-package lorawan
+package hashdog
 
 import (
 	"encoding/json"
@@ -14,7 +13,7 @@ type LorawanEvent struct {
 	Type           string          `json:"type"`
 }
 
-// Data represents the data field of a lorawan payload
+// Data represents the data field of a lorawan payload.
 type Data struct {
 	DecodedPayload json.RawMessage `json:"decodedPayload"`
 	Header         int             `json:"header"`
