@@ -84,9 +84,8 @@ generate-ruptela: # Generate all files for ruptela
 	go run ./pkg/ruptela/codegen
 
 generate-autopi: # Generate all files for autopi
-	go run ./cmd/codegen -convert.package=autopi -generators=convert -convert.output-file=./pkg/autopi/vehicle-convert-funcs_gen.go -definitions=./pkg/autopi/schema/autopi-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/vehicle-v1-convert_gen.go -custom.template-file=./pkg/autopi/codegen/convertv1.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/vehicle-v2-convert_gen.go -custom.template-file=./pkg/autopi/codegen/convertv2.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi-definitions.yaml
+	go run ./cmd/codegen -convert.package=autopi -generators=convert -convert.output-file=./pkg/autopi/convert_signal_funcs_gen.go -definitions=./pkg/autopi/schema/autopi_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/convert_signal_status_gen.go -custom.template-file=./pkg/autopi/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi_definitions.yaml
 
 generate-lorawan: # Generate all files for lorawan (macaron)
 	go run ./cmd/codegen -convert.package=lorawan -generators=convert -convert.output-file=./pkg/lorawan/vehicle-convert-funcs_gen.go -definitions=./pkg/lorawan/schema/lorawan-definitions.yaml
