@@ -4,16 +4,9 @@ package modules
 import (
 	"context"
 	"fmt"
-	"sync"
 
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
-)
-
-const (
-	ChainID                 = 80002
-	AftermarketContractAddr = "0x325b45949C833986bC98e98a49F3CA5C5c4643B5"
-	VehicleContractAddr     = "0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8"
 )
 
 // SignalModule is an interface for converting messages to signals.
@@ -38,62 +31,18 @@ func (e NotFoundError) Error() string {
 	return string(e)
 }
 
-// global registry for modules with mutex locks for thread safety
-var (
-	signalModulesMu sync.RWMutex
-	signalModules   = make(map[string]SignalModule)
-
-	cloudEventModulesMu sync.RWMutex
-	cloudEventModules   = make(map[string]CloudEventModule)
-
-	fingerprintModulesMu sync.RWMutex
-	fingerprintModules   = make(map[string]FingerprintModule)
-)
-
-// RegisterSignalModule registers a signal module for a given source.
-func RegisterSignalModule(source string, module SignalModule) error {
-	signalModulesMu.Lock()
-	defer signalModulesMu.Unlock()
-
-	if _, ok := signalModules[source]; ok {
-		return fmt.Errorf("signal module '%s' already registered", source)
-	}
-	signalModules[source] = module
-	return nil
-}
-
-// RegisterCloudEventModule registers a cloud event module for a given source.
-func RegisterCloudEventModule(source string, module CloudEventModule) error {
-	cloudEventModulesMu.Lock()
-	defer cloudEventModulesMu.Unlock()
-
-	if _, ok := cloudEventModules[source]; ok {
-		return fmt.Errorf("cloud event module '%s' already registered", source)
-	}
-	cloudEventModules[source] = module
-	return nil
-}
-
-// RegisterFingerprintModule registers a fingerprint module for a given source.
-func RegisterFingerprintModule(source string, module FingerprintModule) error {
-	fingerprintModulesMu.Lock()
-	defer fingerprintModulesMu.Unlock()
-
-	if _, ok := fingerprintModules[source]; ok {
-		return fmt.Errorf("fingerprint module '%s' already registered", source)
-	}
-	fingerprintModules[source] = module
-	return nil
-}
-
-// ConvertToSignals takes a module source and raw payload and returns a list of signals
+// ConvertToSignals takes a module source and raw payload and returns a list of signals.
+// Falls back to the default module (empty source) if the specified module is not found.
 func ConvertToSignals(ctx context.Context, source string, event cloudevent.RawEvent) ([]vss.Signal, error) {
-	signalModulesMu.RLock()
-	module, ok := signalModules[source]
-	signalModulesMu.RUnlock()
+	// Try to get the specific module
+	module, ok := SignalRegistry.Get(source)
 
+	// If not found, use the default module
 	if !ok {
-		return nil, NotFoundError(fmt.Sprintf("signal module '%s' not found", source))
+		module, ok = SignalRegistry.Get("")
+		if !ok {
+			return nil, NotFoundError(fmt.Sprintf("signal module '%s' not found and no default module registered", source))
+		}
 	}
 
 	signals, err := module.SignalConvert(ctx, event)
@@ -104,14 +53,18 @@ func ConvertToSignals(ctx context.Context, source string, event cloudevent.RawEv
 	return signals, nil
 }
 
-// ConvertToCloudEvents takes a module source and raw payload and returns cloud event headers and data
+// ConvertToCloudEvents takes a module source and raw payload and returns cloud event headers and data.
+// Falls back to the default module (empty source) if the specified module is not found.
 func ConvertToCloudEvents(ctx context.Context, source string, rawData []byte) ([]cloudevent.CloudEventHeader, []byte, error) {
-	cloudEventModulesMu.RLock()
-	module, ok := cloudEventModules[source]
-	cloudEventModulesMu.RUnlock()
+	// Try to get the specific module
+	module, ok := CloudEventRegistry.Get(source)
 
+	// If not found, use the default module
 	if !ok {
-		return nil, nil, NotFoundError(fmt.Sprintf("cloud event module '%s' not found", source))
+		module, ok = CloudEventRegistry.Get("")
+		if !ok {
+			return nil, nil, NotFoundError(fmt.Sprintf("cloud event module '%s' not found and no default module registered", source))
+		}
 	}
 
 	headers, data, err := module.CloudEventConvert(ctx, rawData)
@@ -122,14 +75,18 @@ func ConvertToCloudEvents(ctx context.Context, source string, rawData []byte) ([
 	return headers, data, nil
 }
 
-// ConvertToFingerprint takes a module source and raw payload and returns a fingerprint event
+// ConvertToFingerprint takes a module source and raw payload and returns a fingerprint event.
+// Falls back to the default module (empty source) if the specified module is not found.
 func ConvertToFingerprint(ctx context.Context, source string, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
-	fingerprintModulesMu.RLock()
-	module, ok := fingerprintModules[source]
-	fingerprintModulesMu.RUnlock()
+	// Try to get the specific module
+	module, ok := FingerprintRegistry.Get(source)
 
+	// If not found, use the default module
 	if !ok {
-		return cloudevent.Fingerprint{}, NotFoundError(fmt.Sprintf("fingerprint module '%s' not found", source))
+		module, ok = FingerprintRegistry.Get("")
+		if !ok {
+			return cloudevent.Fingerprint{}, NotFoundError(fmt.Sprintf("fingerprint module '%s' not found and no default module registered", source))
+		}
 	}
 
 	fingerprint, err := module.FingerprintConvert(ctx, event)
