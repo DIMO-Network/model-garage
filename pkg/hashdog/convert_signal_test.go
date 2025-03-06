@@ -184,6 +184,7 @@ func TestNullSignals(t *testing.T) {
 	t.Parallel()
 	var event cloudevent.RawEvent
 	err := json.Unmarshal([]byte(nilSignalsJSON), &event)
+	require.NoError(t, err)
 	actualSignals, err := SignalsFromV2Payload(event)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 	require.Equalf(t, []vss.Signal{}, actualSignals, "converted vehicle does not match expected vehicle")

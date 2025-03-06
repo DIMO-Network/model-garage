@@ -1,3 +1,4 @@
+// Package defaultmodule provides a default implementation for decoding DIMO data.
 package defaultmodule
 
 import (

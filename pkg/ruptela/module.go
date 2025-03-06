@@ -14,12 +14,6 @@ import (
 	"github.com/segmentio/ksuid"
 )
 
-type moduleConfig struct {
-	ChainID                 uint64 `json:"chain_id"`
-	AftermarketContractAddr string `json:"aftermarket_contract_addr"`
-	VehicleContractAddr     string `json:"vehicle_contract_addr"`
-}
-
 // Module is a module that converts ruptela messages to signals.
 type Module struct {
 	ChainID                 uint64         `json:"chain_id"`
@@ -118,7 +112,7 @@ func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, 
 func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType string) (cloudevent.CloudEventHeader, error) {
 	timeValue, err := time.Parse(time.RFC3339, event.Time)
 	if err != nil {
-		return cloudevent.CloudEventHeader{}, fmt.Errorf("Failed to parse time: %v\n", err)
+		return cloudevent.CloudEventHeader{}, fmt.Errorf("failed to parse time: %w", err)
 	}
 	return cloudevent.CloudEventHeader{
 		DataContentType: "application/json",
