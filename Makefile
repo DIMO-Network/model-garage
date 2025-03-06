@@ -69,7 +69,7 @@ tools: tools-golangci-lint
 clickhouse:
 	go run ./cmd/clickhouse-container
 
-generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-lorawan# Generate all files for the repository
+generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-hashdog# Generate all files for the repository
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/vss/vehicle-structs.go -custom.template-file=./internal/generator/vehicle.tmpl -custom.format=true
 
 generate-nativestatus: # Generate all files for nativestatus
@@ -78,25 +78,24 @@ generate-nativestatus: # Generate all files for nativestatus
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/nativestatus/vehicle-v2-convert_gen.go -custom.template-file=./pkg/nativestatus/convertv2.tmpl -custom.format=true -definitions=./pkg/nativestatus/schema/native-definitions.yaml
 
 generate-ruptela: # Generate all files for ruptela
-	go run ./cmd/codegen -convert.package=ruptela -generators=convert -convert.output-file=./pkg/ruptela/vehicle-convert-funcs_gen.go -definitions=./pkg/ruptela/schema/ruptela-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/vehicle-v1-convert_gen.go -custom.template-file=./pkg/ruptela/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/vehicle-location-convert_gen.go -custom.template-file=./pkg/ruptela/codegen/convert-location.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela-definitions.yaml
+	go run ./cmd/codegen -convert.package=ruptela -generators=convert -convert.output-file=./pkg/ruptela/conver_signal_funcs_gen.go -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/convert_signal_status_gen.go -custom.template-file=./pkg/ruptela/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/convert_signal_location_gen.go -custom.template-file=./pkg/ruptela/codegen/convert_signal_location.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
 	go run ./pkg/ruptela/codegen
 
 generate-autopi: # Generate all files for autopi
-	go run ./cmd/codegen -convert.package=autopi -generators=convert -convert.output-file=./pkg/autopi/vehicle-convert-funcs_gen.go -definitions=./pkg/autopi/schema/autopi-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/vehicle-v1-convert_gen.go -custom.template-file=./pkg/autopi/codegen/convertv1.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/vehicle-v2-convert_gen.go -custom.template-file=./pkg/autopi/codegen/convertv2.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi-definitions.yaml
+	go run ./cmd/codegen -convert.package=autopi -generators=convert -convert.output-file=./pkg/autopi/convert_signal_funcs_gen.go -definitions=./pkg/autopi/schema/autopi_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/convert_signal_status_gen.go -custom.template-file=./pkg/autopi/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi_definitions.yaml
 
-generate-lorawan: # Generate all files for lorawan (macaron)
-	go run ./cmd/codegen -convert.package=lorawan -generators=convert -convert.output-file=./pkg/lorawan/vehicle-convert-funcs_gen.go -definitions=./pkg/lorawan/schema/lorawan-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/lorawan/lorawan-convert_gen.go -custom.template-file=./pkg/lorawan/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/lorawan/schema/lorawan-definitions.yaml
+generate-hashdog: # Generate all files for hashdog (macaron)
+	go run ./cmd/codegen -convert.package=hashdog -generators=convert -convert.output-file=./pkg/hashdog/convert_signal_funcs_gen.go -definitions=./pkg/hashdog/schema/lorawan_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/hashdog/convert_signal_status_gen.go -custom.template-file=./pkg/hashdog/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/hashdog/schema/lorawan_definitions.yaml
 
 
 generate-tesla: # Generate all files for tesla
-	go run ./cmd/codegen -convert.package=tesla -generators=convert -convert.output-file=./pkg/tesla/vehicle-convert-funcs_gen.go -definitions=./pkg/tesla/schema/tesla-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/tesla/tesla-convert_gen.go -custom.template-file=./pkg/tesla/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/tesla/schema/tesla-definitions.yaml
+	go run ./cmd/codegen -convert.package=tesla -generators=convert -convert.output-file=./pkg/tesla/convert_signal_funcs_gen.go -definitions=./pkg/tesla/schema/tesla_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/tesla/convert_signal_status_gen.go -custom.template-file=./pkg/tesla/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/tesla/schema/tesla_definitions.yaml
 
 generate-compass: # Generate all files for compass
-	go run ./cmd/codegen -convert.package=compass -generators=convert -convert.output-file=./pkg/compass/vehicle-convert-funcs_gen.go -definitions=./pkg/compass/schema/compass-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/compass/compass-convert_gen.go -custom.template-file=./pkg/compass/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/compass/schema/compass-definitions.yaml
+	go run ./cmd/codegen -convert.package=compass -generators=convert -convert.output-file=./pkg/compass/convert_signal_funcs_gen.go -definitions=./pkg/compass/schema/compass_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/compass/convert_signal_status_gen.go -custom.template-file=./pkg/compass/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/compass/schema/compass_definitions.yaml
