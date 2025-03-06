@@ -1,38 +1,28 @@
-// Package status provides a functions for managing Autopi status payloads.
-package status
+package autopi
 
 import (
 	"errors"
 	"fmt"
 	"time"
 
-	"github.com/DIMO-Network/model-garage/pkg/autopi"
 	"github.com/tidwall/gjson"
 
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 )
 
 // SignalsFromV2Payload extracts signals from a V2 payload.
-func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
-	tokenID, err := autopi.TokenIDFromData(jsonData)
+func SignalsFromV2Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
+	did, err := cloudevent.DecodeNFTDID(event.Subject)
 	if err != nil {
-		return nil, convert.ConversionError{
-			Errors: []error{fmt.Errorf("error getting tokenId: %w", err)},
-		}
+		return nil, fmt.Errorf("failed to decode DID: %w", err)
 	}
-	source, err := autopi.SourceFromData(jsonData)
-	if err != nil {
-		return nil, convert.ConversionError{
-			TokenID: tokenID,
-			Errors:  []error{fmt.Errorf("error getting source: %w", err)},
-		}
-	}
-	signals := gjson.GetBytes(jsonData, "data.vehicle.signals")
+	signals := gjson.GetBytes(event.Data, "vehicle.signals")
 	if !signals.Exists() {
 		return nil, convert.ConversionError{
-			TokenID: tokenID,
-			Source:  source,
+			TokenID: did.TokenID,
+			Source:  event.Source,
 			Errors:  []error{convert.FieldNotFoundError{Field: "signals", Lookup: "data.vehicle.signals"}},
 		}
 	}
@@ -42,20 +32,20 @@ func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
 			return []vss.Signal{}, nil
 		}
 		return nil, convert.ConversionError{
-			TokenID: tokenID,
-			Source:  source,
+			TokenID: did.TokenID,
+			Source:  event.Source,
 			Errors:  []error{errors.New("signals field is not an array")},
 		}
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		TokenID: tokenID,
-		Source:  source,
+		TokenID: did.TokenID,
+		Source:  event.Source,
 	}
 
 	conversionErrors := convert.ConversionError{
-		TokenID: tokenID,
-		Source:  source,
+		TokenID: did.TokenID,
+		Source:  event.Source,
 	}
 	for _, sigData := range signals.Array() {
 		originalName, err := NameFromV2Signal(sigData)
@@ -70,7 +60,7 @@ func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
 			continue
 		}
 		signalMeta.Timestamp = ts
-		sigs, err := autopi.SignalsFromV2Data(jsonData, signalMeta, originalName, sigData)
+		sigs, err := SignalsFromV2Data(event.Data, signalMeta, originalName, sigData)
 		if err != nil {
 			conversionErrors.Errors = append(conversionErrors.Errors, err)
 			continue

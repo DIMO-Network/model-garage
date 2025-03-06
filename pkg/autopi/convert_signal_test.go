@@ -1,24 +1,30 @@
-package status
+package autopi_test
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/DIMO-Network/model-garage/pkg/autopi"
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 )
 
 func TestFullFromV2DataConversion(t *testing.T) {
 	t.Parallel()
-	actualSignals, err := SignalsFromV2Payload([]byte(fullV2InputJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(fullAPInputJSON), &event)
+	require.NoError(t, err)
+	actualSignals, err := autopi.SignalsFromV2Payload(event)
 
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 	require.Len(t, actualSignals, len(expectedV2Signals), "actual signals length does not match expected")
 	require.Equalf(t, expectedV2Signals, actualSignals, "converted vehicle does not match expected vehicle")
 }
 
-var fullV2InputJSON = `{
+var fullAPInputJSON = `{
     "id": "2fHbFXPWzrVActDb7WqWCfqeiYe",
     "source": "dimo/integration/123",
     "specversion": "1.0",
@@ -139,7 +145,7 @@ var fullV2InputJSON = `{
                     "timestamp": 1713460846435,
                     "name": "fuelLevel",
                     "value": 50
-                },
+                }
             ]
         }
     },
@@ -178,7 +184,10 @@ var (
 
 func TestNullSignals(t *testing.T) {
 	t.Parallel()
-	actualSignals, err := SignalsFromV2Payload([]byte(nilSignalsJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(nilSignalsJSON), &event)
+	require.NoError(t, err)
+	actualSignals, err := autopi.SignalsFromV2Payload(event)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 	require.Equalf(t, []vss.Signal{}, actualSignals, "converted vehicle does not match expected vehicle")
 }
@@ -200,5 +209,5 @@ var nilSignalsJSON = `{
         "vehicle": {
             "signals": null
         }
-    },
+    }
 }`
