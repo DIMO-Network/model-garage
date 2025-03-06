@@ -1,5 +1,4 @@
-// Package fingerprint provides decoding for Tesla fingerprint payloads.
-package fingerprint
+package tesla
 
 import (
 	"encoding/json"
@@ -7,18 +6,17 @@ import (
 	"fmt"
 
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
-	"github.com/DIMO-Network/model-garage/pkg/tesla"
 	"github.com/teslamotors/fleet-telemetry/protos"
 	"github.com/tidwall/gjson"
 	"google.golang.org/protobuf/proto"
 )
 
 // DecodeFingerprintFromData decodes a fingerprint from the data portion of a CloudEvent.
-func DecodeFingerprintFromData(ce cloudevent.CloudEvent[json.RawMessage]) (cloudevent.Fingerprint, error) {
+func DecodeFingerprintFromData(ce cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
 	fingerPrint := cloudevent.Fingerprint{}
 	switch ce.DataVersion {
-	case tesla.FleetTelemetryDataVersion:
-		var tlmData tesla.TelemetryData
+	case FleetTelemetryDataVersion:
+		var tlmData TelemetryData
 		if err := json.Unmarshal(ce.Data, &tlmData); err != nil {
 			return fingerPrint, fmt.Errorf("failed to unmarshal telemetry payload: %w", err)
 		}

@@ -1,11 +1,11 @@
-package fingerprint_test
+package tesla_test
 
 import (
 	"encoding/json"
 	"testing"
 
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
-	"github.com/DIMO-Network/model-garage/pkg/tesla/fingerprint"
+	"github.com/DIMO-Network/model-garage/pkg/tesla"
 	"github.com/stretchr/testify/require"
 )
 
@@ -29,7 +29,7 @@ func TestFullFromDataConversion(t *testing.T) {
 	} {
 		err := json.Unmarshal([]byte(test.CloudEvent), &event)
 		require.NoError(t, err, "error unmarshalling input JSON")
-		fp, err := fingerprint.DecodeFingerprintFromData(event)
+		fp, err := tesla.DecodeFingerprintFromData(event)
 		require.Equal(t, test.ExpectedError, err, "error decoding fingerprint")
 		require.Equal(t, test.ExpectedVin, fp.VIN, "decoded VIN does not match expected VIN")
 	}
