@@ -1,5 +1,4 @@
-// Package status converts Tesla CloudEvents to ClickHouse-ready slices of signals.
-package status
+package tesla
 
 import (
 	"encoding/json"
@@ -7,21 +6,13 @@ import (
 
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
-	"github.com/DIMO-Network/model-garage/pkg/tesla"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	ftconv "github.com/DIMO-Network/tesla-vss/pkg/convert"
 	"github.com/teslamotors/fleet-telemetry/protos"
 	"google.golang.org/protobuf/proto"
 )
 
-func Decode(msgBytes []byte) ([]vss.Signal, error) {
-	// Only interested in the top-level CloudEvent fields.
-	var ce cloudevent.CloudEvent[json.RawMessage]
-
-	if err := json.Unmarshal(msgBytes, &ce); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal payload: %w", err)
-	}
-
+func Decode(ce cloudevent.RawEvent) ([]vss.Signal, error) {
 	did, err := cloudevent.DecodeNFTDID(ce.Subject)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
@@ -36,8 +27,8 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 	}
 
 	switch ce.DataVersion {
-	case tesla.FleetTelemetryDataVersion:
-		var td tesla.TelemetryData
+	case FleetTelemetryDataVersion:
+		var td TelemetryData
 		if err := json.Unmarshal(ce.Data, &td); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal telemetry wrapper: %w", err)
 		}
@@ -66,7 +57,7 @@ func Decode(msgBytes []byte) ([]vss.Signal, error) {
 		}
 		return batchedSigs, nil
 	default:
-		sigs, errs := tesla.SignalsFromTesla(baseSignal, msgBytes)
+		sigs, errs := SignalsFromTesla(baseSignal, ce.Data)
 		if len(errs) != 0 {
 			return nil, convert.ConversionError{
 				TokenID:        tokenID,

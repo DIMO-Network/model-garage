@@ -272,25 +272,25 @@ var zeroTime time.Time
 func ChassisAxleRow1WheelLeftTirePressureFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.vehicle_state.tpms_pressure_fl")
+	result = gjson.GetBytes(jsonData, "vehicle_state.tpms_pressure_fl")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToChassisAxleRow1WheelLeftTirePressure0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("vehicle_state.tpms_pressure_fl", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.vehicle_state.tpms_pressure_fl'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'vehicle_state.tpms_pressure_fl'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.vehicle_state.tpms_pressure_fl': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'vehicle_state.tpms_pressure_fl': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.vehicle_state.tpms_pressure_fl' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'vehicle_state.tpms_pressure_fl' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -305,25 +305,25 @@ func ChassisAxleRow1WheelLeftTirePressureFromTesla(jsonData []byte) (ret float64
 func ChassisAxleRow1WheelRightTirePressureFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.vehicle_state.tpms_pressure_fr")
+	result = gjson.GetBytes(jsonData, "vehicle_state.tpms_pressure_fr")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToChassisAxleRow1WheelRightTirePressure0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("vehicle_state.tpms_pressure_fr", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.vehicle_state.tpms_pressure_fr'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'vehicle_state.tpms_pressure_fr'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.vehicle_state.tpms_pressure_fr': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'vehicle_state.tpms_pressure_fr': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.vehicle_state.tpms_pressure_fr' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'vehicle_state.tpms_pressure_fr' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -338,25 +338,25 @@ func ChassisAxleRow1WheelRightTirePressureFromTesla(jsonData []byte) (ret float6
 func ChassisAxleRow2WheelLeftTirePressureFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.vehicle_state.tpms_pressure_rl")
+	result = gjson.GetBytes(jsonData, "vehicle_state.tpms_pressure_rl")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToChassisAxleRow2WheelLeftTirePressure0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("vehicle_state.tpms_pressure_rl", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.vehicle_state.tpms_pressure_rl'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'vehicle_state.tpms_pressure_rl'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.vehicle_state.tpms_pressure_rl': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'vehicle_state.tpms_pressure_rl': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.vehicle_state.tpms_pressure_rl' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'vehicle_state.tpms_pressure_rl' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -371,25 +371,25 @@ func ChassisAxleRow2WheelLeftTirePressureFromTesla(jsonData []byte) (ret float64
 func ChassisAxleRow2WheelRightTirePressureFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.vehicle_state.tpms_pressure_rr")
+	result = gjson.GetBytes(jsonData, "vehicle_state.tpms_pressure_rr")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToChassisAxleRow2WheelRightTirePressure0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("vehicle_state.tpms_pressure_rr", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.vehicle_state.tpms_pressure_rr'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'vehicle_state.tpms_pressure_rr'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.vehicle_state.tpms_pressure_rr': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'vehicle_state.tpms_pressure_rr': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.vehicle_state.tpms_pressure_rr' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'vehicle_state.tpms_pressure_rr' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -404,25 +404,25 @@ func ChassisAxleRow2WheelRightTirePressureFromTesla(jsonData []byte) (ret float6
 func CurrentLocationLatitudeFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.drive_state.latitude")
+	result = gjson.GetBytes(jsonData, "drive_state.latitude")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToCurrentLocationLatitude0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("drive_state.latitude", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.drive_state.latitude'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'drive_state.latitude'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.drive_state.latitude': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'drive_state.latitude': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.drive_state.latitude' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'drive_state.latitude' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -437,25 +437,25 @@ func CurrentLocationLatitudeFromTesla(jsonData []byte) (ret float64, ts time.Tim
 func CurrentLocationLongitudeFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.drive_state.longitude")
+	result = gjson.GetBytes(jsonData, "drive_state.longitude")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToCurrentLocationLongitude0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("drive_state.longitude", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.drive_state.longitude'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'drive_state.longitude'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.drive_state.longitude': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'drive_state.longitude': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.drive_state.longitude' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'drive_state.longitude' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -470,25 +470,25 @@ func CurrentLocationLongitudeFromTesla(jsonData []byte) (ret float64, ts time.Ti
 func ExteriorAirTemperatureFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.climate_state.outside_temp")
+	result = gjson.GetBytes(jsonData, "climate_state.outside_temp")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToExteriorAirTemperature0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("climate_state.outside_temp", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.climate_state.outside_temp'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'climate_state.outside_temp'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.climate_state.outside_temp': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'climate_state.outside_temp': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.climate_state.outside_temp' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'climate_state.outside_temp' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -503,25 +503,25 @@ func ExteriorAirTemperatureFromTesla(jsonData []byte) (ret float64, ts time.Time
 func PowertrainRangeFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.charge_state.battery_range")
+	result = gjson.GetBytes(jsonData, "charge_state.battery_range")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToPowertrainRange0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("charge_state.battery_range", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.charge_state.battery_range'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'charge_state.battery_range'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.charge_state.battery_range': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'charge_state.battery_range': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.charge_state.battery_range' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'charge_state.battery_range' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -536,25 +536,25 @@ func PowertrainRangeFromTesla(jsonData []byte) (ret float64, ts time.Time, err e
 func PowertrainTractionBatteryChargingAddedEnergyFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.charge_state.charge_energy_added")
+	result = gjson.GetBytes(jsonData, "charge_state.charge_energy_added")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToPowertrainTractionBatteryChargingAddedEnergy0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("charge_state.charge_energy_added", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.charge_state.charge_energy_added'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'charge_state.charge_energy_added'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.charge_state.charge_energy_added': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'charge_state.charge_energy_added': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.charge_state.charge_energy_added' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'charge_state.charge_energy_added' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -569,25 +569,25 @@ func PowertrainTractionBatteryChargingAddedEnergyFromTesla(jsonData []byte) (ret
 func PowertrainTractionBatteryChargingChargeLimitFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.charge_state.charge_limit_soc")
+	result = gjson.GetBytes(jsonData, "charge_state.charge_limit_soc")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToPowertrainTractionBatteryChargingChargeLimit0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("charge_state.charge_limit_soc", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.charge_state.charge_limit_soc'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'charge_state.charge_limit_soc'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.charge_state.charge_limit_soc': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'charge_state.charge_limit_soc': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.charge_state.charge_limit_soc' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'charge_state.charge_limit_soc' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -602,25 +602,25 @@ func PowertrainTractionBatteryChargingChargeLimitFromTesla(jsonData []byte) (ret
 func PowertrainTractionBatteryChargingIsChargingFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.charge_state.charging_state")
+	result = gjson.GetBytes(jsonData, "charge_state.charging_state")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
 			retVal, err := ToPowertrainTractionBatteryChargingIsCharging0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("charge_state.charging_state", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.charge_state.charging_state'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'charge_state.charging_state'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.charge_state.charging_state': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'charge_state.charging_state': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.charge_state.charging_state' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'charge_state.charging_state' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -635,25 +635,25 @@ func PowertrainTractionBatteryChargingIsChargingFromTesla(jsonData []byte) (ret 
 func PowertrainTractionBatteryCurrentPowerFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.drive_state.power")
+	result = gjson.GetBytes(jsonData, "drive_state.power")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToPowertrainTractionBatteryCurrentPower0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("drive_state.power", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.drive_state.power'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'drive_state.power'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.drive_state.power': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'drive_state.power': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.drive_state.power' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'drive_state.power' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -668,25 +668,25 @@ func PowertrainTractionBatteryCurrentPowerFromTesla(jsonData []byte) (ret float6
 func PowertrainTractionBatteryStateOfChargeCurrentFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.charge_state.battery_level")
+	result = gjson.GetBytes(jsonData, "charge_state.battery_level")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToPowertrainTractionBatteryStateOfChargeCurrent0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("charge_state.battery_level", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.charge_state.battery_level'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'charge_state.battery_level'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.charge_state.battery_level': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'charge_state.battery_level': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.charge_state.battery_level' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'charge_state.battery_level' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -701,25 +701,25 @@ func PowertrainTractionBatteryStateOfChargeCurrentFromTesla(jsonData []byte) (re
 func PowertrainTransmissionTravelledDistanceFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.vehicle_state.odometer")
+	result = gjson.GetBytes(jsonData, "vehicle_state.odometer")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToPowertrainTransmissionTravelledDistance0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("vehicle_state.odometer", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.vehicle_state.odometer'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'vehicle_state.odometer'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.vehicle_state.odometer': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'vehicle_state.odometer': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.vehicle_state.odometer' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'vehicle_state.odometer' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -734,25 +734,25 @@ func PowertrainTransmissionTravelledDistanceFromTesla(jsonData []byte) (ret floa
 func SpeedFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.drive_state.speed")
+	result = gjson.GetBytes(jsonData, "drive_state.speed")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
 			retVal, err := ToSpeed0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("drive_state.speed", ".")
-				result := gjson.GetBytes(jsonData, "data."+endpoint+".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.drive_state.speed'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'drive_state.speed'"))
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.drive_state.speed': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'drive_state.speed': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.drive_state.speed' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'drive_state.speed' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 

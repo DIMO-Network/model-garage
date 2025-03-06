@@ -46,25 +46,25 @@ func {{ $sig.GOName }}FromTesla(jsonData []byte) (ret {{ $sig.GOType }}, ts time
     var result gjson.Result
 
 	{{- range $j, $conv := .Conversions }}
-    result = gjson.GetBytes(jsonData, "data.{{ $conv.OriginalName }}")
+    result = gjson.GetBytes(jsonData, "{{ $conv.OriginalName }}")
     if result.Exists() && result.Value() != nil {
         val, ok := result.Value().({{ $conv.OriginalType }})
         if ok {
             retVal, err := To{{ $sig.GOName }}{{ $j }}(jsonData, val)
             if err == nil {
 				endpoint, _, _ := strings.Cut("{{ $conv.OriginalName }}", ".")
-				result := gjson.GetBytes(jsonData, "data." + endpoint + ".timestamp")
+				result := gjson.GetBytes(jsonData, endpoint + ".timestamp")
 
 				if result.Exists() && result.Type == gjson.Number {
 					ts := time.UnixMilli(result.Int())
 					return retVal, ts, nil
 				}
 
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'data.{{ $conv.OriginalName }}'"))
+				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for '{{ $conv.OriginalName }}'"))
             }
-            errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.{{ $conv.OriginalName }}': %w", err))
+            errs = errors.Join(errs, fmt.Errorf("failed to convert '{{ $conv.OriginalName }}': %w", err))
         } else {
-            errs = errors.Join(errs, fmt.Errorf("%w, field 'data.{{ $conv.OriginalName }}' is not of type '{{ $conv.OriginalType }}' got '%v' of type '%T'",  convert.InvalidTypeError(), result.Value(), result.Value()))
+            errs = errors.Join(errs, fmt.Errorf("%w, field '{{ $conv.OriginalName }}' is not of type '{{ $conv.OriginalType }}' got '%v' of type '%T'",  convert.InvalidTypeError(), result.Value(), result.Value()))
         }
     }
 	{{- end }}

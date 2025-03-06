@@ -94,8 +94,8 @@ generate-lorawan: # Generate all files for lorawan (macaron)
 
 
 generate-tesla: # Generate all files for tesla
-	go run ./cmd/codegen -convert.package=tesla -generators=convert -convert.output-file=./pkg/tesla/vehicle-convert-funcs_gen.go -definitions=./pkg/tesla/schema/tesla-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/tesla/tesla-convert_gen.go -custom.template-file=./pkg/tesla/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/tesla/schema/tesla-definitions.yaml
+	go run ./cmd/codegen -convert.package=tesla -generators=convert -convert.output-file=./pkg/tesla/convert_signal_funcs_gen.go -definitions=./pkg/tesla/schema/tesla_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/tesla/convert_signal_status_gen.go -custom.template-file=./pkg/tesla/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/tesla/schema/tesla_definitions.yaml
 
 generate-compass: # Generate all files for compass
 	go run ./cmd/codegen -convert.package=compass -generators=convert -convert.output-file=./pkg/compass/vehicle-convert-funcs_gen.go -definitions=./pkg/compass/schema/compass-definitions.yaml

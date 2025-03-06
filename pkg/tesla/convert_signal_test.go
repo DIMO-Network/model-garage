@@ -1,9 +1,11 @@
-package status
+package tesla
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -65,7 +67,10 @@ var expSignals = []vss.Signal{
 }
 
 func TestSignalsFromTesla(t *testing.T) {
-	computedSignals, err := Decode(baseDoc)
-	require.Empty(t, err, "Expected no errors.")
+	var rawEvent cloudevent.RawEvent
+	err := json.Unmarshal(baseDoc, &rawEvent)
+	require.NoError(t, err, "Expected no errors.")
+	computedSignals, err := Decode(rawEvent)
+	require.NoError(t, err, "Expected no errors.")
 	assert.ElementsMatch(t, computedSignals, expSignals)
 }
