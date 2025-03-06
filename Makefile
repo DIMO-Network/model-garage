@@ -78,9 +78,9 @@ generate-nativestatus: # Generate all files for nativestatus
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/nativestatus/vehicle-v2-convert_gen.go -custom.template-file=./pkg/nativestatus/convertv2.tmpl -custom.format=true -definitions=./pkg/nativestatus/schema/native-definitions.yaml
 
 generate-ruptela: # Generate all files for ruptela
-	go run ./cmd/codegen -convert.package=ruptela -generators=convert -convert.output-file=./pkg/ruptela/vehicle-convert-funcs_gen.go -definitions=./pkg/ruptela/schema/ruptela-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/vehicle-v1-convert_gen.go -custom.template-file=./pkg/ruptela/codegen/convert-status.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/vehicle-location-convert_gen.go -custom.template-file=./pkg/ruptela/codegen/convert-location.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela-definitions.yaml
+	go run ./cmd/codegen -convert.package=ruptela -generators=convert -convert.output-file=./pkg/ruptela/conver_signal_funcs_gen.go -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/convert_signal_status_gen.go -custom.template-file=./pkg/ruptela/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/convert_signal_location_gen.go -custom.template-file=./pkg/ruptela/codegen/convert_signal_location.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
 	go run ./pkg/ruptela/codegen
 
 generate-autopi: # Generate all files for autopi

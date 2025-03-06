@@ -475,7 +475,7 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 func ChassisAxleRow1WheelLeftTirePressureFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.960")
+	result = gjson.GetBytes(jsonData, "signals.960")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -483,9 +483,9 @@ func ChassisAxleRow1WheelLeftTirePressureFromV1Data(jsonData []byte) (ret float6
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.960': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.960': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.960' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.960' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -500,7 +500,7 @@ func ChassisAxleRow1WheelLeftTirePressureFromV1Data(jsonData []byte) (ret float6
 func ChassisAxleRow1WheelRightTirePressureFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.961")
+	result = gjson.GetBytes(jsonData, "signals.961")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -508,9 +508,9 @@ func ChassisAxleRow1WheelRightTirePressureFromV1Data(jsonData []byte) (ret float
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.961': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.961': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.961' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.961' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -525,7 +525,7 @@ func ChassisAxleRow1WheelRightTirePressureFromV1Data(jsonData []byte) (ret float
 func ChassisAxleRow2WheelLeftTirePressureFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.962")
+	result = gjson.GetBytes(jsonData, "signals.962")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -533,9 +533,9 @@ func ChassisAxleRow2WheelLeftTirePressureFromV1Data(jsonData []byte) (ret float6
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.962': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.962': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.962' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.962' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -550,7 +550,7 @@ func ChassisAxleRow2WheelLeftTirePressureFromV1Data(jsonData []byte) (ret float6
 func ChassisAxleRow2WheelRightTirePressureFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.963")
+	result = gjson.GetBytes(jsonData, "signals.963")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -558,9 +558,9 @@ func ChassisAxleRow2WheelRightTirePressureFromV1Data(jsonData []byte) (ret float
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.963': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.963': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.963' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.963' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -575,7 +575,7 @@ func ChassisAxleRow2WheelRightTirePressureFromV1Data(jsonData []byte) (ret float
 func CurrentLocationAltitudeFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.pos.alt")
+	result = gjson.GetBytes(jsonData, "pos.alt")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
@@ -583,9 +583,9 @@ func CurrentLocationAltitudeFromV1Data(jsonData []byte) (ret float64, err error)
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.pos.alt': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.alt': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.pos.alt' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.alt' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -600,7 +600,7 @@ func CurrentLocationAltitudeFromV1Data(jsonData []byte) (ret float64, err error)
 func CurrentLocationLatitudeFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.pos.lat")
+	result = gjson.GetBytes(jsonData, "pos.lat")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
@@ -608,9 +608,9 @@ func CurrentLocationLatitudeFromV1Data(jsonData []byte) (ret float64, err error)
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.pos.lat': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.lat': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.pos.lat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.lat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -625,7 +625,7 @@ func CurrentLocationLatitudeFromV1Data(jsonData []byte) (ret float64, err error)
 func CurrentLocationLongitudeFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.pos.lon")
+	result = gjson.GetBytes(jsonData, "pos.lon")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
@@ -633,9 +633,9 @@ func CurrentLocationLongitudeFromV1Data(jsonData []byte) (ret float64, err error
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.pos.lon': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.lon': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.pos.lon' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.lon' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -650,7 +650,7 @@ func CurrentLocationLongitudeFromV1Data(jsonData []byte) (ret float64, err error
 func DIMOAftermarketHDOPFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.pos.hdop")
+	result = gjson.GetBytes(jsonData, "pos.hdop")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
@@ -658,9 +658,9 @@ func DIMOAftermarketHDOPFromV1Data(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.pos.hdop': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.hdop': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.pos.hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -675,7 +675,7 @@ func DIMOAftermarketHDOPFromV1Data(jsonData []byte) (ret float64, err error) {
 func DIMOAftermarketNSATFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.pos.sat")
+	result = gjson.GetBytes(jsonData, "pos.sat")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
@@ -683,9 +683,9 @@ func DIMOAftermarketNSATFromV1Data(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.pos.sat': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.sat': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.pos.sat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.sat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -700,7 +700,7 @@ func DIMOAftermarketNSATFromV1Data(jsonData []byte) (ret float64, err error) {
 func ExteriorAirTemperatureFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.97")
+	result = gjson.GetBytes(jsonData, "signals.97")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -708,9 +708,9 @@ func ExteriorAirTemperatureFromV1Data(jsonData []byte) (ret float64, err error) 
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.97': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.97': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.97' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.97' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -725,7 +725,7 @@ func ExteriorAirTemperatureFromV1Data(jsonData []byte) (ret float64, err error) 
 func LowVoltageBatteryCurrentVoltageFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.29")
+	result = gjson.GetBytes(jsonData, "signals.29")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -733,9 +733,9 @@ func LowVoltageBatteryCurrentVoltageFromV1Data(jsonData []byte) (ret float64, er
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.29': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.29': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.29' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.29' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -750,7 +750,7 @@ func LowVoltageBatteryCurrentVoltageFromV1Data(jsonData []byte) (ret float64, er
 func OBDDTCListFromV1Data(jsonData []byte) (ret string, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.dtc_codes")
+	result = gjson.GetBytes(jsonData, "dtc_codes")
 	if result.Exists() && result.Value() != nil {
 		if result.IsArray() {
 			sliceOBDDTCList := make([]any, len(result.Array()))
@@ -759,7 +759,7 @@ func OBDDTCListFromV1Data(jsonData []byte) (ret string, err error) {
 				if ok {
 					sliceOBDDTCList[i] = v
 				} else {
-					errs = errors.Join(errs, fmt.Errorf("%w, field 'data.dtc_codes' array element %d is not of type 'any' got '%v' of type '%T'", convert.InvalidTypeError(), i, res.Value(), res.Value()))
+					errs = errors.Join(errs, fmt.Errorf("%w, field 'dtc_codes' array element %d is not of type 'any' got '%v' of type '%T'", convert.InvalidTypeError(), i, res.Value(), res.Value()))
 				}
 			}
 			retVal, err := ToOBDDTCList0(jsonData, sliceOBDDTCList)
@@ -768,7 +768,7 @@ func OBDDTCListFromV1Data(jsonData []byte) (ret string, err error) {
 			}
 			errs = errors.Join(errs, fmt.Errorf("failed to convert ': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.dtc_codes' is not an array", convert.InvalidTypeError()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'dtc_codes' is not an array", convert.InvalidTypeError()))
 		}
 
 	}
@@ -784,7 +784,7 @@ func OBDDTCListFromV1Data(jsonData []byte) (ret string, err error) {
 func OBDDistanceWithMILFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.102")
+	result = gjson.GetBytes(jsonData, "signals.102")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -792,9 +792,9 @@ func OBDDistanceWithMILFromV1Data(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.102': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.102': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.102' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.102' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -809,7 +809,7 @@ func OBDDistanceWithMILFromV1Data(jsonData []byte) (ret float64, err error) {
 func OBDRunTimeFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.107")
+	result = gjson.GetBytes(jsonData, "signals.107")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -817,9 +817,9 @@ func OBDRunTimeFromV1Data(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.107': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.107': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.107' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.107' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -834,7 +834,7 @@ func OBDRunTimeFromV1Data(jsonData []byte) (ret float64, err error) {
 func PowertrainCombustionEngineDieselExhaustFluidCapacityFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.1148")
+	result = gjson.GetBytes(jsonData, "signals.1148")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -842,12 +842,12 @@ func PowertrainCombustionEngineDieselExhaustFluidCapacityFromV1Data(jsonData []b
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.1148': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1148': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.1148' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1148' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
-	result = gjson.GetBytes(jsonData, "data.signals.1149")
+	result = gjson.GetBytes(jsonData, "signals.1149")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -855,9 +855,9 @@ func PowertrainCombustionEngineDieselExhaustFluidCapacityFromV1Data(jsonData []b
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.1149': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1149': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.1149' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1149' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -872,7 +872,7 @@ func PowertrainCombustionEngineDieselExhaustFluidCapacityFromV1Data(jsonData []b
 func PowertrainCombustionEngineDieselExhaustFluidLevelFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.1150")
+	result = gjson.GetBytes(jsonData, "signals.1150")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -880,9 +880,9 @@ func PowertrainCombustionEngineDieselExhaustFluidLevelFromV1Data(jsonData []byte
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.1150': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1150': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.1150' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1150' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -897,7 +897,7 @@ func PowertrainCombustionEngineDieselExhaustFluidLevelFromV1Data(jsonData []byte
 func PowertrainCombustionEngineECTFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.96")
+	result = gjson.GetBytes(jsonData, "signals.96")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -905,9 +905,9 @@ func PowertrainCombustionEngineECTFromV1Data(jsonData []byte) (ret float64, err 
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.96': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.96': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.96' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.96' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -922,7 +922,7 @@ func PowertrainCombustionEngineECTFromV1Data(jsonData []byte) (ret float64, err 
 func PowertrainCombustionEngineEngineOilLevelFromV1Data(jsonData []byte) (ret string, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.964")
+	result = gjson.GetBytes(jsonData, "signals.964")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -930,9 +930,9 @@ func PowertrainCombustionEngineEngineOilLevelFromV1Data(jsonData []byte) (ret st
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.964': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.964': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.964' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.964' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -947,7 +947,7 @@ func PowertrainCombustionEngineEngineOilLevelFromV1Data(jsonData []byte) (ret st
 func PowertrainCombustionEngineEngineOilRelativeLevelFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.964")
+	result = gjson.GetBytes(jsonData, "signals.964")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -955,9 +955,9 @@ func PowertrainCombustionEngineEngineOilRelativeLevelFromV1Data(jsonData []byte)
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.964': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.964': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.964' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.964' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -972,7 +972,7 @@ func PowertrainCombustionEngineEngineOilRelativeLevelFromV1Data(jsonData []byte)
 func PowertrainCombustionEngineSpeedFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.94")
+	result = gjson.GetBytes(jsonData, "signals.94")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -980,9 +980,9 @@ func PowertrainCombustionEngineSpeedFromV1Data(jsonData []byte) (ret float64, er
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.94': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.94': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.94' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.94' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -997,7 +997,7 @@ func PowertrainCombustionEngineSpeedFromV1Data(jsonData []byte) (ret float64, er
 func PowertrainCombustionEngineTPSFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.103")
+	result = gjson.GetBytes(jsonData, "signals.103")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1005,9 +1005,9 @@ func PowertrainCombustionEngineTPSFromV1Data(jsonData []byte) (ret float64, err 
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.103': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.103': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.103' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.103' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -1022,7 +1022,7 @@ func PowertrainCombustionEngineTPSFromV1Data(jsonData []byte) (ret float64, err 
 func PowertrainFuelSystemAbsoluteLevelFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.642")
+	result = gjson.GetBytes(jsonData, "signals.642")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1030,12 +1030,12 @@ func PowertrainFuelSystemAbsoluteLevelFromV1Data(jsonData []byte) (ret float64, 
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.642': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.642': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.642' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.642' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
-	result = gjson.GetBytes(jsonData, "data.signals.205")
+	result = gjson.GetBytes(jsonData, "signals.205")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1043,9 +1043,9 @@ func PowertrainFuelSystemAbsoluteLevelFromV1Data(jsonData []byte) (ret float64, 
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.205': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.205': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.205' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.205' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -1060,7 +1060,7 @@ func PowertrainFuelSystemAbsoluteLevelFromV1Data(jsonData []byte) (ret float64, 
 func PowertrainFuelSystemRelativeLevelFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.98")
+	result = gjson.GetBytes(jsonData, "signals.98")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1068,12 +1068,12 @@ func PowertrainFuelSystemRelativeLevelFromV1Data(jsonData []byte) (ret float64, 
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.98': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.98': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.98' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.98' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
-	result = gjson.GetBytes(jsonData, "data.signals.207")
+	result = gjson.GetBytes(jsonData, "signals.207")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1081,9 +1081,9 @@ func PowertrainFuelSystemRelativeLevelFromV1Data(jsonData []byte) (ret float64, 
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.207': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.207': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.207' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.207' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -1098,7 +1098,7 @@ func PowertrainFuelSystemRelativeLevelFromV1Data(jsonData []byte) (ret float64, 
 func PowertrainTractionBatteryRangeFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.723")
+	result = gjson.GetBytes(jsonData, "signals.723")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1106,9 +1106,9 @@ func PowertrainTractionBatteryRangeFromV1Data(jsonData []byte) (ret float64, err
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.723': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.723': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.723' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.723' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -1123,7 +1123,7 @@ func PowertrainTractionBatteryRangeFromV1Data(jsonData []byte) (ret float64, err
 func PowertrainTractionBatteryStateOfChargeCurrentFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.722")
+	result = gjson.GetBytes(jsonData, "signals.722")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1131,9 +1131,9 @@ func PowertrainTractionBatteryStateOfChargeCurrentFromV1Data(jsonData []byte) (r
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.722': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.722': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.722' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.722' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -1148,7 +1148,7 @@ func PowertrainTractionBatteryStateOfChargeCurrentFromV1Data(jsonData []byte) (r
 func PowertrainTransmissionTravelledDistanceFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.645")
+	result = gjson.GetBytes(jsonData, "signals.645")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1156,12 +1156,12 @@ func PowertrainTransmissionTravelledDistanceFromV1Data(jsonData []byte) (ret flo
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.645': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.645': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.645' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.645' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
-	result = gjson.GetBytes(jsonData, "data.signals.114")
+	result = gjson.GetBytes(jsonData, "signals.114")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1169,9 +1169,9 @@ func PowertrainTransmissionTravelledDistanceFromV1Data(jsonData []byte) (ret flo
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.114': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.114': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.114' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.114' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -1186,7 +1186,7 @@ func PowertrainTransmissionTravelledDistanceFromV1Data(jsonData []byte) (ret flo
 func PowertrainTypeFromV1Data(jsonData []byte) (ret string, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.99")
+	result = gjson.GetBytes(jsonData, "signals.99")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1194,12 +1194,12 @@ func PowertrainTypeFromV1Data(jsonData []byte) (ret string, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.99': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.99': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.99' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.99' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
-	result = gjson.GetBytes(jsonData, "data.signals.483")
+	result = gjson.GetBytes(jsonData, "signals.483")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1207,9 +1207,9 @@ func PowertrainTypeFromV1Data(jsonData []byte) (ret string, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.483': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.483': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.483' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.483' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -1224,7 +1224,7 @@ func PowertrainTypeFromV1Data(jsonData []byte) (ret string, err error) {
 func SpeedFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
 	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "data.signals.95")
+	result = gjson.GetBytes(jsonData, "signals.95")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(string)
 		if ok {
@@ -1232,12 +1232,12 @@ func SpeedFromV1Data(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.signals.95': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.95': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.signals.95' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.95' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
-	result = gjson.GetBytes(jsonData, "data.pos.spd")
+	result = gjson.GetBytes(jsonData, "pos.spd")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
@@ -1245,9 +1245,9 @@ func SpeedFromV1Data(jsonData []byte) (ret float64, err error) {
 			if err == nil {
 				return retVal, nil
 			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'data.pos.spd': %w", err))
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.spd': %w", err))
 		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'data.pos.spd' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.spd' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 

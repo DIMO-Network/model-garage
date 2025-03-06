@@ -1,19 +1,24 @@
-package status_test
+package ruptela_test
 
 import (
 	"cmp"
+	"encoding/json"
 	"slices"
 	"testing"
 	"time"
 
-	"github.com/DIMO-Network/model-garage/pkg/ruptela/status"
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/require"
 )
 
 func TestFullFromDataConversion(t *testing.T) {
 	t.Parallel()
-	actualSignals, err := status.SignalsFromV1Payload([]byte(fullInputJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(fullInputJSON), &event)
+	require.NoError(t, err)
+	actualSignals, err := ruptela.SignalsFromV1Payload(event)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 
 	// sort the signals so diffs are easier to read
@@ -87,7 +92,7 @@ var (
 	"ds": "r/v0/s",
 	"signature": "0x6fb5849e21e66f3e0619f148bc032153aa4c90be4cd175e83c1f959e1bc551d940d516fe74f50aed380e432406675c583e75155bf1c77b9ec0761b1dbe1ab87e1c",
 	"subject": "did:nft:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_33",
-	"time": "2024-09-27T08:33:26Z",
+	"time": "2024-09-27T08:33:26Z"
 }`
 	ts = time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC)
 

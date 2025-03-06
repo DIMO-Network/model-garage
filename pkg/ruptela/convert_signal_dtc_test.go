@@ -1,19 +1,24 @@
-package status_test
+package ruptela_test
 
 import (
 	"cmp"
+	"encoding/json"
 	"slices"
 	"testing"
 	"time"
 
-	"github.com/DIMO-Network/model-garage/pkg/ruptela/status"
+	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/require"
 )
 
 func TestValidDTCPayload(t *testing.T) {
 	t.Parallel()
-	actualSignals, err := status.SignalsFromDTCPayload([]byte(dtcInputJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(dtcInputJSON), &event)
+	require.NoError(t, err)
+	actualSignals, err := ruptela.SignalsFromDTCPayload(event)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 
 	// sort the signals so diffs are easier to read
@@ -28,13 +33,19 @@ func TestValidDTCPayload(t *testing.T) {
 
 func TestEmptyDTCPayload(t *testing.T) {
 	t.Parallel()
-	_, err := status.SignalsFromDTCPayload([]byte(emptyDtcInputJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(emptyDtcInputJSON), &event)
+	require.NoError(t, err)
+	_, err = ruptela.SignalsFromDTCPayload(event)
 	require.Errorf(t, err, "error converting full input data: %v", err)
 }
 
 func TestNoDTCPayload(t *testing.T) {
 	t.Parallel()
-	_, err := status.SignalsFromDTCPayload([]byte(noDtcInputJSON))
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(noDtcInputJSON), &event)
+	require.NoError(t, err)
+	_, err = ruptela.SignalsFromDTCPayload(event)
 	require.Errorf(t, err, "error converting full input data: %v", err)
 }
 
