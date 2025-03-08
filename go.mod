@@ -5,19 +5,19 @@ go 1.24
 require (
 	github.com/99designs/gqlgen v0.17.64
 	github.com/DIMO-Network/clickhouse-infra v0.0.3
-	github.com/DIMO-Network/tesla-vss v0.1.0
+	github.com/DIMO-Network/tesla-vss v0.1.1
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/ethereum/go-ethereum v1.14.13
 	github.com/pressly/goose/v3 v3.24.1
 	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.10.0
-	github.com/teslamotors/fleet-telemetry v0.6.0
+	github.com/teslamotors/fleet-telemetry v0.7.2
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
 	golang.org/x/mod v0.22.0
-	golang.org/x/text v0.21.0
+	golang.org/x/text v0.22.0
 	golang.org/x/tools v0.29.0
-	google.golang.org/protobuf v1.36.4
+	google.golang.org/protobuf v1.36.5
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -93,7 +93,7 @@ require (
 	go.opentelemetry.io/proto/otlp v1.0.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240318140521-94a12d6c2237 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
