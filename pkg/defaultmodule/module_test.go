@@ -89,7 +89,7 @@ func TestModule_CloudEventConvert(t *testing.T) {
 		},
 	}
 
-	module, _ := defaultmodule.New()
+	module := defaultmodule.Module{}
 	ctx := context.Background()
 
 	for _, tt := range tests {
@@ -369,8 +369,7 @@ func TestModule_SignalConvert(t *testing.T) {
 		},
 	}
 
-	module, err := defaultmodule.New()
-	require.NoError(t, err, "Failed to create module")
+	module := defaultmodule.Module{}
 	ctx := context.Background()
 
 	for _, tt := range tests {

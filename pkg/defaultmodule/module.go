@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
@@ -31,11 +32,13 @@ type Signal struct {
 
 // Module holds dependencies for the default module. At present, there are none.
 type Module struct {
+	sync.Once
 	signalMap map[string]*schema.SignalInfo
+	loadErr   error
 }
 
-// New creates a new default, uninitialized module.
-func New() (*Module, error) {
+// LoadSignalMap loads the default signal map.
+func LoadSignalMap() (map[string]*schema.SignalInfo, error) {
 	defs, err := schema.LoadDefinitionFile(strings.NewReader(schema.DefaultDefinitionsYAML()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to load default schema definitions: %w", err)
@@ -50,11 +53,18 @@ func New() (*Module, error) {
 		signalMap[signal.JSONName] = signal
 	}
 
-	return &Module{signalMap: signalMap}, nil
+	return signalMap, nil
 }
 
 // SignalConvert converts a default CloudEvent to DIMO's vss signals.
 func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Signal, error) {
+	m.Once.Do(func() {
+		m.signalMap, m.loadErr = LoadSignalMap()
+	})
+	if m.loadErr != nil {
+		return nil, fmt.Errorf("failed to load signal map: %w", m.loadErr)
+	}
+
 	return SignalConvert(event, m.signalMap)
 }
 
