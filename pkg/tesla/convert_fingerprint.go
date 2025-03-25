@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
+	"github.com/DIMO-Network/cloudevent"
 	"github.com/teslamotors/fleet-telemetry/protos"
 	"github.com/tidwall/gjson"
 	"google.golang.org/protobuf/proto"
