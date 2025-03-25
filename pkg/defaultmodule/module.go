@@ -32,7 +32,7 @@ type Signal struct {
 
 // Module holds dependencies for the default module. At present, there are none.
 type Module struct {
-	sync.Once
+	once      sync.Once
 	signalMap map[string]*schema.SignalInfo
 	loadErr   error
 }
@@ -58,7 +58,7 @@ func LoadSignalMap() (map[string]*schema.SignalInfo, error) {
 
 // SignalConvert converts a default CloudEvent to DIMO's vss signals.
 func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Signal, error) {
-	m.Once.Do(func() {
+	m.once.Do(func() {
 		m.signalMap, m.loadErr = LoadSignalMap()
 	})
 	if m.loadErr != nil {

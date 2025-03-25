@@ -48,7 +48,7 @@ func run(ctx context.Context) error {
 		}
 	}
 
-	host, err := chcontainer.ClickHouseContainer.ConnectionString(ctx)
+	host, err := chcontainer.ConnectionString(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get clickhouse host: %w", err)
 	}

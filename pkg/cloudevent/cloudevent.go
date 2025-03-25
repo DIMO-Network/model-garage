@@ -17,7 +17,7 @@ const (
 
 	// TypeVerifableCredential is the event type for verifiable credentials.
 	// Deprecated: Use github.com/DIMO-Network/cloudevent.TypeVerifableCredential instead.
-	TypeVerifableCredential = cloudeventpkg.TypeVerifableCredential //nolint:gosec // This is not a credential.
+	TypeVerifableCredential = cloudeventpkg.TypeVerifableCredential
 
 	// TypeUnknown is the event type for unknown events.
 	// Deprecated: Use github.com/DIMO-Network/cloudevent.TypeUnknown instead.

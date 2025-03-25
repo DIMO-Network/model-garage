@@ -90,9 +90,10 @@ func TimestampFromLocationSignal(sigResult gjson.Result) (time.Time, error) {
 	if !timestamp.Exists() {
 		return time.Time{}, convert.FieldNotFoundError{Field: "timestamp", Lookup: lookupKey}
 	}
-	if timestamp.Type == gjson.Number {
+	switch timestamp.Type {
+	case gjson.Number:
 		return time.Unix(timestamp.Int(), 0).UTC(), nil
-	} else if timestamp.Type == gjson.String {
+	case gjson.String:
 		ts, err := time.Parse(time.RFC3339, timestamp.String())
 		if err != nil {
 			return time.Time{}, fmt.Errorf("error parsing timestamp: %w", err)
