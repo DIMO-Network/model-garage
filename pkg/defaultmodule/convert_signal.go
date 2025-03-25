@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
+	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/schema"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 )

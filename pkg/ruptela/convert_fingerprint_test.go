@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
+	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/stretchr/testify/require"
 )
