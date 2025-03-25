@@ -12,6 +12,8 @@ github.com/ClickHouse/clickhouse-go/v2 v2.30.0 h1:AG4D/hW39qa58+JHQIFOSnxyL46H6h
 github.com/ClickHouse/clickhouse-go/v2 v2.30.0/go.mod h1:i9ZQAojcayW3RsdCb3YR+n+wC2h65eJsZCscZ1Z1wyo=
 github.com/DIMO-Network/clickhouse-infra v0.0.3 h1:B6/4IY9IxLcyydET14IjHUT+A5SDEis7p//DoFzrMk4=
 github.com/DIMO-Network/clickhouse-infra v0.0.3/go.mod h1:NtpQ1btkPzebDvpYYygeqiiBmJ/q5oJb/T/JWzUVRlk=
+github.com/DIMO-Network/cloudevent v0.0.0-20250325154729-4842ad34efe5 h1:9QftQeAFK+0RAxd5JACG9XpTVM02i/pslcpW60ihFBo=
+github.com/DIMO-Network/cloudevent v0.0.0-20250325154729-4842ad34efe5/go.mod h1:fp0ddRacIT3kjYnFrt6aQRkoRpAQsYIVJR0zDeLeAv4=
 github.com/DIMO-Network/tesla-vss v0.1.1 h1:8pyyOMjXykZY/+KZHyfEmODbhmczghtetV5PTS+36Qk=
 github.com/DIMO-Network/tesla-vss v0.1.1/go.mod h1:jTu3Jfu9HeXPIoXtPY0RPPHj6/hJ1fxCOhO1bQfKnxo=
 github.com/Masterminds/goutils v1.1.1 h1:5nUrii3FMTL5diU80unEVvNevw1nH4+ZV4DSLVJLSYI=

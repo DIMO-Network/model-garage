@@ -1,87 +1,91 @@
-linters-settings:
-  funlen:
-    lines: 100
-    statements: 50
-  gocyclo:
-    min-complexity: 15
-  misspell:
-    locale: US
-    ignore-words:
-      - artefact
-  nolintlint:
-    allow-unused: false # report any unused nolint directives
-    require-explanation: true # require an explanation for nolint directives
-    require-specific: false # don't require nolint directives to be specific about which linter is being skipped
-  revive:
-    confidence: 0
-    rules:
-    # Default rules with a expoted omitted
-      - name: "var-declaration"
-      - name: "package-comments"
-      - name: "dot-imports"
-      - name: "blank-imports"
-      - name: "var-naming"
-      - name: "indent-error-flow"
-      - name: "range"
-      - name: "errorf"
-      - name: "error-naming"
-      - name: "error-strings"
-      - name: "receiver-naming"
-      - name: "increment-decrement"
-      - name: "error-return"
-      - name: "unexported-return"
-      - name: "time-naming"
-      - name: "context-keys-type"
-      - name: "context-as-argument"
-      - name: "empty-block"
-      - name: "superfluous-else"
-      - name: "unused-parameter"
-      - name: "unreachable-code"
-      - name: "redefines-builtin-id"
-      
+version: "2"
 linters:
-  disable-all: true
+  default: none
   enable:
     - bodyclose
+    - copyloopvar
     - dupl
     - errcheck
-    - copyloopvar
     - funlen
     - gocritic
-    - gofumpt
-    - goimports
-    - revive
-    - rowserrcheck
     - goprintffuncname
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - misspell
     - nakedret
     - noctx
     - nolintlint
-    - staticcheck
-    - stylecheck
+    - revive
+    - rowserrcheck
     - sqlclosecheck
-    - typecheck
+    - staticcheck
     - unconvert
     - unparam
     - unused
     - whitespace
-
-issues:
-  # enable issues excluded by default
-  exclude-use-default: false
-  exclude-rules:
-    # Exclude some linters from running on tests files.
-    - path: convert-funcs_test\.go
-      linters:
-        - dupl
-    # Exclude some linters from running on tests files.
-    - path: _test\.go
-      linters:
-        - funlen
-        - errcheck
-        - dupl
-        - gosec
+  settings:
+    funlen:
+      lines: 100
+      statements: 50
+    gocyclo:
+      min-complexity: 15
+    misspell:
+      locale: US
+      ignore-rules:
+        - artefact
+    nolintlint:
+      require-explanation: true
+      require-specific: false
+      allow-unused: false
+    revive:
+      confidence: 0
+      rules:
+        - name: var-declaration
+        - name: package-comments
+        - name: dot-imports
+        - name: blank-imports
+        - name: var-naming
+        - name: indent-error-flow
+        - name: range
+        - name: errorf
+        - name: error-naming
+        - name: error-strings
+        - name: receiver-naming
+        - name: increment-decrement
+        - name: error-return
+        - name: unexported-return
+        - name: time-naming
+        - name: context-keys-type
+        - name: context-as-argument
+        - name: empty-block
+        - name: superfluous-else
+        - name: unused-parameter
+        - name: unreachable-code
+        - name: redefines-builtin-id
+  exclusions:
+    generated: lax
+    rules:
+      - linters:
+          - dupl
+        path: convert-funcs_test\.go
+      - linters:
+          - dupl
+          - errcheck
+          - funlen
+          - gosec
+        path: _test\.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
