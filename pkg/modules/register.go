@@ -9,7 +9,7 @@ import (
 	"github.com/DIMO-Network/model-garage/pkg/defaultmodule"
 	"github.com/DIMO-Network/model-garage/pkg/hashdog"
 	"github.com/DIMO-Network/model-garage/pkg/ruptela"
-	"github.com/DIMO-Network/model-garage/pkg/tesla"
+	"github.com/DIMO-Network/model-garage/pkg/tesla/api"
 	"github.com/ethereum/go-ethereum/common"
 )
 
@@ -77,7 +77,7 @@ func RegisterDefaultModules(
 	fingerprintReg.Override(CompassSource.String(), compassModule)
 
 	// Tesla
-	teslaModule := &tesla.Module{}
+	teslaModule := &api.Module{}
 	signalReg.Override(TeslaSource.String(), teslaModule)
 	cloudEventReg.Override(TeslaSource.String(), teslaModule)
 	fingerprintReg.Override(TeslaSource.String(), teslaModule)

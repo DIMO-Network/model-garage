@@ -1,11 +1,10 @@
-package tesla_test
+package api
 
 import (
 	"context"
 	"testing"
 
 	"github.com/DIMO-Network/cloudevent"
-	"github.com/DIMO-Network/model-garage/pkg/tesla"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -123,7 +122,7 @@ func TestModule_CloudEventConvert(t *testing.T) {
 		},
 	}
 
-	var module tesla.Module
+	var module Module
 	ctx := context.Background()
 
 	for _, tt := range tests {

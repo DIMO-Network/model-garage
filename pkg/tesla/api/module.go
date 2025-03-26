@@ -1,4 +1,4 @@
-package tesla
+package api
 
 import (
 	"context"
