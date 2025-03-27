@@ -1,3 +1,6 @@
+// Package main contains the code generation command for transforming a
+// definitions file into code that executes a conversion from Tesla
+// Fleet Telemetry protobufs into VSS signals.
 package main
 
 import "log"

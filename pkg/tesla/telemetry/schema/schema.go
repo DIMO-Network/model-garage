@@ -1,3 +1,5 @@
+// Package schema merely embeds the definitions file for conversions
+// from Tesla Fleet Telemetry to VSS signals.
 package schema
 
 import (

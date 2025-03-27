@@ -1,3 +1,5 @@
+// Package unit converts between commonly used units of measure for
+// vehicle signals.
 package unit
 
 func KilowattsToWatts(x float64) float64 {
