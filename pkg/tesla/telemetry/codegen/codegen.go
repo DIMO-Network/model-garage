@@ -86,41 +86,9 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 		Package: packageName,
 	}
 
-	teslaTypeToAttributes := make(map[string]TeslaTypeDescription)
-
-	desc := (&protos.Value{}).ProtoReflect().Descriptor()
-	for i := range desc.Fields().Len() {
-		field := desc.Fields().Get(i)
-		fieldName := field.Name()
-
-		teslaWrapperFieldName := snakeToPascal(string(fieldName))
-		teslaWrapperType := "Value_" + teslaWrapperFieldName
-		var protoType, valueType string
-		switch field.Kind() {
-		case protoreflect.MessageKind:
-			protoType = string(field.Message().Name())
-			valueType = "*protos." + protoType
-		case protoreflect.EnumKind:
-			protoType = string(field.Enum().Name())
-			valueType = "protos." + protoType
-		default:
-			// Primitive types.
-			protoType = field.Kind().String()
-			goType, ok := protoToGoTypes[protoType]
-			if !ok {
-				return fmt.Errorf("no Go mapping for protobuf type %s", protoType)
-			}
-			valueType = goType
-		}
-
-		niceName := strings.ToUpper(protoType[:1]) + protoType[1:]
-
-		teslaTypeToAttributes[protoType] = TeslaTypeDescription{
-			TeslaWrapperType:      teslaWrapperType,
-			TeslaWrapperFieldName: teslaWrapperFieldName,
-			ValueType:             valueType,
-			NiceName:              niceName,
-		}
+	teslaTypeToAttributes, err := assembleTeslaTypeInformation()
+	if err != nil {
+		return err
 	}
 
 	for _, r := range rules {
@@ -188,6 +156,47 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 	}
 
 	return nil
+}
+
+func assembleTeslaTypeInformation() (map[string]TeslaTypeDescription, error) {
+	out := make(map[string]TeslaTypeDescription)
+
+	desc := (&protos.Value{}).ProtoReflect().Descriptor()
+	for i := range desc.Fields().Len() {
+		field := desc.Fields().Get(i)
+		fieldName := field.Name()
+
+		teslaWrapperFieldName := snakeToPascal(string(fieldName))
+		teslaWrapperType := "Value_" + teslaWrapperFieldName
+		var protoType, valueType string
+		switch field.Kind() {
+		case protoreflect.MessageKind:
+			protoType = string(field.Message().Name())
+			valueType = "*protos." + protoType
+		case protoreflect.EnumKind:
+			protoType = string(field.Enum().Name())
+			valueType = "protos." + protoType
+		default:
+			// Primitive types.
+			protoType = field.Kind().String()
+			goType, ok := protoToGoTypes[protoType]
+			if !ok {
+				return nil, fmt.Errorf("no Go mapping for protobuf type %s", protoType)
+			}
+			valueType = goType
+		}
+
+		niceName := strings.ToUpper(protoType[:1]) + protoType[1:]
+
+		out[protoType] = TeslaTypeDescription{
+			TeslaWrapperType:      teslaWrapperType,
+			TeslaWrapperFieldName: teslaWrapperFieldName,
+			ValueType:             valueType,
+			NiceName:              niceName,
+		}
+	}
+
+	return out, nil
 }
 
 func writeOuter(tmplInput *TemplateInput, outerPath string) error {
