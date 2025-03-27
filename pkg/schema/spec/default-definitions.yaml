@@ -14,6 +14,30 @@
 - vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Cabin.Door.Row1.DriverSide.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Cabin.Door.Row1.PassengerSide.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Cabin.Door.Row2.DriverSide.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Cabin.Door.Row2.PassengerSide.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Cabin.Door.Row1.DriverSide.Window.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Cabin.Door.Row1.PassengerSide.Window.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Cabin.Door.Row2.DriverSide.Window.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Cabin.Door.Row2.PassengerSide.Window.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.CurrentLocation.Altitude
   requiredPrivileges:
     - VEHICLE_ALL_TIME_LOCATION
