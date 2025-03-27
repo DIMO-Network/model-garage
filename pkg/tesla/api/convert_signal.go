@@ -1,31 +1,20 @@
 package api
 
-import (
-	"encoding/json"
-	"fmt"
+// func Decode(ce cloudevent.RawEvent) ([]vss.Signal, error) {
+// 	did, err := cloudevent.DecodeNFTDID(ce.Subject)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
+// 	}
 
-	"github.com/DIMO-Network/cloudevent"
-	"github.com/DIMO-Network/model-garage/pkg/convert"
-	"github.com/DIMO-Network/model-garage/pkg/vss"
-	ftconv "github.com/DIMO-Network/tesla-vss/pkg/convert"
-	"github.com/teslamotors/fleet-telemetry/protos"
-	"google.golang.org/protobuf/proto"
-)
+// 	tokenID := did.TokenID
+// 	source := ce.Source
 
-func Decode(ce cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeNFTDID(ce.Subject)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
-	}
+// 	baseSignal := vss.Signal{
+// 		TokenID: tokenID,
+// 		Source:  source,
+// 	}
 
-	tokenID := did.TokenID
-	source := ce.Source
-
-	baseSignal := vss.Signal{
-		TokenID: tokenID,
-		Source:  source,
-	}
-
+/*
 	switch ce.DataVersion {
 	case FleetTelemetryDataVersion:
 		var td TelemetryData
@@ -56,17 +45,17 @@ func Decode(ce cloudevent.RawEvent) ([]vss.Signal, error) {
 			}
 		}
 		return batchedSigs, nil
-	default:
-		sigs, errs := SignalsFromTesla(baseSignal, ce.Data)
-		if len(errs) != 0 {
-			return nil, convert.ConversionError{
-				TokenID:        tokenID,
-				Source:         source,
-				DecodedSignals: sigs,
-				Errors:         errs,
-			}
-		}
+	default:*/
+// 	sigs, errs := SignalsFromTesla(baseSignal, ce.Data)
+// 	if len(errs) != 0 {
+// 		return nil, convert.ConversionError{
+// 			TokenID:        tokenID,
+// 			Source:         source,
+// 			DecodedSignals: sigs,
+// 			Errors:         errs,
+// 		}
+// 	}
 
-		return sigs, nil
-	}
-}
+// 	return sigs, nil
+// 	// }
+// }

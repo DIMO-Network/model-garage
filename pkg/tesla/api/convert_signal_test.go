@@ -70,7 +70,7 @@ func TestSignalsFromTesla(t *testing.T) {
 	var rawEvent cloudevent.RawEvent
 	err := json.Unmarshal(baseDoc, &rawEvent)
 	require.NoError(t, err, "Expected no errors.")
-	computedSignals, err := Decode(rawEvent)
+	computedSignals, err := SignalConvert(rawEvent)
 	require.NoError(t, err, "Expected no errors.")
 	assert.ElementsMatch(t, computedSignals, expSignals)
 }

@@ -1,51 +1,64 @@
 package api
 
 import (
-	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/tidwall/gjson"
 )
 
-// Module holds dependencies for the Tesla module. At present, there are none.
-type Module struct{}
+const DataVersion = "fleet_api/v1.0.0"
 
 // SignalConvert converts a Tesla CloudEvent to DIMO's VSS rows.
-func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Signal, error) {
-	return Decode(event)
-}
-
-// CloudEventConvert converts an input message to Cloud Events. In the Tesla case
-// there is no conversion to perform.
-func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudevent.CloudEventHeader, []byte, error) {
-	event := cloudevent.CloudEvent[json.RawMessage]{}
-	err := json.Unmarshal(msgData, &event)
+func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
+	did, err := cloudevent.DecodeNFTDID(event.Subject)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to unmarshal message: %w", err)
-	}
-	hdrs := []cloudevent.CloudEventHeader{event.CloudEventHeader}
-	if event.DataVersion == FleetTelemetryDataVersion {
-		payloads := gjson.GetBytes(event.Data, "payloads")
-		// This check should always pass.
-		if payloads.Exists() && payloads.IsArray() && len(payloads.Array()) != 0 {
-			fpHdr := event.CloudEventHeader
-			fpHdr.Type = cloudevent.TypeFingerprint
-			hdrs = append(hdrs, fpHdr)
-		}
-	} else if gjson.GetBytes(event.Data, "vin").Exists() {
-		// Must be a Fleet API response.
-		fpHdr := event.CloudEventHeader
-		fpHdr.Type = cloudevent.TypeFingerprint
-		hdrs = append(hdrs, fpHdr)
+		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
 	}
 
-	return hdrs, event.Data, nil
+	tokenID := did.TokenID
+	source := event.Source
+
+	baseSignal := vss.Signal{
+		TokenID: tokenID,
+		Source:  source,
+	}
+
+	sigs, errs := SignalsFromTesla(baseSignal, event.Data)
+	if len(errs) != 0 {
+		return nil, convert.ConversionError{
+			TokenID:        tokenID,
+			Source:         source,
+			DecodedSignals: sigs,
+			Errors:         errs,
+		}
+	}
+
+	return sigs, nil
 }
 
-// FingerprintConvert converts a Tesla CloudEvent to a FingerprintEvent.
-func (m *Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
-	return DecodeFingerprintFromData(event)
+func IsFingerprint(event cloudevent.RawEvent) bool {
+	result := gjson.GetBytes(event.Data, "vin")
+
+	// This check should always pass.
+	return result.Exists() && result.Type == gjson.String
+}
+
+func FingerprintConvert(event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
+	var fp cloudevent.Fingerprint
+
+	result := gjson.GetBytes(event.Data, "vin")
+
+	if !result.Exists() {
+		return fp, errors.New("data object has no VIN field")
+	}
+	if result.Type != gjson.String {
+		return fp, errors.New("data object has a VIN field, but it is not a string")
+	}
+
+	fp.VIN = result.String()
+	return fp, nil
 }
