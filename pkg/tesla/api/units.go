@@ -1,4 +1,4 @@
-package tesla
+package api
 
 const kilometersPerMile = 1.609344
 

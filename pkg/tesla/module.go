@@ -1,3 +1,5 @@
+// Package tesla handles incoming Tesla messages, both from polling the Fleet API and
+// streaming from Fleet Telemetry.
 package tesla
 
 import (
@@ -6,37 +8,47 @@ import (
 	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/tesla/api"
+	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
-	"github.com/tidwall/gjson"
 )
 
 // Module holds dependencies for the Tesla module. At present, there are none.
+// All of the functions on this struct delegate to the appropriate function in
+// the api and telemetry submodules, according to the dataversion field.
 type Module struct{}
 
 // SignalConvert converts a Tesla CloudEvent to DIMO's VSS rows.
 func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Signal, error) {
-	return Decode(event)
+	if event.DataVersion == telemetry.DataVersion {
+		return telemetry.SignalConvert(event)
+	}
+	return api.SignalConvert(event)
 }
 
 // CloudEventConvert converts an input message to Cloud Events. In the Tesla case
-// there is no conversion to perform.
+// the input messages always consist of signal values and include the VIN, so we
+// want to create a fingerprint header pointing to the same data.
 func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudevent.CloudEventHeader, []byte, error) {
-	event := cloudevent.CloudEvent[json.RawMessage]{}
+	var event cloudevent.RawEvent
+
 	err := json.Unmarshal(msgData, &event)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to unmarshal message: %w", err)
+		return nil, nil, fmt.Errorf("failed to unmarshal CloudEvent: %w", err)
 	}
+
 	hdrs := []cloudevent.CloudEventHeader{event.CloudEventHeader}
-	if event.DataVersion == FleetTelemetryDataVersion {
-		payloads := gjson.GetBytes(event.Data, "payloads")
-		// This check should always pass.
-		if payloads.Exists() && payloads.IsArray() && len(payloads.Array()) != 0 {
-			fpHdr := event.CloudEventHeader
-			fpHdr.Type = cloudevent.TypeFingerprint
-			hdrs = append(hdrs, fpHdr)
-		}
-	} else if gjson.GetBytes(event.Data, "vin").Exists() {
-		// Must be a Fleet API response.
+
+	isFingerprint := false
+
+	if event.DataVersion == telemetry.DataVersion {
+		isFingerprint = telemetry.IsFingerprint(event)
+	} else {
+		isFingerprint = api.IsFingerprint(event)
+	}
+
+	if isFingerprint {
+		// Headers are all the same, besides type.
 		fpHdr := event.CloudEventHeader
 		fpHdr.Type = cloudevent.TypeFingerprint
 		hdrs = append(hdrs, fpHdr)
@@ -47,5 +59,8 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 
 // FingerprintConvert converts a Tesla CloudEvent to a FingerprintEvent.
 func (m *Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
-	return DecodeFingerprintFromData(event)
+	if event.DataVersion == telemetry.DataVersion {
+		return telemetry.FingerprintConvert(event)
+	}
+	return api.FingerprintConvert(event)
 }
