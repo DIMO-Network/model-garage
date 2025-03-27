@@ -442,6 +442,40 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				}
 			}
 		}
+		if d.GetKey() == protos.Field_ChargeAmps {
+			if v, ok := d.GetValue().Value.(*protos.Value_StringValue); ok {
+				val, err := ConvertChargeAmpsStringToPowertrainTractionBatteryChargingChargeCurrentACWrapper(v.StringValue)
+				if err != nil {
+					outErr = append(outErr, err)
+				} else {
+					sig := vss.Signal{
+						TokenID:   tokenID,
+						Name:      "powertrainTractionBatteryChargingChargeCurrentAC",
+						Timestamp: ts,
+						Source:    source,
+					}
+					sig.SetValue(val)
+					out = append(out, sig)
+				}
+			}
+		}
+		if d.GetKey() == protos.Field_ChargerVoltage {
+			if v, ok := d.GetValue().Value.(*protos.Value_DoubleValue); ok {
+				val, err := ConvertChargerVoltageDoubleToPowertrainTractionBatteryChargingChargeVoltageUnknownTypeWrapper(v.DoubleValue)
+				if err != nil {
+					outErr = append(outErr, err)
+				} else {
+					sig := vss.Signal{
+						TokenID:   tokenID,
+						Name:      "powertrainTractionBatteryChargingChargeVoltageUnknownType",
+						Timestamp: ts,
+						Source:    source,
+					}
+					sig.SetValue(val)
+					out = append(out, sig)
+				}
+			}
+		}
 	}
 
 	return out, outErr
@@ -645,4 +679,18 @@ func ConvertRdWindowStringToCabinDoorRow2DriverSideWindowIsOpenWrapper(wrap stri
 
 func ConvertRpWindowStringToCabinDoorRow2PassengerSideWindowIsOpenWrapper(wrap string) (float64, error) {
 	return ConvertRpWindowStringToCabinDoorRow2PassengerSideWindowIsOpen(wrap)
+}
+
+func ConvertChargeAmpsStringToPowertrainTractionBatteryChargingChargeCurrentACWrapper(wrap string) (float64, error) {
+	fp, err := strconv.ParseFloat(wrap, 64)
+	if err != nil {
+		var tmpOut float64
+		return tmpOut, fmt.Errorf("failed to parse float: %w", err)
+	}
+
+	return ConvertChargeAmpsStringToPowertrainTractionBatteryChargingChargeCurrentAC(fp)
+}
+
+func ConvertChargerVoltageDoubleToPowertrainTractionBatteryChargingChargeVoltageUnknownTypeWrapper(wrap float64) (float64, error) {
+	return ConvertChargerVoltageDoubleToPowertrainTractionBatteryChargingChargeVoltageUnknownType(wrap)
 }
