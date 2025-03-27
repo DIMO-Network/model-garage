@@ -1,3 +1,4 @@
+// Package telemetry converts batches of Tesla protobuf Payloads into VSS signals.
 package telemetry
 
 import (
@@ -22,7 +23,6 @@ type TelemetryData struct {
 
 // SignalConvert converts a Tesla Telemetry CloudEvent to DIMO's VSS rows.
 func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
-
 	did, err := cloudevent.DecodeNFTDID(event.Subject)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
@@ -59,7 +59,6 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 		}
 	}
 	return batchedSigs, nil
-
 }
 
 func IsFingerprint(event cloudevent.RawEvent) bool {

@@ -1,3 +1,5 @@
+// Package tesla handles incoming Tesla messages, both from polling the Fleet API and
+// streaming from Fleet Telemetry.
 package tesla
 
 import (
@@ -20,9 +22,8 @@ type Module struct{}
 func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Signal, error) {
 	if event.DataVersion == telemetry.DataVersion {
 		return telemetry.SignalConvert(event)
-	} else {
-		return api.SignalConvert(event)
 	}
+	return api.SignalConvert(event)
 }
 
 // CloudEventConvert converts an input message to Cloud Events. In the Tesla case
@@ -60,7 +61,6 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 func (m *Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
 	if event.DataVersion == telemetry.DataVersion {
 		return telemetry.FingerprintConvert(event)
-	} else {
-		return api.FingerprintConvert(event)
 	}
+	return api.FingerprintConvert(event)
 }
