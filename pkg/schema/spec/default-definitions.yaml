@@ -74,7 +74,13 @@
 - vspecName: Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.ChargeCurrent.AC
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.ChargeVoltage.UnknownType
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.Powertrain.TractionBattery.Charging.IsCharging
