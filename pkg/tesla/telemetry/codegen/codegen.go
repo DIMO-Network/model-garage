@@ -15,6 +15,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/DIMO-Network/model-garage/pkg/codegen"
 	"github.com/DIMO-Network/model-garage/pkg/schema"
 	tschema "github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/schema"
 	"github.com/teslamotors/fleet-telemetry/protos"
@@ -201,23 +202,7 @@ func writeOuter(tmplInput *TemplateInput, outerPath string) error {
 		panic(err)
 	}
 
-	out, err := format.Source(buf.Bytes())
-	if err != nil {
-		panic(err)
-	}
-
-	f, err := os.Create(outerPath)
-	if err != nil {
-		return fmt.Errorf("error opening outer output file: %w", err)
-	}
-	defer f.Close()
-
-	_, err = f.Write(out)
-	if err != nil {
-		return fmt.Errorf("error writing outer output file: %w", err)
-	}
-
-	return nil
+	return codegen.FormatAndWriteToFile(buf.Bytes(), outerPath)
 }
 
 func writeInner(tmplInput *TemplateInput, innerPath string) error {
@@ -254,32 +239,16 @@ func writeInner(tmplInput *TemplateInput, innerPath string) error {
 
 	t, err := template.New("inner").Parse(innerTmpl)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	var buf bytes.Buffer
 	err = t.Execute(&buf, tmplInput)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	out, err := format.Source(buf.Bytes())
-	if err != nil {
-		panic(err)
-	}
-
-	f, err := os.Create(innerPath)
-	if err != nil {
-		return fmt.Errorf("error opening outer output file: %w", err)
-	}
-	defer f.Close()
-
-	_, err = f.Write(out)
-	if err != nil {
-		return fmt.Errorf("error writing outer output file: %w", err)
-	}
-
-	return nil
+	return codegen.FormatAndWriteToFile(buf.Bytes(), innerPath)
 }
 
 func loadRules() ([]Rule, error) {
