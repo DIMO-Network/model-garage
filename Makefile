@@ -95,6 +95,7 @@ generate-hashdog: # Generate all files for hashdog (macaron)
 generate-tesla: # Generate all files for tesla
 	go run ./cmd/codegen -convert.package=api -generators=convert -convert.output-file=./pkg/tesla/api/convert_signal_funcs_gen.go -definitions=./pkg/tesla/api/schema/tesla_definitions.yaml
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/tesla/api/convert_signal_status_gen.go -custom.template-file=./pkg/tesla/api/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/tesla/api/schema/tesla_definitions.yaml
+	go run ./pkg/tesla/telemetry/codegen
 
 generate-compass: # Generate all files for compass
 	go run ./cmd/codegen -convert.package=compass -generators=convert -convert.output-file=./pkg/compass/convert_signal_funcs_gen.go -definitions=./pkg/compass/schema/compass_definitions.yaml

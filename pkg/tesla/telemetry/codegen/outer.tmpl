@@ -1,0 +1,59 @@
+package {{.Package}}
+
+import (
+    "fmt"
+    "strconv"
+
+    "github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
+	"github.com/teslamotors/fleet-telemetry/protos"
+	"github.com/DIMO-Network/model-garage/pkg/vss"
+)
+
+func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]vss.Signal, []error) {
+    var out []vss.Signal
+    var outErr []error
+
+    ts := payload.GetCreatedAt().AsTime()
+
+    for _, d := range payload.GetData() {
+        {{- range .Conversions}}
+        if d.GetKey() == protos.Field_{{.TeslaField}} {
+            if v, ok := d.GetValue().Value.(*protos.{{.WrapperName}}); ok {
+                val, err := Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}Wrapper(v.{{.WrapperFieldName}})
+                if err != nil {
+                    outErr = append(outErr, err)
+                } else {
+                    sig := vss.Signal{
+                        TokenID:   tokenID,
+                        Name:      "{{.JSONName}}",
+                        Timestamp: ts,
+                        Source:    source,
+                    }
+                    sig.SetValue(val)
+                    out = append(out, sig)
+                }
+            }
+        }
+        {{- end}}
+    }
+
+    return out, outErr
+}
+
+{{range .Conversions}}
+func Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}Wrapper(wrap {{.OuterInputType}}) ({{.OutputType}}, error) {
+    {{- if .ParseFloat}}
+    fp, err := strconv.ParseFloat(wrap, 64)
+    if err != nil {
+        var tmpOut {{.OutputType}}
+        return tmpOut, fmt.Errorf("failed to parse float: %w", err)
+    }
+    {{if .UnitFunc}}
+    fp = unit.{{.UnitFunc}}(fp)
+    {{end}}
+    return Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}(fp)
+    {{- else}}
+    return Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}(wrap)
+    {{- end}}
+}
+{{end}}

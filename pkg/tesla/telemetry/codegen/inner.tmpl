@@ -1,0 +1,30 @@
+package {{.Package}}
+
+import (
+    "strings"
+
+    "github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
+	"github.com/teslamotors/fleet-telemetry/protos"
+)
+
+{{range .Conversions}}
+// Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}} converts a telemetry datum with key {{.TeslaField}} to the VSS signal {{.GoVSSSignalName}}.
+{{- if .ParseFloat}}
+// Before being passed to this function, the string value is parsed into a float64.
+{{- end}}
+{{- if .UnitFunc}}
+// Before being passed to this function, the units are converted using {{.UnitFunc}}
+{{- end}}
+func Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}(val {{.InnerInputType}}) ({{.OutputType}}, error)
+    {{- if .Body -}}
+    {{- .Body -}}
+    {{- else -}}
+    {
+    {{- if eq .InnerInputType .OutputType}}
+    return val, nil
+    {{- else}}
+    panic("not implemented")
+    {{- end}}
+    }
+    {{- end}}
+{{end}}

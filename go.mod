@@ -6,7 +6,6 @@ require (
 	github.com/99designs/gqlgen v0.17.64
 	github.com/DIMO-Network/clickhouse-infra v0.0.3
 	github.com/DIMO-Network/cloudevent v0.0.0-20250325154729-4842ad34efe5
-	github.com/DIMO-Network/tesla-vss v0.1.1
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/ethereum/go-ethereum v1.14.13
 	github.com/pressly/goose/v3 v3.24.1
