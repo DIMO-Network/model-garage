@@ -47,6 +47,8 @@ var innerTmpl string
 //go:embed outer.tmpl
 var outerTmpl string
 
+// protoToGoTypes maps protobuf types to Go types. The only point of disagreement here
+// is for floating point numbers.
 var protoToGoTypes = map[string]string{
 	"string": "string",
 	"int32":  "int32",
