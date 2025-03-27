@@ -12,7 +12,7 @@ import (
 
 const DataVersion = "fleet_api/v1.0.0"
 
-// SignalConvert converts a Tesla CloudEvent to DIMO's VSS rows.
+// SignalConvert converts a Tesla Fleet API response CloudEvent to DIMO's VSS rows.
 func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	did, err := cloudevent.DecodeNFTDID(event.Subject)
 	if err != nil {
@@ -40,6 +40,8 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	return sigs, nil
 }
 
+// IsFingerprint returns whether the Fleet API response contains an extractable
+// VIN. This should always return true.
 func IsFingerprint(event cloudevent.RawEvent) bool {
 	result := gjson.GetBytes(event.Data, "vin")
 
@@ -47,6 +49,8 @@ func IsFingerprint(event cloudevent.RawEvent) bool {
 	return result.Exists() && result.Type == gjson.String
 }
 
+// FingerprintConvert extracts a fingerprint from a Fleet API vehicle_data response.
+// We expect this to always succeed.
 func FingerprintConvert(event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
 	var fp cloudevent.Fingerprint
 

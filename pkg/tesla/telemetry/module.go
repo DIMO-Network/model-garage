@@ -21,7 +21,8 @@ type TelemetryData struct {
 	Payloads [][]byte `json:"payloads"`
 }
 
-// SignalConvert converts a Tesla Telemetry CloudEvent to DIMO's VSS rows.
+// SignalConvert converts a CloudEvent containing a batch of Fleet Telemetry
+// protobuf Payloads into DIMO's VSS rows.
 func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	did, err := cloudevent.DecodeNFTDID(event.Subject)
 	if err != nil {
@@ -61,6 +62,8 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	return batchedSigs, nil
 }
 
+// IsFingerprint returns whether the Fleet Telemetry batch contains an extractable
+// VIN. This should always return true.
 func IsFingerprint(event cloudevent.RawEvent) bool {
 	result := gjson.GetBytes(event.Data, "payloads")
 
@@ -68,6 +71,8 @@ func IsFingerprint(event cloudevent.RawEvent) bool {
 	return result.Exists() && result.IsArray() && len(result.Array()) != 0
 }
 
+// FingerprintConvert extracts a fingerprint from the first Fleet Telemetry protobuf
+// Payload. We expect this to always succeed.
 func FingerprintConvert(event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
 	var fp cloudevent.Fingerprint
 
