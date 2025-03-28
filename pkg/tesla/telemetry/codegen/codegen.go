@@ -204,13 +204,13 @@ func assembleTeslaTypeInformation() (map[string]TeslaTypeDescription, error) {
 func writeOuter(tmplInput *TemplateInput, outerPath string) error {
 	t, err := template.New("outer").Parse(outerTmpl)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	var buf bytes.Buffer
 	err = t.Execute(&buf, tmplInput)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	return codegen.FormatAndWriteToFile(buf.Bytes(), outerPath)
@@ -234,7 +234,7 @@ func writeInner(tmplInput *TemplateInput, innerPath string) error {
 					Comments: astFile.Comments,
 				})
 				if err != nil {
-					panic(err)
+					return err
 				}
 				existingBodies[fn.Name.Name] = buf.String()
 			}

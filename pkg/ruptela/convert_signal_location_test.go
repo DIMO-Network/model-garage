@@ -32,7 +32,7 @@ func TestLocationPayload(t *testing.T) {
 }
 
 func expectedLocationSignals() []vss.Signal {
-	ts = time.Unix(1727360340, 0).UTC()
+	ts := time.Unix(1727360340, 0).UTC()
 	return []vss.Signal{
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 123.2, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationLatitude, ValueNumber: 43.2699983, Source: "ruptela/TODO"},
