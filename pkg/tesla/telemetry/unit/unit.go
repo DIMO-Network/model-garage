@@ -6,10 +6,6 @@ func KilowattsToWatts(x float64) float64 {
 	return 1000 * x
 }
 
-func BarsToKilopascals(x float64) float64 {
-	return 100 * x
-}
-
 const kilopascalsPerAtmosphere = 101.325
 
 func AtmospheresToKilopascals(x float64) float64 {
