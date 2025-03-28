@@ -9,7 +9,6 @@ import (
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
-	ftconv "github.com/DIMO-Network/tesla-vss/pkg/convert"
 	"github.com/teslamotors/fleet-telemetry/protos"
 	"github.com/tidwall/gjson"
 	"google.golang.org/protobuf/proto"
@@ -46,7 +45,7 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 			batchedErrs = append(batchedErrs, fmt.Errorf("failed to unmarshal payload at index %d: %w", i, err))
 			continue
 		}
-		sigs, errs := ftconv.ProcessPayload(&pl, tokenID, source)
+		sigs, errs := ProcessPayload(&pl, tokenID, source)
 		batchedSigs = append(batchedSigs, sigs...)
 		batchedErrs = append(batchedErrs, errs...)
 	}
