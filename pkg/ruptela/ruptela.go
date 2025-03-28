@@ -38,7 +38,7 @@ func ignoreZero(val float64, err error) (float64, error) {
 }
 
 func ignitionOff(originalDoc []byte) bool {
-	result := gjson.GetBytes(originalDoc, "data.signals.409")
+	result := gjson.GetBytes(originalDoc, "signals.409")
 	if !result.Exists() || result.Type != gjson.String {
 		return false
 	}
@@ -46,7 +46,7 @@ func ignitionOff(originalDoc []byte) bool {
 }
 
 func unplugged(originalDoc []byte) bool {
-	result := gjson.GetBytes(originalDoc, "data.signals.985")
+	result := gjson.GetBytes(originalDoc, "signals.985")
 	if !result.Exists() || result.Type != gjson.String {
 		return false
 	}
