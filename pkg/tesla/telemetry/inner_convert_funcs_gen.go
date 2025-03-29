@@ -171,3 +171,14 @@ func ConvertRdWindowStringToCabinDoorRow2DriverSideWindowIsOpen(val string) (flo
 func ConvertRpWindowStringToCabinDoorRow2PassengerSideWindowIsOpen(val string) (float64, error) {
 	return windowStateToIsOpen(val), nil
 }
+
+// ConvertChargeAmpsStringToPowertrainTractionBatteryChargingChargeCurrentAC converts a telemetry datum with key ChargeAmps to the VSS signal PowertrainTractionBatteryChargingChargeCurrentAC.
+// Before being passed to this function, the string value is parsed into a float64.
+func ConvertChargeAmpsStringToPowertrainTractionBatteryChargingChargeCurrentAC(val float64) (float64, error) {
+	return val, nil
+}
+
+// ConvertChargerVoltageDoubleToPowertrainTractionBatteryChargingChargeVoltageUnknownType converts a telemetry datum with key ChargerVoltage to the VSS signal PowertrainTractionBatteryChargingChargeVoltageUnknownType.
+func ConvertChargerVoltageDoubleToPowertrainTractionBatteryChargingChargeVoltageUnknownType(val float64) (float64, error) {
+	return val, nil
+}

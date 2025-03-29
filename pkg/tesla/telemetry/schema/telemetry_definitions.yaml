@@ -167,3 +167,18 @@
 - teslaField: RpWindow
   teslaType: string
   vssSignal: Vehicle.Cabin.Door.Row2.PassengerSide.Window.IsOpen
+
+- teslaField: ChargeAmps
+  teslaType: string
+  teslaUnit: A
+  vssSignal: Vehicle.Powertrain.TractionBattery.Charging.ChargeCurrent.AC
+  automations:
+  - PARSE_FLOAT
+  - CONVERT_UNIT
+
+- teslaField: ChargerVoltage
+  teslaType: double
+  teslaUnit: V
+  vssSignal: Vehicle.Powertrain.TractionBattery.Charging.ChargeVoltage.UnknownType
+  automations:
+  - CONVERT_UNIT

@@ -4,6 +4,22 @@ package vss
 const (
 	// FieldAngularVelocityYaw Vehicle rotation rate along Z (vertical).
 	FieldAngularVelocityYaw = "angularVelocityYaw"
+	// FieldCabinDoorRow1DriverSideIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldCabinDoorRow1DriverSideIsOpen = "cabinDoorRow1DriverSideIsOpen"
+	// FieldCabinDoorRow1DriverSideWindowIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldCabinDoorRow1DriverSideWindowIsOpen = "cabinDoorRow1DriverSideWindowIsOpen"
+	// FieldCabinDoorRow1PassengerSideIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldCabinDoorRow1PassengerSideIsOpen = "cabinDoorRow1PassengerSideIsOpen"
+	// FieldCabinDoorRow1PassengerSideWindowIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldCabinDoorRow1PassengerSideWindowIsOpen = "cabinDoorRow1PassengerSideWindowIsOpen"
+	// FieldCabinDoorRow2DriverSideIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldCabinDoorRow2DriverSideIsOpen = "cabinDoorRow2DriverSideIsOpen"
+	// FieldCabinDoorRow2DriverSideWindowIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldCabinDoorRow2DriverSideWindowIsOpen = "cabinDoorRow2DriverSideWindowIsOpen"
+	// FieldCabinDoorRow2PassengerSideIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldCabinDoorRow2PassengerSideIsOpen = "cabinDoorRow2PassengerSideIsOpen"
+	// FieldCabinDoorRow2PassengerSideWindowIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldCabinDoorRow2PassengerSideWindowIsOpen = "cabinDoorRow2PassengerSideWindowIsOpen"
 	// FieldChassisAxleRow1WheelLeftSpeed Rotational speed of a vehicle's wheel.
 	FieldChassisAxleRow1WheelLeftSpeed = "chassisAxleRow1WheelLeftSpeed"
 	// FieldChassisAxleRow1WheelLeftTirePressure Tire pressure in kilo-Pascal.
@@ -104,8 +120,12 @@ const (
 	FieldPowertrainRange = "powertrainRange"
 	// FieldPowertrainTractionBatteryChargingAddedEnergy Amount of charge added to the high voltage battery during the current charging session, expressed in kilowatt-hours.
 	FieldPowertrainTractionBatteryChargingAddedEnergy = "powertrainTractionBatteryChargingAddedEnergy"
+	// FieldPowertrainTractionBatteryChargingChargeCurrentAC Current AC charging current (rms) at inlet. Negative if returning energy to grid. Used when per-phase numbers are unavailable.
+	FieldPowertrainTractionBatteryChargingChargeCurrentAC = "powertrainTractionBatteryChargingChargeCurrentAC"
 	// FieldPowertrainTractionBatteryChargingChargeLimit Target charge limit (state of charge) for battery.
 	FieldPowertrainTractionBatteryChargingChargeLimit = "powertrainTractionBatteryChargingChargeLimit"
+	// FieldPowertrainTractionBatteryChargingChargeVoltageUnknownType Current charging voltage at inlet. Used when the data source does not indicate the current type (AC or DC) in use.
+	FieldPowertrainTractionBatteryChargingChargeVoltageUnknownType = "powertrainTractionBatteryChargingChargeVoltageUnknownType"
 	// FieldPowertrainTractionBatteryChargingIsCharging True if charging is ongoing. Charging is considered to be ongoing if energy is flowing from charger to vehicle.
 	FieldPowertrainTractionBatteryChargingIsCharging = "powertrainTractionBatteryChargingIsCharging"
 	// FieldPowertrainTractionBatteryCurrentPower Current electrical energy flowing in/out of battery. Positive = Energy flowing in to battery, e.g. during charging. Negative = Energy flowing out of battery, e.g. during driving.
