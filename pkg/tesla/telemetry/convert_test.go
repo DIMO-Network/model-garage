@@ -42,6 +42,8 @@ func TestConvert(t *testing.T) {
 			{Key: protos.Field_FpWindow, Value: &protos.Value{Value: &protos.Value_StringValue{StringValue: "Opened"}}},
 			{Key: protos.Field_RdWindow, Value: &protos.Value{Value: &protos.Value_StringValue{StringValue: "Closed"}}},
 			{Key: protos.Field_RpWindow, Value: &protos.Value{Value: &protos.Value_StringValue{StringValue: "PartiallyOpen"}}},
+			{Key: protos.Field_ChargerVoltage, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 114.774}}},
+			{Key: protos.Field_ChargeAmps, Value: &protos.Value{Value: &protos.Value_StringValue{StringValue: "12.0"}}},
 		},
 		CreatedAt: timestamppb.New(ts),
 		Vin:       vin,
@@ -77,6 +79,8 @@ func TestConvert(t *testing.T) {
 		{TokenID: 7, Timestamp: ts, Name: "cabinDoorRow1PassengerSideWindowIsOpen", ValueNumber: 1, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "cabinDoorRow2DriverSideWindowIsOpen", ValueNumber: 0, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "cabinDoorRow2PassengerSideWindowIsOpen", ValueNumber: 1, Source: teslaConnection},
+		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeVoltageUnknownType", ValueNumber: 114.774, Source: teslaConnection},
+		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeCurrentAC", ValueNumber: 12.0, Source: teslaConnection},
 	}
 
 	assert.ElementsMatch(t, expectedSignals, signals)
