@@ -4,7 +4,6 @@ package ruptela
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 )
 
 // This file is automatically populated with conversion functions for each field of the model struct.
@@ -20,10 +19,7 @@ func ToChassisAxleRow1WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 		return 0, err
 	}
 
-	kPa := ConvertPSIToKPa(psi)
-	// rounding to 2 decimal places
-	kPa = math.Round(kPa*100) / 100
-	return kPa, nil
+	return ConvertPSIToKPa(psi), nil
 }
 
 // ToChassisAxleRow1WheelRightTirePressure0 converts data from field 'signals.961' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure' of type float64.
@@ -35,10 +31,7 @@ func ToChassisAxleRow1WheelRightTirePressure0(originalDoc []byte, val string) (f
 		return 0, err
 	}
 
-	kPa := ConvertPSIToKPa(psi)
-	// rounding to 2 decimal places
-	kPa = math.Round(kPa*100) / 100
-	return kPa, nil
+	return ConvertPSIToKPa(psi), nil
 }
 
 // ToChassisAxleRow2WheelLeftTirePressure0 converts data from field 'signals.962' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure' of type float64.
@@ -50,10 +43,7 @@ func ToChassisAxleRow2WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 		return 0, err
 	}
 
-	kPa := ConvertPSIToKPa(psi)
-	// rounding to 2 decimal places
-	kPa = math.Round(kPa*100) / 100
-	return kPa, nil
+	return ConvertPSIToKPa(psi), nil
 }
 
 // ToChassisAxleRow2WheelRightTirePressure0 converts data from field 'signals.963' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure' of type float64.
@@ -65,10 +55,7 @@ func ToChassisAxleRow2WheelRightTirePressure0(originalDoc []byte, val string) (f
 		return 0, err
 	}
 
-	kPa := ConvertPSIToKPa(psi)
-	// rounding to 2 decimal places
-	kPa = math.Round(kPa*100) / 100
-	return kPa, nil
+	return ConvertPSIToKPa(psi), nil
 }
 
 // ToCurrentLocationAltitude0 converts data from field 'pos.alt' of type float64 to 'Vehicle.CurrentLocation.Altitude' of type float64.
