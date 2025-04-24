@@ -52,3 +52,8 @@ func unplugged(originalDoc []byte) bool {
 	}
 	return result.Str == "1"
 }
+
+// ConvertPSIToKPa converts a pressure value from psi to kPa.
+func ConvertPSIToKPa(psi float64) float64 {
+	return psi * 6.89476
+}
