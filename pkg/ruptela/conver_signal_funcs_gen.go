@@ -4,7 +4,7 @@ package ruptela
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
+	"math"
 )
 
 // This file is automatically populated with conversion functions for each field of the model struct.
@@ -21,7 +21,8 @@ func ToChassisAxleRow1WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 	}
 
 	kPa := ConvertPSIToKPa(psi)
-	kPa, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", kPa), 64)
+	// rounding to 2 decimal places
+	kPa = math.Round(kPa*100) / 100
 	return kPa, nil
 }
 
@@ -35,7 +36,8 @@ func ToChassisAxleRow1WheelRightTirePressure0(originalDoc []byte, val string) (f
 	}
 
 	kPa := ConvertPSIToKPa(psi)
-	kPa, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", kPa), 64)
+	// rounding to 2 decimal places
+	kPa = math.Round(kPa*100) / 100
 	return kPa, nil
 }
 
@@ -49,7 +51,8 @@ func ToChassisAxleRow2WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 	}
 
 	kPa := ConvertPSIToKPa(psi)
-	kPa, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", kPa), 64)
+	// rounding to 2 decimal places
+	kPa = math.Round(kPa*100) / 100
 	return kPa, nil
 }
 
@@ -63,7 +66,8 @@ func ToChassisAxleRow2WheelRightTirePressure0(originalDoc []byte, val string) (f
 	}
 
 	kPa := ConvertPSIToKPa(psi)
-	kPa, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", kPa), 64)
+	// rounding to 2 decimal places
+	kPa = math.Round(kPa*100) / 100
 	return kPa, nil
 }
 
