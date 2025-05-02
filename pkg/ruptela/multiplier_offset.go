@@ -687,7 +687,7 @@ func Convert964(rawValue string) (float64, error) {
 	const byteSize = 1
 	const offset = float64(0)
 	const maxSize = 1<<(byteSize*bitsInByte) - 1
-	const multiplier = float64(0.393)
+	const multiplier = float64(1)
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
 		return 0, fmt.Errorf("could not parse uint: %w", err)
