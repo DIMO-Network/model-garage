@@ -668,7 +668,7 @@ Ratio of brake pedal position to maximum position.",No,No,Yes,No,Yes,Yes,Yes,Yes
 27-Dual Fuel – Diesel and CNG
 28-Dual Fuel – Diesel and LNG
 29-Fuel Cell Utilizing Hydrogen Engine
-30-Hydrogen Internal Combustion 
+30-Hydrogen Internal Combustion
 31-Kerosene
 32-Heavy Fuel Oil
 33-253-ISO/SAE reserved
@@ -1065,7 +1065,7 @@ PEUGEOT = 45,
 DIECI = 46,
 TESLA = 47,
 EV_BUS = 48,
-SAIC = 49, 
+SAIC = 49,
 JAC = 50,
 BYD = 51,
 MG = 52,
@@ -1447,7 +1447,7 @@ Driver1 (MSB) + Driver2 (LSB)
 Not available for VDO",No,No,Yes,No,No,Yes,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 859,TCO_CAN Remaining Current Drive Time,4,Unsigned int.,0,64255,1,min,"0xFFFFFFFF, 0xFFFFXXXX, 0xXXXXFFFF","This parameter shall be the maximum remaining driving time left to next required break/rest according to what is defined by regulation.
 Driver1 (MSB; 2B) + Driver2 (LSB; 2B)",No,No,Yes,No,No,Yes,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-860,TCO_CAN Remaining Drive Time on Current Shift,4,Unsigned int.,0,64255,1,min,"0xFFFFFFFF, 0xFFFFXXXX, 0xXXXXFFFF","This parameter shall be the maximum remaining driving time left on current day. 
+860,TCO_CAN Remaining Drive Time on Current Shift,4,Unsigned int.,0,64255,1,min,"0xFFFFFFFF, 0xFFFFXXXX, 0xXXXXFFFF","This parameter shall be the maximum remaining driving time left on current day.
 Driver1 (MSB; 2B) + Driver2 (LSB; 2B)",No,No,Yes,No,No,Yes,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 861,TCO_CAN Remaining Drive Time on Current Week,4,Unsigned int.,0,64255,1,min,"0xFFFFFFFF, 0xFFFFXXXX, 0xXXXXFFFF","This parameter shall be set to the maximum remaining driving time left of current week.
 Driver1 (MSB; 2B) + Driver2 (LSB; 2B) Not available for Stoneridge",No,No,Yes,No,No,Yes,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
@@ -1667,7 +1667,7 @@ Range: 0~250, Offset: 0",No,Yes,No,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No
 961,OBD tire pressure front right,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 962,OBD tire pressure rear left,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 963,OBD tire pressure rear righ,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-964,OBD Oil Life remaining,1,Unsigned int.,0,254,"0,393;0",%,255,,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+964,OBD Oil Life remaining,1,Unsigned int.,0,254,"1;0",%,255,,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 965,CAN tire pressure front left,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 966,CAN tire pressure front right,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 967,CAN tire pressure rear left,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,Outer-left tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
