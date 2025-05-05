@@ -46,6 +46,8 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelRightTirePressure, ValueNumber: 258.20876200000004, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelLeftTirePressure, ValueNumber: 266.482474, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelRightTirePressure, ValueNumber: 260.966666, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilLevel, ValueString: "HIGH", Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilRelativeLevel, ValueNumber: 92, Source: "ruptela/TODO"},
 	}
 
 	slices.SortFunc(expectedSignals, sortFunc)
@@ -109,6 +111,7 @@ var fullInputJSON = `
 			"961": "2ED",
 			"962": "305",
 			"963": "2F5",
+			"964": "5C",
 			"985": "0",
 			"99": "1",
 			"999": "0"

@@ -207,13 +207,13 @@ func ToPowertrainCombustionEngineEngineOilLevel0(originalDoc []byte, val string)
 		return "", err
 	}
 	switch {
-	case num < 0.25:
+	case num < 25:
 		return "CRITICALLY_LOW", nil
-	case num < 0.5:
+	case num < 50:
 		return "LOW", nil
-	case num < 0.75:
+	case num < 75:
 		return "NORMAL", nil
-	case num < .99:
+	case num < 99:
 		return "HIGH", nil
 	default:
 		return "CRITICALLY_HIGH", nil
