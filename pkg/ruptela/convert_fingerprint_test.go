@@ -80,7 +80,7 @@ var fullFPInputJSON = `
 	},
 	"ds": "r/v0/s",
 	"signature": "0x6fb5849e21e66f3e0619f148bc032153aa4c90be4cd175e83c1f959e1bc551d940d516fe74f50aed380e432406675c583e75155bf1c77b9ec0761b1dbe1ab87e1c",
-	"subject": "did:nft:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_33",
+	"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 	"time": "2024-09-27T08:33:26Z",
 	"topic": "devices/0xf47f6579029a1c53388e4d8776413aa3f993cb94/status"
 }`

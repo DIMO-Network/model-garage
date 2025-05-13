@@ -55,13 +55,13 @@ type CloudEventHeader = cloudeventpkg.CloudEventHeader
 // NFTDID is a Decentralized Identifier for NFTs.
 //
 // Deprecated: Use github.com/DIMO-Network/cloudevent.NFTDID instead.
-type NFTDID = cloudeventpkg.NFTDID
+type NFTDID = cloudeventpkg.ERC721DID
 
-// DecodeNFTDID decodes a DID string into a DID struct.
+// DecodeERC721DID decodes a DID string into a DID struct.
 //
-// Deprecated: Use github.com/DIMO-Network/cloudevent.DecodeNFTDID instead.
-func DecodeNFTDID(did string) (NFTDID, error) {
-	return cloudeventpkg.DecodeNFTDID(did)
+// Deprecated: Use github.com/DIMO-Network/cloudevent.DecodeERC721DID instead.
+func DecodeERC721DID(did string) (NFTDID, error) {
+	return cloudeventpkg.DecodeERC721DID(did)
 }
 
 // EthrDID is a Decentralized Identifier for an Ethereum contract.

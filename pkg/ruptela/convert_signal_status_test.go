@@ -120,7 +120,7 @@ var fullInputJSON = `
 	},
 	"ds": "r/v0/s",
 	"signature": "0x6fb5849e21e66f3e0619f148bc032153aa4c90be4cd175e83c1f959e1bc551d940d516fe74f50aed380e432406675c583e75155bf1c77b9ec0761b1dbe1ab87e1c",
-	"subject": "did:nft:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_33",
+	"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 	"time": "2024-09-27T08:33:26Z"
 }`
 
@@ -143,9 +143,9 @@ var ignoreTestDoc = `
 {
   "id": "2uvJPjThhoJSwNulNpvfe6xwkpF",
   "source": "0xF26421509Efe92861a587482100c6d728aBf1CD0",
-  "producer": "did:nft:137:0x9c94C395cBcBDe662235E0A9d3bB87Ad708561BA_31648",
+  "producer": "did:erc721:137:0x9c94C395cBcBDe662235E0A9d3bB87Ad708561BA:31648",
   "specversion": "1.0",
-  "subject": "did:nft:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_162682",
+  "subject": "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:162682",
   "time": "2025-03-28T00:51:29Z",
   "type": "dimo.status",
   "datacontenttype": "application/json",
@@ -155,6 +155,7 @@ var ignoreTestDoc = `
     "trigger": 7,
     "prt": 0,
     "pos": {
+		"spd": 0
     },
     "signals": {
       "27": "0",

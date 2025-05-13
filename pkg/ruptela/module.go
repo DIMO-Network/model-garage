@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/big"
 	"time"
 
 	"github.com/DIMO-Network/cloudevent"
@@ -56,10 +57,10 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 	}
 
 	// Construct the producer DID
-	producer := cloudevent.NFTDID{
+	producer := cloudevent.ERC721DID{
 		ChainID:         m.ChainID,
 		ContractAddress: m.AftermarketContractAddr,
-		TokenID:         *event.DeviceTokenID,
+		TokenID:         big.NewInt(int64(*event.DeviceTokenID)),
 	}.String()
 	subject, err := m.determineSubject(&event, producer)
 	if err != nil {
@@ -94,10 +95,10 @@ func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, 
 	switch event.DS {
 	case StatusEventDS, LocationEventDS, DTCEventDS:
 		if event.VehicleTokenID != nil {
-			subject = cloudevent.NFTDID{
+			subject = cloudevent.ERC721DID{
 				ChainID:         m.ChainID,
 				ContractAddress: m.VehicleContractAddr,
-				TokenID:         *event.VehicleTokenID,
+				TokenID:         big.NewInt(int64(*event.VehicleTokenID)),
 			}.String()
 		}
 	case DevStatusDS:
