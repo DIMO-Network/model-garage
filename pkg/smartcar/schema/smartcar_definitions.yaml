@@ -1,0 +1,82 @@
+- path: /battery
+  fields:
+  - scName: percentRemaining
+    scUnit: fraction
+    vssSignal: Vehicle.Powertrain.TractionBattery.StateOfCharge.Current
+    automations:
+    - CONVERT_UNIT
+  - scName: range
+    scUnit: km
+    vssSignal: Vehicle.Powertrain.Range
+    automations:
+    - CONVERT_UNIT
+
+- path: /charge/limit
+  fields:
+  - scName: limit
+    scUnit: fraction
+    vssSignal: Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit
+    automations:
+    - CONVERT_UNIT
+
+- path: /fuel
+  fields:
+  - scName: amountRemaining
+    scUnit: l
+    vssSignal: Vehicle.Powertrain.FuelSystem.AbsoluteLevel
+    automations:
+    - CONVERT_UNIT
+  - scName: percentRemaining
+    scUnit: fraction
+    vssSignal: Vehicle.Powertrain.FuelSystem.RelativeLevel
+    automations:
+    - CONVERT_UNIT
+  - scName: range
+    scUnit: km
+    vssSignal: Vehicle.Powertrain.FuelSystem.RelativeLevel
+    automations:
+    - CONVERT_UNIT
+
+- path: /location
+  fields:
+  - scName: latitude
+    scUnit: degrees
+    vssSignal: Vehicle.CurrentLocation.Latitude
+    automations:
+    - CONVERT_UNIT
+  - scName: longitude
+    scUnit: degrees
+    vssSignal: Vehicle.CurrentLocation.Longitude
+    automations:
+    - CONVERT_UNIT
+
+- path: /odometer
+  fields:
+  - scName: distance
+    scUnit: km
+    vssSignal: Vehicle.Powertrain.Transmission.TravelledDistance
+    automations:
+    - CONVERT_UNIT
+
+- path: /tires/pressure
+  fields:
+  - scName: backLeft
+    scUnit: kPa
+    vssSignal: Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure
+    automations:
+    - CONVERT_UNIT
+  - scName: backRight
+    scUnit: kPa
+    vssSignal: Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
+    automations:
+    - CONVERT_UNIT
+  - scName: frontLeft
+    scUnit: kPa
+    vssSignal: Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure
+    automations:
+    - CONVERT_UNIT
+  - scName: frontRight
+    scUnit: kPa
+    vssSignal: Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
+    automations:
+    - CONVERT_UNIT
