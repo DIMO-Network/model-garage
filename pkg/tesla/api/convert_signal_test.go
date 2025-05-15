@@ -13,7 +13,7 @@ import (
 
 var baseDoc = []byte(`
 {
-	"subject": "did:nft:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_37",
+	"subject": "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37",
 	"source": "0x983110309620D911731Ac0932219af06091b6744",
 	"data": {
 		"charge_state": {

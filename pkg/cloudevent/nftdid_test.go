@@ -1,6 +1,7 @@
 package cloudevent_test
 
 import (
+	"math/big"
 	"testing"
 
 	"github.com/DIMO-Network/model-garage/pkg/cloudevent"
@@ -17,11 +18,11 @@ func TestDecodeDID(t *testing.T) {
 	}{
 		{
 			name:  "valid DID",
-			input: "did:nft:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_123",
+			input: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:123",
 			expectedDID: cloudevent.NFTDID{
 				ChainID:         137,
 				ContractAddress: common.HexToAddress("0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF"),
-				TokenID:         123,
+				TokenID:         big.NewInt(123),
 			},
 		},
 		{
@@ -38,7 +39,7 @@ func TestDecodeDID(t *testing.T) {
 		},
 		{
 			name:          "invalid tokenID",
-			input:         "did:nft:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_notanumber",
+			input:         "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:notanumber",
 			expectedDID:   cloudevent.NFTDID{},
 			expectedError: true,
 		},
@@ -52,7 +53,7 @@ func TestDecodeDID(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			did, err := cloudevent.DecodeNFTDID(tt.input)
+			did, err := cloudevent.DecodeERC721DID(tt.input)
 
 			// Check if the error matches the expected error
 			if tt.expectedError {

@@ -13,14 +13,14 @@ import (
 
 // SignalsFromV2Payload extracts signals from a V2 payload.
 func SignalsFromV2Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeNFTDID(event.Subject)
+	did, err := cloudevent.DecodeERC721DID(event.Subject)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode DID: %w", err)
 	}
 	signals := gjson.GetBytes(event.Data, "vehicle.signals")
 	if !signals.Exists() {
 		return nil, convert.ConversionError{
-			TokenID: did.TokenID,
+			TokenID: uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
 			Source:  event.Source,
 			Errors:  []error{convert.FieldNotFoundError{Field: "signals", Lookup: "vehicle.signals"}},
 		}
@@ -31,19 +31,19 @@ func SignalsFromV2Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 			return []vss.Signal{}, nil
 		}
 		return nil, convert.ConversionError{
-			TokenID: did.TokenID,
+			TokenID: uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
 			Source:  event.Source,
 			Errors:  []error{errors.New("signals field is not an array")},
 		}
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		TokenID: did.TokenID,
+		TokenID: uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
 		Source:  event.Source,
 	}
 
 	conversionErrors := convert.ConversionError{
-		TokenID: did.TokenID,
+		TokenID: uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
 		Source:  event.Source,
 	}
 	for _, sigData := range signals.Array() {

@@ -47,7 +47,7 @@ dep:
 	@go mod tidy
 
 test:
-	@go test ./...
+	@go test ./... -race
 
 lint:
 	@golangci-lint version

@@ -14,7 +14,7 @@ import (
 
 var baseDoc = []byte(`
 {
-   "subject":"did:nft:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_37",
+   "subject":"did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37",
    "source":"0x55BF1c27d468314Ea119CF74979E2b59F962295c",
    "time": "2024-09-27T08:33:26Z",
    "data":{

@@ -51,7 +51,7 @@ func expectedLocationSignals() []vss.Signal {
 
 var locationInputJSON = `
 	{
-		"subject": "did:nft:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_33",
+		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"source": "ruptela/TODO",
 		"data": {
 			"location": [
