@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/99designs/gqlgen v0.17.64
 	github.com/DIMO-Network/clickhouse-infra v0.0.3
-	github.com/DIMO-Network/cloudevent v0.0.5-0.20250513190112-0cebf7ff0ff0
+	github.com/DIMO-Network/cloudevent v0.1.0
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/ethereum/go-ethereum v1.15.11
 	github.com/pressly/goose/v3 v3.24.1
