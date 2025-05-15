@@ -1,3 +1,4 @@
+# https://smartcar.com/docs/api-reference
 - path: /battery
   fields:
   - scName: percentRemaining
