@@ -43,7 +43,6 @@ func (m *MockModule) FingerprintConvert(_ context.Context, _ cloudevent.RawEvent
 }
 
 func TestModuleRegistration(t *testing.T) {
-	t.Parallel()
 	// Reset registries for test
 	modules.SignalRegistry = modules.NewModuleRegistry[modules.SignalModule]()
 	modules.CloudEventRegistry = modules.NewModuleRegistry[modules.CloudEventModule]()
@@ -166,7 +165,6 @@ func TestSignalConversion(t *testing.T) {
 }
 
 func TestCloudEventConversion(t *testing.T) {
-	t.Parallel()
 	// Reset registry for test
 	modules.CloudEventRegistry = modules.NewModuleRegistry[modules.CloudEventModule]()
 
