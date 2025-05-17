@@ -10,20 +10,20 @@ import (
 
 // SignalsFromV1Payload gets a slice signals from a v1 payload.
 func SignalsFromV1Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeNFTDID(event.Subject)
+	did, err := cloudevent.DecodeERC721DID(event.Subject)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
 	}
 
 	baseSignal := vss.Signal{
-		TokenID:   did.TokenID,
+		TokenID:   uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
 		Timestamp: event.Time,
 		Source:    event.Source,
 	}
 	sigs, errs := SignalsFromV1Data(baseSignal, event.Data)
 	if errs != nil {
 		return nil, convert.ConversionError{
-			TokenID:        did.TokenID,
+			TokenID:        uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
 			Source:         event.Source,
 			DecodedSignals: sigs,
 			Errors:         errs,

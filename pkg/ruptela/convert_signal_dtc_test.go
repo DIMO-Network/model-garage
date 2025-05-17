@@ -58,7 +58,7 @@ func expectedDTCSignals() []vss.Signal {
 
 var dtcInputJSON = `
 	{
-	   "subject":"did:nft:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_33",
+	   "subject":"did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 	   "source":"ruptela/TODO",
 	   "data":{
 	      "dtc_codes":[
@@ -79,7 +79,7 @@ var dtcInputJSON = `
 
 var emptyDtcInputJSON = `
 	{
-	   "subject":"did:nft:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_33",
+	   "subject":"did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 	   "source":"ruptela/TODO",
 	   "data":{
 	      "dtc_codes":[
@@ -93,7 +93,7 @@ var emptyDtcInputJSON = `
 
 var noDtcInputJSON = `
 	{
-	   "subject":"did:nft:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF_33",
+	   "subject":"did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 	   "source":"ruptela/TODO",
 	   "data":{
 	   },

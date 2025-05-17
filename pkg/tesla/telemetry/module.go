@@ -23,12 +23,12 @@ type TelemetryData struct {
 // SignalConvert converts a CloudEvent containing a batch of Fleet Telemetry
 // protobuf Payloads into DIMO's VSS rows.
 func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeNFTDID(event.Subject)
+	did, err := cloudevent.DecodeERC721DID(event.Subject)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
 	}
 
-	tokenID := did.TokenID
+	tokenID := uint32(did.TokenID.Uint64()) //nolint:gosec // will not exceed uint32 max value
 	source := event.Source
 
 	var td TelemetryData
@@ -53,7 +53,6 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	if len(batchedErrs) != 0 {
 		return nil, convert.ConversionError{
 			TokenID:        tokenID,
-			Source:         source,
 			DecodedSignals: batchedSigs,
 			Errors:         batchedErrs,
 		}

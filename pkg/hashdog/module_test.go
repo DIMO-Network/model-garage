@@ -45,7 +45,7 @@ func TestSignalConvert(t *testing.T) {
 					DataVersion: DataVersion,
 					Type:        cloudevent.TypeStatus,
 					Source:      source,
-					Subject:     "did:nft:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8_33",
+					Subject:     "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
 					Time:        ts,
 				},
 				Data: json.RawMessage(signalData),
@@ -63,8 +63,8 @@ func TestSignalConvert(t *testing.T) {
 					DataVersion: DataVersion,
 					Type:        cloudevent.TypeStatus,
 					Source:      source,
-					Subject:     "did:nft:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8_33",
-					Producer:    "did:nft:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8_33",
+					Subject:     "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
+					Producer:    "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
 					Time:        ts,
 				},
 				Data: json.RawMessage(signalData),
@@ -92,7 +92,7 @@ func TestSignalConvert(t *testing.T) {
 }
 
 func TestFingerprintConvert(t *testing.T) {
-	fingerPrintData := `{"id":"9xYzA8bCdEf2GhIj3KlMnOpQ7rS","source":"0x4c674ddE8189aEF6e3b58F5a36d7438b2b1f6Bc2","producer":"did:nft:137:0x8a92B34cDeFg1H2i3J4k5L6m7N8o9P0qRsTuV_45678","specversion":"1.0","subject":"did:nft:137:0xAb12Cd34Ef56Gh78Ij90Kl12Mn34Op56Qr78St_12345","type":"dimo.fingerprint","data":{"decodedPayload":{"data_base64":"Abc123XyZaBcDeF0987654321HiJkLmNoPqRsTuVwXyZ","header":1,"latitude":12.345678,"longitude":-98.765432,"nsat":1,"protocol":6,"signature":"0x9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m","timestamp":"2025-03-05T12:46:32.000Z","vin":"1ABCD2EFGH3JKLMNO"},"device":{"id":"A1B2C3D4E5F6G7H8","name":"0x1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s","protocol":"lora_helium","tags":{"env":"prod","label":"prod"}},"header":1,"id":"a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6","metadata":{"devAddr":"123456ab","fPort":"2","fcnt":"2627"},"payload":"Abc123XyZaBcDeF0987654321HiJkLmNoPqRsTuVwXyZ9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m","timestamp":1741178792000,"vehicle":{"signals":[{"name":"data_base64","timestamp":1741178792000,"value":"Abc123XyZaBcDeF0987654321HiJkLmNoPqRsTuVwXyZ"},{"name":"latitude","timestamp":1741178792000,"value":12.345678},{"name":"longitude","timestamp":1741178792000,"value":-98.765432},{"name":"nsat","timestamp":1741178792000,"value":1},{"name":"protocol","timestamp":1741178792000,"value":6},{"name":"signature","timestamp":1741178792000,"value":"0x9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m"},{"name":"vin","timestamp":1741178792000,"value":"1ABCD2EFGH3JKLMNO"}]},"via":[{"id":"1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T1u2V3w4X5y6Z","location":{"latitude":12.345678,"longitude":-98.765432,"ref":"1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T1u2V3w4X5y6Z","rssi":-110,"snr":5.2},"metadata":{"gatewayId":"1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T1u2V3w4X5y6Z","gatewayName":"random-scrambled-identifier"},"network":"helium_iot","protocol":"LORAWAN","timestamp":1741178794588,"txInfo":{"frequency":905100000,"modulation":{"lora":{"bandwidth":125000,"codeRate":"CR_4_5","spreadingFactor":7}}}}]}}`
+	fingerPrintData := `{"id":"9xYzA8bCdEf2GhIj3KlMnOpQ7rS","source":"0x4c674ddE8189aEF6e3b58F5a36d7438b2b1f6Bc2","producer":"did:erc721:137:0x8a92B34cDeFg1H2i3J4k5L6m7N8o9P0qRsTuV_45678","specversion":"1.0","subject":"did:nft:137:0xAb12Cd34Ef56Gh78Ij90Kl12Mn34Op56Qr78St_12345","type":"dimo.fingerprint","data":{"decodedPayload":{"data_base64":"Abc123XyZaBcDeF0987654321HiJkLmNoPqRsTuVwXyZ","header":1,"latitude":12.345678,"longitude":-98.765432,"nsat":1,"protocol":6,"signature":"0x9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m","timestamp":"2025-03-05T12:46:32.000Z","vin":"1ABCD2EFGH3JKLMNO"},"device":{"id":"A1B2C3D4E5F6G7H8","name":"0x1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s","protocol":"lora_helium","tags":{"env":"prod","label":"prod"}},"header":1,"id":"a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6","metadata":{"devAddr":"123456ab","fPort":"2","fcnt":"2627"},"payload":"Abc123XyZaBcDeF0987654321HiJkLmNoPqRsTuVwXyZ9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m","timestamp":1741178792000,"vehicle":{"signals":[{"name":"data_base64","timestamp":1741178792000,"value":"Abc123XyZaBcDeF0987654321HiJkLmNoPqRsTuVwXyZ"},{"name":"latitude","timestamp":1741178792000,"value":12.345678},{"name":"longitude","timestamp":1741178792000,"value":-98.765432},{"name":"nsat","timestamp":1741178792000,"value":1},{"name":"protocol","timestamp":1741178792000,"value":6},{"name":"signature","timestamp":1741178792000,"value":"0x9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m"},{"name":"vin","timestamp":1741178792000,"value":"1ABCD2EFGH3JKLMNO"}]},"via":[{"id":"1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T1u2V3w4X5y6Z","location":{"latitude":12.345678,"longitude":-98.765432,"ref":"1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T1u2V3w4X5y6Z","rssi":-110,"snr":5.2},"metadata":{"gatewayId":"1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T1u2V3w4X5y6Z","gatewayName":"random-scrambled-identifier"},"network":"helium_iot","protocol":"LORAWAN","timestamp":1741178794588,"txInfo":{"frequency":905100000,"modulation":{"lora":{"bandwidth":125000,"codeRate":"CR_4:5","spreadingFactor":7}}}}]}}`
 	tests := []struct {
 		name          string
 		cloudEvent    []byte
