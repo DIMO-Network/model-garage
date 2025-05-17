@@ -1,12 +1,16 @@
 # https://smartcar.com/docs/api-reference
+# Most Smartcar stuff doesn't need unit conversion, but it's nice for the code
+# generation to double-check.
 - path: /battery
   fields:
   - scName: percentRemaining
+    scType: number
     scUnit: fraction
     vssSignal: Vehicle.Powertrain.TractionBattery.StateOfCharge.Current
     automations:
     - CONVERT_UNIT
   - scName: range
+    scType: number
     scUnit: km
     vssSignal: Vehicle.Powertrain.Range
     automations:
@@ -15,6 +19,7 @@
 - path: /charge/limit
   fields:
   - scName: limit
+    scType: number
     scUnit: fraction
     vssSignal: Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit
     automations:
@@ -23,11 +28,13 @@
 - path: /fuel
   fields:
   - scName: amountRemaining
+    scType: number
     scUnit: l
     vssSignal: Vehicle.Powertrain.FuelSystem.AbsoluteLevel
     automations:
     - CONVERT_UNIT
   - scName: percentRemaining
+    scType: number
     scUnit: fraction
     vssSignal: Vehicle.Powertrain.FuelSystem.RelativeLevel
     automations:
@@ -41,11 +48,13 @@
 - path: /location
   fields:
   - scName: latitude
+    scType: number
     scUnit: degrees
     vssSignal: Vehicle.CurrentLocation.Latitude
     automations:
     - CONVERT_UNIT
   - scName: longitude
+    scType: number
     scUnit: degrees
     vssSignal: Vehicle.CurrentLocation.Longitude
     automations:
@@ -54,6 +63,7 @@
 - path: /odometer
   fields:
   - scName: distance
+    scType: number
     scUnit: km
     vssSignal: Vehicle.Powertrain.Transmission.TravelledDistance
     automations:
@@ -62,21 +72,25 @@
 - path: /tires/pressure
   fields:
   - scName: backLeft
+    scType: number
     scUnit: kPa
     vssSignal: Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure
     automations:
     - CONVERT_UNIT
   - scName: backRight
+    scType: number
     scUnit: kPa
     vssSignal: Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
     automations:
     - CONVERT_UNIT
   - scName: frontLeft
+    scType: number
     scUnit: kPa
     vssSignal: Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure
     automations:
     - CONVERT_UNIT
   - scName: frontRight
+    scType: number
     scUnit: kPa
     vssSignal: Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
     automations:
