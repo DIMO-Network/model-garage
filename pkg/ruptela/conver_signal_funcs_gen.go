@@ -22,11 +22,35 @@ func ToChassisAxleRow1WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 	return ConvertPSIToKPa(psi), nil
 }
 
+// ToChassisAxleRow1WheelLeftTirePressure1 converts data from field 'signals.965' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow1WheelLeftTirePressure1(originalDoc []byte, val string) (float64, error) {
+	psi, err := Convert965(val)
+	if err != nil {
+		return 0, err
+	}
+
+	return ConvertPSIToKPa(psi), nil
+}
+
 // ToChassisAxleRow1WheelRightTirePressure0 converts data from field 'signals.961' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure' of type float64.
 // Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
 // Unit: 'kPa'
 func ToChassisAxleRow1WheelRightTirePressure0(originalDoc []byte, val string) (float64, error) {
 	psi, err := Convert961(val)
+	if err != nil {
+		return 0, err
+	}
+
+	return ConvertPSIToKPa(psi), nil
+}
+
+// ToChassisAxleRow1WheelRightTirePressure1 converts data from field 'signals.966' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow1WheelRightTirePressure1(originalDoc []byte, val string) (float64, error) {
+	psi, err := Convert966(val)
 	if err != nil {
 		return 0, err
 	}
@@ -46,11 +70,35 @@ func ToChassisAxleRow2WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 	return ConvertPSIToKPa(psi), nil
 }
 
+// ToChassisAxleRow2WheelLeftTirePressure1 converts data from field 'signals.967' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow2WheelLeftTirePressure1(originalDoc []byte, val string) (float64, error) {
+	psi, err := Convert967(val)
+	if err != nil {
+		return 0, err
+	}
+
+	return ConvertPSIToKPa(psi), nil
+}
+
 // ToChassisAxleRow2WheelRightTirePressure0 converts data from field 'signals.963' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure' of type float64.
 // Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
 // Unit: 'kPa'
 func ToChassisAxleRow2WheelRightTirePressure0(originalDoc []byte, val string) (float64, error) {
 	psi, err := Convert963(val)
+	if err != nil {
+		return 0, err
+	}
+
+	return ConvertPSIToKPa(psi), nil
+}
+
+// ToChassisAxleRow2WheelRightTirePressure1 converts data from field 'signals.968' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow2WheelRightTirePressure1(originalDoc []byte, val string) (float64, error) {
+	psi, err := Convert968(val)
 	if err != nil {
 		return 0, err
 	}
