@@ -48,6 +48,7 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelRightTirePressure, ValueNumber: 260.966666, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilLevel, ValueString: "HIGH", Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilRelativeLevel, ValueNumber: 92, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 197.3, Source: "ruptela/TODO"},
 	}
 
 	slices.SortFunc(expectedSignals, sortFunc)

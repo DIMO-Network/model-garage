@@ -101,6 +101,22 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 		retSignals = append(retSignals, sig)
 	}
 
+	val, err = CurrentLocationHeadingFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'CurrentLocationHeading': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "currentLocationHeading",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = CurrentLocationLatitudeFromV1Data(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -591,6 +607,31 @@ func CurrentLocationAltitudeFromV1Data(jsonData []byte) (ret float64, err error)
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'CurrentLocationAltitude'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// CurrentLocationHeadingFromV1Data converts the given JSON data to a float64.
+func CurrentLocationHeadingFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "pos.dir")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(float64)
+		if ok {
+			retVal, err := ToCurrentLocationHeading0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.dir': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.dir' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'CurrentLocationHeading'", errNotFound)
 	}
 
 	return ret, errs
