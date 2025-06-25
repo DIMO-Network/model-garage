@@ -62,7 +62,7 @@ func ignoreOutOfHeadingRange(val float64, err error) (float64, error) {
 	if err != nil {
 		return 0, err
 	}
-	if val < 0 || val >= 360 {
+	if val < 0 || val > 360 {
 		return 0, errNotFound
 	}
 	return val, nil
