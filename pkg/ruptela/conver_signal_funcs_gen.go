@@ -72,7 +72,7 @@ func ToCurrentLocationAltitude0(originalDoc []byte, val float64) (float64, error
 // Vehicle.CurrentLocation.Heading: Current heading relative to geographic north. 0 = North, 90 = East, 180 = South, 270 = West.
 // Unit: 'degrees' Min: '0' Max: '360'
 func ToCurrentLocationHeading0(originalDoc []byte, val float64) (float64, error) {
-	if val == 0x8000 {
+	if val == 0xffff {
 		return 0, errNotFound
 	}
 	heading := val / 100
