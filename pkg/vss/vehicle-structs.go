@@ -86,6 +86,8 @@ const (
 	FieldOBDRunTime = "obdRunTime"
 	// FieldOBDShortTermFuelTrim1 PID 06 - Short Term (immediate) Fuel Trim - Bank 1 - negative percent leaner, positive percent richer
 	FieldOBDShortTermFuelTrim1 = "obdShortTermFuelTrim1"
+	// FieldOBDStatusDTCCount Number of Diagnostic Trouble Codes (DTC)
+	FieldOBDStatusDTCCount = "obdStatusDTCCount"
 	// FieldOBDWarmupsSinceDTCClear PID 30 - Number of warm-ups since codes cleared
 	FieldOBDWarmupsSinceDTCClear = "obdWarmupsSinceDTCClear"
 	// FieldPowertrainCombustionEngineDieselExhaustFluidCapacity Capacity in liters of the Diesel Exhaust Fluid Tank.

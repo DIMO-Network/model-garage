@@ -230,3 +230,6 @@
 - vspecName: Vehicle.Powertrain.CombustionEngine.EOP
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.Status.DTCCount
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
