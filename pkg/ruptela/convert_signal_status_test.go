@@ -134,6 +134,7 @@ func TestIgnoreUnplugged(t *testing.T) {
 	require.NoError(t, err)
 	expectedSignals := []vss.Signal{
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDDistanceWithMIL, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
+		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldPowertrainCombustionEngineTPS, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldSpeed, ValueNumber: 5, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 	}
