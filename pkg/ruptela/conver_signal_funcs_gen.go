@@ -77,7 +77,11 @@ func ToCurrentLocationHeading0(originalDoc []byte, val float64) (float64, error)
 	}
 	heading := val / 100
 
-	return ignoreOutOfHeadingRange(heading, nil)
+	if heading < 0 || heading > 360 {
+		return 0, errNotFound
+	}
+
+	return heading, nil
 }
 
 // ToCurrentLocationLatitude0 converts data from field 'pos.lat' of type float64 to 'Vehicle.CurrentLocation.Latitude' of type float64.
