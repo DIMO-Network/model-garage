@@ -1668,10 +1668,10 @@ Range: 0~250, Offset: 0",No,Yes,No,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No
 962,OBD tire pressure rear left,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 963,OBD tire pressure rear righ,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 964,OBD Oil Life remaining,1,Unsigned int.,0,254,"1;0",%,255,,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-965,CAN tire pressure front left,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-966,CAN tire pressure front right,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-967,CAN tire pressure rear left,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,Outer-left tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-968,CAN tire pressure rear right,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,Outer-right tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+965,CAN tire pressure front left,2,Unsigned int.,0,65534,"1; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+966,CAN tire pressure front right,2,Unsigned int.,0,65534,"1; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+967,CAN tire pressure rear left,2,Unsigned int.,0,65534,"1; 0",PSI,65535,Outer-left tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+968,CAN tire pressure rear right,2,Unsigned int.,0,65534,"1; 0",PSI,65535,Outer-right tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 969,Not in use,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 970,Not in use,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 971,Not in use,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

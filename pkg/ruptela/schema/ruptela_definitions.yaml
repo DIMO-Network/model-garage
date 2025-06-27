@@ -3,23 +3,29 @@
   conversions:
     - originalName: "signals.960" # OBD tire pressure front left
       originalType: string
+    - originalName: "signals.965"
+      originalType: string
 
 - vspecName: Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
   conversions:
     - originalName: "signals.961" # OBD tire pressure front right
+      originalType: string
+    - originalName: "signals.966"
       originalType: string
 
 - vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure
   conversions:
     - originalName: "signals.962" # OBD tire pressure rear left
       originalType: string
-
+    - originalName: "signals.967"
+      originalType: string
 
 - vspecName: Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
   conversions:
     - originalName: "signals.963" # OBD tire pressure rear right
       originalType: string
-
+    - originalName: "signals.968"
+      originalType: string
 
 - vspecName: Vehicle.CurrentLocation.Altitude
   conversions:
