@@ -125,9 +125,7 @@ func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType strin
 		Type:            eventType,
 		DataVersion:     event.DS,
 		Producer:        producer,
-		Extras: map[string]any{
-			"signature": event.Signature,
-		},
+		Signature:       event.Signature,
 	}, nil
 }
 

@@ -102,8 +102,6 @@ func createCloudEventHeader(event LorawanEvent, producer, subject, eventType str
 		Type:            eventType,
 		DataVersion:     DataVersion,
 		Producer:        producer,
-		Extras: map[string]any{
-			"signature": event.Signature,
-		},
+		Signature:       event.Signature,
 	}, nil
 }
