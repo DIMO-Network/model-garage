@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/99designs/gqlgen v0.17.73
 	github.com/DIMO-Network/clickhouse-infra v0.0.3
-	github.com/DIMO-Network/cloudevent v0.1.1
+	github.com/DIMO-Network/cloudevent v0.1.2-0.20250630133933-fe9cb3ce2425
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/ethereum/go-ethereum v1.15.11
 	github.com/pressly/goose/v3 v3.24.3
@@ -34,7 +34,6 @@ require (
 	github.com/containerd/platforms v0.2.1 // indirect
 	github.com/cpuguy83/dockercfg v0.3.2 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/docker/docker v28.1.1+incompatible // indirect
 	github.com/docker/go-connections v0.5.0 // indirect

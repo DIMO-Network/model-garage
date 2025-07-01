@@ -95,6 +95,11 @@ func (*Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeven
 		statusHdr.Type = cloudevent.TypeStatus
 		hdrs = append(hdrs, statusHdr)
 	}
+	if gjson.GetBytes(event.Data, "eventCategory").Exists() {
+		statusHdr := event.CloudEventHeader
+		statusHdr.Type = cloudevent.TypeEvent
+		hdrs = append(hdrs, statusHdr)
+	}
 
 	// if we can't infer the type, default to unknown so we don't drop the event.
 	if len(hdrs) == 0 {
