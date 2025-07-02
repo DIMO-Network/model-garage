@@ -95,7 +95,7 @@ func (*Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeven
 		statusHdr.Type = cloudevent.TypeStatus
 		hdrs = append(hdrs, statusHdr)
 	}
-	if gjson.GetBytes(event.Data, "eventCategory").Exists() {
+	if gjson.GetBytes(event.Data, "events").Exists() {
 		statusHdr := event.CloudEventHeader
 		statusHdr.Type = cloudevent.TypeEvent
 		hdrs = append(hdrs, statusHdr)
