@@ -8,23 +8,21 @@ import (
 )
 
 {{range .Conversions}}
-// Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}} converts a telemetry datum with key {{.TeslaField}} to the VSS signal {{.GoVSSSignalName}}.
-{{- if .ParseFloat}}
-// Before being passed to this function, the string value is parsed into a float64.
-{{- end}}
-{{- if .UnitFunc}}
-// Before being passed to this function, the units are converted using {{.UnitFunc}}
-{{- end}}
-func Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}(val {{.InnerInputType}}) ({{.OutputType}}, error)
+{{- $teslaField := .TeslaField}}
+{{- $goInputType := .GoInputType}}
+{{- range .VSSSignals}}
+// Convert{{$teslaField}}To{{.GoVSSName}} converts a telemetry datum with key {{$teslaField}} to the VSS signal {{.GoVSSName}}.
+func Convert{{$teslaField}}To{{.GoVSSName}}(val {{$goInputType}}) ({{.GoOutputType}}, error)
     {{- if .Body -}}
     {{- .Body -}}
     {{- else -}}
     {
-    {{- if eq .InnerInputType .OutputType}}
+    {{- if eq $goInputType .GoOutputType}}
     return val, nil
     {{- else}}
     panic("not implemented")
     {{- end}}
     }
     {{- end}}
+{{end}}
 {{end}}

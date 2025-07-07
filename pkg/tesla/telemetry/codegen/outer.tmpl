@@ -17,44 +17,65 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
     ts := payload.GetCreatedAt().AsTime()
 
     for _, d := range payload.GetData() {
+        switch d.GetKey() {
         {{- range .Conversions}}
-        if d.GetKey() == protos.Field_{{.TeslaField}} {
-            if v, ok := d.GetValue().Value.(*protos.{{.WrapperName}}); ok {
-                val, err := Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}Wrapper(v.{{.WrapperFieldName}})
-                if err != nil {
-                    outErr = append(outErr, err)
-                } else {
-                    sig := vss.Signal{
-                        TokenID:   tokenID,
-                        Name:      "{{.JSONName}}",
-                        Timestamp: ts,
-                        Source:    source,
-                    }
-                    sig.SetValue(val)
-                    out = append(out, sig)
-                }
-            }
-        }
+        case protos.Field_{{.TeslaField}}:
+            signals, errs := Convert{{.TeslaField}}(d.GetValue(), tokenID, ts, source)
+            out = append(out, signals...)
+            outErr = append(outErr, errs...)
         {{- end}}
+        }
     }
 
     return out, outErr
 }
 
 {{range .Conversions}}
-func Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}Wrapper(wrap {{.OuterInputType}}) ({{.OutputType}}, error) {
-    {{- if .ParseFloat}}
-    fp, err := strconv.ParseFloat(wrap, 64)
-    if err != nil {
-        var tmpOut {{.OutputType}}
-        return tmpOut, fmt.Errorf("failed to parse float: %w", err)
-    }
-    {{if .UnitFunc}}
-    fp = unit.{{.UnitFunc}}(fp)
-    {{end}}
-    return Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}(fp)
-    {{- else}}
-    return Convert{{.TeslaField}}{{.TeslaTypeName}}To{{.GoVSSSignalName}}(wrap)
+{{- $teslaField := .TeslaField}}
+{{- $goInputType := .GoInputType}}
+func Convert{{.TeslaField}}(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
+    var tvf {{.GoInputType}}
+    switch tv := v.Value.(type) {
+    case *protos.{{.WrapperName}}:
+        tvf = tv.{{.WrapperFieldName}}
+    {{- if .Parser}}
+    case *protos.Value_StringValue:
+        var err error
+        tvf, err = parse.{{.Parser}}(tv.StringValue)
+        if err != nil {
+            return nil, []error{fmt.Errorf("failed to parse string %q for field {{.TeslaField}} into {{$goInputType}}: %w", tv.StringValue, err)}    
+        }
     {{- end}}
+    case *protos.Value_Invalid:
+        return nil, nil
+    default:
+        {{- if .Parser}}
+            return nil, []error{fmt.Errorf("type of {{.TeslaField}} is %T instead of the expected {{$goInputType}} or string", tv)}
+        {{- else}}
+            return nil, []error{fmt.Errorf("type of {{.TeslaField}} is %T instead of the expected {{$goInputType}}", tv)}
+        {{- end}}
+    }
+    var sigs []vss.Signal
+    var errs []error
+    {{- range .VSSSignals}}
+    {{- if .ConvertFunc}}
+    utv := unit.{{.ConvertFunc}}(tvf)
+    if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(utv); err != nil {
+    {{- else}}
+    if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(tvf); err != nil {
+    {{- end}}
+        errs = append(errs, err)
+    } else {
+        sig := vss.Signal{
+            TokenID: tokenID,
+            Name: "{{.JsonName}}",
+            Timestamp: ts,
+            Source: source,
+        }
+        sig.SetValue(res)
+        sigs = append(sigs, sig)
+    }
+    {{- end}}
+    return sigs, errs
 }
 {{end}}

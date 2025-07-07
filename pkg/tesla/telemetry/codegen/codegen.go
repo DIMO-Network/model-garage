@@ -11,7 +11,6 @@ import (
 	"go/token"
 	"log"
 	"os"
-	"slices"
 	"strings"
 	"text/template"
 
@@ -28,17 +27,24 @@ const (
 	ConvertUnitFlag = "CONVERT_UNIT"
 )
 
+type TargetVSSSignal struct {
+	GoVSSName    string
+	JsonName     string
+	GoOutputType string
+	ConvertFunc  string
+	Body         string
+}
+
 type Rule struct {
 	TeslaField string `yaml:"teslaField"`
 	// TeslaType is the protobuf type of the value field on the Datum. If not specified, it is
 	// assumed to be string. This is the dominant case.
-	TeslaType string `yaml:"teslaType"`
+	TeslaType      string `yaml:"teslaType"`
+	TeslaUnit      string `yaml:"teslaUnit"`
+	DisableConvert bool   `yaml:"disableConvert"`
 	// VSSSignal is the full path to the VSS signal that will be produced from this Datum. For
 	// example, one might write "Vehicle.Cabin.Door.Row1.Left.IsLocked".
-	VSSSignal string `yaml:"vssSignal"`
-	TeslaUnit string `yaml:"teslaUnit"`
-
-	Automations []string `yaml:"automations"`
+	VSSSignals []string `yaml:"vssSignals"`
 }
 
 //go:embed inner.tmpl
@@ -94,56 +100,61 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 	}
 
 	for _, r := range rules {
-		signalInfo, ok := signalInfoBySignal[r.VSSSignal]
-		if !ok {
-			return fmt.Errorf("unrecognized VSS signal %q", r.VSSSignal)
-		}
-
-		_, ok = protos.Field_value[r.TeslaField]
+		_, ok := protos.Field_value[r.TeslaField]
 		if !ok {
 			return fmt.Errorf("unrecognized Tesla field %q", r.TeslaField)
 		}
-
-		parseFloat := r.TeslaType == "string" && slices.Contains(r.Automations, ParseFloatFlag)
-
-		var convertUnit string
 
 		teslaType, ok := teslaTypeToAttributes[r.TeslaType]
 		if !ok {
 			return fmt.Errorf("unsupported Tesla type %q", r.TeslaType)
 		}
 
-		if slices.Contains(r.Automations, ConvertUnitFlag) && r.TeslaUnit != signalInfo.Unit {
-			m, ok := conversions[r.TeslaUnit]
-			if !ok {
-				return fmt.Errorf("no conversion from unit %q", r.TeslaUnit)
-			}
+		parseString := parsers[r.TeslaType]
 
-			n, ok := m[signalInfo.Unit]
-			if !ok {
-				return fmt.Errorf("no conversion from unit %s to %s", r.TeslaUnit, signalInfo.Unit)
+		if r.TeslaUnit != "" {
+			if r.TeslaType != "double" {
+				return fmt.Errorf("unit specified for Tesla signal of non-double type %s", r.TeslaType)
 			}
-
-			convertUnit = n
 		}
 
-		innerInputType := teslaType.ValueType
-		if slices.Contains(r.Automations, ParseFloatFlag) {
-			innerInputType = "float64"
+		var targets []*TargetVSSSignal
+
+		for _, st := range r.VSSSignals {
+			info, ok := signalInfoBySignal[st]
+			if !ok {
+				return fmt.Errorf("unrecognized VSS signal %q", st)
+			}
+
+			var convertFunc string
+			if !r.DisableConvert && r.TeslaUnit != "" && info.Unit != "" && r.TeslaUnit != info.Unit {
+				if convertFrom, ok := conversions[r.TeslaUnit]; ok {
+					// More to check here.
+					convertFunc, ok = convertFrom[info.Unit]
+					if !ok {
+						return fmt.Errorf("no converters from unit %s to unit %s", r.TeslaUnit, info.Unit)
+					}
+				} else {
+					return fmt.Errorf("no converters from unit %s", r.TeslaUnit)
+				}
+			}
+
+			targets = append(targets, &TargetVSSSignal{
+				GoVSSName:    info.GOName,
+				JsonName:     info.JSONName,
+				GoOutputType: info.GOType(),
+				ConvertFunc:  convertFunc,
+			})
 		}
 
 		tmplInput.Conversions = append(tmplInput.Conversions, &Conversion{
 			TeslaField:       r.TeslaField,
 			WrapperName:      teslaType.TeslaWrapperType,
 			WrapperFieldName: teslaType.TeslaWrapperFieldName,
-			GoVSSSignalName:  signalInfo.GOName,
-			OuterInputType:   teslaType.ValueType,
-			JSONName:         signalInfo.JSONName,
-			OutputType:       signalInfo.GOType(),
-			ParseFloat:       parseFloat,
-			UnitFunc:         convertUnit,
-			InnerInputType:   innerInputType,
+			Parser:           parseString,
+			GoInputType:      teslaType.ValueType,
 			TeslaTypeName:    teslaType.NiceName,
+			VSSSignals:       targets,
 		})
 	}
 
@@ -242,9 +253,11 @@ func writeInner(tmplInput *TemplateInput, innerPath string) error {
 	}
 
 	for _, conv := range tmplInput.Conversions {
-		name := fmt.Sprintf("Convert%s%sTo%s", conv.TeslaField, conv.TeslaTypeName, conv.GoVSSSignalName)
-		if body, ok := existingBodies[name]; ok {
-			conv.Body = body
+		for _, vs := range conv.VSSSignals {
+			name := fmt.Sprintf("Convert%sTo%s", conv.TeslaField, vs.GoVSSName)
+			if body, ok := existingBodies[name]; ok {
+				vs.Body = body
+			}
 		}
 	}
 
@@ -279,17 +292,11 @@ type Conversion struct {
 	TeslaField       string
 	WrapperName      string
 	WrapperFieldName string
-	GoVSSSignalName  string
-	OuterInputType   string
-	JSONName         string
-	InnerInputType   string
-	OutputType       string
-	Body             string
+	TeslaTypeName    string
+	Parser           string
+	GoInputType      string
 
-	TeslaTypeName string
-
-	ParseFloat bool
-	UnitFunc   string
+	VSSSignals []*TargetVSSSignal
 }
 
 type TemplateInput struct {
@@ -313,6 +320,12 @@ var conversions = map[string]map[string]string{
 	"mph": {
 		"km/h": "MilesPerHourToKilometersPerHour",
 	},
+}
+
+var parsers = map[string]string{
+	"double":      "Double",
+	"WindowState": "WindowState",
+	"Doors":       "Doors",
 }
 
 type TeslaTypeDescription struct {

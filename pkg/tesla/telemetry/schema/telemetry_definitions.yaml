@@ -1,37 +1,34 @@
-- teslaField: Location
-  teslaType: LocationValue
-  vssSignal: Vehicle.CurrentLocation.Latitude
+# See https://developer.tesla.com/docs/fleet-api/fleet-telemetry/available-data
 
 - teslaField: Location
   teslaType: LocationValue
-  vssSignal: Vehicle.CurrentLocation.Longitude
+  vssSignals:
+  - Vehicle.CurrentLocation.Latitude
+  - Vehicle.CurrentLocation.Longitude
 
 # TODO(elffjs): Express more of the subtlety of the source enum, which has 7 possibilities.
 - teslaField: DetailedChargeState
   teslaType: DetailedChargeStateValue
-  vssSignal: Vehicle.Powertrain.TractionBattery.Charging.IsCharging
+  vssSignals:
+  - Vehicle.Powertrain.TractionBattery.Charging.IsCharging
 
 - teslaField: ACChargingPower
-  teslaType: string
+  teslaType: double
   teslaUnit: kW
-  vssSignal: Vehicle.Powertrain.TractionBattery.CurrentPower # Happily, in VSS this is positive for charging.
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals:
+  - Vehicle.Powertrain.TractionBattery.CurrentPower # Happily, VSS is positive here for charging.
 
 - teslaField: DCChargingPower
-  teslaType: string
+  teslaType: double
   teslaUnit: kW
-  vssSignal: Vehicle.Powertrain.TractionBattery.CurrentPower
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Powertrain.TractionBattery.CurrentPower
 
 # # TODO(elffjs): Bring this back?
 # - teslaField: ACChargingEnergyIn
 #   teslaType: string
 #   teslaUnit: kWh
-#   vssSignal: Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
+#   vssSignals: Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
 #   automations:
 #   - PARSE_FLOAT
 #   - CONVERT_UNIT
@@ -40,145 +37,116 @@
 # For AC charging, the difference is that this number is measured at the battery and
 # ACChargingEnergyIn is measured at the charger.
 - teslaField: DCChargingEnergyIn
-  teslaType: string
+  teslaType: double
   teslaUnit: kWh
-  vssSignal: Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
 
 - teslaField: EnergyRemaining
-  teslaType: string
+  teslaType: double
   teslaUnit: kWh
-  vssSignal: Vehicle.Powertrain.TractionBattery.StateOfCharge.CurrentEnergy
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Powertrain.TractionBattery.StateOfCharge.CurrentEnergy
 
 - teslaField: Soc
-  teslaType: string
+  teslaType: double
   teslaUnit: percent
-  vssSignal: Vehicle.Powertrain.TractionBattery.StateOfCharge.Current
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals:
+  - Vehicle.Powertrain.TractionBattery.StateOfCharge.Current
 
 - teslaField: TpmsPressureFl
-  teslaType: string
+  teslaType: double
   teslaUnit: atm
-  vssSignal: Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals:
+  - Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure
 
 - teslaField: TpmsPressureFr
-  teslaType: string
+  teslaType: double
   teslaUnit: atm
-  vssSignal: Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
 
 - teslaField: TpmsPressureRl
-  teslaType: string
+  teslaType: double
   teslaUnit: atm
-  vssSignal: Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals:
+  - Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure
 
 - teslaField: TpmsPressureRr
-  teslaType: string
+  teslaType: double
   teslaUnit: atm
-  vssSignal: Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
 
 - teslaField: OutsideTemp
-  teslaType: string
+  teslaType: double
   teslaUnit: celsius
-  vssSignal: Vehicle.Exterior.AirTemperature
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Exterior.AirTemperature
 
 # Note, too, the existence of IdealBatteryRange and RatedRange.
 - teslaField: EstBatteryRange
-  teslaType: string
+  teslaType: double
   teslaUnit: mi
-  vssSignal: Vehicle.Powertrain.Range
-  automations:
-  - PARSE_FLOAT
-  # Can't convert units automatically because the VSS spec has meters, but we've always output kilometers.
+  disableConvert: true # VSS uses m, but in practice we've been using km. Need to fix this in our fork.
+  vssSignals: 
+  - Vehicle.Powertrain.Range
 
 - teslaField: ChargeLimitSoc
-  teslaType: string
+  teslaType: double
   teslaUnit: percent
-  vssSignal: Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit
 
 - teslaField: Odometer
-  teslaType: string
+  teslaType: double
   teslaUnit: mi
-  vssSignal: Vehicle.Powertrain.Transmission.TravelledDistance
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Powertrain.Transmission.TravelledDistance
 
 - teslaField: VehicleSpeed
-  teslaType: string
+  teslaType: double
   teslaUnit: mph
-  vssSignal: Vehicle.Speed
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Speed
 
+# TODO(elffjs): Annoying to have to process this four times.
 - teslaField: DoorState
-  teslaType: string
-  vssSignal: Vehicle.Cabin.Door.Row1.DriverSide.IsOpen
-
-- teslaField: DoorState
-  teslaType: string
-  vssSignal: Vehicle.Cabin.Door.Row1.PassengerSide.IsOpen
-
-- teslaField: DoorState
-  teslaType: string
-  vssSignal: Vehicle.Cabin.Door.Row2.DriverSide.IsOpen
-
-- teslaField: DoorState
-  teslaType: string
-  vssSignal: Vehicle.Cabin.Door.Row2.PassengerSide.IsOpen
+  teslaType: Doors
+  vssSignals: 
+  - Vehicle.Cabin.Door.Row1.DriverSide.IsOpen
+  - Vehicle.Cabin.Door.Row1.PassengerSide.IsOpen
+  - Vehicle.Cabin.Door.Row2.DriverSide.IsOpen
+  - Vehicle.Cabin.Door.Row2.PassengerSide.IsOpen
 
 - teslaField: FdWindow
-  teslaType: string
-  vssSignal: Vehicle.Cabin.Door.Row1.DriverSide.Window.IsOpen
+  teslaType: WindowState
+  vssSignals:
+  - Vehicle.Cabin.Door.Row1.DriverSide.Window.IsOpen
 
 - teslaField: FpWindow
-  teslaType: string
-  vssSignal: Vehicle.Cabin.Door.Row1.PassengerSide.Window.IsOpen
+  teslaType: WindowState
+  vssSignals:
+  - Vehicle.Cabin.Door.Row1.PassengerSide.Window.IsOpen
 
 - teslaField: RdWindow
-  teslaType: string
-  vssSignal: Vehicle.Cabin.Door.Row2.DriverSide.Window.IsOpen
+  teslaType: WindowState
+  vssSignals: 
+  - Vehicle.Cabin.Door.Row2.DriverSide.Window.IsOpen
 
 - teslaField: RpWindow
-  teslaType: string
-  vssSignal: Vehicle.Cabin.Door.Row2.PassengerSide.Window.IsOpen
+  teslaType: WindowState
+  vssSignals: 
+  - Vehicle.Cabin.Door.Row2.PassengerSide.Window.IsOpen
 
 - teslaField: ChargeAmps
-  teslaType: string
+  teslaType: double
   teslaUnit: A
-  vssSignal: Vehicle.Powertrain.TractionBattery.Charging.ChargeCurrent.AC
-  automations:
-  - PARSE_FLOAT
-  - CONVERT_UNIT
+  vssSignals:
+  - Vehicle.Powertrain.TractionBattery.Charging.ChargeCurrent.AC
 
 - teslaField: ChargerVoltage
   teslaType: double
   teslaUnit: V
-  vssSignal: Vehicle.Powertrain.TractionBattery.Charging.ChargeVoltage.UnknownType
-  automations:
-  - CONVERT_UNIT
+  vssSignals: 
+  - Vehicle.Powertrain.TractionBattery.Charging.ChargeVoltage.UnknownType
