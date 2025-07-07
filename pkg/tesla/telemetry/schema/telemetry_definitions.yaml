@@ -21,17 +21,15 @@
 - teslaField: DCChargingPower
   teslaType: double
   teslaUnit: kW
-  vssSignals: 
+  vssSignals:
   - Vehicle.Powertrain.TractionBattery.CurrentPower
 
 # # TODO(elffjs): Bring this back?
 # - teslaField: ACChargingEnergyIn
 #   teslaType: string
 #   teslaUnit: kWh
-#   vssSignals: Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
-#   automations:
-#   - PARSE_FLOAT
-#   - CONVERT_UNIT
+#   vssSignals:
+#   - Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
 
 # Despite the name, this is the amount of energy added during any charging session, AC or DC.
 # For AC charging, the difference is that this number is measured at the battery and
@@ -39,13 +37,13 @@
 - teslaField: DCChargingEnergyIn
   teslaType: double
   teslaUnit: kWh
-  vssSignals: 
+  vssSignals:
   - Vehicle.Powertrain.TractionBattery.Charging.AddedEnergy
 
 - teslaField: EnergyRemaining
   teslaType: double
   teslaUnit: kWh
-  vssSignals: 
+  vssSignals:
   - Vehicle.Powertrain.TractionBattery.StateOfCharge.CurrentEnergy
 
 - teslaField: Soc
@@ -63,7 +61,7 @@
 - teslaField: TpmsPressureFr
   teslaType: double
   teslaUnit: atm
-  vssSignals: 
+  vssSignals:
   - Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure
 
 - teslaField: TpmsPressureRl
@@ -75,13 +73,13 @@
 - teslaField: TpmsPressureRr
   teslaType: double
   teslaUnit: atm
-  vssSignals: 
+  vssSignals:
   - Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure
 
 - teslaField: OutsideTemp
   teslaType: double
   teslaUnit: celsius
-  vssSignals: 
+  vssSignals:
   - Vehicle.Exterior.AirTemperature
 
 # Note, too, the existence of IdealBatteryRange and RatedRange.
@@ -89,31 +87,31 @@
   teslaType: double
   teslaUnit: mi
   disableConvert: true # VSS uses m, but in practice we've been using km. Need to fix this in our fork.
-  vssSignals: 
+  vssSignals:
   - Vehicle.Powertrain.Range
 
 - teslaField: ChargeLimitSoc
   teslaType: double
   teslaUnit: percent
-  vssSignals: 
+  vssSignals:
   - Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit
 
 - teslaField: Odometer
   teslaType: double
   teslaUnit: mi
-  vssSignals: 
+  vssSignals:
   - Vehicle.Powertrain.Transmission.TravelledDistance
 
 - teslaField: VehicleSpeed
   teslaType: double
   teslaUnit: mph
-  vssSignals: 
+  vssSignals:
   - Vehicle.Speed
 
 # TODO(elffjs): Annoying to have to process this four times.
 - teslaField: DoorState
   teslaType: Doors
-  vssSignals: 
+  vssSignals:
   - Vehicle.Cabin.Door.Row1.DriverSide.IsOpen
   - Vehicle.Cabin.Door.Row1.PassengerSide.IsOpen
   - Vehicle.Cabin.Door.Row2.DriverSide.IsOpen
@@ -131,12 +129,12 @@
 
 - teslaField: RdWindow
   teslaType: WindowState
-  vssSignals: 
+  vssSignals:
   - Vehicle.Cabin.Door.Row2.DriverSide.Window.IsOpen
 
 - teslaField: RpWindow
   teslaType: WindowState
-  vssSignals: 
+  vssSignals:
   - Vehicle.Cabin.Door.Row2.PassengerSide.Window.IsOpen
 
 - teslaField: ChargeAmps
@@ -148,5 +146,5 @@
 - teslaField: ChargerVoltage
   teslaType: double
   teslaUnit: V
-  vssSignals: 
+  vssSignals:
   - Vehicle.Powertrain.TractionBattery.Charging.ChargeVoltage.UnknownType
