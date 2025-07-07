@@ -111,23 +111,18 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 			return fmt.Errorf("unsupported Tesla type %q", r.TeslaType)
 		}
 
-		parseString := parsers[r.TeslaType]
-
-		if r.TeslaUnit != "" {
-			if r.TeslaType != "double" {
-				return fmt.Errorf("unit specified for Tesla signal of non-double type %s", r.TeslaType)
-			}
+		if r.TeslaUnit != "" && r.TeslaType != "double" {
+			return fmt.Errorf("unit specified for Tesla signal of non-double type %s", r.TeslaType)
 		}
 
 		var targets []*TargetVSSSignal
-
 		for _, st := range r.VSSSignals {
 			info, ok := signalInfoBySignal[st]
 			if !ok {
 				return fmt.Errorf("unrecognized VSS signal %q", st)
 			}
 
-			var convertFunc, goInputUnit string
+			convertFunc := ""
 			if !r.DisableConvert && r.TeslaUnit != "" && info.Unit != "" && r.TeslaUnit != info.Unit {
 				if convertFrom, ok := conversions[r.TeslaUnit]; ok {
 					// More to check here.
@@ -140,6 +135,7 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 				}
 			}
 
+			goInputUnit := ""
 			if r.TeslaUnit != "" {
 				if r.DisableConvert || info.Unit == "" {
 					goInputUnit = r.TeslaUnit
@@ -161,7 +157,7 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 			TeslaField:       r.TeslaField,
 			WrapperName:      teslaType.TeslaWrapperType,
 			WrapperFieldName: teslaType.TeslaWrapperFieldName,
-			Parser:           parseString,
+			Parser:           parsers[r.TeslaType],
 			GoInputType:      teslaType.ValueType,
 			TeslaTypeName:    teslaType.NiceName,
 			VSSSignals:       targets,
