@@ -68,7 +68,7 @@ func Convert{{.TeslaField}}(v *protos.Value, tokenID uint32, ts time.Time, sourc
     } else {
         sig := vss.Signal{
             TokenID: tokenID,
-            Name: "{{.JsonName}}",
+            Name: "{{.JSONName}}",
             Timestamp: ts,
             Source: source,
         }

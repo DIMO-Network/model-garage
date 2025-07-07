@@ -29,7 +29,7 @@ const (
 
 type TargetVSSSignal struct {
 	GoVSSName    string
-	JsonName     string
+	JSONName     string
 	GoOutputType string
 	ConvertFunc  string
 	Body         string
@@ -141,7 +141,7 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 
 			targets = append(targets, &TargetVSSSignal{
 				GoVSSName:    info.GOName,
-				JsonName:     info.JSONName,
+				JSONName:     info.JSONName,
 				GoOutputType: info.GOType(),
 				ConvertFunc:  convertFunc,
 			})
