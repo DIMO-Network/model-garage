@@ -3,7 +3,6 @@ package telemetry
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/parse"
 	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
@@ -20,902 +19,739 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 	for _, d := range payload.GetData() {
 		switch d.GetKey() {
 		case protos.Field_Location:
-			signals, errs := ConvertLocation(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf *protos.LocationValue
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_LocationValue:
+				tvf = tv.LocationValue
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of Location is %T instead of the expected *protos.LocationValue", tv))
+				continue
+			}
+			if res, err := ConvertLocationToCurrentLocationLatitude(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "currentLocationLatitude",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
+			if res, err := ConvertLocationToCurrentLocationLongitude(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "currentLocationLongitude",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_DetailedChargeState:
-			signals, errs := ConvertDetailedChargeState(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf protos.DetailedChargeStateValue
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DetailedChargeStateValue:
+				tvf = tv.DetailedChargeStateValue
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of DetailedChargeState is %T instead of the expected protos.DetailedChargeStateValue", tv))
+				continue
+			}
+			if res, err := ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsCharging(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryChargingIsCharging",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_ACChargingPower:
-			signals, errs := ConvertACChargingPower(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field ACChargingPower into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of ACChargingPower is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			utv := unit.KilowattsToWatts(tvf)
+			if res, err := ConvertACChargingPowerToPowertrainTractionBatteryCurrentPower(utv); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryCurrentPower",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_DCChargingPower:
-			signals, errs := ConvertDCChargingPower(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field DCChargingPower into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of DCChargingPower is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			utv := unit.KilowattsToWatts(tvf)
+			if res, err := ConvertDCChargingPowerToPowertrainTractionBatteryCurrentPower(utv); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryCurrentPower",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_DCChargingEnergyIn:
-			signals, errs := ConvertDCChargingEnergyIn(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field DCChargingEnergyIn into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of DCChargingEnergyIn is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			if res, err := ConvertDCChargingEnergyInToPowertrainTractionBatteryChargingAddedEnergy(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryChargingAddedEnergy",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_EnergyRemaining:
-			signals, errs := ConvertEnergyRemaining(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field EnergyRemaining into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of EnergyRemaining is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			if res, err := ConvertEnergyRemainingToPowertrainTractionBatteryStateOfChargeCurrentEnergy(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryStateOfChargeCurrentEnergy",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_Soc:
-			signals, errs := ConvertSoc(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field Soc into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of Soc is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			if res, err := ConvertSocToPowertrainTractionBatteryStateOfChargeCurrent(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryStateOfChargeCurrent",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_TpmsPressureFl:
-			signals, errs := ConvertTpmsPressureFl(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field TpmsPressureFl into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of TpmsPressureFl is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			utv := unit.AtmospheresToKilopascals(tvf)
+			if res, err := ConvertTpmsPressureFlToChassisAxleRow1WheelLeftTirePressure(utv); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "chassisAxleRow1WheelLeftTirePressure",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_TpmsPressureFr:
-			signals, errs := ConvertTpmsPressureFr(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field TpmsPressureFr into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of TpmsPressureFr is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			utv := unit.AtmospheresToKilopascals(tvf)
+			if res, err := ConvertTpmsPressureFrToChassisAxleRow1WheelRightTirePressure(utv); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "chassisAxleRow1WheelRightTirePressure",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_TpmsPressureRl:
-			signals, errs := ConvertTpmsPressureRl(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field TpmsPressureRl into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of TpmsPressureRl is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			utv := unit.AtmospheresToKilopascals(tvf)
+			if res, err := ConvertTpmsPressureRlToChassisAxleRow2WheelLeftTirePressure(utv); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "chassisAxleRow2WheelLeftTirePressure",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_TpmsPressureRr:
-			signals, errs := ConvertTpmsPressureRr(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field TpmsPressureRr into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of TpmsPressureRr is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			utv := unit.AtmospheresToKilopascals(tvf)
+			if res, err := ConvertTpmsPressureRrToChassisAxleRow2WheelRightTirePressure(utv); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "chassisAxleRow2WheelRightTirePressure",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_OutsideTemp:
-			signals, errs := ConvertOutsideTemp(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field OutsideTemp into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of OutsideTemp is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			if res, err := ConvertOutsideTempToExteriorAirTemperature(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "exteriorAirTemperature",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_EstBatteryRange:
-			signals, errs := ConvertEstBatteryRange(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field EstBatteryRange into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of EstBatteryRange is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			if res, err := ConvertEstBatteryRangeToPowertrainRange(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainRange",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_ChargeLimitSoc:
-			signals, errs := ConvertChargeLimitSoc(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field ChargeLimitSoc into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of ChargeLimitSoc is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			if res, err := ConvertChargeLimitSocToPowertrainTractionBatteryChargingChargeLimit(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryChargingChargeLimit",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_Odometer:
-			signals, errs := ConvertOdometer(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field Odometer into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of Odometer is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			utv := unit.MilesToKilometers(tvf)
+			if res, err := ConvertOdometerToPowertrainTransmissionTravelledDistance(utv); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTransmissionTravelledDistance",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_VehicleSpeed:
-			signals, errs := ConvertVehicleSpeed(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field VehicleSpeed into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of VehicleSpeed is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			utv := unit.MilesPerHourToKilometersPerHour(tvf)
+			if res, err := ConvertVehicleSpeedToSpeed(utv); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "speed",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_DoorState:
-			signals, errs := ConvertDoorState(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf *protos.Doors
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoorValue:
+				tvf = tv.DoorValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Doors(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field DoorState into *protos.Doors: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of DoorState is %T instead of the expected *protos.Doors or string", tv))
+				continue
+			}
+			if res, err := ConvertDoorStateToCabinDoorRow1DriverSideIsOpen(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "cabinDoorRow1DriverSideIsOpen",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
+			if res, err := ConvertDoorStateToCabinDoorRow1PassengerSideIsOpen(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "cabinDoorRow1PassengerSideIsOpen",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
+			if res, err := ConvertDoorStateToCabinDoorRow2DriverSideIsOpen(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "cabinDoorRow2DriverSideIsOpen",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
+			if res, err := ConvertDoorStateToCabinDoorRow2PassengerSideIsOpen(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "cabinDoorRow2PassengerSideIsOpen",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_FdWindow:
-			signals, errs := ConvertFdWindow(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf protos.WindowState
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_WindowStateValue:
+				tvf = tv.WindowStateValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.WindowState(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field FdWindow into protos.WindowState: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of FdWindow is %T instead of the expected protos.WindowState or string", tv))
+				continue
+			}
+			if res, err := ConvertFdWindowToCabinDoorRow1DriverSideWindowIsOpen(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "cabinDoorRow1DriverSideWindowIsOpen",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_FpWindow:
-			signals, errs := ConvertFpWindow(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf protos.WindowState
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_WindowStateValue:
+				tvf = tv.WindowStateValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.WindowState(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field FpWindow into protos.WindowState: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of FpWindow is %T instead of the expected protos.WindowState or string", tv))
+				continue
+			}
+			if res, err := ConvertFpWindowToCabinDoorRow1PassengerSideWindowIsOpen(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "cabinDoorRow1PassengerSideWindowIsOpen",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_RdWindow:
-			signals, errs := ConvertRdWindow(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf protos.WindowState
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_WindowStateValue:
+				tvf = tv.WindowStateValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.WindowState(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field RdWindow into protos.WindowState: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of RdWindow is %T instead of the expected protos.WindowState or string", tv))
+				continue
+			}
+			if res, err := ConvertRdWindowToCabinDoorRow2DriverSideWindowIsOpen(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "cabinDoorRow2DriverSideWindowIsOpen",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_RpWindow:
-			signals, errs := ConvertRpWindow(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf protos.WindowState
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_WindowStateValue:
+				tvf = tv.WindowStateValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.WindowState(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field RpWindow into protos.WindowState: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of RpWindow is %T instead of the expected protos.WindowState or string", tv))
+				continue
+			}
+			if res, err := ConvertRpWindowToCabinDoorRow2PassengerSideWindowIsOpen(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "cabinDoorRow2PassengerSideWindowIsOpen",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_ChargeAmps:
-			signals, errs := ConvertChargeAmps(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field ChargeAmps into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of ChargeAmps is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			if res, err := ConvertChargeAmpsToPowertrainTractionBatteryChargingChargeCurrentAC(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryChargingChargeCurrentAC",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_ChargerVoltage:
-			signals, errs := ConvertChargerVoltage(d.GetValue(), tokenID, ts, source)
-			out = append(out, signals...)
-			outErr = append(outErr, errs...)
+			var tvf float64
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_DoubleValue:
+				tvf = tv.DoubleValue
+			case *protos.Value_StringValue:
+				var err error
+				tvf, err = parse.Double(tv.StringValue)
+				if err != nil {
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field ChargerVoltage into float64: %w", tv.StringValue, err))
+					continue
+				}
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of ChargerVoltage is %T instead of the expected float64 or string", tv))
+				continue
+			}
+			if res, err := ConvertChargerVoltageToPowertrainTractionBatteryChargingChargeVoltageUnknownType(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryChargingChargeVoltageUnknownType",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		}
 	}
 
 	return out, outErr
-}
-
-func ConvertLocation(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf *protos.LocationValue
-	switch tv := v.Value.(type) {
-	case *protos.Value_LocationValue:
-		tvf = tv.LocationValue
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of Location is %T instead of the expected *protos.LocationValue", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertLocationToCurrentLocationLatitude(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "currentLocationLatitude",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	if res, err := ConvertLocationToCurrentLocationLongitude(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "currentLocationLongitude",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertDetailedChargeState(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf protos.DetailedChargeStateValue
-	switch tv := v.Value.(type) {
-	case *protos.Value_DetailedChargeStateValue:
-		tvf = tv.DetailedChargeStateValue
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of DetailedChargeState is %T instead of the expected protos.DetailedChargeStateValue", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsCharging(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryChargingIsCharging",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertACChargingPower(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field ACChargingPower into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of ACChargingPower is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	utv := unit.KilowattsToWatts(tvf)
-	if res, err := ConvertACChargingPowerToPowertrainTractionBatteryCurrentPower(utv); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryCurrentPower",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertDCChargingPower(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field DCChargingPower into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of DCChargingPower is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	utv := unit.KilowattsToWatts(tvf)
-	if res, err := ConvertDCChargingPowerToPowertrainTractionBatteryCurrentPower(utv); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryCurrentPower",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertDCChargingEnergyIn(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field DCChargingEnergyIn into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of DCChargingEnergyIn is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertDCChargingEnergyInToPowertrainTractionBatteryChargingAddedEnergy(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryChargingAddedEnergy",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertEnergyRemaining(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field EnergyRemaining into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of EnergyRemaining is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertEnergyRemainingToPowertrainTractionBatteryStateOfChargeCurrentEnergy(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryStateOfChargeCurrentEnergy",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertSoc(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field Soc into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of Soc is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertSocToPowertrainTractionBatteryStateOfChargeCurrent(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryStateOfChargeCurrent",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertTpmsPressureFl(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field TpmsPressureFl into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of TpmsPressureFl is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	utv := unit.AtmospheresToKilopascals(tvf)
-	if res, err := ConvertTpmsPressureFlToChassisAxleRow1WheelLeftTirePressure(utv); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "chassisAxleRow1WheelLeftTirePressure",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertTpmsPressureFr(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field TpmsPressureFr into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of TpmsPressureFr is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	utv := unit.AtmospheresToKilopascals(tvf)
-	if res, err := ConvertTpmsPressureFrToChassisAxleRow1WheelRightTirePressure(utv); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "chassisAxleRow1WheelRightTirePressure",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertTpmsPressureRl(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field TpmsPressureRl into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of TpmsPressureRl is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	utv := unit.AtmospheresToKilopascals(tvf)
-	if res, err := ConvertTpmsPressureRlToChassisAxleRow2WheelLeftTirePressure(utv); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "chassisAxleRow2WheelLeftTirePressure",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertTpmsPressureRr(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field TpmsPressureRr into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of TpmsPressureRr is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	utv := unit.AtmospheresToKilopascals(tvf)
-	if res, err := ConvertTpmsPressureRrToChassisAxleRow2WheelRightTirePressure(utv); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "chassisAxleRow2WheelRightTirePressure",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertOutsideTemp(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field OutsideTemp into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of OutsideTemp is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertOutsideTempToExteriorAirTemperature(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "exteriorAirTemperature",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertEstBatteryRange(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field EstBatteryRange into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of EstBatteryRange is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertEstBatteryRangeToPowertrainRange(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainRange",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertChargeLimitSoc(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field ChargeLimitSoc into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of ChargeLimitSoc is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertChargeLimitSocToPowertrainTractionBatteryChargingChargeLimit(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryChargingChargeLimit",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertOdometer(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field Odometer into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of Odometer is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	utv := unit.MilesToKilometers(tvf)
-	if res, err := ConvertOdometerToPowertrainTransmissionTravelledDistance(utv); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTransmissionTravelledDistance",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertVehicleSpeed(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field VehicleSpeed into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of VehicleSpeed is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	utv := unit.MilesPerHourToKilometersPerHour(tvf)
-	if res, err := ConvertVehicleSpeedToSpeed(utv); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "speed",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertDoorState(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf *protos.Doors
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoorValue:
-		tvf = tv.DoorValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Doors(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field DoorState into *protos.Doors: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of DoorState is %T instead of the expected *protos.Doors or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertDoorStateToCabinDoorRow1DriverSideIsOpen(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "cabinDoorRow1DriverSideIsOpen",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	if res, err := ConvertDoorStateToCabinDoorRow1PassengerSideIsOpen(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "cabinDoorRow1PassengerSideIsOpen",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	if res, err := ConvertDoorStateToCabinDoorRow2DriverSideIsOpen(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "cabinDoorRow2DriverSideIsOpen",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	if res, err := ConvertDoorStateToCabinDoorRow2PassengerSideIsOpen(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "cabinDoorRow2PassengerSideIsOpen",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertFdWindow(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf protos.WindowState
-	switch tv := v.Value.(type) {
-	case *protos.Value_WindowStateValue:
-		tvf = tv.WindowStateValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.WindowState(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field FdWindow into protos.WindowState: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of FdWindow is %T instead of the expected protos.WindowState or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertFdWindowToCabinDoorRow1DriverSideWindowIsOpen(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "cabinDoorRow1DriverSideWindowIsOpen",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertFpWindow(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf protos.WindowState
-	switch tv := v.Value.(type) {
-	case *protos.Value_WindowStateValue:
-		tvf = tv.WindowStateValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.WindowState(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field FpWindow into protos.WindowState: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of FpWindow is %T instead of the expected protos.WindowState or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertFpWindowToCabinDoorRow1PassengerSideWindowIsOpen(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "cabinDoorRow1PassengerSideWindowIsOpen",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertRdWindow(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf protos.WindowState
-	switch tv := v.Value.(type) {
-	case *protos.Value_WindowStateValue:
-		tvf = tv.WindowStateValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.WindowState(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field RdWindow into protos.WindowState: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of RdWindow is %T instead of the expected protos.WindowState or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertRdWindowToCabinDoorRow2DriverSideWindowIsOpen(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "cabinDoorRow2DriverSideWindowIsOpen",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertRpWindow(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf protos.WindowState
-	switch tv := v.Value.(type) {
-	case *protos.Value_WindowStateValue:
-		tvf = tv.WindowStateValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.WindowState(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field RpWindow into protos.WindowState: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of RpWindow is %T instead of the expected protos.WindowState or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertRpWindowToCabinDoorRow2PassengerSideWindowIsOpen(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "cabinDoorRow2PassengerSideWindowIsOpen",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertChargeAmps(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field ChargeAmps into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of ChargeAmps is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertChargeAmpsToPowertrainTractionBatteryChargingChargeCurrentAC(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryChargingChargeCurrentAC",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
-}
-
-func ConvertChargerVoltage(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-	var tvf float64
-	switch tv := v.Value.(type) {
-	case *protos.Value_DoubleValue:
-		tvf = tv.DoubleValue
-	case *protos.Value_StringValue:
-		var err error
-		tvf, err = parse.Double(tv.StringValue)
-		if err != nil {
-			return nil, []error{fmt.Errorf("failed to parse string %q for field ChargerVoltage into float64: %w", tv.StringValue, err)}
-		}
-	case *protos.Value_Invalid:
-		return nil, nil
-	default:
-		return nil, []error{fmt.Errorf("type of ChargerVoltage is %T instead of the expected float64 or string", tv)}
-	}
-	var sigs []vss.Signal
-	var errs []error
-	if res, err := ConvertChargerVoltageToPowertrainTractionBatteryChargingChargeVoltageUnknownType(tvf); err != nil {
-		errs = append(errs, err)
-	} else {
-		sig := vss.Signal{
-			TokenID:   tokenID,
-			Name:      "powertrainTractionBatteryChargingChargeVoltageUnknownType",
-			Timestamp: ts,
-			Source:    source,
-		}
-		sig.SetValue(res)
-		sigs = append(sigs, sig)
-	}
-	return sigs, errs
 }

@@ -13,69 +13,60 @@ import (
 func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]vss.Signal, []error) {
     var out []vss.Signal
     var outErr []error
+    {{/* Is it worth it to reuse more variables? */}}
 
     ts := payload.GetCreatedAt().AsTime()
 
     for _, d := range payload.GetData() {
         switch d.GetKey() {
         {{- range .Conversions}}
+        {{- $teslaField := .TeslaField}}
         case protos.Field_{{.TeslaField}}:
-            signals, errs := Convert{{.TeslaField}}(d.GetValue(), tokenID, ts, source)
-            out = append(out, signals...)
-            outErr = append(outErr, errs...)
+            var tvf {{.GoInputType}}
+            switch tv := d.GetValue().Value.(type) {
+            case *protos.{{.WrapperName}}:
+                tvf = tv.{{.WrapperFieldName}}
+            {{- if .Parser}}
+            case *protos.Value_StringValue:
+                var err error
+                tvf, err = parse.{{.Parser}}(tv.StringValue)
+                if err != nil {
+                    outErr = append(outErr, fmt.Errorf("failed to parse string %q for field {{.TeslaField}} into {{.GoInputType}}: %w", tv.StringValue, err))
+                    continue
+                }
+            {{- end}}
+            case *protos.Value_Invalid:
+                continue
+            default:
+                {{- if .Parser}}
+                outErr = append(outErr, fmt.Errorf("type of {{.TeslaField}} is %T instead of the expected {{.GoInputType}} or string", tv))
+                {{- else}}
+                outErr = append(outErr, fmt.Errorf("type of {{.TeslaField}} is %T instead of the expected {{.GoInputType}}", tv))
+                {{- end}}
+                continue
+            }
+            {{- range .VSSSignals}}
+            {{- if .ConvertFunc}}
+            utv := unit.{{.ConvertFunc}}(tvf)
+            if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(utv); err != nil {
+            {{- else}}
+            if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(tvf); err != nil {
+            {{- end}}
+                outErr = append(outErr, err)
+            } else {
+                sig := vss.Signal{
+                    TokenID: tokenID,
+                    Name: "{{.JSONName}}",
+                    Timestamp: ts,
+                    Source: source,
+                }
+                sig.SetValue(res) {{/* Would be nice to skip the runtime check, since we know the type. */}}
+                out = append(out, sig)
+            }
+            {{- end}}
         {{- end}}
-        }
+        } {{/* Unclear whether we want to warn about fields we don't handle. */}}
     }
 
     return out, outErr
 }
-
-{{range .Conversions}}
-{{- $teslaField := .TeslaField}}
-{{- $goInputType := .GoInputType}}
-func Convert{{.TeslaField}}(v *protos.Value, tokenID uint32, ts time.Time, source string) ([]vss.Signal, []error) {
-    var tvf {{.GoInputType}}
-    switch tv := v.Value.(type) {
-    case *protos.{{.WrapperName}}:
-        tvf = tv.{{.WrapperFieldName}}
-    {{- if .Parser}}
-    case *protos.Value_StringValue:
-        var err error
-        tvf, err = parse.{{.Parser}}(tv.StringValue)
-        if err != nil {
-            return nil, []error{fmt.Errorf("failed to parse string %q for field {{.TeslaField}} into {{$goInputType}}: %w", tv.StringValue, err)}    
-        }
-    {{- end}}
-    case *protos.Value_Invalid:
-        return nil, nil
-    default:
-        {{- if .Parser}}
-            return nil, []error{fmt.Errorf("type of {{.TeslaField}} is %T instead of the expected {{$goInputType}} or string", tv)}
-        {{- else}}
-            return nil, []error{fmt.Errorf("type of {{.TeslaField}} is %T instead of the expected {{$goInputType}}", tv)}
-        {{- end}}
-    }
-    var sigs []vss.Signal
-    var errs []error
-    {{- range .VSSSignals}}
-    {{- if .ConvertFunc}}
-    utv := unit.{{.ConvertFunc}}(tvf)
-    if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(utv); err != nil {
-    {{- else}}
-    if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(tvf); err != nil {
-    {{- end}}
-        errs = append(errs, err)
-    } else {
-        sig := vss.Signal{
-            TokenID: tokenID,
-            Name: "{{.JSONName}}",
-            Timestamp: ts,
-            Source: source,
-        }
-        sig.SetValue(res)
-        sigs = append(sigs, sig)
-    }
-    {{- end}}
-    return sigs, errs
-}
-{{end}}
