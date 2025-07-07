@@ -48,7 +48,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 			{{- range .VSSSignals}}
 			{{- if .ConvertFunc}}
 			utv := unit.{{.ConvertFunc}}(tvf)
-			if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(utv); err != nil {
+			if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(utv); err != nil { {{/* Do we have any need for these inner functions when unit conversion is automatic? */}}
 			{{- else}}
 			if res, err := Convert{{$teslaField}}To{{.GoVSSName}}(tvf); err != nil {
 			{{- end}}

@@ -1,9 +1,9 @@
 package {{.Package}}
 
 import (
-    "strings"
+	"strings"
 
-    "github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
+	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
 	"github.com/teslamotors/fleet-telemetry/protos"
 )
 
@@ -13,16 +13,16 @@ import (
 {{- range .VSSSignals}}
 // Convert{{$teslaField}}To{{.GoVSSName}} converts a telemetry datum with key {{$teslaField}} to the VSS signal {{.GoVSSName}}.
 func Convert{{$teslaField}}To{{.GoVSSName}}(val {{$goInputType}}) ({{.GoOutputType}}, error)
-    {{- if .Body -}}
-    {{- .Body -}}
-    {{- else -}}
-    {
-    {{- if eq $goInputType .GoOutputType}}
-    return val, nil
-    {{- else}}
-    panic("not implemented")
-    {{- end}}
-    }
-    {{- end}}
+	{{- if .Body -}}
+	{{- .Body -}}
+	{{- else -}}
+	{
+	{{- if eq $goInputType .GoOutputType}}
+	return val, nil
+	{{- else}}
+	panic("not implemented")
+	{{- end}}
+	}
+	{{- end}}
 {{end}}
 {{end}}
