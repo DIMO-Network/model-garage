@@ -90,12 +90,14 @@ func (*Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeven
 		fpHdr.Type = cloudevent.TypeFingerprint
 		hdrs = append(hdrs, fpHdr)
 	}
-	if gjson.GetBytes(event.Data, "signals").Exists() {
+	signals := gjson.GetBytes(event.Data, "signals")
+	if signals.Exists() && signals.IsArray() && len(signals.Array()) > 0 {
 		statusHdr := event.CloudEventHeader
 		statusHdr.Type = cloudevent.TypeStatus
 		hdrs = append(hdrs, statusHdr)
 	}
-	if gjson.GetBytes(event.Data, "events").Exists() {
+	events := gjson.GetBytes(event.Data, "events")
+	if events.Exists() && events.IsArray() && len(events.Array()) > 0 {
 		statusHdr := event.CloudEventHeader
 		statusHdr.Type = cloudevent.TypeEvent
 		hdrs = append(hdrs, statusHdr)
