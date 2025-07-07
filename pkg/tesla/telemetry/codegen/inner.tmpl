@@ -12,6 +12,9 @@ import (
 {{- $goInputType := .GoInputType}}
 {{- range .VSSSignals}}
 // Convert{{$teslaField}}To{{.GoVSSName}} converts a telemetry datum with key {{$teslaField}} to the VSS signal {{.GoVSSName}}.
+{{- if .GoInputUnit}}
+// The input value is expressed in {{.GoInputUnit}}.
+{{- end}}
 func Convert{{$teslaField}}To{{.GoVSSName}}(val {{$goInputType}}) ({{.GoOutputType}}, error)
 	{{- if .Body -}}
 	{{- .Body -}}

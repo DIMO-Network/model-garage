@@ -32,6 +32,7 @@ type TargetVSSSignal struct {
 	JSONName     string
 	GoOutputType string
 	ConvertFunc  string
+	GoInputUnit  string
 	Body         string
 }
 
@@ -126,7 +127,7 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 				return fmt.Errorf("unrecognized VSS signal %q", st)
 			}
 
-			var convertFunc string
+			var convertFunc, goInputUnit string
 			if !r.DisableConvert && r.TeslaUnit != "" && info.Unit != "" && r.TeslaUnit != info.Unit {
 				if convertFrom, ok := conversions[r.TeslaUnit]; ok {
 					// More to check here.
@@ -139,11 +140,20 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 				}
 			}
 
+			if r.TeslaUnit != "" {
+				if r.DisableConvert || info.Unit == "" {
+					goInputUnit = r.TeslaUnit
+				} else {
+					goInputUnit = info.Unit
+				}
+			}
+
 			targets = append(targets, &TargetVSSSignal{
 				GoVSSName:    info.GOName,
 				JSONName:     info.JSONName,
 				GoOutputType: info.GOType(),
 				ConvertFunc:  convertFunc,
+				GoInputUnit:  goInputUnit,
 			})
 		}
 
