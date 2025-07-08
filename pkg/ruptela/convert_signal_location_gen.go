@@ -32,6 +32,21 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 			ret = append(ret, sig)
 		}
 
+	case "dir":
+		val0, err := CurrentLocationHeadingFromLocationData(originalDoc, valResult)
+		if err != nil {
+			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.dir': %w", err))
+		} else {
+			sig := vss.Signal{
+				TokenID:   baseSignal.TokenID,
+				Timestamp: baseSignal.Timestamp,
+				Source:    baseSignal.Source,
+				Name:      "currentLocationHeading",
+			}
+			sig.SetValue(val0)
+			ret = append(ret, sig)
+		}
+
 	case "hdop":
 		val0, err := DIMOAftermarketHDOPFromLocationData(originalDoc, valResult)
 		if err != nil {
@@ -125,6 +140,23 @@ func CurrentLocationAltitudeFromLocationData(originalDoc []byte, result gjson.Re
 		errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.alt': %w", err))
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.alt' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+	}
+
+	return ret, errs
+}
+
+// CurrentLocationHeadingFromLocationData converts the given JSON data to a float64.
+func CurrentLocationHeadingFromLocationData(originalDoc []byte, result gjson.Result) (ret float64, err error) {
+	var errs error
+	val0, ok := result.Value().(float64)
+	if ok {
+		ret, err = ToCurrentLocationHeading0(originalDoc, val0)
+		if err == nil {
+			return ret, nil
+		}
+		errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.dir': %w", err))
+	} else {
+		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.dir' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
 
 	return ret, errs
