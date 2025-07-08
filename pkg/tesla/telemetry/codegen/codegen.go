@@ -37,14 +37,22 @@ type TargetVSSSignal struct {
 }
 
 type Rule struct {
+	// TeslaField is the name of the enum value in the key field on the
+	// Tesla Datum message.
 	TeslaField string `yaml:"teslaField"`
-	// TeslaType is the protobuf type of the value field on the Datum. If not specified, it is
-	// assumed to be string. This is the dominant case.
-	TeslaType      string `yaml:"teslaType"`
+	// TeslaType is the protobuf type of the value held within a Datum.
+	TeslaType string `yaml:"teslaType"`
+	// TeslaUnit is the unit of measure for a numeric Tesla value. It
+	// may be empty.
+	//
+	// Tesla tends to use miles in all regions.
 	TeslaUnit      string `yaml:"teslaUnit"`
 	DisableConvert bool   `yaml:"disableConvert"`
-	// VSSSignal is the full path to the VSS signal that will be produced from this Datum. For
-	// example, one might write "Vehicle.Cabin.Door.Row1.Left.IsLocked".
+	// VSSSignals is a list of VSS paths that will be populated
+	// from data with the given field.
+	//
+	// For example, this could contain a single element,
+	// "Vehicle.Cabin.Door.Row1.Left.IsLocked".
 	VSSSignals []string `yaml:"vssSignals"`
 }
 
@@ -113,6 +121,12 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 
 		if r.TeslaUnit != "" && r.TeslaType != "double" {
 			return fmt.Errorf("unit specified for Tesla signal of non-double type %s", r.TeslaType)
+		}
+
+		if len(r.VSSSignals) == 0 {
+			// It's fine to not specify any targets, but don't generate
+			// code in this case.
+			continue
 		}
 
 		var targets []*TargetVSSSignal
@@ -193,6 +207,7 @@ func assembleTeslaTypeInformation() (map[string]TeslaTypeDescription, error) {
 			protoType = string(field.Message().Name())
 			valueType = "*protos." + protoType
 		case protoreflect.EnumKind:
+			// TODO(elffjs): Should we try to check if the number here is a known member?
 			protoType = string(field.Enum().Name())
 			valueType = "protos." + protoType
 		default:

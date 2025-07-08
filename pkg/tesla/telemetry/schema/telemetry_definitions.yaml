@@ -1,4 +1,5 @@
 # See https://developer.tesla.com/docs/fleet-api/fleet-telemetry/available-data
+# and https://github.com/teslamotors/fleet-telemetry/blob/main/protos/vehicle_data.proto
 
 - teslaField: Location
   teslaType: LocationValue
