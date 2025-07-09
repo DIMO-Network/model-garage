@@ -31,30 +31,30 @@ const (
 // Event represents a single event submitted by an oracle with device data.
 // This is the data format that is stored in the database.
 type Event struct {
-	EventIDCol       string    `ch:"id" json:"id"`
-	CloudEventIDCol  string    `ch:"cloud_event_id" json:"cloud_event_id"`
-	Subject          string    `ch:"subject" json:"subject"`
-	SourceCol        string    `ch:"source" json:"source"`
-	ProducerCol      string    `ch:"producer" json:"producer"`
-	EventNameCol     string    `ch:"event_name" json:"event_name"`
-	EventTimeCol     time.Time `ch:"event_time" json:"event_time"`
-	EventDurationCol string    `ch:"event_duration" json:"event_duration"`
-	EventMetaDataCol string    `ch:"event_metadata" json:"event_metadata"`
+	EventID       string        `ch:"id" json:"id"`
+	CloudEventID  string        `ch:"cloud_event_id" json:"cloud_event_id"`
+	Subject       string        `ch:"subject" json:"subject"`
+	Source        string        `ch:"source" json:"source"`
+	Producer      string        `ch:"producer" json:"producer"`
+	EventName     string        `ch:"event_name" json:"event_name"`
+	EventTime     time.Time     `ch:"event_time" json:"event_time"`
+	EventDuration time.Duration `ch:"event_duration" json:"event_duration"`
+	EventMetaData string        `ch:"event_metadata" json:"event_metadata"`
 }
 
 // EventToSlice converts an Event to an array of any for Clickhouse insertion.
 // The order of the elements in the array is guaranteed to match the order of elements in the `EventColNames`.
 func EventToSlice(obj Event) []any {
 	return []any{
-		obj.EventIDCol,
-		obj.CloudEventIDCol,
+		obj.EventID,
+		obj.CloudEventID,
 		obj.Subject,
-		obj.SourceCol,
-		obj.ProducerCol,
-		obj.EventNameCol,
-		obj.EventTimeCol,
-		obj.EventDurationCol,
-		obj.EventMetaDataCol,
+		obj.Source,
+		obj.Producer,
+		obj.EventName,
+		obj.EventTime,
+		obj.EventDuration,
+		obj.EventMetaData,
 	}
 }
 
