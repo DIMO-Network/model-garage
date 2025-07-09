@@ -11,11 +11,11 @@ import (
 
 func init() {
 	_, filename, _, _ := runtime.Caller(0)
-	registerFunc := func() { goose.AddNamedMigrationContext(filename, upVehicle_event_table, downVehicle_event_table) }
+	registerFunc := func() { goose.AddNamedMigrationContext(filename, upVehicleEventTable, downVehicleEventTable) }
 	registerFuncs = append(registerFuncs, registerFunc)
 }
 
-func upVehicle_event_table(ctx context.Context, tx *sql.Tx) error {
+func upVehicleEventTable(ctx context.Context, tx *sql.Tx) error {
 	// This code is executed when the migration is applied.
 	upStatements := []string{
 		createVehicleEventStmt,
@@ -29,7 +29,7 @@ func upVehicle_event_table(ctx context.Context, tx *sql.Tx) error {
 	return nil
 }
 
-func downVehicle_event_table(ctx context.Context, tx *sql.Tx) error {
+func downVehicleEventTable(ctx context.Context, tx *sql.Tx) error {
 	// This code is executed when the migration is rolled back.
 	downStatements := []string{
 		"DROP TABLE vehicle_event",
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS vehicle_event
     data_content_type String COMMENT 'Type of data of this object.',
     data_version String COMMENT 'Version of the data stored for this cloud event.',
 	extras String COMMENT 'Extra metadata for the cloud event',
-    index_key String COMMENT 'Key of the backing object for this cloud event'
+    index_key String COMMENT 'Key of the backing object for this cloud event',
 
 	-- vehicle infos
 	event_name String COMMENT 'name of the event indicated by the oracle transmitting it',
