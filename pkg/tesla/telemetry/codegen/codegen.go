@@ -108,9 +108,7 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 		return fmt.Errorf("failed to load rules: %w", err)
 	}
 
-	tmplInput := &TemplateInput{
-		Package: packageName,
-	}
+	tmplInput := &TemplateInput{Package: packageName}
 
 	teslaTypeToAttributes, err := assembleTeslaTypeInformation()
 	if err != nil {
@@ -182,7 +180,6 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 			WrapperFieldName: teslaType.TeslaWrapperFieldName,
 			Parser:           parsers[r.TeslaType],
 			GoInputType:      teslaType.ValueType,
-			TeslaTypeName:    teslaType.NiceName,
 			VSSSignals:       targets,
 		})
 	}
@@ -229,13 +226,10 @@ func assembleTeslaTypeInformation() (map[string]TeslaTypeDescription, error) {
 			valueType = goType
 		}
 
-		niceName := strings.ToUpper(protoType[:1]) + protoType[1:]
-
 		out[protoType] = TeslaTypeDescription{
 			TeslaWrapperType:      teslaWrapperType,
 			TeslaWrapperFieldName: teslaWrapperFieldName,
 			ValueType:             valueType,
-			NiceName:              niceName,
 		}
 	}
 
@@ -322,7 +316,6 @@ type Conversion struct {
 	TeslaField       string
 	WrapperName      string
 	WrapperFieldName string
-	TeslaTypeName    string
 	Parser           string
 	GoInputType      string
 
@@ -359,8 +352,15 @@ var parsers = map[string]string{
 }
 
 type TeslaTypeDescription struct {
-	TeslaWrapperType      string
+	// TeslaWrapperType is the name of a type T such that *T is
+	// assignable to Value's Value field. The most common one is
+	// Value_StringValue.
+	TeslaWrapperType string
+	// TeslaWrapperFieldName is the name of the only field on the type
+	// referenced by TeslaWrapperType. This field is what holds the
+	// value of interest.
 	TeslaWrapperFieldName string
-	ValueType             string
-	NiceName              string
+	// ValueType is the type of the field named by
+	// TeslaWrapperFieldName.
+	ValueType string
 }
