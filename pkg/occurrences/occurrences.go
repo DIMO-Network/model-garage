@@ -1,5 +1,5 @@
-// Package vehicle_event holds the data structures and functions for working with event data submitted by DIMO oracles.
-package vehicle_event
+// Package occurrences holds the data structures and functions for working with event data submitted by DIMO oracles.
+package occurrences
 
 import (
 	"time"
