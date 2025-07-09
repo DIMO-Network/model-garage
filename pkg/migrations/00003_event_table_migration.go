@@ -49,21 +49,16 @@ CREATE TABLE IF NOT EXISTS event
 	id String COMMENT 'unique event id',
 
 	-- original cloud event headers
-    subject String COMMENT 'identifying the subject of the event within the context of the event producer',
-    cloudevent_time DateTime64(3, 'UTC') COMMENT 'Time at which the cloudevent occurred.',
-    cloudevent_id String COMMENT 'Identifier for the cloudevent.',
-    source String COMMENT 'Entity that is responsible for providing this cloud event',
-    producer String COMMENT 'specific instance, process or device that creates the data structure describing the cloud event.',
-    data_content_type String COMMENT 'Type of data of this object.',
-    data_version String COMMENT 'Version of the data stored for this cloud event.',
-	extras String COMMENT 'Extra metadata for the cloud event',
-    index_key String COMMENT 'Key of the backing object for this cloud event',
+    cloud_event_id String COMMENT 'Identifier for the cloudevent.',
+    subject String COMMENT 'identifies the entity the event pertains to',
+    source String COMMENT 'the origin of the data used to determine the event',
+    producer String COMMENT 'the entity that identified and submitted the event (oracle)',
 
 	-- event infos
 	event_name String COMMENT 'name of the event indicated by the oracle transmitting it',
-	event_time DateTime64(3, 'UTC') COMMENT 'optional field denoting time at which the event described occurred, transmitted by oracle',
+	event_time DateTime64(6, 'UTC') COMMENT 'optional field denoting time at which the event described occurred, transmitted by oracle',
 	event_duration String COMMENT 'optional event duration field transmitted by oracle',
 	event_metadata String COMMENT 'string representing freeform json containing infos relevant to event transmitted'
 )
 ENGINE = ReplacingMergeTree
-ORDER BY (subject, event_time, event_name, source, cloudevent_id) SETTINGS index_granularity = 8192;`
+ORDER BY (subject, event_time, event_name, source) SETTINGS index_granularity = 8192;`
