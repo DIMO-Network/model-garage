@@ -41,7 +41,7 @@ type Event struct {
 }
 
 // EventToSlice converts an Event to an array of any for Clickhouse insertion.
-// The order of the elements in the array is guaranteed to match the order of elements in the `SignalColNames`.
+// The order of the elements in the array is guaranteed to match the order of elements in the `EventColNames`.
 func EventToSlice(obj Event) []any {
 	return []any{
 		obj.EventIDCol,
@@ -56,8 +56,8 @@ func EventToSlice(obj Event) []any {
 	}
 }
 
-// SignalColNames returns the column names of the Signal struct.
-func SignalColNames() []string {
+// EventColNames returns the column names of the Event struct.
+func EventColNames() []string {
 	return []string{
 		EventIDCol,
 		CloudEventIDCol,
