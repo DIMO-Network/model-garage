@@ -22,11 +22,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const (
-	ParseFloatFlag  = "PARSE_FLOAT"
-	ConvertUnitFlag = "CONVERT_UNIT"
-)
-
 type TargetVSSSignal struct {
 	GoVSSName    string
 	JSONName     string
@@ -62,9 +57,9 @@ var innerTmpl string
 //go:embed outer.tmpl
 var outerTmpl string
 
-// protoToGoTypes maps protobuf types to Go types. The only point of disagreement here
-// is for floating point numbers.
-var protoToGoTypes = map[string]string{
+// protoTypeToGoType maps scalar protobuf types to Go types. The only
+// point of disagreement here is for floating point numbers.
+var protoTypeToGoType = map[string]string{
 	"string": "string",
 	"int32":  "int32",
 	"int64":  "int64",
@@ -74,6 +69,7 @@ var protoToGoTypes = map[string]string{
 }
 
 func snakeToPascal(s string) string {
+	// This is not robust.
 	words := strings.Split(s, "_")
 	for i, w := range words {
 		if len(w) != 0 {
@@ -176,10 +172,10 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 
 		tmplInput.Conversions = append(tmplInput.Conversions, &Conversion{
 			TeslaField:       r.TeslaField,
-			WrapperName:      teslaType.TeslaWrapperType,
-			WrapperFieldName: teslaType.TeslaWrapperFieldName,
+			WrapperName:      teslaType.WrapperType,
+			WrapperFieldName: teslaType.Field,
 			Parser:           parsers[r.TeslaType],
-			GoInputType:      teslaType.ValueType,
+			GoInputType:      teslaType.FieldType,
 			VSSSignals:       targets,
 		})
 	}
@@ -197,39 +193,45 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 	return nil
 }
 
-func assembleTeslaTypeInformation() (map[string]TeslaTypeDescription, error) {
-	out := make(map[string]TeslaTypeDescription)
+func assembleTeslaTypeInformation() (map[string]TeslaGoValueType, error) {
+	out := make(map[string]TeslaGoValueType)
 
+	// This is protobuf reflection. The protos.Value type in Go does
+	// not have all of these fields. Maybe we should reflect in Go,
+	// instead?
 	desc := (&protos.Value{}).ProtoReflect().Descriptor()
+
 	for i := range desc.Fields().Len() {
 		field := desc.Fields().Get(i)
-		fieldName := field.Name()
 
-		teslaWrapperFieldName := snakeToPascal(string(fieldName))
-		teslaWrapperType := "Value_" + teslaWrapperFieldName
-		var protoType, valueType string
-		switch field.Kind() {
+		goFieldName := snakeToPascal(string(field.Name()))
+		wrapperType := "Value_" + goFieldName // This is only a concept in Go.
+
+		var protoType, goFieldType string
+
+		switch kind := field.Kind(); kind {
 		case protoreflect.MessageKind:
 			protoType = string(field.Message().Name())
-			valueType = "*protos." + protoType
+			goFieldType = "*protos." + protoType
 		case protoreflect.EnumKind:
-			// TODO(elffjs): Should we try to check if the number here is a known member?
+			// TODO(elffjs): Should we try to check if the number we
+			// get for such fields is in-bounds?
 			protoType = string(field.Enum().Name())
-			valueType = "protos." + protoType
+			goFieldType = "protos." + protoType
 		default:
-			// Primitive types.
-			protoType = field.Kind().String()
-			goType, ok := protoToGoTypes[protoType]
+			// Primitive types, we hope.
+			protoType = kind.String()
+			var ok bool
+			goFieldType, ok = protoTypeToGoType[protoType]
 			if !ok {
 				return nil, fmt.Errorf("no Go mapping for protobuf type %s", protoType)
 			}
-			valueType = goType
 		}
 
-		out[protoType] = TeslaTypeDescription{
-			TeslaWrapperType:      teslaWrapperType,
-			TeslaWrapperFieldName: teslaWrapperFieldName,
-			ValueType:             valueType,
+		out[protoType] = TeslaGoValueType{
+			WrapperType: wrapperType,
+			Field:       goFieldName,
+			FieldType:   goFieldType,
 		}
 	}
 
@@ -351,16 +353,15 @@ var parsers = map[string]string{
 	"Doors":       "Doors",
 }
 
-type TeslaTypeDescription struct {
-	// TeslaWrapperType is the name of a type T such that *T is
+type TeslaGoValueType struct {
+	// WrapperType is the name of a Go type T such that *T is
 	// assignable to Value's Value field. The most common one is
-	// Value_StringValue.
-	TeslaWrapperType string
-	// TeslaWrapperFieldName is the name of the only field on the type
-	// referenced by TeslaWrapperType. This field is what holds the
-	// value of interest.
-	TeslaWrapperFieldName string
-	// ValueType is the type of the field named by
-	// TeslaWrapperFieldName.
-	ValueType string
+	// protos.Value_StringValue.
+	WrapperType string
+	// Field is the name of the only field on the type named by
+	// TeslaWrapperType. This field is what holds the value of
+	// interest.
+	Field string
+	// FieldType is the type of the field named by Field.
+	FieldType string
 }
