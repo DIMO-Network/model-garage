@@ -83,15 +83,24 @@ func snakeToPascal(s string) string {
 	return strings.Join(words, "")
 }
 
-func Generate(packageName, outerOutputPath, innerOutputPath string) error {
+func createSignalLookup() (map[string]*schema.SignalInfo, error) {
 	signalInfos, err := schema.LoadSignalsCSV(strings.NewReader(schema.VssRel42DIMO()))
 	if err != nil {
-		log.Fatalf("Failed to load VSS schema: %v", err)
+		return nil, err
 	}
 
 	signalInfoBySignal := make(map[string]*schema.SignalInfo, len(signalInfos))
 	for _, s := range signalInfos {
 		signalInfoBySignal[s.Name] = s
+	}
+
+	return signalInfoBySignal, nil
+}
+
+func Generate(packageName, outerOutputPath, innerOutputPath string) error {
+	signalInfoBySignal, err := createSignalLookup()
+	if err != nil {
+		log.Fatalf("Failed to load VSS schema: %v", err)
 	}
 
 	rules, err := loadRules()
