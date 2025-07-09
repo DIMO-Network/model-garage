@@ -1,7 +1,9 @@
-// Package event holds the data structures and functions for working with event data submitted by DIMO oracles.
-package event
+// Package vehicle_event holds the data structures and functions for working with event data submitted by DIMO oracles.
+package vehicle_event
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	// TableName is the name of the distributed table in Clickhouse.
