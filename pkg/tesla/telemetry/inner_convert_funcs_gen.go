@@ -131,22 +131,22 @@ func ConvertDoorStateToCabinDoorRow2PassengerSideIsOpen(val *protos.Doors) (floa
 
 // ConvertFdWindowToCabinDoorRow1DriverSideWindowIsOpen converts a telemetry datum with key FdWindow to the VSS signal CabinDoorRow1DriverSideWindowIsOpen.
 func ConvertFdWindowToCabinDoorRow1DriverSideWindowIsOpen(val protos.WindowState) (float64, error) {
-	return windowStateToIsOpen(val), nil
+	return windowStateToIsOpen(val)
 }
 
 // ConvertFpWindowToCabinDoorRow1PassengerSideWindowIsOpen converts a telemetry datum with key FpWindow to the VSS signal CabinDoorRow1PassengerSideWindowIsOpen.
 func ConvertFpWindowToCabinDoorRow1PassengerSideWindowIsOpen(val protos.WindowState) (float64, error) {
-	return windowStateToIsOpen(val), nil
+	return windowStateToIsOpen(val)
 }
 
 // ConvertRdWindowToCabinDoorRow2DriverSideWindowIsOpen converts a telemetry datum with key RdWindow to the VSS signal CabinDoorRow2DriverSideWindowIsOpen.
 func ConvertRdWindowToCabinDoorRow2DriverSideWindowIsOpen(val protos.WindowState) (float64, error) {
-	return windowStateToIsOpen(val), nil
+	return windowStateToIsOpen(val)
 }
 
 // ConvertRpWindowToCabinDoorRow2PassengerSideWindowIsOpen converts a telemetry datum with key RpWindow to the VSS signal CabinDoorRow2PassengerSideWindowIsOpen.
 func ConvertRpWindowToCabinDoorRow2PassengerSideWindowIsOpen(val protos.WindowState) (float64, error) {
-	return windowStateToIsOpen(val), nil
+	return windowStateToIsOpen(val)
 }
 
 // ConvertChargeAmpsToPowertrainTractionBatteryChargingChargeCurrentAC converts a telemetry datum with key ChargeAmps to the VSS signal PowertrainTractionBatteryChargingChargeCurrentAC.
