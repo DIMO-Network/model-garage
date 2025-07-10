@@ -55,8 +55,8 @@ func ToExteriorAirTemperature0(originalDoc []byte, val float64) (float64, error)
 }
 
 // ToPowertrainRange0 converts data from field 'charge_state.battery_range' of type float64 to 'Vehicle.Powertrain.Range' of type float64.
-// Vehicle.Powertrain.Range: Remaining range in meters using all energy sources available in the vehicle.
-// Unit: 'm'
+// Vehicle.Powertrain.Range: Remaining range in kilometers using all energy sources available in the vehicle.
+// Unit: 'km'
 func ToPowertrainRange0(originalDoc []byte, val float64) (float64, error) {
 	// Note: We are converting to kilometers here, breaking with VSS. We need to fix this at some point.
 	return milesToKilometers(val), nil
