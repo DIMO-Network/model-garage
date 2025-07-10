@@ -161,3 +161,61 @@ func TestConvertTyped(t *testing.T) {
 
 	assert.ElementsMatch(t, expectedSignals, signals)
 }
+
+func TestIgnoreInvalids(t *testing.T) {
+	teslaConnection := "0xc4035Fecb1cc906130423EF05f9C20977F643722" // This is the real value in dev and prod.
+
+	ts, err := time.Parse(time.RFC3339, "2025-01-01T09:00:00Z")
+	if err != nil {
+		t.Fatal("Failed to create test timestamp.")
+	}
+
+	vin := "5YJYGDEF2LFR00942"
+
+	pl := &protos.Payload{
+		Data: []*protos.Datum{
+			{Key: protos.Field_Odometer, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 61026.774055062444}}},
+			{Key: protos.Field_VehicleSpeed, Value: &protos.Value{Value: &protos.Value_Invalid{Invalid: true}}},
+		},
+		CreatedAt: timestamppb.New(ts),
+		Vin:       vin,
+	}
+
+	signals, errors := ProcessPayload(pl, 7, teslaConnection)
+	if len(errors) != 0 {
+		t.Fatalf("Unexpected errors from conversion: %v", err)
+	}
+
+	expectedSignals := []vss.Signal{
+		{TokenID: 7, Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 98213.07266487041, Source: teslaConnection},
+	}
+
+	assert.ElementsMatch(t, expectedSignals, signals)
+}
+
+func TestConversionErrors(t *testing.T) {
+	teslaConnection := "0xc4035Fecb1cc906130423EF05f9C20977F643722" // This is the real value in dev and prod.
+
+	ts, err := time.Parse(time.RFC3339, "2025-01-01T09:00:00Z")
+	if err != nil {
+		t.Fatal("Failed to create test timestamp.")
+	}
+
+	vin := "5YJYGDEF2LFR00942"
+
+	pl := &protos.Payload{
+		Data: []*protos.Datum{
+			{Key: protos.Field_Odometer, Value: &protos.Value{Value: &protos.Value_BooleanValue{BooleanValue: true}}},
+		},
+		CreatedAt: timestamppb.New(ts),
+		Vin:       vin,
+	}
+
+	signals, errors := ProcessPayload(pl, 7, teslaConnection)
+	if len(signals) != 0 {
+		t.Errorf("Should not have gotten any signals.")
+	}
+	if len(errors) != 1 {
+		t.Fatalf("Should have gotten exactly one error.")
+	}
+}
