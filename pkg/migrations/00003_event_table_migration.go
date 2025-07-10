@@ -46,8 +46,6 @@ func downEventTable(ctx context.Context, tx *sql.Tx) error {
 const createVehicleEventStmt = `
 CREATE TABLE IF NOT EXISTS event
 (
-	id String COMMENT 'unique event id',
-
 	-- original cloud event headers
     cloud_event_id String COMMENT 'Identifier for the cloudevent.',
     subject String COMMENT 'identifies the entity the event pertains to',

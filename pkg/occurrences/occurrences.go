@@ -8,8 +8,6 @@ import (
 const (
 	// TableName is the name of the distributed table in Clickhouse.
 	TableName = "event"
-	// EventIDCol is the name of the unique event id column in Clickhouse.
-	EventIDCol = "id"
 	// CloudEventIDCol is the name of the cloud_event_id column in Clickhouse.
 	CloudEventIDCol = "cloud_event_id"
 	// Subject is the name of the timestamp column in Clickhouse.
@@ -31,22 +29,20 @@ const (
 // Event represents a single event submitted by an oracle with device data.
 // This is the data format that is stored in the database.
 type Event struct {
-	EventID       string        `ch:"id" json:"id"`
-	CloudEventID  string        `ch:"cloud_event_id" json:"cloud_event_id"`
+	CloudEventID  string        `ch:"cloud_event_id" json:"cloudEventId"`
 	Subject       string        `ch:"subject" json:"subject"`
 	Source        string        `ch:"source" json:"source"`
 	Producer      string        `ch:"producer" json:"producer"`
-	EventName     string        `ch:"event_name" json:"event_name"`
-	EventTime     time.Time     `ch:"event_time" json:"event_time"`
-	EventDuration time.Duration `ch:"event_duration" json:"event_duration"`
-	EventMetaData string        `ch:"event_metadata" json:"event_metadata"`
+	EventName     string        `ch:"event_name" json:"eventName"`
+	EventTime     time.Time     `ch:"event_time" json:"eventTime"`
+	EventDuration time.Duration `ch:"event_duration" json:"eventDuration"`
+	EventMetaData string        `ch:"event_metadata" json:"eventMetadata"`
 }
 
 // EventToSlice converts an Event to an array of any for Clickhouse insertion.
 // The order of the elements in the array is guaranteed to match the order of elements in the `EventColNames`.
 func EventToSlice(obj Event) []any {
 	return []any{
-		obj.EventID,
 		obj.CloudEventID,
 		obj.Subject,
 		obj.Source,
@@ -61,7 +57,6 @@ func EventToSlice(obj Event) []any {
 // EventColNames returns the column names of the Event struct.
 func EventColNames() []string {
 	return []string{
-		EventIDCol,
 		CloudEventIDCol,
 		Subject,
 		SourceCol,
