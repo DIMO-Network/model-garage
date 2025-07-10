@@ -1,7 +1,6 @@
 package telemetry
 
 import (
-	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
 	"github.com/teslamotors/fleet-telemetry/protos"
 )
 
@@ -88,7 +87,7 @@ func ConvertOutsideTempToExteriorAirTemperature(val float64) (float64, error) {
 // ConvertEstBatteryRangeToPowertrainRange converts a telemetry datum with key EstBatteryRange to the VSS signal PowertrainRange.
 // The input value is expressed in km.
 func ConvertEstBatteryRangeToPowertrainRange(val float64) (float64, error) {
-	return unit.MilesToKilometers(val), nil
+	return val, nil
 }
 
 // ConvertChargeLimitSocToPowertrainTractionBatteryChargingChargeLimit converts a telemetry datum with key ChargeLimitSoc to the VSS signal PowertrainTractionBatteryChargingChargeLimit.
