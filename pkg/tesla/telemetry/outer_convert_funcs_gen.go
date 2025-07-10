@@ -400,7 +400,8 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, fmt.Errorf("type of EstBatteryRange is %T instead of the expected float64 or string", tv))
 				continue
 			}
-			if res, err := ConvertEstBatteryRangeToPowertrainRange(tvf); err != nil {
+			utv := unit.MilesToKilometers(tvf)
+			if res, err := ConvertEstBatteryRangeToPowertrainRange(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{

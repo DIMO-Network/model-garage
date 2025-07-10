@@ -116,7 +116,7 @@ const (
 	FieldPowertrainFuelSystemRelativeLevel = "powertrainFuelSystemRelativeLevel"
 	// FieldPowertrainFuelSystemSupportedFuelTypes High level information of fuel types supported
 	FieldPowertrainFuelSystemSupportedFuelTypes = "powertrainFuelSystemSupportedFuelTypes"
-	// FieldPowertrainRange Remaining range in meters using all energy sources available in the vehicle.
+	// FieldPowertrainRange Remaining range in kilometers using all energy sources available in the vehicle.
 	FieldPowertrainRange = "powertrainRange"
 	// FieldPowertrainTractionBatteryChargingAddedEnergy Amount of charge added to the high voltage battery during the current charging session, expressed in kilowatt-hours.
 	FieldPowertrainTractionBatteryChargingAddedEnergy = "powertrainTractionBatteryChargingAddedEnergy"
@@ -134,7 +134,7 @@ const (
 	FieldPowertrainTractionBatteryCurrentVoltage = "powertrainTractionBatteryCurrentVoltage"
 	// FieldPowertrainTractionBatteryGrossCapacity Gross capacity of the battery.
 	FieldPowertrainTractionBatteryGrossCapacity = "powertrainTractionBatteryGrossCapacity"
-	// FieldPowertrainTractionBatteryRange Remaining range in meters using only battery.
+	// FieldPowertrainTractionBatteryRange Remaining range in kilometers using only battery.
 	FieldPowertrainTractionBatteryRange = "powertrainTractionBatteryRange"
 	// FieldPowertrainTractionBatteryStateOfChargeCurrent Physical state of charge of the high voltage battery, relative to net capacity. This is not necessarily the state of charge being displayed to the customer.
 	FieldPowertrainTractionBatteryStateOfChargeCurrent = "powertrainTractionBatteryStateOfChargeCurrent"

@@ -87,7 +87,6 @@
 - teslaField: EstBatteryRange
   teslaType: double
   teslaUnit: mi
-  disableConvert: true # VSS uses m, but in practice we've been using km. Need to fix this in our fork.
   vssSignals:
   - Vehicle.Powertrain.Range
 

@@ -41,8 +41,7 @@ type Rule struct {
 	// may be empty.
 	//
 	// Tesla tends to use miles in all regions.
-	TeslaUnit      string `yaml:"teslaUnit"`
-	DisableConvert bool   `yaml:"disableConvert"`
+	TeslaUnit string `yaml:"teslaUnit"`
 	// VSSSignals is a list of VSS paths that will be populated
 	// from data with the given field.
 	//
@@ -140,7 +139,7 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 			}
 
 			convertFunc := ""
-			if !r.DisableConvert && r.TeslaUnit != "" && info.Unit != "" && r.TeslaUnit != info.Unit {
+			if r.TeslaUnit != "" && info.Unit != "" && r.TeslaUnit != info.Unit {
 				if convertFrom, ok := conversions[r.TeslaUnit]; ok {
 					// More to check here.
 					convertFunc, ok = convertFrom[info.Unit]
@@ -154,7 +153,7 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 
 			goInputUnit := ""
 			if r.TeslaUnit != "" {
-				if r.DisableConvert || info.Unit == "" {
+				if info.Unit == "" {
 					goInputUnit = r.TeslaUnit
 				} else {
 					goInputUnit = info.Unit

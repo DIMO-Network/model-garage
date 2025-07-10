@@ -321,8 +321,8 @@ func ToPowertrainFuelSystemRelativeLevel1(originalDoc []byte, val string) (float
 }
 
 // ToPowertrainTractionBatteryRange0 converts data from field 'signals.723' of type string to 'Vehicle.Powertrain.TractionBattery.Range' of type float64.
-// Vehicle.Powertrain.TractionBattery.Range: Remaining range in meters using only battery.
-// Unit: 'm'
+// Vehicle.Powertrain.TractionBattery.Range: Remaining range in kilometers using only battery.
+// Unit: 'km'
 func ToPowertrainTractionBatteryRange0(originalDoc []byte, val string) (float64, error) {
 	floatValKm, err := Convert723(val)
 	if err != nil {
