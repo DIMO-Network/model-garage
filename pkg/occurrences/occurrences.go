@@ -10,8 +10,8 @@ const (
 	TableName = "event"
 	// CloudEventIDCol is the name of the cloud_event_id column in Clickhouse.
 	CloudEventIDCol = "cloud_event_id"
-	// Subject is the name of the timestamp column in Clickhouse.
-	Subject = "subject"
+	// SubjectCol is the name of the timestamp column in Clickhouse.
+	SubjectCol = "subject"
 	// SourceCol is the name of the source column in Clickhouse.
 	SourceCol = "source"
 	// ProducerCol is the name of the producer column in Clickhouse.
@@ -29,14 +29,14 @@ const (
 // Event represents a single event submitted by an oracle with device data.
 // This is the data format that is stored in the database.
 type Event struct {
-	CloudEventID  string        `ch:"cloud_event_id" json:"cloudEventId"`
-	Subject       string        `ch:"subject" json:"subject"`
-	Source        string        `ch:"source" json:"source"`
-	Producer      string        `ch:"producer" json:"producer"`
-	EventName     string        `ch:"event_name" json:"eventName"`
-	EventTime     time.Time     `ch:"event_time" json:"eventTime"`
-	EventDuration time.Duration `ch:"event_duration" json:"eventDuration"`
-	EventMetaData string        `ch:"event_metadata" json:"eventMetadata"`
+	CloudEventID  string    `ch:"cloud_event_id" json:"cloudEventId"`
+	Subject       string    `ch:"subject" json:"subject"`
+	Source        string    `ch:"source" json:"source"`
+	Producer      string    `ch:"producer" json:"producer"`
+	EventName     string    `ch:"event_name" json:"eventName"`
+	EventTime     time.Time `ch:"event_time" json:"eventTime"`
+	EventDuration string    `ch:"event_duration" json:"eventDuration"`
+	EventMetaData string    `ch:"event_metadata" json:"eventMetadata"`
 }
 
 // EventToSlice converts an Event to an array of any for Clickhouse insertion.
@@ -58,7 +58,7 @@ func EventToSlice(obj Event) []any {
 func EventColNames() []string {
 	return []string{
 		CloudEventIDCol,
-		Subject,
+		SubjectCol,
 		SourceCol,
 		ProducerCol,
 		EventNameCol,
