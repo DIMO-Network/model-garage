@@ -9,7 +9,6 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"log"
 	"os"
 	"strings"
 	"text/template"
@@ -95,7 +94,7 @@ func createSignalLookup() (map[string]*schema.SignalInfo, error) {
 func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 	signalInfoBySignal, err := createSignalLookup()
 	if err != nil {
-		log.Fatalf("Failed to load VSS schema: %v", err)
+		return fmt.Errorf("failed to load VSS schema: %w", err)
 	}
 
 	rules, err := loadRules()
