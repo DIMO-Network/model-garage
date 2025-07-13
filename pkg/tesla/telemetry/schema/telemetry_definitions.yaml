@@ -91,7 +91,7 @@
   - Vehicle.Powertrain.Range
 
 - teslaField: ChargeLimitSoc
-  teslaType: double
+  teslaType: int32
   teslaUnit: percent
   vssSignals:
   - Vehicle.Powertrain.TractionBattery.Charging.ChargeLimit

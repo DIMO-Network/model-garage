@@ -121,10 +121,6 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 			return fmt.Errorf("unsupported Tesla type %q", r.TeslaType)
 		}
 
-		if r.TeslaUnit != "" && r.TeslaType != "double" {
-			return fmt.Errorf("unit specified for Tesla signal of non-double type %s", r.TeslaType)
-		}
-
 		if len(r.VSSSignals) == 0 {
 			// It's fine to not specify any targets, but don't generate
 			// code in this case.
@@ -139,7 +135,7 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 			}
 
 			convertFunc := ""
-			if r.TeslaUnit != "" && info.Unit != "" && r.TeslaUnit != info.Unit {
+			if r.TeslaUnit != "" && info.Unit != "" && r.TeslaUnit != info.Unit && r.TeslaType == "double" && info.GOType() == "float64" {
 				if convertFrom, ok := conversions[r.TeslaUnit]; ok {
 					// More to check here.
 					convertFunc, ok = convertFrom[info.Unit]
@@ -348,6 +344,7 @@ var conversions = map[string]map[string]string{
 
 var parsers = map[string]string{
 	"double":      "Double",
+	"int32":       "Int32",
 	"WindowState": "WindowState",
 	"Doors":       "Doors",
 }

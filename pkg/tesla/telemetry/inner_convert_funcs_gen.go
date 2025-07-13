@@ -92,8 +92,8 @@ func ConvertEstBatteryRangeToPowertrainRange(val float64) (float64, error) {
 
 // ConvertChargeLimitSocToPowertrainTractionBatteryChargingChargeLimit converts a telemetry datum with key ChargeLimitSoc to the VSS signal PowertrainTractionBatteryChargingChargeLimit.
 // The input value is expressed in percent.
-func ConvertChargeLimitSocToPowertrainTractionBatteryChargingChargeLimit(val float64) (float64, error) {
-	return val, nil
+func ConvertChargeLimitSocToPowertrainTractionBatteryChargingChargeLimit(val int32) (float64, error) {
+	return float64(val), nil
 }
 
 // ConvertOdometerToPowertrainTransmissionTravelledDistance converts a telemetry datum with key Odometer to the VSS signal PowertrainTransmissionTravelledDistance.

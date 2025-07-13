@@ -51,7 +51,7 @@ func TestConvertUntyped(t *testing.T) {
 
 	signals, errors := ProcessPayload(pl, 7, teslaConnection)
 	if len(errors) != 0 {
-		t.Fatalf("Unexpected errors from conversion: %v", err)
+		t.Fatalf("Unexpected errors from conversion: %v", errors)
 	}
 
 	expectedSignals := []vss.Signal{
@@ -109,7 +109,7 @@ func TestConvertTyped(t *testing.T) {
 			{Key: protos.Field_TpmsPressureRr, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 2.8000000417232513}}},
 			{Key: protos.Field_OutsideTemp, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 2.5}}},
 			{Key: protos.Field_EstBatteryRange, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 19.80471193262205}}},
-			{Key: protos.Field_ChargeLimitSoc, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 80}}},
+			{Key: protos.Field_ChargeLimitSoc, Value: &protos.Value{Value: &protos.Value_IntValue{IntValue: 80}}},
 			{Key: protos.Field_Odometer, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 61026.774055062444}}},
 			{Key: protos.Field_VehicleSpeed, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 21}}},
 			{Key: protos.Field_EnergyRemaining, Value: &protos.Value{Value: &protos.Value_DoubleValue{DoubleValue: 39.61999911442399}}},
@@ -127,7 +127,7 @@ func TestConvertTyped(t *testing.T) {
 
 	signals, errors := ProcessPayload(pl, 7, teslaConnection)
 	if len(errors) != 0 {
-		t.Fatalf("Unexpected errors from conversion: %v", err)
+		t.Fatalf("Unexpected errors from conversion: %v", errors)
 	}
 
 	expectedSignals := []vss.Signal{

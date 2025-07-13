@@ -11,6 +11,14 @@ import (
 	"github.com/teslamotors/fleet-telemetry/protos"
 )
 
+func Int32(s string) (int32, error) {
+	d, err := strconv.ParseInt(s, 10, 32)
+	if err != nil {
+		return 0, fmt.Errorf("couldn't parse string into int32: %w", err)
+	}
+	return int32(d), nil
+}
+
 func Double(s string) (float64, error) {
 	d, err := strconv.ParseFloat(s, 64)
 	if err != nil {

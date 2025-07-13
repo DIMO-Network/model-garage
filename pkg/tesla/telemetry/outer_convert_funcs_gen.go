@@ -414,21 +414,21 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				out = append(out, sig)
 			}
 		case protos.Field_ChargeLimitSoc:
-			var tvf float64
+			var tvf int32
 			switch tv := d.GetValue().Value.(type) {
-			case *protos.Value_DoubleValue:
-				tvf = tv.DoubleValue
+			case *protos.Value_IntValue:
+				tvf = tv.IntValue
 			case *protos.Value_StringValue:
 				var err error
-				tvf, err = parse.Double(tv.StringValue)
+				tvf, err = parse.Int32(tv.StringValue)
 				if err != nil {
-					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field ChargeLimitSoc into float64: %w", tv.StringValue, err))
+					outErr = append(outErr, fmt.Errorf("failed to parse string %q for field ChargeLimitSoc into int32: %w", tv.StringValue, err))
 					continue
 				}
 			case *protos.Value_Invalid:
 				continue
 			default:
-				outErr = append(outErr, fmt.Errorf("type of ChargeLimitSoc is %T instead of the expected float64 or string", tv))
+				outErr = append(outErr, fmt.Errorf("type of ChargeLimitSoc is %T instead of the expected int32 or string", tv))
 				continue
 			}
 			if res, err := ConvertChargeLimitSocToPowertrainTractionBatteryChargingChargeLimit(tvf); err != nil {
