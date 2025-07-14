@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS event (
 	-- event infos
 	event_name String COMMENT 'name of the event indicated by the oracle transmitting it',
 	event_time DateTime64(6, 'UTC') COMMENT 'denotes time at which the event described occurred, transmitted by oracle',
-	event_duration String COMMENT 'optional event duration field transmitted by oracle',
+	event_duration_ns Int64 COMMENT 'optional event duration in nanoseconds field transmitted by oracle',
 	event_metadata String COMMENT 'arbitrary JSON metadata provided by the user, containing additional event-related information'
 ) ENGINE = ReplacingMergeTree
 ORDER BY (subject, event_time, event_name, source) SETTINGS index_granularity = 8192;`

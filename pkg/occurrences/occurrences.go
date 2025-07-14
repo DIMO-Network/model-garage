@@ -20,8 +20,8 @@ const (
 	EventNameCol = "event_name"
 	// EventTimeCol is the name of the event_time column in Clickhouse.
 	EventTimeCol = "event_time"
-	// EventDurationCol is the name of the event_duration column in Clickhouse.
-	EventDurationCol = "event_duration"
+	// EventDurationNSCol is the name of the event_duration_ns column in Clickhouse.
+	EventDurationNSCol = "event_duration_ns"
 	// EventMetaDataCol is the name of the event_metadata column in Clickhouse.
 	EventMetaDataCol = "event_metadata"
 )
@@ -29,14 +29,14 @@ const (
 // Event represents a single event submitted by an oracle with device data.
 // This is the data format that is stored in the database.
 type Event struct {
-	CloudEventID  string    `ch:"cloud_event_id" json:"cloudEventId"`
-	Subject       string    `ch:"subject" json:"subject"`
-	Source        string    `ch:"source" json:"source"`
-	Producer      string    `ch:"producer" json:"producer"`
-	EventName     string    `ch:"event_name" json:"eventName"`
-	EventTime     time.Time `ch:"event_time" json:"eventTime"`
-	EventDuration string    `ch:"event_duration" json:"eventDuration"`
-	EventMetaData string    `ch:"event_metadata" json:"eventMetadata"`
+	CloudEventID    string    `ch:"cloud_event_id" json:"cloudEventId"`
+	Subject         string    `ch:"subject" json:"subject"`
+	Source          string    `ch:"source" json:"source"`
+	Producer        string    `ch:"producer" json:"producer"`
+	EventName       string    `ch:"event_name" json:"eventName"`
+	EventTime       time.Time `ch:"event_time" json:"eventTime"`
+	EventDurationNS int64     `ch:"event_duration_ns" json:"eventDurationNs"`
+	EventMetaData   string    `ch:"event_metadata" json:"eventMetadata"`
 }
 
 // EventToSlice converts an Event to an array of any for Clickhouse insertion.
@@ -49,7 +49,7 @@ func EventToSlice(obj Event) []any {
 		obj.Producer,
 		obj.EventName,
 		obj.EventTime,
-		obj.EventDuration,
+		obj.EventDurationNS,
 		obj.EventMetaData,
 	}
 }
@@ -63,7 +63,7 @@ func EventColNames() []string {
 		ProducerCol,
 		EventNameCol,
 		EventTimeCol,
-		EventDurationCol,
+		EventDurationNSCol,
 		EventMetaDataCol,
 	}
 }

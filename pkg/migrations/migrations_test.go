@@ -82,7 +82,7 @@ func TestEventMigration(t *testing.T) {
 		{Name: occurrences.ProducerCol, Type: "String", Comment: "the origin of the data used to determine the event"},
 		{Name: occurrences.EventNameCol, Type: "String", Comment: "name of the event indicated by the oracle transmitting it"},
 		{Name: occurrences.EventTimeCol, Type: "DateTime64(6, 'UTC')", Comment: "denotes time at which the event described occurred, transmitted by oracle"},
-		{Name: occurrences.EventDurationCol, Type: "String", Comment: "optional event duration field transmitted by oracle"},
+		{Name: occurrences.EventDurationNSCol, Type: "Int64", Comment: "optional event duration in nanoseconds field transmitted by oracle"},
 		{Name: occurrences.EventMetaDataCol, Type: "String", Comment: "arbitrary JSON metadata provided by the user, containing additional event-related information"},
 	}
 
