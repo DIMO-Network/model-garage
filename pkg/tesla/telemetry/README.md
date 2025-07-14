@@ -14,4 +14,4 @@ The code generator tries to be helpful in two ways:
 1. If a unit is specified on both Tesla and VSS sides, then we'll attempt to automatically convert the units. So, for example, if `teslaUnit` is `mi` and the VSS unit is `km` then `unit.MilesToKilometers` will be applied.
 2. If we know how to parse `teslaType` from a string, then we'll accept both for the field. For example, if `VehicleSpeed` has Tesla type `double` and a value of `"2.5"` comes in then we'll convert this to the floating point number `2.5`.
 
-Each combination of Tesla field and VSS signal gets an entry in [`inner_convert_funcs_gen.go`](inner_convert_funcs_gen.go), and edits to these functions will 
+Each combination of Tesla field and VSS signal gets an entry in [`inner_convert_funcs_gen.go`](inner_convert_funcs_gen.go), and edits to these functions will be preserved across invocations of `make generate`.
