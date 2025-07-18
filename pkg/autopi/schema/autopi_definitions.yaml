@@ -242,6 +242,11 @@
     - originalName: distanceWMil
       originalType: float64
       isArray: false
+- vspecName: Vehicle.OBD.DTCList
+  conversions:
+    - originalName: obdDTCList
+      originalType: string
+      isArray: false
 - vspecName: Vehicle.OBD.DistanceSinceDTCClear
   conversions:
     - originalName: distanceSinceDtcClear

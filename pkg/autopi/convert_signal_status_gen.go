@@ -551,6 +551,20 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 			sig.SetValue(val0)
 			ret = append(ret, sig)
 		}
+	case "obdDTCList":
+		val0, err := OBDDTCListFromV2Data(originalDoc, valResult)
+		if err != nil {
+			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'obdDTCList': %w", err))
+		} else {
+			sig := vss.Signal{
+				TokenID:   baseSignal.TokenID,
+				Timestamp: baseSignal.Timestamp,
+				Source:    baseSignal.Source,
+				Name:      "obdDTCList",
+			}
+			sig.SetValue(val0)
+			ret = append(ret, sig)
+		}
 	case "odometer":
 		val0, err := PowertrainTransmissionTravelledDistanceFromV2Data(originalDoc, valResult)
 		if err != nil {
@@ -1367,6 +1381,23 @@ func OBDCommandedEVAPFromV2Data(originalDoc []byte, result gjson.Result) (ret fl
 		errs = errors.Join(errs, fmt.Errorf("failed to convert 'evap': %w", err))
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'evap' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+	}
+
+	return ret, errs
+}
+
+// OBDDTCListFromData converts the given JSON data to a string.
+func OBDDTCListFromV2Data(originalDoc []byte, result gjson.Result) (ret string, err error) {
+	var errs error
+	val0, ok := result.Value().(string)
+	if ok {
+		ret, err = ToOBDDTCList0(originalDoc, val0)
+		if err == nil {
+			return ret, nil
+		}
+		errs = errors.Join(errs, fmt.Errorf("failed to convert 'obdDTCList': %w", err))
+	} else {
+		errs = errors.Join(errs, fmt.Errorf("%w, field 'obdDTCList' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
 
 	return ret, errs
