@@ -2,13 +2,14 @@ package migrations_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/DIMO-Network/clickhouse-infra/pkg/connect"
 	"github.com/DIMO-Network/clickhouse-infra/pkg/connect/config"
 	"github.com/DIMO-Network/clickhouse-infra/pkg/container"
 	"github.com/DIMO-Network/model-garage/pkg/migrations"
-	"github.com/DIMO-Network/model-garage/pkg/occurrences"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -72,22 +73,62 @@ func TestEventMigration(t *testing.T) {
 	require.NoError(t, err, "Failed to get clickhouse connection")
 
 	// Iterate over the rows and check the column names
-	columns, err := connect.GetTableCols(ctx, conn, occurrences.TableName)
+	columns, err := connect.GetTableCols(ctx, conn, vss.EventTableName)
 	require.NoError(t, err, "Failed to get current columns")
 
 	expectedColumns := []connect.ColInfo{
-		{Name: occurrences.CloudEventIDCol, Type: "String", Comment: "identifier for the cloudevent"},
-		{Name: occurrences.SubjectCol, Type: "String", Comment: "identifies the entity the event pertains to"},
-		{Name: occurrences.SourceCol, Type: "String", Comment: "the entity that identified and submitted the event (oracle)"},
-		{Name: occurrences.ProducerCol, Type: "String", Comment: "the origin of the data used to determine the event"},
-		{Name: occurrences.EventNameCol, Type: "String", Comment: "name of the event indicated by the oracle transmitting it"},
-		{Name: occurrences.EventTimeCol, Type: "DateTime64(6, 'UTC')", Comment: "denotes time at which the event described occurred, transmitted by oracle"},
-		{Name: occurrences.EventDurationNSCol, Type: "Int64", Comment: "optional event duration in nanoseconds field transmitted by oracle"},
-		{Name: occurrences.EventMetaDataCol, Type: "String", Comment: "arbitrary JSON metadata provided by the user, containing additional event-related information"},
+		{Name: vss.SubjectCol, Type: "String", Comment: "identifies the entity the event pertains to."},
+		{Name: vss.EventSourceCol, Type: "String", Comment: "the entity that identified and submitted the event (oracle)."},
+		{Name: vss.EventProducerCol, Type: "String", Comment: "the specific origin of the data used to determine the event (device)."},
+		{Name: vss.EventCloudEventIDCol, Type: "String", Comment: "identifier for the cloudevent."},
+		{Name: vss.EventNameCol, Type: "String", Comment: "name of the event indicated by the oracle transmitting it."},
+		{Name: vss.EventTimestampCol, Type: "DateTime64(6, 'UTC')", Comment: "time at which the event described occurred, transmitted by oracle."},
+		{Name: vss.DurationNsCol, Type: "UInt64", Comment: "duration in nanoseconds of the event."},
+		{Name: vss.MetadataCol, Type: "String", Comment: "arbitrary JSON metadata provided by the user, containing additional event-related information."},
 	}
 
 	// Check if the actual columns match the expected columns
 	require.Equal(t, expectedColumns, columns, "Unexpected table columns")
+
+	event := vss.Event{
+		Subject:      "subject",
+		Source:       "source",
+		Producer:     "producer",
+		CloudEventID: "cloudEventId",
+		Name:         "name",
+		Timestamp:    time.Now().Truncate(time.Microsecond),
+		DurationNs:   1000000000,
+		Metadata:     "metadata",
+	}
+	batch, err := conn.PrepareBatch(context.Background(), "INSERT INTO "+vss.EventTableName)
+	require.NoError(t, err, "Failed to prepare batch")
+	defer batch.Close()
+
+	err = batch.Append(vss.EventToSlice(event)...)
+	require.NoError(t, err, "Failed to append event")
+
+	err = batch.Send()
+	require.NoError(t, err, "Failed to send batch")
+
+	rows, err := conn.Query(ctx, fmt.Sprintf("SELECT * FROM %s", vss.EventTableName))
+	require.NoError(t, err, "Failed to select event")
+	defer rows.Close()
+
+	events := []vss.Event{}
+	for rows.Next() {
+		var event vss.Event
+		err = rows.Scan(&event.Subject, &event.Source, &event.Producer, &event.CloudEventID, &event.Name, &event.Timestamp, &event.DurationNs, &event.Metadata)
+
+		require.NoError(t, err, "Failed to scan event")
+		events = append(events, event)
+	}
+
+	require.Equal(t, 1, len(events), "Expected 1 event")
+
+	// Debug: Print the timestamps to see what's happ
+	assert.Truef(t, event.Timestamp.Equal(events[0].Timestamp), "Event timestamp mismatch: %v != %v", event.Timestamp, events[0].Timestamp)
+	event.Timestamp = events[0].Timestamp
+	assert.Equal(t, event, events[0], "Event mismatch")
 
 	// Close the DB connection
 	err = db.Close()
