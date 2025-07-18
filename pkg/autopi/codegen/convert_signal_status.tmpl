@@ -53,7 +53,7 @@ func {{ .GOName }}FromV2Data(originalDoc []byte, result gjson.Result) (ret {{ .B
 				errs = errors.Join(errs, fmt.Errorf("%w, field '{{ $conv.OriginalName }}' array element %d is not of type '{{ $conv.OriginalType }}' got '%v' of type '%T'", convert.InvalidTypeError(), i, res.Value(), res.Value()))
 			}
 		}
-		ret, err := To{{ $sig.GOName }}{{ $j }}(originalDoc, slice{{ $sig.GOName}})
+		ret, err = To{{ $sig.GOName }}{{ $j }}(originalDoc, slice{{ $sig.GOName}})
 		if err == nil {
 			return ret, nil
 		}
