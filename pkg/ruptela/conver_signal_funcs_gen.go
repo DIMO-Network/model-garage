@@ -219,6 +219,12 @@ func ToOBDRunTime0(originalDoc []byte, val string) (float64, error) {
 	return ignoreZero(Convert107(val))
 }
 
+// ToOBDStatusDTCCount0 converts data from field 'signals.108' of type string to 'Vehicle.OBD.Status.DTCCount' of type float64.
+// Vehicle.OBD.Status.DTCCount: Number of Diagnostic Trouble Codes (DTC)
+func ToOBDStatusDTCCount0(originalDoc []byte, val string) (float64, error) {
+	return Convert108(val)
+}
+
 // ToPowertrainCombustionEngineDieselExhaustFluidCapacity0 converts data from field 'signals.1148' of type string to 'Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Capacity' of type float64.
 // Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Capacity: Capacity in liters of the Diesel Exhaust Fluid Tank.
 // Unit: 'l'
