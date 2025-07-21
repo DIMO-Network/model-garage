@@ -15,7 +15,7 @@ import (
 
 func init() {
 	// Register modules to the global registries
-	RegisterDefaultModules(SignalRegistry, CloudEventRegistry, FingerprintRegistry)
+	RegisterDefaultModules(SignalRegistry, CloudEventRegistry, FingerprintRegistry, EventRegistry)
 }
 
 // Source addresses and global registries for different modules.
@@ -43,6 +43,9 @@ var (
 
 	// FingerprintRegistry stores fingerprint modules.
 	FingerprintRegistry = NewModuleRegistry[FingerprintModule]()
+
+	// EventRegistry stores event modules.
+	EventRegistry = NewModuleRegistry[EventModule]()
 )
 
 // RegisterDefaultModules registers all the default module implementations
@@ -51,6 +54,7 @@ func RegisterDefaultModules(
 	signalReg *ModuleRegistry[SignalModule],
 	cloudEventReg *ModuleRegistry[CloudEventModule],
 	fingerprintReg *ModuleRegistry[FingerprintModule],
+	eventReg *ModuleRegistry[EventModule],
 ) {
 	// AutoPi
 	autoPiModule := &autopi.Module{}
@@ -63,6 +67,7 @@ func RegisterDefaultModules(
 	signalReg.Override(RuptelaSource.String(), ruptelaModule)
 	cloudEventReg.Override(RuptelaSource.String(), ruptelaModule)
 	fingerprintReg.Override(RuptelaSource.String(), ruptelaModule)
+	eventReg.Override(RuptelaSource.String(), ruptelaModule)
 
 	// HashDog
 	hashDogModule := &hashdog.Module{}
@@ -87,6 +92,7 @@ func RegisterDefaultModules(
 	signalReg.Override("", defaultModule)
 	cloudEventReg.Override("", defaultModule)
 	fingerprintReg.Override("", defaultModule)
+	eventReg.Override("", defaultModule)
 }
 
 // ModuleRegistry is a generic registry for storing and retrieving modules.
