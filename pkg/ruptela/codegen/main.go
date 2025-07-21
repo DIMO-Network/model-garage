@@ -5,6 +5,7 @@ import (
 	"bytes"
 	_ "embed"
 	"fmt"
+	"log"
 	"math/big"
 	"os"
 	"strings"
@@ -21,17 +22,16 @@ var functionsTemplate string
 func main() {
 	oidMap, err := loadCSVToMap(rupschema.OIDCSV())
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	vssReader := strings.NewReader(schema.VssRel42DIMO())
 	defReader := strings.NewReader(rupschema.RuptelaDefinitionsYAML())
-	sigs, err := schema.GetDefinedSignals(vssReader, defReader)
+	definitions, err := schema.LoadDefinitionFile(defReader)
 	if err != nil {
-		panic(err)
+		log.Fatal(fmt.Errorf("error reading definition file: %w", err))
 	}
 	createRecords := make(map[string]Record)
-	for _, sig := range sigs.Signals {
+	for _, sig := range definitions.FromName {
 		for _, conv := range sig.Conversions {
 			parts := strings.Split(conv.OriginalName, ".")
 			if len(parts) < 1 || parts[0] != "signals" {

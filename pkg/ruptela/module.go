@@ -91,9 +91,7 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 
 // EventConvert converts a message to events.
 func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Event, error) {
-	// For now, return empty events array - this can be implemented later
-	// when specific event conversion logic is needed for Ruptela
-	return []vss.Event{}, nil
+	return DecodeEvent(event)
 }
 
 // determineSubject determines the subject of the cloud event based on the DS type.
