@@ -18,6 +18,7 @@ type MockModule struct {
 	CloudEventData    []byte
 	CloudEventHeaders []cloudevent.CloudEventHeader
 	FingerprintResult cloudevent.Fingerprint
+	EventResult       []vss.Event
 	ShouldError       bool
 }
 
@@ -42,11 +43,19 @@ func (m *MockModule) FingerprintConvert(_ context.Context, _ cloudevent.RawEvent
 	return m.FingerprintResult, nil
 }
 
+func (m *MockModule) EventConvert(_ context.Context, _ cloudevent.RawEvent) ([]vss.Event, error) {
+	if m.ShouldError {
+		return nil, errors.New("event conversion error")
+	}
+	return m.EventResult, nil
+}
+
 func TestModuleRegistration(t *testing.T) {
 	// Reset registries for test
 	modules.SignalRegistry = modules.NewModuleRegistry[modules.SignalModule]()
 	modules.CloudEventRegistry = modules.NewModuleRegistry[modules.CloudEventModule]()
 	modules.FingerprintRegistry = modules.NewModuleRegistry[modules.FingerprintModule]()
+	modules.EventRegistry = modules.NewModuleRegistry[modules.EventModule]()
 
 	// Test modules
 	sourceA := "sourceA"
@@ -351,6 +360,94 @@ func TestFingerprintConversion(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.expectedFingerprint, fingerprint)
+			}
+		})
+	}
+}
+
+func TestEventConversion(t *testing.T) {
+	// Reset registry for test
+	modules.EventRegistry = modules.NewModuleRegistry[modules.EventModule]()
+
+	sourceA := "sourceA"
+	defaultSource := ""
+
+	eventA := vss.Event{Name: "Event A", Subject: "subject A"}
+	eventDefault := vss.Event{Name: "Default Event", Subject: "default subject"}
+
+	moduleA := &MockModule{
+		EventResult: []vss.Event{eventA},
+	}
+
+	defaultModule := &MockModule{
+		EventResult: []vss.Event{eventDefault},
+	}
+
+	errorModule := &MockModule{
+		ShouldError: true,
+	}
+
+	// Register modules
+	modules.EventRegistry.Register(sourceA, moduleA)
+	modules.EventRegistry.Register(defaultSource, defaultModule)
+
+	// Table driven test cases
+	tests := []struct {
+		name           string
+		source         string
+		expectedEvents []vss.Event
+		setupFunc      func()
+		expectError    bool
+	}{
+		{
+			name:           "Found specific module",
+			source:         sourceA,
+			expectedEvents: []vss.Event{eventA},
+			setupFunc:      func() {},
+			expectError:    false,
+		},
+		{
+			name:           "Fallback to default",
+			source:         "nonexistent",
+			expectedEvents: []vss.Event{eventDefault},
+			setupFunc:      func() {},
+			expectError:    false,
+		},
+		{
+			name:           "Module error",
+			source:         sourceA,
+			expectedEvents: nil,
+			setupFunc: func() {
+				modules.EventRegistry.Override(sourceA, errorModule)
+			},
+			expectError: true,
+		},
+		{
+			name:           "No modules registered",
+			source:         "nonexistent",
+			expectedEvents: nil,
+			setupFunc: func() {
+				modules.EventRegistry = modules.NewModuleRegistry[modules.EventModule]()
+			},
+			expectError: true,
+		},
+	}
+
+	// Run tests
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Setup test case
+			tt.setupFunc()
+
+			// Execute conversion
+			events, err := modules.ConvertToEvents(context.Background(), tt.source, cloudevent.RawEvent{})
+
+			// Verify results
+			if tt.expectError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expectedEvents, events)
 			}
 		})
 	}
