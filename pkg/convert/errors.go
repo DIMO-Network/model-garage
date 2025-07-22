@@ -32,13 +32,16 @@ func (e FieldNotFoundError) Error() string {
 
 // ConversionError is an error that occurs during conversion.
 type ConversionError struct {
+	// Errors is the list of errors that occurred during conversion.
+	Errors []error `json:"-"`
+	// Subject is the subject of the event that was converted.
+	Subject string `json:"subject"`
+	// Source is the source of the event that was converted.
+	Source string `json:"source"`
 	// DecodedSignals is the list of signals that were successfully decoded.
-	DecodedSignals []vss.Signal `json:"decodedSignals"`
+	DecodedSignals []vss.Signal `json:"-"`
 	// DecodedEvents is the list of events that were successfully decoded.
-	DecodedEvents []vss.Event `json:"decodedEvents"`
-	Errors        []error     `json:"errors"`
-	Subject       string      `json:"subject"`
-	Source        string      `json:"source"`
+	DecodedEvents []vss.Event `json:"-"`
 }
 
 // Error returns the error message.

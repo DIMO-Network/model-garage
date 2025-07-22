@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
-	"time"
 
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
@@ -55,7 +54,6 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 	if event.DeviceTokenID == nil {
 		return nil, nil, fmt.Errorf("device token id is missing")
 	}
-
 	// Construct the producer DID
 	producer := cloudevent.ERC721DID{
 		ChainID:         m.ChainID,
@@ -66,24 +64,17 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 	if err != nil {
 		return nil, nil, err
 	}
-
-	statusHdr, err := createCloudEventHdr(&event, producer, subject, cloudevent.TypeStatus)
+	cloudEventTypes, err := getCloudEventTypes(&event)
 	if err != nil {
 		return nil, nil, err
 	}
-	hdrs := []cloudevent.CloudEventHeader{statusHdr}
-
-	isVinPresent, err := checkVINPresenceInPayload(&event)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	if isVinPresent {
-		fpHdr, err := createCloudEventHdr(&event, producer, subject, cloudevent.TypeFingerprint)
+	hdrs := make([]cloudevent.CloudEventHeader, 0, len(cloudEventTypes))
+	for _, cloudEventType := range cloudEventTypes {
+		cloudEventHdr, err := createCloudEventHdr(&event, producer, subject, cloudEventType)
 		if err != nil {
 			return nil, nil, err
 		}
-		hdrs = append(hdrs, fpHdr)
+		hdrs = append(hdrs, cloudEventHdr)
 	}
 
 	return hdrs, event.Data, nil
@@ -116,17 +107,13 @@ func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, 
 
 // createCloudEvent creates a cloud event from a ruptela event.
 func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType string) (cloudevent.CloudEventHeader, error) {
-	timeValue, err := time.Parse(time.RFC3339, event.Time)
-	if err != nil {
-		return cloudevent.CloudEventHeader{}, fmt.Errorf("failed to parse time: %w", err)
-	}
 	return cloudevent.CloudEventHeader{
 		DataContentType: "application/json",
 		ID:              ksuid.New().String(),
 		Subject:         subject,
 		Source:          "dimo/integration/2lcaMFuCO0HJIUfdq8o780Kx5n3",
 		SpecVersion:     "1.0",
-		Time:            timeValue,
+		Time:            event.Time,
 		Type:            eventType,
 		DataVersion:     event.DS,
 		Producer:        producer,
@@ -134,26 +121,57 @@ func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType strin
 	}, nil
 }
 
-// checkVINPresenceInPayload checks if the VIN is present in the payload.
-func checkVINPresenceInPayload(event *RuptelaEvent) (bool, error) {
+// getCloudEventTypes gets the cloud event types contained in the ruptela event.
+func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
+	// always include the status event
+	cloudEventTypes := []string{cloudevent.TypeStatus}
 	if event.DS != StatusEventDS {
-		return false, nil
+		return cloudEventTypes, nil
 	}
-
 	var dataContent DataContent
 	err := json.Unmarshal(event.Data, &dataContent)
 	if err != nil {
-		return false, fmt.Errorf("failed to unmarshal data: %w", err)
+		return nil, fmt.Errorf("failed to unmarshal data: %w", err)
 	}
+	if checkVINPresenceInPayload(event, dataContent.Signals) {
+		cloudEventTypes = append(cloudEventTypes, cloudevent.TypeFingerprint)
+	}
+	if checkEventPresenceInPayload(event, dataContent.Signals) {
+		cloudEventTypes = append(cloudEventTypes, cloudevent.TypeEvent)
+	}
+	return cloudEventTypes, nil
+}
+
+// checkVINPresenceInPayload checks if the VIN is present in the payload.
+func checkVINPresenceInPayload(event *RuptelaEvent, dataMap map[string]string) bool {
+	if event.DS != StatusEventDS {
+		return false
+	}
+
 	// VIN keys in the ruptela payload
 	vinKeys := []string{"104", "105", "106"}
 
 	for _, key := range vinKeys {
-		value, ok := dataContent.Signals[key]
+		value, ok := dataMap[key]
 		if !ok || value == "0" {
 			// key does not exist or its value is 0
-			return false, nil
+			return false
 		}
 	}
-	return true, nil
+	return true
+}
+
+// checkEventPresenceInPayload checks if the event is present in the payload.
+func checkEventPresenceInPayload(event *RuptelaEvent, dataMap map[string]string) bool {
+	if event.DS != StatusEventDS {
+		return false
+	}
+	eventKeys := []string{"135", "136", "143"}
+	for _, key := range eventKeys {
+		value, ok := dataMap[key]
+		if ok && value != "0" {
+			return true
+		}
+	}
+	return false
 }

@@ -30,6 +30,14 @@ func TestCloudEventConvert(t *testing.T) {
 		expectedProducer string
 	}{
 		{
+			name:             "Status payload with VIN and event",
+			input:            []byte(`{"ds":"r/v0/s","signature":"test","time":"2022-01-01T00:00:00Z","data":{"signals":{"104":"4148544241334344","105":"3930363235323539","106":"3300000000000000", "135":"1"}},"subject":"test","vehicleTokenId":1, "deviceTokenId":2}`),
+			expectError:      false,
+			length:           3,
+			expectedSubject:  "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:1",
+			expectedProducer: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:2",
+		},
+		{
 			name:             "Status payload with VIN",
 			input:            []byte(`{"ds":"r/v0/s","signature":"test","time":"2022-01-01T00:00:00Z","data":{"signals":{"104":"4148544241334344","105":"3930363235323539","106":"3300000000000000"}},"subject":"test","vehicleTokenId":1, "deviceTokenId":2}`),
 			expectError:      false,
