@@ -436,13 +436,13 @@ func TestModule_EventConvert(t *testing.T) {
 					"events": [
 						{
 							"name": "harsh_braking",
-							"time": "` + eventTs.Format(time.RFC3339Nano) + `",
+							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
 							"durationNs": 0,
 							"metadata": "{\"side\":\"left\"}"
 						},
 						{
 							"name": "charging_stopped",
-							"time": "` + eventTs.Format(time.RFC3339Nano) + `",
+							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
 							"durationNs": ` + strconv.Itoa(int((time.Second * 5).Nanoseconds())) + `,
 							"metadata": "{\"temp\":72}"
 						}
@@ -479,7 +479,7 @@ func TestModule_EventConvert(t *testing.T) {
 					"events": [
 						{
 							"name": "bad_event",
-							"time": "` + eventTs.Format(time.RFC3339Nano) + `",
+							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
 							"durationNs": 0,
 							"metadata": "{\"bad\":}"
 						}

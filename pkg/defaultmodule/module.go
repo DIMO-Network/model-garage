@@ -40,8 +40,8 @@ type EventsData struct {
 type Event struct {
 	// Name is the name of the event.
 	Name string `json:"name"`
-	// Time is when this event occurred. (format: RFC3339)
-	Time time.Time `json:"time"`
+	// Timestamp is when this event occurred. (format: RFC3339)
+	Timestamp time.Time `json:"timestamp"`
 	// Duration is the duration of the event in nanoseconds.
 	DurationNs uint64 `json:"durationNs,omitempty"`
 	// Metadata is the metadata of the event.
@@ -143,9 +143,17 @@ func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss
 	vssEvents := make([]vss.Event, 0, len(eventsData.Events))
 	var decodeErrs error
 	for _, ev := range eventsData.Events {
+		if ev.Name == "" {
+			decodeErrs = errors.Join(decodeErrs, fmt.Errorf("event.name is empty"))
+			continue
+		}
+		if ev.Timestamp.IsZero() {
+			decodeErrs = errors.Join(decodeErrs, fmt.Errorf("event.timestamp is zero for event.name %s", ev.Name))
+			continue
+		}
 		if len(ev.Metadata) > 0 && !json.Valid([]byte(ev.Metadata)) {
 			// We do not expect to get this far if the metadata is not valid json. Since it would invalidate the entire cloudevent.
-			decodeErrs = errors.Join(decodeErrs, fmt.Errorf("metadata for event.name %s, event.time %s is not valid json", ev.Name, ev.Time))
+			decodeErrs = errors.Join(decodeErrs, fmt.Errorf("metadata for event.name %s, event.timestamp %s is not valid json", ev.Name, ev.Timestamp))
 			continue
 		}
 
@@ -155,7 +163,7 @@ func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss
 			Producer:     event.Producer,
 			CloudEventID: event.ID,
 			Name:         ev.Name,
-			Timestamp:    ev.Time,
+			Timestamp:    ev.Timestamp,
 			DurationNs:   ev.DurationNs,
 			Metadata:     ev.Metadata,
 		}
