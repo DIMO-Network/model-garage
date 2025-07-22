@@ -27,7 +27,7 @@ func DecodeSignals(ce cloudevent.RawEvent) ([]vss.Signal, error) {
 	sigs, errs := SignalsFromCompass(baseSignal, ce.Data)
 	if len(errs) != 0 {
 		return nil, convert.ConversionError{
-			TokenID:        uint32(tokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+			Subject:        ce.Subject,
 			Source:         source,
 			DecodedSignals: sigs,
 			Errors:         errs,

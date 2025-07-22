@@ -23,7 +23,7 @@ func SignalsFromV1Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	sigs, errs := SignalsFromV1Data(baseSignal, event.Data)
 	if errs != nil {
 		return nil, convert.ConversionError{
-			TokenID:        uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+			Subject:        event.Subject,
 			Source:         event.Source,
 			DecodedSignals: sigs,
 			Errors:         errs,

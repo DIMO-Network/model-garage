@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/DIMO-Network/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 )
 
@@ -40,11 +41,11 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 	}
 
 	var events []vss.Event
-	var errs error
+	var errs []error
 	if signals.Signals.Braking != zeroValue {
 		brakingEvents, err := ToBrakingEvents(signals.Signals.Braking)
 		if err != nil {
-			errs = errors.Join(errs, err)
+			errs = append(errs, err)
 		}
 		events = append(events, brakingEvents...)
 	}
@@ -53,7 +54,7 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 		if err == nil {
 			events = append(events, accelerationEvent)
 		} else if !errors.Is(err, errNotFound) {
-			errs = errors.Join(errs, err)
+			errs = append(errs, err)
 		}
 	}
 	if signals.Signals.Cornering != zeroValue {
@@ -61,7 +62,7 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 		if err == nil {
 			events = append(events, corneringEvent)
 		} else if !errors.Is(err, errNotFound) {
-			errs = errors.Join(errs, err)
+			errs = append(errs, err)
 		}
 	}
 
@@ -72,7 +73,17 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 		events[i].CloudEventID = cEvent.ID
 		events[i].Timestamp = cEvent.Time
 	}
-	return events, errs
+
+	if len(errs) > 0 {
+		return nil, convert.ConversionError{
+			DecodedEvents: events,
+			Errors:        errs,
+			Subject:       cEvent.Subject,
+			Source:        cEvent.Source,
+		}
+	}
+
+	return events, nil
 }
 
 func ToBrakingEvents(rawValue string) ([]vss.Event, error) {

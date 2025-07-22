@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/DIMO-Network/model-garage/pkg/convert"
@@ -35,7 +36,7 @@ func SignalsFromV1Payload(ctx context.Context, tokenGetter TokenIDGetter, jsonDa
 	source, err := SourceFromData(jsonData)
 	if err != nil {
 		return nil, convert.ConversionError{
-			TokenID: tokenID,
+			Subject: strconv.FormatUint(uint64(tokenID), 10),
 			Errors:  []error{fmt.Errorf("error getting source: %w", err)},
 		}
 	}
@@ -47,7 +48,7 @@ func SignalsFromV1Payload(ctx context.Context, tokenGetter TokenIDGetter, jsonDa
 	sigs, errs := SignalsFromV1Data(baseSignal, jsonData)
 	if errs != nil {
 		return nil, convert.ConversionError{
-			TokenID:        tokenID,
+			Subject:        strconv.FormatUint(uint64(tokenID), 10),
 			Source:         source,
 			DecodedSignals: sigs,
 			Errors:         errs,

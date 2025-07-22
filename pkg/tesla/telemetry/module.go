@@ -52,7 +52,8 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 
 	if len(batchedErrs) != 0 {
 		return nil, convert.ConversionError{
-			TokenID:        tokenID,
+			Subject:        event.Subject,
+			Source:         source,
 			DecodedSignals: batchedSigs,
 			Errors:         batchedErrs,
 		}
