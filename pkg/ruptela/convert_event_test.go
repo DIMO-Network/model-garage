@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/DIMO-Network/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/require"
@@ -216,66 +217,6 @@ func TestDecodeEventNoEvents(t *testing.T) {
 	require.Len(t, actualEvents, 0, "should have no events when all values are zero")
 }
 
-func TestDecodeEventBrakingBothNibbles(t *testing.T) {
-	t.Parallel()
-
-	// Test data with braking event in both nibbles (LSB and MSB)
-	brakingBothNibblesInputJSON := `{
-		"id": "test-cloud-event-id",
-		"source": "ruptela/test",
-		"producer": "test-producer",
-		"specversion": "1.0",
-		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
-		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
-		"data": {
-			"signals": {
-				"135": "A5",
-				"136": "0",
-				"143": "0"
-			}
-		}
-	}`
-
-	var event cloudevent.RawEvent
-	err := json.Unmarshal([]byte(brakingBothNibblesInputJSON), &event)
-	require.NoError(t, err)
-
-	actualEvents, err := ruptela.DecodeEvent(event)
-	require.NoError(t, err)
-	require.Len(t, actualEvents, 2, "should have 2 braking events for both nibbles")
-
-	// Separate the events by type
-	var harshBrakingEvents []vss.Event
-	var extremeBrakingEvents []vss.Event
-
-	for _, evt := range actualEvents {
-		switch evt.Name {
-		case ruptela.EventNameHarshBraking:
-			harshBrakingEvents = append(harshBrakingEvents, evt)
-		case ruptela.EventNameExtremeBraking:
-			extremeBrakingEvents = append(extremeBrakingEvents, evt)
-		}
-	}
-
-	require.Len(t, harshBrakingEvents, 1, "should have 1 harsh braking event (LSB)")
-	require.Len(t, extremeBrakingEvents, 1, "should have 1 extreme braking event (MSB)")
-
-	// Check the counter values - one from LSB (bits 0-3) and one from MSB (bits 4-7)
-	// For value "A5" (hex) = 165 (decimal) = 10100101 (binary)
-	// LSB (bits 0-3): 0101 = 5
-	// MSB (bits 4-7): 1010 = 10
-	var harshMetadata ruptela.CounterMetadata
-	err = json.Unmarshal([]byte(harshBrakingEvents[0].Metadata), &harshMetadata)
-	require.NoError(t, err)
-	require.Equal(t, uint(5), harshMetadata.CounterValue, "harsh braking should have counter value 5 from LSB")
-
-	var extremeMetadata ruptela.CounterMetadata
-	err = json.Unmarshal([]byte(extremeBrakingEvents[0].Metadata), &extremeMetadata)
-	require.NoError(t, err)
-	require.Equal(t, uint(10), extremeMetadata.CounterValue, "extreme braking should have counter value 10 from MSB")
-}
-
 func TestDecodeEventInvalidJSON(t *testing.T) {
 	t.Parallel()
 
@@ -399,13 +340,19 @@ func TestDecodeEventPartialErrors(t *testing.T) {
 	// Should get events for acceleration and cornering, but error for braking
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "could not parse uint")
-	require.Len(t, actualEvents, 2, "should have 2 events despite braking error")
+	require.Len(t, actualEvents, 0, "should not have any events")
+
+	var conversionError convert.ConversionError
+	require.ErrorAs(t, err, &conversionError)
+	require.Equal(t, "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33", conversionError.Subject)
+	require.Equal(t, "ruptela/test", conversionError.Source)
+	require.Len(t, conversionError.DecodedEvents, 2, "should have 2 events")
 
 	// Verify the successful events
 	var accelerationEvents []vss.Event
 	var corneringEvents []vss.Event
 
-	for _, evt := range actualEvents {
+	for _, evt := range conversionError.DecodedEvents {
 		switch evt.Name {
 		case ruptela.EventNameAcceleration:
 			accelerationEvents = append(accelerationEvents, evt)

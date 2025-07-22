@@ -30,7 +30,7 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	sigs, errs := SignalsFromTesla(baseSignal, event.Data)
 	if len(errs) != 0 {
 		return nil, convert.ConversionError{
-			TokenID:        uint32(tokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+			Subject:        event.Subject,
 			Source:         source,
 			DecodedSignals: sigs,
 			Errors:         errs,

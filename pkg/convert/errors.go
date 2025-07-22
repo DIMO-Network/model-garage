@@ -4,7 +4,6 @@ package convert
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/DIMO-Network/model-garage/pkg/vss"
@@ -35,18 +34,20 @@ func (e FieldNotFoundError) Error() string {
 type ConversionError struct {
 	// DecodedSignals is the list of signals that were successfully decoded.
 	DecodedSignals []vss.Signal `json:"decodedSignals"`
-	Errors         []error      `json:"errors"`
-	TokenID        uint32       `json:"tokenId"`
-	Source         string       `json:"source"`
+	// DecodedEvents is the list of events that were successfully decoded.
+	DecodedEvents []vss.Event `json:"decodedEvents"`
+	Errors        []error     `json:"errors"`
+	Subject       string      `json:"subject"`
+	Source        string      `json:"source"`
 }
 
 // Error returns the error message.
 func (e ConversionError) Error() string {
 	var errBuilder strings.Builder
 	errBuilder.WriteString("conversion error")
-	if e.TokenID != 0 {
-		errBuilder.WriteString(" tokenId '")
-		errBuilder.WriteString(strconv.FormatUint(uint64(e.TokenID), 10))
+	if e.Subject != "" {
+		errBuilder.WriteString(" subject '")
+		errBuilder.WriteString(e.Subject)
 		errBuilder.WriteString("'")
 	}
 
