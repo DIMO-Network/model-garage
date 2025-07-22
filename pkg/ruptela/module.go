@@ -70,10 +70,7 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 	}
 	hdrs := make([]cloudevent.CloudEventHeader, 0, len(cloudEventTypes))
 	for _, cloudEventType := range cloudEventTypes {
-		cloudEventHdr, err := createCloudEventHdr(&event, producer, subject, cloudEventType)
-		if err != nil {
-			return nil, nil, err
-		}
+		cloudEventHdr := createCloudEventHdr(&event, producer, subject, cloudEventType)
 		hdrs = append(hdrs, cloudEventHdr)
 	}
 
@@ -106,7 +103,7 @@ func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, 
 }
 
 // createCloudEvent creates a cloud event from a ruptela event.
-func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType string) (cloudevent.CloudEventHeader, error) {
+func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType string) cloudevent.CloudEventHeader {
 	return cloudevent.CloudEventHeader{
 		DataContentType: "application/json",
 		ID:              ksuid.New().String(),
@@ -118,7 +115,7 @@ func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType strin
 		DataVersion:     event.DS,
 		Producer:        producer,
 		Signature:       event.Signature,
-	}, nil
+	}
 }
 
 // getCloudEventTypes gets the cloud event types contained in the ruptela event.
