@@ -48,6 +48,13 @@
   requiredPrivileges:
     - VEHICLE_ALL_TIME_LOCATION
 
+- vspecName: Vehicle.CurrentLocation.Heading
+  conversions:
+    - originalName: pos.dir
+      originalType: float64
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION
+
 - vspecName: Vehicle.Exterior.AirTemperature
   conversions:
     - originalName: "signals.97" # OBD ambient air temperature
