@@ -19,7 +19,7 @@ func init() {
 func upAddValueLocation(ctx context.Context, tx *sql.Tx) error {
 	// This code is executed when the migration is applied.
 	upStatements := []string{
-		"ALTER TABLE signal ADD COLUMN value_location Tuple(latitude Float64, longitude Float64, hdop Float64) COMMENT 'Geographic point value, expressed in WGS-84 degrees.'",
+		"ALTER TABLE signal ADD COLUMN value_location Tuple(latitude Float64, longitude Float64, hdop Float64) COMMENT 'Location value of the signal collected.'",
 	}
 	for _, upStatement := range upStatements {
 		_, err := tx.ExecContext(ctx, upStatement)
