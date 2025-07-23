@@ -25,6 +25,8 @@ const (
 	ValueNumberCol = "value_number"
 	// ValueStringCol is the name of the value_string column in Clickhouse.
 	ValueStringCol = "value_string"
+	// ValueLocationCol is the name of the value_location column in Clickhouse.
+	ValueLocationCol = "value_location"
 )
 
 // Signal represents a single signal collected from a device.
@@ -45,6 +47,9 @@ type Signal struct {
 	// ValueString is the value of the signal collected.
 	ValueString string `ch:"value_string" json:"valueString"`
 
+	// ValueLocation is the value of the signal collected.
+	ValueLocation Location `ch:"value_location" json:"valueLocation"`
+
 	// Source is the source of the signal collected.
 	Source string `ch:"source" json:"source"`
 
@@ -55,6 +60,14 @@ type Signal struct {
 	CloudEventID string `ch:"cloud_event_id" json:"cloudEventId"`
 }
 
+// Location represents a point on the earth in WSG-84 coordinates,
+// optionally with a Horizontal Dilution of Position (HDOP) value.
+type Location struct {
+	Latitude  float64 `ch:"latitude"`
+	Longitude float64 `ch:"longitude"`
+	HDOP      float64 `ch:"hdop"`
+}
+
 // SetValue dynamically set the appropriate value field based on the type of the value.
 func (s *Signal) SetValue(val any) {
 	switch typedVal := val.(type) {
@@ -62,6 +75,8 @@ func (s *Signal) SetValue(val any) {
 		s.ValueNumber = typedVal
 	case string:
 		s.ValueString = typedVal
+	case Location:
+		s.ValueLocation = typedVal
 	default:
 		s.ValueString = fmt.Sprintf("%v", val)
 	}
@@ -79,6 +94,7 @@ func SignalToSlice(obj Signal) []any {
 		obj.CloudEventID,
 		obj.ValueNumber,
 		obj.ValueString,
+		obj.ValueLocation,
 	}
 }
 
@@ -93,5 +109,6 @@ func SignalColNames() []string {
 		CloudEventIDCol,
 		ValueNumberCol,
 		ValueStringCol,
+		ValueLocationCol,
 	}
 }
