@@ -8,8 +8,8 @@ import (
 const (
 	// EventTableName is the name of the distributed table in Clickhouse.
 	EventTableName = "event"
-	// SubjectCol is the name of the subject column in Clickhouse.
-	SubjectCol = "subject"
+	// EventSubjectCol is the name of the subject column in Clickhouse.
+	EventSubjectCol = "subject"
 	// EventSourceCol is the name of the source column in Clickhouse.
 	EventSourceCol = "source"
 	// EventProducerCol is the name of the producer column in Clickhouse.
@@ -21,9 +21,9 @@ const (
 	// EventTimestampCol is the name of the timestamp column in Clickhouse.
 	EventTimestampCol = "timestamp"
 	// DurationNsCol is the name of the duration_ns column in Clickhouse.
-	DurationNsCol = "duration_ns"
+	EventDurationNsCol = "duration_ns"
 	// MetadataCol is the name of the metadata column in Clickhouse.
-	MetadataCol = "metadata"
+	EventMetadataCol = "metadata"
 )
 
 // Event represents a single event collected from a device.
@@ -72,13 +72,13 @@ func EventToSlice(obj Event) []any {
 // EventColNames returns the column names of the Event struct.
 func EventColNames() []string {
 	return []string{
-		SubjectCol,
+		EventSubjectCol,
 		EventSourceCol,
 		EventProducerCol,
 		EventCloudEventIDCol,
 		EventNameCol,
 		EventTimestampCol,
-		DurationNsCol,
-		MetadataCol,
+		EventDurationNsCol,
+		EventMetadataCol,
 	}
 }

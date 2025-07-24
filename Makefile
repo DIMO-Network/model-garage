@@ -88,8 +88,8 @@ generate-autopi: # Generate all files for autopi
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/convert_signal_status_gen.go -custom.template-file=./pkg/autopi/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi_definitions.yaml
 
 generate-hashdog: # Generate all files for hashdog (macaron)
-	go run ./cmd/codegen -convert.package=hashdog -generators=convert -convert.output-file=./pkg/hashdog/convert_signal_funcs_gen.go -definitions=./pkg/hashdog/schema/lorawan_definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/hashdog/convert_signal_status_gen.go -custom.template-file=./pkg/hashdog/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/hashdog/schema/lorawan_definitions.yaml
+	go run ./cmd/codegen -convert.package=hashdog -generators=convert -convert.output-file=./pkg/hashdog/convert_signal_funcs_gen.go -definitions=./pkg/hashdog/schema/hashdog_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/hashdog/convert_signal_status_gen.go -custom.template-file=./pkg/hashdog/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/hashdog/schema/hashdog_definitions.yaml
 
 
 generate-tesla: # Generate all files for tesla

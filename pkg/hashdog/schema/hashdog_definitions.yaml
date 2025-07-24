@@ -322,4 +322,13 @@
    - originalName: hvBatteryVoltage
      originalType: float64
      isArray: false
-
+- vspecName: Vehicle.OBD.DTCList
+  conversions:
+    - originalName: obdDTCList
+      originalType: string
+      isArray: false
+- vspecName: Vehicle.OBD.Status.DTCCount
+  conversions:
+    - originalName: obdStatusDTCCount
+      originalType: float64
+      isArray: false

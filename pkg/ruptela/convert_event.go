@@ -14,8 +14,8 @@ import (
 const (
 	EventNameHarshBraking   = "HarshBraking"
 	EventNameExtremeBraking = "ExtremeBraking"
-	EventNameAcceleration   = "Acceleration"
-	EventNameCornering      = "Cornering"
+	EventNameAcceleration   = "HarshAcceleration"
+	EventNameCornering      = "HarshCornering"
 	zeroValue               = "0"
 )
 
