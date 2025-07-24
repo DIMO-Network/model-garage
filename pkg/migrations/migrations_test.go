@@ -77,14 +77,14 @@ func TestEventMigration(t *testing.T) {
 	require.NoError(t, err, "Failed to get current columns")
 
 	expectedColumns := []connect.ColInfo{
-		{Name: vss.SubjectCol, Type: "String", Comment: "identifies the entity the event pertains to."},
+		{Name: vss.EventSubjectCol, Type: "String", Comment: "identifies the entity the event pertains to."},
 		{Name: vss.EventSourceCol, Type: "String", Comment: "the entity that identified and submitted the event (oracle)."},
 		{Name: vss.EventProducerCol, Type: "String", Comment: "the specific origin of the data used to determine the event (device)."},
 		{Name: vss.EventCloudEventIDCol, Type: "String", Comment: "identifier for the cloudevent."},
 		{Name: vss.EventNameCol, Type: "String", Comment: "name of the event indicated by the oracle transmitting it."},
 		{Name: vss.EventTimestampCol, Type: "DateTime64(6, 'UTC')", Comment: "time at which the event described occurred, transmitted by oracle."},
-		{Name: vss.DurationNsCol, Type: "UInt64", Comment: "duration in nanoseconds of the event."},
-		{Name: vss.MetadataCol, Type: "String", Comment: "arbitrary JSON metadata provided by the user, containing additional event-related information."},
+		{Name: vss.EventDurationNsCol, Type: "UInt64", Comment: "duration in nanoseconds of the event."},
+		{Name: vss.EventMetadataCol, Type: "String", Comment: "arbitrary JSON metadata provided by the user, containing additional event-related information."},
 	}
 
 	// Check if the actual columns match the expected columns
