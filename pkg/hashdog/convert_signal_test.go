@@ -213,6 +213,7 @@ var nilSignalsJSON = `{
 var expectedDTCErrorsSignals = []vss.Signal{
 	{TokenID: tokenID, Timestamp: time.UnixMilli(1753387941604).UTC(), Name: vss.FieldOBDDTCList, ValueString: `["P1234","P1235"]`, Source: "dimo/integration/123"},
 	{TokenID: tokenID, Timestamp: time.UnixMilli(1753387941604).UTC(), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 2, Source: "dimo/integration/123"},
+	{TokenID: tokenID, Timestamp: time.UnixMilli(1753387941605).UTC(), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 0, Source: "dimo/integration/123"},
 }
 
 func TestDTCErrorCodesConversion(t *testing.T) {
@@ -249,6 +250,11 @@ var dtcErrorsAPInputJSON = `{
                     "timestamp": 1753387941604,
                     "name": "obdStatusDTCCount",
                     "value": 2
+                },
+                {
+                    "timestamp": 1753387941605,
+                    "name": "obdStatusDTCCount",
+                    "value": 0
                 }
             ]
         }
