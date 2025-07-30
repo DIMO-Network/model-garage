@@ -86,6 +86,8 @@ const (
 	FieldOBDRunTime = "obdRunTime"
 	// FieldOBDShortTermFuelTrim1 PID 06 - Short Term (immediate) Fuel Trim - Bank 1 - negative percent leaner, positive percent richer
 	FieldOBDShortTermFuelTrim1 = "obdShortTermFuelTrim1"
+	// FieldOBDStatusDTCCount Number of Diagnostic Trouble Codes (DTC)
+	FieldOBDStatusDTCCount = "obdStatusDTCCount"
 	// FieldOBDWarmupsSinceDTCClear PID 30 - Number of warm-ups since codes cleared
 	FieldOBDWarmupsSinceDTCClear = "obdWarmupsSinceDTCClear"
 	// FieldPowertrainCombustionEngineDieselExhaustFluidCapacity Capacity in liters of the Diesel Exhaust Fluid Tank.
@@ -116,7 +118,7 @@ const (
 	FieldPowertrainFuelSystemRelativeLevel = "powertrainFuelSystemRelativeLevel"
 	// FieldPowertrainFuelSystemSupportedFuelTypes High level information of fuel types supported
 	FieldPowertrainFuelSystemSupportedFuelTypes = "powertrainFuelSystemSupportedFuelTypes"
-	// FieldPowertrainRange Remaining range in meters using all energy sources available in the vehicle.
+	// FieldPowertrainRange Remaining range in kilometers using all energy sources available in the vehicle.
 	FieldPowertrainRange = "powertrainRange"
 	// FieldPowertrainTractionBatteryChargingAddedEnergy Amount of charge added to the high voltage battery during the current charging session, expressed in kilowatt-hours.
 	FieldPowertrainTractionBatteryChargingAddedEnergy = "powertrainTractionBatteryChargingAddedEnergy"
@@ -134,7 +136,7 @@ const (
 	FieldPowertrainTractionBatteryCurrentVoltage = "powertrainTractionBatteryCurrentVoltage"
 	// FieldPowertrainTractionBatteryGrossCapacity Gross capacity of the battery.
 	FieldPowertrainTractionBatteryGrossCapacity = "powertrainTractionBatteryGrossCapacity"
-	// FieldPowertrainTractionBatteryRange Remaining range in meters using only battery.
+	// FieldPowertrainTractionBatteryRange Remaining range in kilometers using only battery.
 	FieldPowertrainTractionBatteryRange = "powertrainTractionBatteryRange"
 	// FieldPowertrainTractionBatteryStateOfChargeCurrent Physical state of charge of the high voltage battery, relative to net capacity. This is not necessarily the state of charge being displayed to the customer.
 	FieldPowertrainTractionBatteryStateOfChargeCurrent = "powertrainTractionBatteryStateOfChargeCurrent"

@@ -9,9 +9,7 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"log"
 	"os"
-	"slices"
 	"strings"
 	"text/template"
 
@@ -23,22 +21,32 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const (
-	ParseFloatFlag  = "PARSE_FLOAT"
-	ConvertUnitFlag = "CONVERT_UNIT"
-)
+type TargetVSSSignal struct {
+	GoVSSName    string
+	JSONName     string
+	GoOutputType string
+	ConvertFunc  string
+	GoInputUnit  string
+	Body         string
+}
 
 type Rule struct {
+	// TeslaField is the name of the enum value in the key field on the
+	// Tesla Datum message.
 	TeslaField string `yaml:"teslaField"`
-	// TeslaType is the protobuf type of the value field on the Datum. If not specified, it is
-	// assumed to be string. This is the dominant case.
+	// TeslaType is the protobuf type of the value held within a Datum.
 	TeslaType string `yaml:"teslaType"`
-	// VSSSignal is the full path to the VSS signal that will be produced from this Datum. For
-	// example, one might write "Vehicle.Cabin.Door.Row1.Left.IsLocked".
-	VSSSignal string `yaml:"vssSignal"`
+	// TeslaUnit is the unit of measure for a numeric Tesla value. It
+	// may be empty.
+	//
+	// Tesla tends to use miles in all regions.
 	TeslaUnit string `yaml:"teslaUnit"`
-
-	Automations []string `yaml:"automations"`
+	// VSSSignals is a list of VSS paths that will be populated
+	// from data with the given field.
+	//
+	// For example, this could contain a single element,
+	// "Vehicle.Cabin.Door.Row1.Left.IsLocked".
+	VSSSignals []string `yaml:"vssSignals"`
 }
 
 //go:embed inner.tmpl
@@ -47,9 +55,9 @@ var innerTmpl string
 //go:embed outer.tmpl
 var outerTmpl string
 
-// protoToGoTypes maps protobuf types to Go types. The only point of disagreement here
-// is for floating point numbers.
-var protoToGoTypes = map[string]string{
+// protoTypeToGoType maps scalar protobuf types to Go types. The only
+// point of disagreement here is for floating point numbers.
+var protoTypeToGoType = map[string]string{
 	"string": "string",
 	"int32":  "int32",
 	"int64":  "int64",
@@ -59,6 +67,7 @@ var protoToGoTypes = map[string]string{
 }
 
 func snakeToPascal(s string) string {
+	// This is not robust.
 	words := strings.Split(s, "_")
 	for i, w := range words {
 		if len(w) != 0 {
@@ -68,10 +77,10 @@ func snakeToPascal(s string) string {
 	return strings.Join(words, "")
 }
 
-func Generate(packageName, outerOutputPath, innerOutputPath string) error {
+func createSignalLookup() (map[string]*schema.SignalInfo, error) {
 	signalInfos, err := schema.LoadSignalsCSV(strings.NewReader(schema.VssRel42DIMO()))
 	if err != nil {
-		log.Fatalf("Failed to load VSS schema: %v", err)
+		return nil, err
 	}
 
 	signalInfoBySignal := make(map[string]*schema.SignalInfo, len(signalInfos))
@@ -79,14 +88,21 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 		signalInfoBySignal[s.Name] = s
 	}
 
+	return signalInfoBySignal, nil
+}
+
+func Generate(packageName, outerOutputPath, innerOutputPath string) error {
+	signalInfoBySignal, err := createSignalLookup()
+	if err != nil {
+		return fmt.Errorf("failed to load VSS schema: %w", err)
+	}
+
 	rules, err := loadRules()
 	if err != nil {
 		return fmt.Errorf("failed to load rules: %w", err)
 	}
 
-	tmplInput := &TemplateInput{
-		Package: packageName,
-	}
+	tmplInput := &TemplateInput{Package: packageName}
 
 	teslaTypeToAttributes, err := assembleTeslaTypeInformation()
 	if err != nil {
@@ -94,56 +110,67 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 	}
 
 	for _, r := range rules {
-		signalInfo, ok := signalInfoBySignal[r.VSSSignal]
-		if !ok {
-			return fmt.Errorf("unrecognized VSS signal %q", r.VSSSignal)
-		}
-
-		_, ok = protos.Field_value[r.TeslaField]
+		_, ok := protos.Field_value[r.TeslaField]
 		if !ok {
 			return fmt.Errorf("unrecognized Tesla field %q", r.TeslaField)
 		}
-
-		parseFloat := r.TeslaType == "string" && slices.Contains(r.Automations, ParseFloatFlag)
-
-		var convertUnit string
 
 		teslaType, ok := teslaTypeToAttributes[r.TeslaType]
 		if !ok {
 			return fmt.Errorf("unsupported Tesla type %q", r.TeslaType)
 		}
 
-		if slices.Contains(r.Automations, ConvertUnitFlag) && r.TeslaUnit != signalInfo.Unit {
-			m, ok := conversions[r.TeslaUnit]
-			if !ok {
-				return fmt.Errorf("no conversion from unit %q", r.TeslaUnit)
-			}
-
-			n, ok := m[signalInfo.Unit]
-			if !ok {
-				return fmt.Errorf("no conversion from unit %s to %s", r.TeslaUnit, signalInfo.Unit)
-			}
-
-			convertUnit = n
+		if len(r.VSSSignals) == 0 {
+			// It's fine to not specify any targets, but don't generate
+			// code in this case.
+			continue
 		}
 
-		innerInputType := teslaType.ValueType
-		if slices.Contains(r.Automations, ParseFloatFlag) {
-			innerInputType = "float64"
+		var targets []*TargetVSSSignal
+		for _, st := range r.VSSSignals {
+			info, ok := signalInfoBySignal[st]
+			if !ok {
+				return fmt.Errorf("unrecognized VSS signal %q", st)
+			}
+
+			convertFunc := ""
+			if r.TeslaUnit != "" && info.Unit != "" && r.TeslaUnit != info.Unit && r.TeslaType == "double" && info.GOType() == "float64" {
+				if convertFrom, ok := conversions[r.TeslaUnit]; ok {
+					// More to check here.
+					convertFunc, ok = convertFrom[info.Unit]
+					if !ok {
+						return fmt.Errorf("no converters from unit %s to unit %s", r.TeslaUnit, info.Unit)
+					}
+				} else {
+					return fmt.Errorf("no converters from unit %s", r.TeslaUnit)
+				}
+			}
+
+			goInputUnit := ""
+			if r.TeslaUnit != "" {
+				if info.Unit == "" {
+					goInputUnit = r.TeslaUnit
+				} else {
+					goInputUnit = info.Unit
+				}
+			}
+
+			targets = append(targets, &TargetVSSSignal{
+				GoVSSName:    info.GOName,
+				JSONName:     info.JSONName,
+				GoOutputType: info.GOType(),
+				ConvertFunc:  convertFunc,
+				GoInputUnit:  goInputUnit,
+			})
 		}
 
 		tmplInput.Conversions = append(tmplInput.Conversions, &Conversion{
 			TeslaField:       r.TeslaField,
-			WrapperName:      teslaType.TeslaWrapperType,
-			WrapperFieldName: teslaType.TeslaWrapperFieldName,
-			GoVSSSignalName:  signalInfo.GOName,
-			OuterInputType:   teslaType.ValueType,
-			JSONName:         signalInfo.JSONName,
-			OutputType:       signalInfo.GOType(),
-			ParseFloat:       parseFloat,
-			UnitFunc:         convertUnit,
-			InnerInputType:   innerInputType,
-			TeslaTypeName:    teslaType.NiceName,
+			WrapperName:      teslaType.WrapperType,
+			WrapperFieldName: teslaType.Field,
+			Parser:           parsers[r.TeslaType],
+			GoInputType:      teslaType.FieldType,
+			VSSSignals:       targets,
 		})
 	}
 
@@ -160,41 +187,45 @@ func Generate(packageName, outerOutputPath, innerOutputPath string) error {
 	return nil
 }
 
-func assembleTeslaTypeInformation() (map[string]TeslaTypeDescription, error) {
-	out := make(map[string]TeslaTypeDescription)
+func assembleTeslaTypeInformation() (map[string]TeslaGoValueType, error) {
+	out := make(map[string]TeslaGoValueType)
 
+	// This is protobuf reflection. The protos.Value type in Go does
+	// not have all of these fields. Maybe we should reflect in Go,
+	// instead?
 	desc := (&protos.Value{}).ProtoReflect().Descriptor()
+
 	for i := range desc.Fields().Len() {
 		field := desc.Fields().Get(i)
-		fieldName := field.Name()
 
-		teslaWrapperFieldName := snakeToPascal(string(fieldName))
-		teslaWrapperType := "Value_" + teslaWrapperFieldName
-		var protoType, valueType string
-		switch field.Kind() {
+		goFieldName := snakeToPascal(string(field.Name()))
+		wrapperType := "Value_" + goFieldName // This is only a concept in Go.
+
+		var protoType, goFieldType string
+
+		switch kind := field.Kind(); kind {
 		case protoreflect.MessageKind:
 			protoType = string(field.Message().Name())
-			valueType = "*protos." + protoType
+			goFieldType = "*protos." + protoType
 		case protoreflect.EnumKind:
+			// TODO(elffjs): Should we try to check if the number we
+			// get for such fields is in-bounds?
 			protoType = string(field.Enum().Name())
-			valueType = "protos." + protoType
+			goFieldType = "protos." + protoType
 		default:
-			// Primitive types.
-			protoType = field.Kind().String()
-			goType, ok := protoToGoTypes[protoType]
+			// Primitive types, we hope.
+			protoType = kind.String()
+			var ok bool
+			goFieldType, ok = protoTypeToGoType[protoType]
 			if !ok {
 				return nil, fmt.Errorf("no Go mapping for protobuf type %s", protoType)
 			}
-			valueType = goType
 		}
 
-		niceName := strings.ToUpper(protoType[:1]) + protoType[1:]
-
-		out[protoType] = TeslaTypeDescription{
-			TeslaWrapperType:      teslaWrapperType,
-			TeslaWrapperFieldName: teslaWrapperFieldName,
-			ValueType:             valueType,
-			NiceName:              niceName,
+		out[protoType] = TeslaGoValueType{
+			WrapperType: wrapperType,
+			Field:       goFieldName,
+			FieldType:   goFieldType,
 		}
 	}
 
@@ -242,9 +273,11 @@ func writeInner(tmplInput *TemplateInput, innerPath string) error {
 	}
 
 	for _, conv := range tmplInput.Conversions {
-		name := fmt.Sprintf("Convert%s%sTo%s", conv.TeslaField, conv.TeslaTypeName, conv.GoVSSSignalName)
-		if body, ok := existingBodies[name]; ok {
-			conv.Body = body
+		for _, vs := range conv.VSSSignals {
+			name := fmt.Sprintf("Convert%sTo%s", conv.TeslaField, vs.GoVSSName)
+			if body, ok := existingBodies[name]; ok {
+				vs.Body = body
+			}
 		}
 	}
 
@@ -279,17 +312,10 @@ type Conversion struct {
 	TeslaField       string
 	WrapperName      string
 	WrapperFieldName string
-	GoVSSSignalName  string
-	OuterInputType   string
-	JSONName         string
-	InnerInputType   string
-	OutputType       string
-	Body             string
+	Parser           string
+	GoInputType      string
 
-	TeslaTypeName string
-
-	ParseFloat bool
-	UnitFunc   string
+	VSSSignals []*TargetVSSSignal
 }
 
 type TemplateInput struct {
@@ -315,9 +341,22 @@ var conversions = map[string]map[string]string{
 	},
 }
 
-type TeslaTypeDescription struct {
-	TeslaWrapperType      string
-	TeslaWrapperFieldName string
-	ValueType             string
-	NiceName              string
+var parsers = map[string]string{
+	"double":      "Double",
+	"int32":       "Int32",
+	"WindowState": "WindowState",
+	"Doors":       "Doors",
+}
+
+type TeslaGoValueType struct {
+	// WrapperType is the name of a Go type T such that *T is
+	// assignable to Value's Value field. The most common one is
+	// protos.Value_StringValue.
+	WrapperType string
+	// Field is the name of the only field on the type named by
+	// TeslaWrapperType. This field is what holds the value of
+	// interest.
+	Field string
+	// FieldType is the type of the field named by Field.
+	FieldType string
 }

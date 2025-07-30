@@ -49,13 +49,13 @@ func expectedLocationSignals() []vss.Signal {
 		{TokenID: 33, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 1.2, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationLatitude, ValueNumber: 44.2699983, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationLongitude, ValueNumber: -71.50142, Source: "ruptela/TODO"},
-		{TokenID: 33, Timestamp: ts.Add(time.Second), Name: vss.FieldDIMOAftermarketHDOP, ValueNumber: 1, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationHeading, ValueNumber: 93.9, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 0.2, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationLatitude, ValueNumber: 45.2699983, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationLongitude, ValueNumber: -71.50142, Source: "ruptela/TODO"},
-		{TokenID: 33, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldDIMOAftermarketHDOP, ValueNumber: 2, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationHeading, ValueNumber: 3.59, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts.Add(time.Second), Name: vss.FieldDIMOAftermarketHDOP, ValueNumber: 0.1, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldDIMOAftermarketHDOP, ValueNumber: 0.2, Source: "ruptela/TODO"},
 	}
 }
 

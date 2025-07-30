@@ -26,7 +26,7 @@ func SignalsFromDTCPayload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 
 	if errs != nil {
 		return nil, convert.ConversionError{
-			TokenID:        uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+			Subject:        event.Subject,
 			Source:         event.Source,
 			DecodedSignals: []vss.Signal{dtcSignal},
 			Errors:         []error{fmt.Errorf("error getting obdDTCList: %w", errs)},

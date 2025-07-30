@@ -3,6 +3,7 @@ package nativestatus
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/DIMO-Network/model-garage/pkg/convert"
@@ -21,14 +22,14 @@ func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
 	source, err := SourceFromData(jsonData)
 	if err != nil {
 		return nil, convert.ConversionError{
-			TokenID: tokenID,
+			Subject: strconv.FormatUint(uint64(tokenID), 10),
 			Errors:  []error{fmt.Errorf("error getting source: %w", err)},
 		}
 	}
 	signals := gjson.GetBytes(jsonData, "data.vehicle.signals")
 	if !signals.Exists() {
 		return nil, convert.ConversionError{
-			TokenID: tokenID,
+			Subject: strconv.FormatUint(uint64(tokenID), 10),
 			Source:  source,
 			Errors:  []error{convert.FieldNotFoundError{Field: "signals", Lookup: "data.vehicle.signals"}},
 		}
@@ -39,7 +40,7 @@ func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
 			return []vss.Signal{}, nil
 		}
 		return nil, convert.ConversionError{
-			TokenID: tokenID,
+			Subject: strconv.FormatUint(uint64(tokenID), 10),
 			Source:  source,
 			Errors:  []error{errors.New("signals field is not an array")},
 		}
@@ -51,7 +52,7 @@ func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
 	}
 
 	conversionErrors := convert.ConversionError{
-		TokenID: tokenID,
+		Subject: strconv.FormatUint(uint64(tokenID), 10),
 		Source:  source,
 	}
 	for _, sigData := range signals.Array() {

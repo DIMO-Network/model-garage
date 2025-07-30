@@ -78,7 +78,7 @@ generate-nativestatus: # Generate all files for nativestatus
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/nativestatus/vehicle-v2-convert_gen.go -custom.template-file=./pkg/nativestatus/convertv2.tmpl -custom.format=true -definitions=./pkg/nativestatus/schema/native-definitions.yaml
 
 generate-ruptela: # Generate all files for ruptela
-	go run ./cmd/codegen -convert.package=ruptela -generators=convert -convert.output-file=./pkg/ruptela/conver_signal_funcs_gen.go -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
+	go run ./cmd/codegen -convert.package=ruptela -generators=convert -convert.output-file=./pkg/ruptela/convert_signal_funcs_gen.go -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/convert_signal_status_gen.go -custom.template-file=./pkg/ruptela/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/ruptela/convert_signal_location_gen.go -custom.template-file=./pkg/ruptela/codegen/convert_signal_location.tmpl -custom.format=true -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
 	go run ./pkg/ruptela/codegen
@@ -88,8 +88,8 @@ generate-autopi: # Generate all files for autopi
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/autopi/convert_signal_status_gen.go -custom.template-file=./pkg/autopi/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/autopi/schema/autopi_definitions.yaml
 
 generate-hashdog: # Generate all files for hashdog (macaron)
-	go run ./cmd/codegen -convert.package=hashdog -generators=convert -convert.output-file=./pkg/hashdog/convert_signal_funcs_gen.go -definitions=./pkg/hashdog/schema/lorawan_definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/hashdog/convert_signal_status_gen.go -custom.template-file=./pkg/hashdog/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/hashdog/schema/lorawan_definitions.yaml
+	go run ./cmd/codegen -convert.package=hashdog -generators=convert -convert.output-file=./pkg/hashdog/convert_signal_funcs_gen.go -definitions=./pkg/hashdog/schema/hashdog_definitions.yaml
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/hashdog/convert_signal_status_gen.go -custom.template-file=./pkg/hashdog/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/hashdog/schema/hashdog_definitions.yaml
 
 
 generate-tesla: # Generate all files for tesla

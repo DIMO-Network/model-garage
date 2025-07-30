@@ -209,3 +209,54 @@ var nilSignalsJSON = `{
         }
     }
 }`
+
+var expectedDTCErrorsSignals = []vss.Signal{
+	{TokenID: tokenID, Timestamp: time.UnixMilli(1753387941604).UTC(), Name: vss.FieldOBDDTCList, ValueString: `["P1234","P1235"]`, Source: "dimo/integration/123"},
+	{TokenID: tokenID, Timestamp: time.UnixMilli(1753387941604).UTC(), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 2, Source: "dimo/integration/123"},
+	{TokenID: tokenID, Timestamp: time.UnixMilli(1753387941605).UTC(), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 0, Source: "dimo/integration/123"},
+}
+
+func TestDTCErrorCodesConversion(t *testing.T) {
+	t.Parallel()
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(dtcErrorsAPInputJSON), &event)
+	require.NoError(t, err)
+	actualSignals, err := SignalsFromV2Payload(event)
+
+	require.NoErrorf(t, err, "error converting full input data: %v", err)
+	actualSignals = actualSignals[:len(expectedDTCErrorsSignals)]
+	require.Len(t, actualSignals, len(expectedDTCErrorsSignals), "actual signals length does not match expected")
+	require.Equalf(t, expectedDTCErrorsSignals, actualSignals, "converted vehicle does not match expected vehicle")
+}
+
+var dtcErrorsAPInputJSON = `{
+    "id": "30Kt9eBsiyIZEsPTxnW5ldsenCb",
+    "subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+    "specversion": "1.0",
+    "time": "2025-07-24T20:12:21.604Z",
+    "datacontenttype": "application/json",
+    "type": "com.dimo.device.status.v2",
+    "dataschema": "dimo.zone.status/v2.0",
+    "source": "dimo/integration/123",
+    "data": {
+        "vehicle": {
+            "signals": [
+                {
+                    "timestamp": 1753387941604,
+                    "name": "obdDTCList",
+                    "value": "P1234,P1235"
+                },
+                {
+                    "timestamp": 1753387941604,
+                    "name": "obdStatusDTCCount",
+                    "value": 2
+                },
+                {
+                    "timestamp": 1753387941605,
+                    "name": "obdStatusDTCCount",
+                    "value": 0
+                }
+            ]
+        }
+    }
+}`

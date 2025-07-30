@@ -3,6 +3,7 @@ package defaultmodule_test
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 	"testing"
 	"time"
 
@@ -402,6 +403,127 @@ func TestModule_SignalConvert(t *testing.T) {
 
 					// Check timestamp - using WithinDuration to avoid any potential timestamp precision issues
 					assert.WithinDuration(t, expectedSignal.Timestamp, signals[i].Timestamp, time.Millisecond)
+				}
+			}
+		})
+	}
+}
+
+func TestModule_EventConvert(t *testing.T) {
+	module := defaultmodule.Module{}
+	ctx := context.Background()
+
+	eventTs := time.Now().Truncate(time.Millisecond).UTC()
+	cloudEventTs := eventTs.Add(-time.Minute)
+
+	tests := []struct {
+		name           string
+		inputJSON      string
+		expectedEvents []vss.Event
+		expectError    bool
+	}{
+		{
+			name: "valid events",
+			inputJSON: `{
+				"id": "evt-1",
+				"source": "test-source",
+				"producer": "test-producer",
+				"subject": "test-subject",
+				"specversion": "1.0",
+				"time": "` + cloudEventTs.Format(time.RFC3339Nano) + `",
+				"type": "dimo.event",
+				"data": {
+					"events": [
+						{
+							"name": "harsh_braking",
+							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
+							"durationNs": 0,
+							"metadata": "{\"side\":\"left\"}"
+						},
+						{
+							"name": "charging_stopped",
+							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
+							"durationNs": ` + strconv.Itoa(int((time.Second * 5).Nanoseconds())) + `,
+							"metadata": "{\"temp\":72}"
+						}
+					]
+				}
+			}`,
+			expectedEvents: []vss.Event{
+				{
+					Name:       "harsh_braking",
+					Timestamp:  eventTs,
+					DurationNs: 0,
+					Metadata:   `{"side":"left"}`,
+				},
+				{
+					Name:       "charging_stopped",
+					Timestamp:  eventTs,
+					DurationNs: uint64(5 * time.Second.Nanoseconds()),
+					Metadata:   `{"temp":72}`,
+				},
+			},
+			expectError: false,
+		},
+		{
+			name: "invalid metadata",
+			inputJSON: `{
+				"id": "evt-2",
+				"source": "test-source",
+				"producer": "test-producer",
+				"subject": "test-subject",
+				"specversion": "1.0",
+				"time": "` + cloudEventTs.Format(time.RFC3339Nano) + `",
+				"type": "dimo.event",
+				"data": {
+					"events": [
+						{
+							"name": "bad_event",
+							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
+							"durationNs": 0,
+							"metadata": "{\"bad\":}"
+						}
+					]
+				}
+			}`,
+			expectedEvents: nil,
+			expectError:    true,
+		},
+		{
+			name: "empty events",
+			inputJSON: `{
+				"id": "evt-3",
+				"source": "test-source",
+				"producer": "test-producer",
+				"subject": "test-subject",
+				"specversion": "1.0",
+				"time": "` + cloudEventTs.Format(time.RFC3339Nano) + `",
+				"type": "dimo.event",
+				"data": {
+					"events": []
+				}
+			}`,
+			expectedEvents: nil,
+			expectError:    false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var rawEvent cloudevent.RawEvent
+			require.NoError(t, json.Unmarshal([]byte(tt.inputJSON), &rawEvent))
+			events, err := module.EventConvert(ctx, rawEvent)
+			if tt.expectError {
+				assert.Error(t, err)
+				assert.Len(t, events, 0)
+			} else {
+				assert.NoError(t, err)
+				assert.Len(t, events, len(tt.expectedEvents))
+				for i, expected := range tt.expectedEvents {
+					assert.Equal(t, expected.Name, events[i].Name)
+					assert.Equal(t, expected.Timestamp, events[i].Timestamp)
+					assert.Equal(t, expected.DurationNs, events[i].DurationNs)
+					assert.Equal(t, expected.Metadata, events[i].Metadata)
 				}
 			}
 		})

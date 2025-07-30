@@ -148,11 +148,7 @@ var fullAPInputJSON = `{
                 }
             ]
         }
-    },
-    "vehicleTokenId": 123,
-    "make": "",
-    "model": "",
-    "year": 0
+    }
 }`
 
 var (
@@ -180,7 +176,44 @@ var (
 		{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainCombustionEngineSpeed", ValueNumber: 2000, ValueString: "", Source: "dimo/integration/123"},
 		{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainFuelSystemRelativeLevel", ValueNumber: 50, ValueString: "", Source: "dimo/integration/123"},
 	}
+
+	expectedDTCErrorsSignals = []vss.Signal{
+		{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: vss.FieldOBDDTCList, ValueString: `["P00BD","P0456","P0446"]`, Source: "dimo/integration/123"},
+	}
 )
+
+func TestDTCErrorCodesConversion(t *testing.T) {
+	t.Parallel()
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(dtcErrorsAPInputJSON), &event)
+	require.NoError(t, err)
+	actualSignals, err := autopi.SignalsFromV2Payload(event)
+
+	require.NoErrorf(t, err, "error converting full input data: %v", err)
+	require.Len(t, actualSignals, len(expectedDTCErrorsSignals), "actual signals length does not match expected")
+	require.Equalf(t, expectedDTCErrorsSignals, actualSignals, "converted vehicle does not match expected vehicle")
+}
+
+var dtcErrorsAPInputJSON = `{
+    "id": "2fHbFXPWzrVActDb7WqWCfqeiYe",
+    "source": "dimo/integration/123",
+    "specversion": "1.0",
+	"dataversion": "v2",
+    "subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+    "time": "2024-04-18T17:20:46.436008782Z",
+    "type": "dimo.status",
+    "data": {
+        "vehicle": {
+            "signals": [
+                {
+                    "timestamp": 1713460823243,
+                    "name": "obdDTCList",
+                    "value": "P00BD,P0456,P0446"
+                }
+            ]
+        }
+    }
+}`
 
 func TestNullSignals(t *testing.T) {
 	t.Parallel()

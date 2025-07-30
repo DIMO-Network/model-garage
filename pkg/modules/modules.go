@@ -24,6 +24,11 @@ type FingerprintModule interface {
 	FingerprintConvert(ctx context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error)
 }
 
+// EventModule is an interface for converting messages to events.
+type EventModule interface {
+	EventConvert(ctx context.Context, event cloudevent.RawEvent) ([]vss.Event, error)
+}
+
 // NotFoundError is an error type for when a module is not found.
 type NotFoundError string
 
@@ -95,4 +100,26 @@ func ConvertToFingerprint(ctx context.Context, source string, event cloudevent.R
 	}
 
 	return fingerprint, nil
+}
+
+// ConvertToEvents takes a module source and raw payload and returns a list of events.
+// Falls back to the default module (empty source) if the specified module is not found.
+func ConvertToEvents(ctx context.Context, source string, event cloudevent.RawEvent) ([]vss.Event, error) {
+	// Try to get the specific module
+	module, ok := EventRegistry.Get(source)
+
+	// If not found, use the default module
+	if !ok {
+		module, ok = EventRegistry.Get("")
+		if !ok {
+			return nil, NotFoundError(fmt.Sprintf("event module '%s' not found and no default module registered", source))
+		}
+	}
+
+	events, err := module.EventConvert(ctx, event)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert events with module '%s': %w", source, err)
+	}
+
+	return events, nil
 }

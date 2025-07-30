@@ -22,11 +22,35 @@ func ToChassisAxleRow1WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 	return ConvertPSIToKPa(psi), nil
 }
 
+// ToChassisAxleRow1WheelLeftTirePressure1 converts data from field 'signals.965' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow1WheelLeftTirePressure1(originalDoc []byte, val string) (float64, error) {
+	psi, err := Convert965(val)
+	if err != nil {
+		return 0, err
+	}
+
+	return ConvertPSIToKPa(psi), nil
+}
+
 // ToChassisAxleRow1WheelRightTirePressure0 converts data from field 'signals.961' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure' of type float64.
 // Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
 // Unit: 'kPa'
 func ToChassisAxleRow1WheelRightTirePressure0(originalDoc []byte, val string) (float64, error) {
 	psi, err := Convert961(val)
+	if err != nil {
+		return 0, err
+	}
+
+	return ConvertPSIToKPa(psi), nil
+}
+
+// ToChassisAxleRow1WheelRightTirePressure1 converts data from field 'signals.966' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow1WheelRightTirePressure1(originalDoc []byte, val string) (float64, error) {
+	psi, err := Convert966(val)
 	if err != nil {
 		return 0, err
 	}
@@ -46,11 +70,35 @@ func ToChassisAxleRow2WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 	return ConvertPSIToKPa(psi), nil
 }
 
+// ToChassisAxleRow2WheelLeftTirePressure1 converts data from field 'signals.967' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow2WheelLeftTirePressure1(originalDoc []byte, val string) (float64, error) {
+	psi, err := Convert967(val)
+	if err != nil {
+		return 0, err
+	}
+
+	return ConvertPSIToKPa(psi), nil
+}
+
 // ToChassisAxleRow2WheelRightTirePressure0 converts data from field 'signals.963' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure' of type float64.
 // Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
 // Unit: 'kPa'
 func ToChassisAxleRow2WheelRightTirePressure0(originalDoc []byte, val string) (float64, error) {
 	psi, err := Convert963(val)
+	if err != nil {
+		return 0, err
+	}
+
+	return ConvertPSIToKPa(psi), nil
+}
+
+// ToChassisAxleRow2WheelRightTirePressure1 converts data from field 'signals.968' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure' of type float64.
+// Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure: Tire pressure in kilo-Pascal.
+// Unit: 'kPa'
+func ToChassisAxleRow2WheelRightTirePressure1(originalDoc []byte, val string) (float64, error) {
+	psi, err := Convert968(val)
 	if err != nil {
 		return 0, err
 	}
@@ -110,6 +158,7 @@ func ToDIMOAftermarketHDOP0(originalDoc []byte, val float64) (float64, error) {
 	if val == 0xff {
 		return 0, errNotFound
 	}
+	val = val / 10
 	return val, nil
 }
 
@@ -185,6 +234,12 @@ func ToOBDDistanceWithMIL0(originalDoc []byte, val string) (float64, error) {
 // Unit: 's'
 func ToOBDRunTime0(originalDoc []byte, val string) (float64, error) {
 	return ignoreZero(Convert107(val))
+}
+
+// ToOBDStatusDTCCount0 converts data from field 'signals.108' of type string to 'Vehicle.OBD.Status.DTCCount' of type float64.
+// Vehicle.OBD.Status.DTCCount: Number of Diagnostic Trouble Codes (DTC)
+func ToOBDStatusDTCCount0(originalDoc []byte, val string) (float64, error) {
+	return Convert108(val)
 }
 
 // ToPowertrainCombustionEngineDieselExhaustFluidCapacity0 converts data from field 'signals.1148' of type string to 'Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Capacity' of type float64.
@@ -289,8 +344,8 @@ func ToPowertrainFuelSystemRelativeLevel1(originalDoc []byte, val string) (float
 }
 
 // ToPowertrainTractionBatteryRange0 converts data from field 'signals.723' of type string to 'Vehicle.Powertrain.TractionBattery.Range' of type float64.
-// Vehicle.Powertrain.TractionBattery.Range: Remaining range in meters using only battery.
-// Unit: 'm'
+// Vehicle.Powertrain.TractionBattery.Range: Remaining range in kilometers using only battery.
+// Unit: 'km'
 func ToPowertrainTractionBatteryRange0(originalDoc []byte, val string) (float64, error) {
 	floatValKm, err := Convert723(val)
 	if err != nil {

@@ -110,8 +110,6 @@ func createCloudEventHeader(event AutopiEvent, producer, subject, eventType stri
 		Type:            eventType,
 		DataVersion:     DataVersion,
 		Producer:        producer,
-		Extras: map[string]any{
-			"signature": event.Signature,
-		},
+		Signature:       event.Signature,
 	}, nil
 }
