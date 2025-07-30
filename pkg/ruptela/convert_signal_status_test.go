@@ -31,7 +31,7 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 14.335, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAbsoluteLevel, ValueNumber: 5, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 104.8, Source: "ruptela/TODO"},
-		{TokenID: 33, Timestamp: ts, Name: vss.FieldDIMOAftermarketHDOP, ValueNumber: 6, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldDIMOAftermarketHDOP, ValueNumber: 0.6, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationLatitude, ValueNumber: 52.2721466, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationLongitude, ValueNumber: -0.9014316, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldDIMOAftermarketNSAT, ValueNumber: 20, Source: "ruptela/TODO"},

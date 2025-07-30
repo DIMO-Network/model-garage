@@ -142,6 +142,7 @@ func ToDIMOAftermarketHDOP0(originalDoc []byte, val float64) (float64, error) {
 	if val == 0xff {
 		return 0, errNotFound
 	}
+	val = val / 10
 	return val, nil
 }
 
