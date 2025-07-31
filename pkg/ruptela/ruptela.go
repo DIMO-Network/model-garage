@@ -1,6 +1,9 @@
 package ruptela
 
-import "github.com/tidwall/gjson"
+import (
+	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/tidwall/gjson"
+)
 
 const (
 	// StatusEventDS is the data version for status events.
@@ -56,4 +59,33 @@ func unplugged(originalDoc []byte) bool {
 // ConvertPSIToKPa converts a pressure value from psi to kPa.
 func ConvertPSIToKPa(psi float64) float64 {
 	return psi * 6.89476
+}
+
+func AddCurrentLocationSignal(sigs *[]vss.Signal, baseSignal vss.Signal) {
+	// add := false
+	var loc vss.Location
+	var latOk, lonOk, hdopOk bool
+
+	for _, s := range *sigs {
+		switch s.Name {
+		case vss.FieldCurrentLocationLatitude:
+			latOk = true
+			loc.Latitude = s.ValueNumber
+		case vss.FieldCurrentLocationLongitude:
+			lonOk = true
+			loc.Longitude = s.ValueNumber
+		case vss.FieldDIMOAftermarketHDOP:
+			hdopOk = true
+			loc.HDOP = s.ValueNumber
+		}
+	}
+
+	if latOk && lonOk || hdopOk {
+		*sigs = append(*sigs, vss.Signal{
+			Name:          "currentLocation",
+			Timestamp:     baseSignal.Timestamp,
+			Source:        baseSignal.Source,
+			ValueLocation: loc,
+		})
+	}
 }
