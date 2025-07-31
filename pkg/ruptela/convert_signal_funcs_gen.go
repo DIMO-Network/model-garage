@@ -116,6 +116,18 @@ func ToCurrentLocationAltitude0(originalDoc []byte, val float64) (float64, error
 	return val / 10, nil
 }
 
+// ToCurrentLocationHeading0 converts data from field 'pos.dir' of type float64 to 'Vehicle.CurrentLocation.Heading' of type float64.
+// Vehicle.CurrentLocation.Heading: Current heading relative to geographic north. 0 = North, 90 = East, 180 = South, 270 = West.
+// Unit: 'degrees' Min: '0' Max: '360'
+func ToCurrentLocationHeading0(originalDoc []byte, val float64) (float64, error) {
+	if val < 0 || val > 36000 {
+		return 0, errNotFound
+	}
+	heading := val / 100
+
+	return heading, nil
+}
+
 // ToCurrentLocationLatitude0 converts data from field 'pos.lat' of type float64 to 'Vehicle.CurrentLocation.Latitude' of type float64.
 // Vehicle.CurrentLocation.Latitude: Current latitude of vehicle in WGS 84 geodetic coordinates, as measured at the position of GNSS receiver antenna.
 // Unit: 'degrees' Min: '-90' Max: '90'
@@ -142,6 +154,7 @@ func ToDIMOAftermarketHDOP0(originalDoc []byte, val float64) (float64, error) {
 	if val == 0xff {
 		return 0, errNotFound
 	}
+	val = val / 10
 	return val, nil
 }
 
