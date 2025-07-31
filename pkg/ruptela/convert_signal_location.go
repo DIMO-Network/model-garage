@@ -71,9 +71,25 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 				conversionErrors.Errors = append(conversionErrors.Errors, err)
 				return true
 			}
+			AddCurrentLocationSignal(&sigs, signalMeta)
 			retSignals = append(retSignals, sigs...)
 			return true
 		})
+		// Create the location tuple, if possible.
+		locSig := vss.Signal{
+			TokenID:   signalMeta.TokenID,
+			Timestamp: ts,
+			Name:      "currentLocation",
+			Source:    signalMeta.Source,
+		}
+		locSig.SetValue(
+			vss.Location{
+				Latitude:  sigData.Get("lat").Num,
+				Longitude: sigData.Get("lon").Num,
+				HDOP:      sigData.Get("hdop").Num,
+			},
+		)
+
 	}
 
 	if len(conversionErrors.Errors) > 0 {
