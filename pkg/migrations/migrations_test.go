@@ -44,6 +44,7 @@ func TestSignalMigration(t *testing.T) {
 		{Name: vss.CloudEventIDCol, Type: "String", Comment: "Id of the Cloud Event that this signal was extracted from."},
 		{Name: vss.ValueNumberCol, Type: "Float64", Comment: "float64 value of the signal collected."},
 		{Name: vss.ValueStringCol, Type: "String", Comment: "string value of the signal collected."},
+		{Name: vss.ValueLocationCol, Type: "Tuple(latitude Float64, longitude Float64, hdop Float64)", Comment: "Location value of the signal collected."},
 	}
 
 	// Check if the actual columns match the expected columns
