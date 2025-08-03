@@ -29,5 +29,6 @@ func SignalsFromV1Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 			Errors:         errs,
 		}
 	}
+	AddCurrentLocationSignal(&sigs, baseSignal)
 	return sigs, nil
 }
