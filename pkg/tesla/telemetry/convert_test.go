@@ -1,6 +1,7 @@
 package telemetry
 
 import (
+	"math"
 	"testing"
 	"time"
 
@@ -131,6 +132,7 @@ func TestConvertTyped(t *testing.T) {
 	}
 
 	expectedSignals := []vss.Signal{
+		{TokenID: 7, Timestamp: ts, Name: "currentLocation", ValueLocation: vss.Location{Latitude: 30.267222, Longitude: -97.743056, HDOP: math.NaN()}, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "currentLocationLatitude", ValueNumber: 30.267222, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "currentLocationLongitude", ValueNumber: -97.743056, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryCurrentPower", ValueNumber: 5700.000084936619, Source: teslaConnection},
