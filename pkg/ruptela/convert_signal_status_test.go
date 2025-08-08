@@ -31,7 +31,7 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 14.335, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAbsoluteLevel, ValueNumber: 5, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 104.8, Source: "ruptela/TODO"},
-		{TokenID: 33, Timestamp: ts, Name: vss.FieldDIMOAftermarketHDOP, ValueNumber: 6, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldDIMOAftermarketHDOP, ValueNumber: 0.6, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationLatitude, ValueNumber: 52.2721466, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationLongitude, ValueNumber: -0.9014316, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldDIMOAftermarketNSAT, ValueNumber: 20, Source: "ruptela/TODO"},
@@ -48,6 +48,8 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelRightTirePressure, ValueNumber: 310.2642, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilLevel, ValueString: "HIGH", Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilRelativeLevel, ValueNumber: 92, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 73.7, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldOBDStatusDTCCount, ValueNumber: 18, Source: "ruptela/TODO"},
 	}
 
 	slices.SortFunc(expectedSignals, sortFunc)
@@ -61,7 +63,7 @@ var fullInputJSON = `
 	"data": {
 		"pos": {
 			"alt": 1048,
-			"dir": 19730,
+			"dir": 7370,
 			"hdop": 6,
 			"lat": 522721466,
 			"lon": -9014316,
@@ -76,7 +78,7 @@ var fullInputJSON = `
 			"105": "3341413534343438",
 			"106": "3200000000000000",
 			"107": "0",
-			"108": "0",
+			"108": "12",
 			"645": "8",
 			"135": "0",
 			"136": "0",
@@ -133,6 +135,7 @@ func TestIgnoreUnplugged(t *testing.T) {
 	require.NoError(t, err)
 	expectedSignals := []vss.Signal{
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDDistanceWithMIL, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
+		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldPowertrainCombustionEngineTPS, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldSpeed, ValueNumber: 5, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 	}

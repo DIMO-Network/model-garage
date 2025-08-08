@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/DIMO-Network/cloudevent"
+	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/schema"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/tidwall/gjson"
@@ -22,12 +23,29 @@ type SignalData struct {
 
 // Signal is a struct for holding vss signal data.
 type Signal struct {
-	// Timestamp is when this data was collected.
+	// Timestamp is when this data was collected. (format: RFC3339)
 	Timestamp time.Time `json:"timestamp"`
 	// Name is the name of the signal collected.
 	Name string `json:"name"`
 	// Value is the value of the signal collected. If the signal base type is a number it will be converted to a float64.
 	Value any `json:"value"`
+}
+
+// EventsData is a struct for holding a list of events.
+type EventsData struct {
+	Events []Event `json:"events"`
+}
+
+// Event is a struct for holding a single event.
+type Event struct {
+	// Name is the name of the event.
+	Name string `json:"name"`
+	// Timestamp is when this event occurred. (format: RFC3339)
+	Timestamp time.Time `json:"timestamp"`
+	// Duration is the duration of the event in nanoseconds.
+	DurationNs uint64 `json:"durationNs,omitempty"`
+	// Metadata is the metadata of the event.
+	Metadata string `json:"metadata,omitempty"`
 }
 
 // Module holds dependencies for the default module. At present, there are none.
@@ -111,4 +129,55 @@ func (*Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeven
 	}
 
 	return hdrs, event.Data, nil
+}
+
+// EventConvert converts a default CloudEvent to events.
+func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Event, error) {
+	// Parse the events array from the event data
+	var eventsData EventsData
+	err := json.Unmarshal(event.Data, &eventsData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal events data: %w", err)
+	}
+
+	vssEvents := make([]vss.Event, 0, len(eventsData.Events))
+	var decodeErrs []error
+	for _, ev := range eventsData.Events {
+		if ev.Name == "" {
+			decodeErrs = append(decodeErrs, fmt.Errorf("event.name is empty"))
+			continue
+		}
+		if ev.Timestamp.IsZero() {
+			decodeErrs = append(decodeErrs, fmt.Errorf("event.timestamp is zero for event.name %s", ev.Name))
+			continue
+		}
+		if len(ev.Metadata) > 0 && !json.Valid([]byte(ev.Metadata)) {
+			// We do not expect to get this far if the metadata is not valid json. Since it would invalidate the entire cloudevent.
+			decodeErrs = append(decodeErrs, fmt.Errorf("metadata for event.name %s, event.timestamp %s is not valid json", ev.Name, ev.Timestamp))
+			continue
+		}
+
+		vssEvent := vss.Event{
+			Subject:      event.Subject,
+			Source:       event.Source,
+			Producer:     event.Producer,
+			CloudEventID: event.ID,
+			Name:         ev.Name,
+			Timestamp:    ev.Timestamp,
+			DurationNs:   ev.DurationNs,
+			Metadata:     ev.Metadata,
+		}
+		vssEvents = append(vssEvents, vssEvent)
+	}
+
+	if len(decodeErrs) > 0 {
+		return nil, convert.ConversionError{
+			DecodedEvents: vssEvents,
+			Errors:        decodeErrs,
+			Subject:       event.Subject,
+			Source:        event.Source,
+		}
+	}
+
+	return vssEvents, nil
 }
