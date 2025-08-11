@@ -3,20 +3,20 @@ module github.com/DIMO-Network/model-garage
 go 1.24
 
 require (
-	github.com/99designs/gqlgen v0.17.76
+	github.com/99designs/gqlgen v0.17.78
 	github.com/DIMO-Network/clickhouse-infra v0.0.4
 	github.com/DIMO-Network/cloudevent v0.1.2
 	github.com/Masterminds/sprig/v3 v3.3.0
-	github.com/ethereum/go-ethereum v1.16.1
+	github.com/ethereum/go-ethereum v1.16.2
 	github.com/pressly/goose/v3 v3.24.3
 	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.10.0
 	github.com/teslamotors/fleet-telemetry v0.7.2
 	github.com/tidwall/gjson v1.18.0
-	golang.org/x/mod v0.26.0
-	golang.org/x/text v0.27.0
-	golang.org/x/tools v0.34.0
-	google.golang.org/protobuf v1.36.6
+	golang.org/x/mod v0.27.0
+	golang.org/x/text v0.28.0
+	golang.org/x/tools v0.35.0
+	google.golang.org/protobuf v1.36.7
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -95,7 +95,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250106144421-5f5ef82da422 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250324211829-b45e905df463 // indirect
 )
