@@ -71,6 +71,7 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 				conversionErrors.Errors = append(conversionErrors.Errors, err)
 				return true
 			}
+			AddCurrentLocationSignal(&sigs, signalMeta)
 			retSignals = append(retSignals, sigs...)
 			return true
 		})
