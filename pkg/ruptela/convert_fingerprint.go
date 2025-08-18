@@ -1,14 +1,13 @@
 package ruptela
 
 import (
+	"bytes"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
 )
-
-const vinLength = 17
 
 type fingerPrintSignals struct {
 	Signals signals `json:"signals"`
@@ -18,6 +17,8 @@ type signals struct {
 	VINPart2 string `json:"105"`
 	VINPart3 string `json:"106"`
 }
+
+const maxVinLength = 17
 
 // DecodeFingerprint decodes a fingerprint payload into a FingerprintEvent.
 func DecodeFingerprint(event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
@@ -43,6 +44,14 @@ func DecodeFingerprint(event cloudevent.RawEvent) (cloudevent.Fingerprint, error
 		return fpData, fmt.Errorf("could not decode VIN part 3: %w", err)
 	}
 	vinBytes := append(append(part1, part2...), part3...)
-	fpData.VIN = string(vinBytes[:vinLength]) // todo: problem here is vinLength needs to be dynamic depending on the VIN
+
+	// Trim null bytes from the end to get the actual VIN length
+	vinBytes = bytes.TrimRight(vinBytes, "\x00")
+
+	if len(vinBytes) > 17 { // Validate that VIN length doesn't exceed 17 characters
+		fpData.VIN = string(vinBytes[:maxVinLength])
+	} else {
+		fpData.VIN = string(vinBytes)
+	}
 	return fpData, nil
 }
