@@ -2,6 +2,7 @@ package ruptela_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/DIMO-Network/cloudevent"
@@ -84,3 +85,77 @@ var fullFPInputJSON = `
 	"time": "2024-09-27T08:33:26Z",
 	"topic": "devices/0xf47f6579029a1c53388e4d8776413aa3f993cb94/status"
 }`
+
+var japanVinSignals = `{
+	"source": "ruptela/TODO",
+	"data": {
+		"pos": {
+			"lat": 522721466,
+			"lon": -9014316
+		},
+		"prt": 0,
+		"signals": {
+			"104": "XXX104",
+			"105": "XXX105",
+			"106": "XXX106"
+		},
+		"trigger": 7
+	},
+	"ds": "r/v0/s"
+}`
+
+func TestDecodeFingerprint_JapanVIN(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name        string
+		vinFrame1   string
+		vinFrame2   string
+		vinFrame3   string
+		expectedVIN string
+	}{
+		{
+			name:        "Japan VIN ZWR90-8000186",
+			expectedVIN: "ZWR90-8000186",
+			vinFrame1:   "5A575239302D3830",
+			vinFrame2:   "3030313836000000",
+			vinFrame3:   "0000000000000000",
+		},
+		{
+			name:        "Japan VIN GRX120-3043102",
+			expectedVIN: "GRX120-3043102",
+			vinFrame1:   "4752583132302D33",
+			vinFrame2:   "3034333130320000",
+			vinFrame3:   "0000000000000000",
+		},
+		{
+			name:        "Japan VIN GFC27-183060",
+			expectedVIN: "GFC27-183060",
+			vinFrame1:   "47464332372D3138",
+			vinFrame2:   "3330363000000000",
+			vinFrame3:   "0000000000000000",
+		},
+		{
+			name:        "Japan VIN DJLAS203662",
+			expectedVIN: "DJLAS203662",
+			vinFrame1:   "444A4C4153323033",
+			vinFrame2:   "3636320000000000",
+			vinFrame3:   "0000000000000000",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var event cloudevent.RawEvent
+			signals := strings.Replace(japanVinSignals, "XXX104", tt.vinFrame1, 1)
+			signals = strings.Replace(signals, "XXX105", tt.vinFrame2, 1)
+			signals = strings.Replace(signals, "XXX106", tt.vinFrame3, 1)
+
+			err := json.Unmarshal([]byte(signals), &event)
+			require.NoError(t, err)
+
+			got, err := ruptela.DecodeFingerprint(event)
+			require.NoError(t, err, "error decoding fingerprint")
+			require.Equal(t, tt.expectedVIN, got.VIN, "decoded VIN does not match expected VIN")
+		})
+	}
+}

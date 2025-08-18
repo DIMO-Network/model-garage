@@ -43,6 +43,6 @@ func DecodeFingerprint(event cloudevent.RawEvent) (cloudevent.Fingerprint, error
 		return fpData, fmt.Errorf("could not decode VIN part 3: %w", err)
 	}
 	vinBytes := append(append(part1, part2...), part3...)
-	fpData.VIN = string(vinBytes[:vinLength])
+	fpData.VIN = string(vinBytes[:vinLength]) // todo: problem here is vinLength needs to be dynamic depending on the VIN
 	return fpData, nil
 }
