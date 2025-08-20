@@ -1,4 +1,4 @@
 package vss
 
-// FieldCurrentLocationCoordinates Location triple of latitude, longitude, and HDOP.
-const FieldCurrentLocationCoordinates = "currentLocationCoordinates"
+// FieldCurrentLocationPosition Location triple of latitude, longitude, and HDOP.
+const FieldCurrentLocationPosition = "currentLocationPosition"
