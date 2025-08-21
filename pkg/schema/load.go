@@ -13,6 +13,9 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// coordinatesVSSDataType is a fake reference to a VSS struct type that
+// includes the three fields we want. See
+// https://covesa.github.io/vehicle_signal_specification/rule_set/data_entry/data_types_struct/index.html
 const coordinatesVSSDataType = "Types.DIMO.Coordinates"
 
 // LoadSignalsCSV loads the signals from a vss CSV file.
