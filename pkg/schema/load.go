@@ -7,10 +7,13 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"gopkg.in/yaml.v3"
 )
+
+const coordinatesVSSDataType = "Types.DIMO.Coordinates"
 
 // LoadSignalsCSV loads the signals from a vss CSV file.
 func LoadSignalsCSV(r io.Reader) ([]*SignalInfo, error) {
@@ -19,6 +22,14 @@ func LoadSignalsCSV(r io.Reader) ([]*SignalInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to read vspec: %w", err)
 	}
+
+	locRec := make([]string, colLen)
+	locRec[nameCol] = vss.FieldCurrentLocationCoordinates
+	locRec[typeCol] = "struct"
+	locRec[dataTypeCol] = coordinatesVSSDataType
+	locRec[deprecatedCol] = "false"
+	locRec[descCol] = "Vehicle's current location in WGS 84 coordinates, possibly with a measure of HDOP."
+	records = append(records, locRec)
 
 	var signals []*SignalInfo
 	for i := 1; i < len(records); i++ {

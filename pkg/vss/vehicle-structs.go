@@ -34,6 +34,8 @@ const (
 	FieldChassisAxleRow2WheelRightTirePressure = "chassisAxleRow2WheelRightTirePressure"
 	// FieldCurrentLocationAltitude Current altitude relative to WGS 84 reference ellipsoid, as measured at the position of GNSS receiver antenna.
 	FieldCurrentLocationAltitude = "currentLocationAltitude"
+	// FieldCurrentLocationCoordinates Vehicle's current location in WGS 84 coordinates, possibly with a measure of HDOP.
+	FieldCurrentLocationCoordinates = "currentLocationCoordinates"
 	// FieldCurrentLocationHeading Current heading relative to geographic north. 0 = North, 90 = East, 180 = South, 270 = West.
 	FieldCurrentLocationHeading = "currentLocationHeading"
 	// FieldCurrentLocationIsRedacted Indicates if the latitude and longitude signals at the current timestamp have been redacted using a privacy zone.
