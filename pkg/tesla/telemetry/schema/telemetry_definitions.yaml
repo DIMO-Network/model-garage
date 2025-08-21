@@ -1,11 +1,12 @@
 # See https://developer.tesla.com/docs/fleet-api/fleet-telemetry/available-data
 # and https://github.com/teslamotors/fleet-telemetry/blob/main/protos/vehicle_data.proto
 
-- teslaField: Location
-  teslaType: LocationValue
-  vssSignals:
-  - Vehicle.CurrentLocation.Latitude
-  - Vehicle.CurrentLocation.Longitude
+# Location is handled in an ad-hoc way, because we map to a struct that isn't part of VSS.
+# - teslaField: Location
+#   teslaType: LocationValue
+#   vssSignals:
+#   - Vehicle.CurrentLocation.Latitude
+#   - Vehicle.CurrentLocation.Longitude
 
 # TODO(elffjs): Express more of the subtlety of the source enum, which has 7 possibilities.
 - teslaField: DetailedChargeState

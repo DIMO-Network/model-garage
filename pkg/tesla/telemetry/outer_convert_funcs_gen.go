@@ -29,30 +29,15 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, fmt.Errorf("type of Location is %T instead of the expected *protos.LocationValue", tv))
 				continue
 			}
-			if res, err := ConvertLocationToCurrentLocationLatitude(tvf); err != nil {
-				outErr = append(outErr, err)
-			} else {
-				sig := vss.Signal{
-					TokenID:   tokenID,
-					Name:      "currentLocationLatitude",
-					Timestamp: ts,
-					Source:    source,
-				}
-				sig.SetValue(res)
-				out = append(out, sig)
+			res := vss.Location{Latitude: tvf.Latitude, Longitude: tvf.Longitude}
+			sig := vss.Signal{
+				TokenID:   tokenID,
+				Name:      "currentLocationCoordinates",
+				Timestamp: ts,
+				Source:    source,
 			}
-			if res, err := ConvertLocationToCurrentLocationLongitude(tvf); err != nil {
-				outErr = append(outErr, err)
-			} else {
-				sig := vss.Signal{
-					TokenID:   tokenID,
-					Name:      "currentLocationLongitude",
-					Timestamp: ts,
-					Source:    source,
-				}
-				sig.SetValue(res)
-				out = append(out, sig)
-			}
+			sig.SetValue(res)
+			out = append(out, sig)
 		case protos.Field_DetailedChargeState:
 			var tvf protos.DetailedChargeStateValue
 			switch tv := d.GetValue().Value.(type) {

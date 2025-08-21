@@ -19,6 +19,26 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 
 	for _, d := range payload.GetData() {
 		switch d.GetKey() {
+		case protos.Field_Location:
+			var tvf *protos.LocationValue
+			switch tv := d.GetValue().Value.(type) {
+			case *protos.Value_LocationValue:
+				tvf = tv.LocationValue
+			case *protos.Value_Invalid:
+				continue
+			default:
+				outErr = append(outErr, fmt.Errorf("type of Location is %T instead of the expected *protos.LocationValue", tv))
+				continue
+			}
+			res := vss.Location{Latitude: tvf.Latitude, Longitude: tvf.Longitude}
+			sig := vss.Signal{
+				TokenID:   tokenID,
+				Name:      "currentLocationCoordinates",
+				Timestamp: ts,
+				Source:    source,
+			}
+			sig.SetValue(res)
+			out = append(out, sig)
 		{{- range .Conversions}}
 		{{- $teslaField := .TeslaField}}
 		case protos.Field_{{.TeslaField}}:

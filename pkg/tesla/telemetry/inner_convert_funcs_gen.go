@@ -4,16 +4,6 @@ import (
 	"github.com/teslamotors/fleet-telemetry/protos"
 )
 
-// ConvertLocationToCurrentLocationLatitude converts a telemetry datum with key Location to the VSS signal CurrentLocationLatitude.
-func ConvertLocationToCurrentLocationLatitude(val *protos.LocationValue) (float64, error) {
-	return val.Latitude, nil
-}
-
-// ConvertLocationToCurrentLocationLongitude converts a telemetry datum with key Location to the VSS signal CurrentLocationLongitude.
-func ConvertLocationToCurrentLocationLongitude(val *protos.LocationValue) (float64, error) {
-	return val.Longitude, nil
-}
-
 // ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsCharging converts a telemetry datum with key DetailedChargeState to the VSS signal PowertrainTractionBatteryChargingIsCharging.
 func ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsCharging(val protos.DetailedChargeStateValue) (float64, error) {
 	switch val {
