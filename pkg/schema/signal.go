@@ -204,7 +204,7 @@ func splitAndSantizeName(name string) (string, string) {
 func goTypeFromVSPEC(baseType string) string {
 	if slices.Contains(numberTypes, baseType) {
 		return "float64"
-	} else if baseType == "Types.DIMO.Coordinates" {
+	} else if baseType == CoordinatesVSSDataType {
 		return "vss.Location"
 	}
 	return "string"
@@ -214,7 +214,7 @@ func goTypeFromVSPEC(baseType string) string {
 func gqlTypeFromVSPEC(baseType string) string {
 	if slices.Contains(numberTypes, baseType) {
 		return "Float"
-	} else if baseType == "Types.DIMO.Coordinates" {
+	} else if baseType == CoordinatesVSSDataType {
 		return "Location"
 	}
 	return "String"
