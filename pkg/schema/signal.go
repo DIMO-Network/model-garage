@@ -215,6 +215,9 @@ func gqlTypeFromVSPEC(baseType string) string {
 	if slices.Contains(numberTypes, baseType) {
 		return "Float"
 	} else if baseType == CoordinatesVSSDataType {
+		// TODO(elffjs): This feels bad because we're fixing a type that
+		// is not a GraphQL built-in, and in truth is totally specific to
+		// telemetry-api.
 		return "Location"
 	}
 	return "String"
