@@ -12,6 +12,16 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// CoordinatesVSSDataType is a hardcoded reference to a VSS struct type that
+// contains three properties: latitude, longitude, and HDOP.
+//
+// See the COVESA documentation for more on VSS structs:
+// https://covesa.github.io/vehicle_signal_specification/rule_set/data_entry/data_types_struct/
+//
+// The type is in the VSS CSV file that we embed, but we are not yet willing
+// to write a general mechanism for translating VSS structs into Go structs.
+const CoordinatesVSSDataType = "Types.DIMO.Coordinates"
+
 // LoadSignalsCSV loads the signals from a vss CSV file.
 func LoadSignalsCSV(r io.Reader) ([]*SignalInfo, error) {
 	reader := csv.NewReader(r)

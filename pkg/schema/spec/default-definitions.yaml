@@ -38,6 +38,9 @@
 - vspecName: Vehicle.Cabin.Door.Row2.PassengerSide.Window.IsOpen
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.CurrentLocation.Coordinates
+  requiredPrivileges:
+    - VEHICLE_ALL_TIME_LOCATION
 - vspecName: Vehicle.CurrentLocation.Altitude
   requiredPrivileges:
     - VEHICLE_ALL_TIME_LOCATION
