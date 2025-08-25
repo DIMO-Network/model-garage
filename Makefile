@@ -23,50 +23,38 @@ endif
 
 # Dependency versions
 GOLANGCI_VERSION := latest
+help:
+	@echo "Specify a subcommand:"
+	@grep -hE '^[0-9a-zA-Z_-]+:.*?## .*$$' ${MAKEFILE_LIST} | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[0;36m%-20s\033[m %s\n", $$1, $$2}'
+	@echo ""
 
-build:
-	@CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(ARCH) \
-		go build -ldflags "-X 'github.com/DIMO-Network/model-garage/pkg/version.version=$(VERSION)'" \
-		-o bin/$(BIN_NAME) ./cmd/$(BIN_NAME)
 
-
-run: build
-	@./bin/$(BIN_NAME)
-
-all: clean target
 
 clean:
 	@rm -rf $(PATHINSTBIN)
 
-install: build
-	@install -d $(INSTALL_DIR)
-	@rm -f $(INSTALL_DIR)/$(BIN_NAME)
-	@cp $(PATHINSTBIN)/* $(INSTALL_DIR)/
-
 dep:
 	@go mod tidy
 
-test:
+test: # Run all tests
 	@go test ./... -race
 
-lint:
+lint: # Run all linters
 	@golangci-lint version
 	@golangci-lint run --timeout=5m
 
-format:
-	@golangci-lint run --fix
 
-migration:
-	migration -output=./pkg/migrations -package=migrations -filename="${name}"
+add-migration: # Add a new migration to the database
+	go tool goose create ${name} sql -s --dir=pkg/migrations
 
-tools-golangci-lint:
+tools-golangci-lint: # Install golangci-lint
 	@mkdir -p $(PATHINSTBIN)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | BINARY=golangci-lint bash -s -- ${GOLANGCI_VERSION}
 
-tools: tools-golangci-lint
+tools: tools-golangci-lint # Install all tools
 	go install tool
 
-clickhouse:
+clickhouse: # Run the clickhouse container
 	go run ./cmd/clickhouse-container
 
 generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-hashdog# Generate all files for the repository
