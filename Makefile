@@ -28,8 +28,6 @@ help:
 	@grep -hE '^[0-9a-zA-Z_-]+:.*?## .*$$' ${MAKEFILE_LIST} | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[0;36m%-20s\033[m %s\n", $$1, $$2}'
 	@echo ""
 
-
-
 clean:
 	@rm -rf $(PATHINSTBIN)
 
@@ -57,8 +55,7 @@ tools: tools-golangci-lint # Install all tools
 clickhouse: # Run the clickhouse container
 	go run ./cmd/clickhouse-container
 
-generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-hashdog# Generate all files for the repository
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/vss/vehicle-structs.go -custom.template-file=./internal/generator/vehicle.tmpl -custom.format=true
+generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-hashdog generate-vss# Generate all files for the repository
 
 generate-nativestatus: # Generate all files for nativestatus
 	go run ./cmd/codegen -convert.package=nativestatus -generators=convert -convert.output-file=./pkg/nativestatus/vehicle-convert-funcs_gen.go -definitions=./pkg/nativestatus/schema/native-definitions.yaml
@@ -88,3 +85,6 @@ generate-tesla: # Generate all files for tesla
 generate-compass: # Generate all files for compass
 	go run ./cmd/codegen -convert.package=compass -generators=convert -convert.output-file=./pkg/compass/convert_signal_funcs_gen.go -definitions=./pkg/compass/schema/compass_definitions.yaml
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/compass/convert_signal_status_gen.go -custom.template-file=./pkg/compass/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/compass/schema/compass_definitions.yaml
+
+generate-vss: # Generate all files for vss
+	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/vss/vehicle-structs.go -custom.template-file=./internal/generator/vehicle.tmpl -custom.format=true

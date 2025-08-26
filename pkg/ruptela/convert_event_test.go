@@ -76,13 +76,17 @@ func TestDecodeEventWithAllEventTypes(t *testing.T) {
 
 	// Verify braking event metadata
 	require.JSONEq(t, `{"counterValue":5}`, harshBrakingEvents[0].Metadata)
+	require.Equal(t, []string{vss.TagBehaviorHarshBraking}, harshBrakingEvents[0].Tags)
 	require.JSONEq(t, `{"counterValue":3}`, extremeBrakingEvents[0].Metadata)
+	require.Equal(t, []string{vss.TagSafetyCollision}, extremeBrakingEvents[0].Tags)
 
 	// Verify acceleration event metadata
 	require.JSONEq(t, `{"counterValue":10}`, accelerationEvents[0].Metadata)
+	require.Equal(t, []string{vss.TagBehaviorHarshAcceleration}, accelerationEvents[0].Tags)
 
 	// Verify cornering event metadata
 	require.JSONEq(t, `{"counterValue":7}`, corneringEvents[0].Metadata)
+	require.Equal(t, []string{vss.TagBehaviorHarshCornering}, corneringEvents[0].Tags)
 }
 
 func TestDecodeEventBrakingOnly(t *testing.T) {

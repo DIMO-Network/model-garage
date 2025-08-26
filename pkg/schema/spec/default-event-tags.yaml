@@ -1,0 +1,36 @@
+- name : behavior.harshBraking
+  description: "harshBraking an event that indicates a harsh braking was detected"
+- name : behavior.harshAcceleration
+  description: "harshAcceleration an event that indicates a harsh acceleration was detected"
+- name : behavior.harshCornering
+  description: "harshCornering an event that indicates a harsh cornering was detected"
+- name : safety.collision
+  description: "collision an event that indicates a collision was detected"
+
+# Future Events
+# - name : charging.sessionStart
+#   description: "sessionStart an event that indicates a charging session started"
+# - name : charging.sessionStop
+#   description: "sessionStop an event that indicates a charging session stopped"
+
+# - name : trip.start
+#   description: "tripStart an event that indicates a trip started"
+# - name : trip.end
+#   description: "tripEnd an event that indicates a trip ended"
+# - name : trip.destinationReached
+#   description: "tripDestinationReached an event that indicates a destination was reached"
+
+# - name : security.unauthorizedAccess
+#   description: "unauthorizedAccess an event that indicates unauthorized access was detected"
+# - name : security.tamperDetected
+#   description: "tamperDetected an event that indicates tamper was detected"
+# - name : security.alarmTriggered
+#   description: "alarmTriggered an event that indicates an alarm was triggered"
+
+# - name : safety.seatbeltUnbuckled
+#   description: "seatbeltUnbuckled an event that indicates a seatbelt was unbuckled"
+# - name : safety.airbagDeployed
+#   description: "airbagDeployed an event that indicates an airbag was deployed"
+# - name : safety.driverDistraction
+#   description: "driverDistraction an event that indicates driver distraction was detected"
+

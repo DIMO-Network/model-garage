@@ -86,6 +86,7 @@ func TestEventMigration(t *testing.T) {
 		{Name: vss.EventTimestampCol, Type: "DateTime64(6, 'UTC')", Comment: "time at which the event described occurred, transmitted by oracle."},
 		{Name: vss.EventDurationNsCol, Type: "UInt64", Comment: "duration in nanoseconds of the event."},
 		{Name: vss.EventMetadataCol, Type: "String", Comment: "arbitrary JSON metadata provided by the user, containing additional event-related information."},
+		{Name: vss.EventTagsCol, Type: "Array(String)", Comment: "tags for the event."},
 	}
 
 	// Check if the actual columns match the expected columns
@@ -100,6 +101,7 @@ func TestEventMigration(t *testing.T) {
 		Timestamp:    time.Now().Truncate(time.Microsecond),
 		DurationNs:   1000000000,
 		Metadata:     "metadata",
+		Tags:         []string{"tag1", "tag2"},
 	}
 	batch, err := conn.PrepareBatch(context.Background(), "INSERT INTO "+vss.EventTableName)
 	require.NoError(t, err, "Failed to prepare batch")
@@ -118,7 +120,7 @@ func TestEventMigration(t *testing.T) {
 	events := []vss.Event{}
 	for rows.Next() {
 		var event vss.Event
-		err = rows.Scan(&event.Subject, &event.Source, &event.Producer, &event.CloudEventID, &event.Name, &event.Timestamp, &event.DurationNs, &event.Metadata)
+		err = rows.Scan(&event.Subject, &event.Source, &event.Producer, &event.CloudEventID, &event.Name, &event.Timestamp, &event.DurationNs, &event.Metadata, &event.Tags)
 
 		require.NoError(t, err, "Failed to scan event")
 		events = append(events, event)
@@ -126,7 +128,6 @@ func TestEventMigration(t *testing.T) {
 
 	require.Equal(t, 1, len(events), "Expected 1 event")
 
-	// Debug: Print the timestamps to see what's happ
 	assert.Truef(t, event.Timestamp.Equal(events[0].Timestamp), "Event timestamp mismatch: %v != %v", event.Timestamp, events[0].Timestamp)
 	event.Timestamp = events[0].Timestamp
 	assert.Equal(t, event, events[0], "Event mismatch")
