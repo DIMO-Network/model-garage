@@ -1,3 +1,4 @@
+// Package migrations provides the functionality to run goose migrations on a clickhouse dimo database.
 package migrations
 
 import (
