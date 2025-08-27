@@ -84,7 +84,7 @@ func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]
 		m.signalMap, m.eventTags, m.loadErr = LoadSignalAndEventTagMap()
 	})
 	if m.loadErr != nil {
-		return nil, fmt.Errorf("failed to load signal map: %w", m.loadErr)
+		return nil, fmt.Errorf("failed to load signals and events: %w", m.loadErr)
 	}
 
 	return SignalConvert(event, m.signalMap)
