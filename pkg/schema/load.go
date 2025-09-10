@@ -7,8 +7,6 @@ import (
 	"slices"
 	"strings"
 
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"gopkg.in/yaml.v3"
 )
 
@@ -35,7 +33,6 @@ func LoadSignalsCSV(r io.Reader) ([]*SignalInfo, error) {
 		record := records[i]
 		signals = append(signals, NewSignalInfo(record))
 	}
-
 	// Sort the signals by name
 	slices.SortStableFunc(signals, func(a, b *SignalInfo) int {
 		return strings.Compare(a.Name, b.Name)
@@ -65,26 +62,60 @@ func LoadDefinitionFile(r io.Reader) (*Definitions, error) {
 	return definitions, nil
 }
 
+func LoadEventTags(r io.Reader) ([]*EventTagInfo, error) {
+	decoder := yaml.NewDecoder(r)
+	var eventTagInfos []*EventTagInfo
+	err := decoder.Decode(&eventTagInfos)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode json: %w", err)
+	}
+	slices.SortStableFunc(eventTagInfos, func(a, b *EventTagInfo) int {
+		return strings.Compare(a.Name, b.Name)
+	})
+
+	for _, eventTagInfo := range eventTagInfos {
+		if eventTagInfo.GOName == "" {
+			eventTagInfo.GOName = EventTagToGoName(eventTagInfo.Name)
+		}
+		if eventTagInfo.JSONName == "" {
+			eventTagInfo.JSONName = eventTagInfo.Name
+		}
+		if err := ValidateEventTag(eventTagInfo); err != nil {
+			return nil, fmt.Errorf("error validating event tag: %w", err)
+		}
+	}
+
+	return eventTagInfos, nil
+}
+
+// GetDefaultSignals reads the default signals and definitions files and merges them.
+func GetDefaultSignals() ([]*SignalInfo, error) {
+	specReader := strings.NewReader(VssRel42DIMO())
+	definitionReader := strings.NewReader(DefaultDefinitionsYAML())
+	signalDefinitions, err := GetDefinedSignals(specReader, definitionReader)
+	if err != nil {
+		return nil, fmt.Errorf("error getting defined signals: %w", err)
+	}
+	return signalDefinitions.Signals, nil
+}
+
+// GetDefaultEventTags reads the default event tags file and returns the event tags.
+func GetDefaultEventTags() ([]*EventTagInfo, error) {
+	return LoadEventTags(strings.NewReader(DefaultEventTagsYAML()))
+}
+
 // GetDefinedSignals reads the signals and definitions files and merges them.
-func GetDefinedSignals(specReader, definitionReader io.Reader) (*TemplateData, error) {
+func GetDefinedSignals(specReader, definitionReader io.Reader) (SignalDefinitions, error) {
 	signals, err := LoadSignalsCSV(specReader)
 	if err != nil {
-		return nil, fmt.Errorf("error reading signals: %w", err)
+		return SignalDefinitions{}, fmt.Errorf("error reading signals: %w", err)
 	}
 
 	definitions, err := LoadDefinitionFile(definitionReader)
 	if err != nil {
-		return nil, fmt.Errorf("error reading definition file: %w", err)
+		return SignalDefinitions{}, fmt.Errorf("error reading definition file: %w", err)
 	}
 	signals = definitions.DefinedSignal(signals)
-	modelName := "Model"
-	if len(signals) > 0 {
-		idx := strings.IndexByte(signals[0].Name, '.')
-		if idx > 0 {
-			modelName = signals[0].Name[:idx]
-			modelName = cases.Title(language.English).String(modelName)
-		}
-	}
 
 	originalNameMap := map[string]map[string]*SignalInfo{}
 	for _, signal := range signals {
@@ -98,13 +129,12 @@ func GetDefinedSignals(specReader, definitionReader io.Reader) (*TemplateData, e
 		}
 	}
 
-	tmplData := &TemplateData{
+	signalDefs := SignalDefinitions{
 		Signals:       signals,
-		ModelName:     modelName,
 		OriginalNames: createListOfOriginalNames(signals),
 	}
 
-	return tmplData, nil
+	return signalDefs, nil
 }
 
 // createListOfOriginalNames reverse the mapping of signalInfo => []conversions to conversions.OriginalName => []signalsInfo

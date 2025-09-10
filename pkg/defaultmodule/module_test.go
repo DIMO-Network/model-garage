@@ -438,7 +438,8 @@ func TestModule_EventConvert(t *testing.T) {
 							"name": "harsh_braking",
 							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
 							"durationNs": 0,
-							"metadata": "{\"side\":\"left\"}"
+							"metadata": "{\"side\":\"left\"}",
+							"tags": ["` + vss.TagBehaviorHarshAcceleration + `"]
 						},
 						{
 							"name": "charging_stopped",

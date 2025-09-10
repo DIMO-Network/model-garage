@@ -21,7 +21,8 @@ const (
 )
 
 var (
-	nonAlphaNum = regexp.MustCompile(`[^a-zA-Z0-9]+`)
+	nonAlphaNum   = regexp.MustCompile(`[^a-zA-Z0-9]+`)
+	nonAlphaOrDot = regexp.MustCompile(`[^a-zA-Z.]+`)
 
 	numberTypes = []string{"uint8", "int8", "uint16", "int16", "uint32", "int32", "uint64", "int64", "float", "double", "boolean"}
 )
@@ -50,6 +51,18 @@ type SignalInfo struct {
 	Privileges  []string
 }
 
+// EventTagInfo contains the information for an event tag.
+type EventTagInfo struct {
+	// Name is the name of the event tag.
+	Name string `json:"name" yaml:"name"`
+	// Desc is the description of the event tag.
+	Desc string `json:"description" yaml:"description"`
+	// JSONName is the name of the event tag in the JSON format this is the same as the Name but defined here for parity with the signals.
+	JSONName string `json:"jsonName" yaml:"jsonName"`
+	// GOName is the name of the event tag in the Go format this is the same as the Name but defined here for parity with the signals.
+	GOName string `json:"goName" yaml:"goName"`
+}
+
 // ConversionInfo contains the conversion information for a field.
 type ConversionInfo struct {
 	OriginalName string `json:"originalName" yaml:"originalName"`
@@ -70,11 +83,16 @@ type OriginalNameInfo struct {
 	Signals []*SignalInfo
 }
 
-// TemplateData contains the data to be used during template execution.
-type TemplateData struct {
-	ModelName     string
+type SignalDefinitions struct {
 	Signals       []*SignalInfo
 	OriginalNames []*OriginalNameInfo
+}
+
+// TemplateData contains the data to be used during template execution.
+type TemplateData struct {
+	SignalDefinitions
+	ModelName string
+	EventTags []*EventTagInfo
 }
 
 // Definitions is a map of definitions from clickhouse Name to definition info.
@@ -156,7 +174,7 @@ func (s *SignalInfo) GQLType() string {
 // VSSToGoName returns the golang formated name of a VSS signal.
 // This is done by removing the root Prefix and nonAlphaNumeric characters from the name and capitalizes the first letter.
 func VSSToGoName(name string) string {
-	firstComponent, rest := splitAndSantizeName(name)
+	firstComponent, rest := splitAndSanitizeName(name)
 	var nameBuilder strings.Builder
 	_, _ = nameBuilder.WriteRune(unicode.ToUpper(rune(firstComponent[0])))
 	_, _ = nameBuilder.WriteString(firstComponent[1:])
@@ -167,7 +185,7 @@ func VSSToGoName(name string) string {
 // VSSToJSONName returns the JSON formated name of a VSS signal.
 // This is done by removing the root Prefix and nonAlphaNumeric characters from the name and lowercases the first word.
 func VSSToJSONName(name string) string {
-	firstComponent, rest := splitAndSantizeName(name)
+	firstComponent, rest := splitAndSanitizeName(name)
 	if firstComponent == "" {
 		return ""
 	}
@@ -187,8 +205,18 @@ func VSSToJSONName(name string) string {
 	return nameBuilder.String()
 }
 
-// splitAndSantizeName removes the root branch prefix from the name and returns the first component separate from rest of the name with nonAlphaNumeric characters removed.
-func splitAndSantizeName(name string) (string, string) {
+func EventTagToGoName(name string) string {
+	splitName := strings.Split(name, ".")
+	var nameBuilder strings.Builder
+	for _, component := range splitName {
+		_, _ = nameBuilder.WriteRune(unicode.ToUpper(rune(component[0])))
+		_, _ = nameBuilder.WriteString(component[1:])
+	}
+	return nameBuilder.String()
+}
+
+// splitAndSanitizeName removes the root branch prefix from the name and returns the first component separate from rest of the name with nonAlphaNumeric characters removed.
+func splitAndSanitizeName(name string) (string, string) {
 	splitName := strings.Split(name, ".")
 
 	if len(splitName) == 1 {

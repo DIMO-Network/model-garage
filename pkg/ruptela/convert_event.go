@@ -113,6 +113,7 @@ func ToBrakingEvents(rawValue string) ([]vss.Event, error) {
 		events = append(events, vss.Event{
 			Name:     EventNameHarshBraking,
 			Metadata: string(metaCounterJSON),
+			Tags:     []string{vss.TagBehaviorHarshBraking},
 		})
 	}
 
@@ -129,6 +130,7 @@ func ToBrakingEvents(rawValue string) ([]vss.Event, error) {
 		events = append(events, vss.Event{
 			Name:     EventNameExtremeBraking,
 			Metadata: string(metaCounterJSON),
+			Tags:     []string{vss.TagSafetyCollision},
 		})
 	}
 
@@ -154,6 +156,7 @@ func ToAccelerationEvent(rawValue string) (vss.Event, error) {
 	return vss.Event{
 		Name:     EventNameAcceleration,
 		Metadata: string(metaCounterJSON),
+		Tags:     []string{vss.TagBehaviorHarshAcceleration},
 	}, nil
 }
 
@@ -175,5 +178,6 @@ func ToCorneringEvent(rawValue string) (vss.Event, error) {
 	return vss.Event{
 		Name:     EventNameCornering,
 		Metadata: string(metaCounterJSON),
+		Tags:     []string{vss.TagBehaviorHarshCornering},
 	}, nil
 }

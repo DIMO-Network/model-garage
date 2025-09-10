@@ -20,10 +20,12 @@ const (
 	EventNameCol = "name"
 	// EventTimestampCol is the name of the timestamp column in Clickhouse.
 	EventTimestampCol = "timestamp"
-	// DurationNsCol is the name of the duration_ns column in Clickhouse.
+	// EventDurationNsCol is the name of the duration_ns column in Clickhouse.
 	EventDurationNsCol = "duration_ns"
-	// MetadataCol is the name of the metadata column in Clickhouse.
+	// EventMetadataCol is the name of the metadata column in Clickhouse.
 	EventMetadataCol = "metadata"
+	// EventTagsCol is the name of the tags column in Clickhouse.
+	EventTagsCol = "tags"
 )
 
 // Event represents a single event collected from a device.
@@ -52,6 +54,9 @@ type Event struct {
 
 	// Metadata is arbitrary JSON metadata provided by the user, containing additional event-related information.
 	Metadata string `ch:"metadata" json:"metadata"`
+
+	// Tags is a list of tags associated with the event.
+	Tags []string `ch:"tags" json:"tags"`
 }
 
 // EventToSlice converts an Event to an array of any for Clickhouse insertion.
@@ -66,6 +71,7 @@ func EventToSlice(obj Event) []any {
 		obj.Timestamp,
 		obj.DurationNs,
 		obj.Metadata,
+		obj.Tags,
 	}
 }
 
@@ -80,5 +86,6 @@ func EventColNames() []string {
 		EventTimestampCol,
 		EventDurationNsCol,
 		EventMetadataCol,
+		EventTagsCol,
 	}
 }

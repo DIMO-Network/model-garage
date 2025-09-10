@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strings"
 	"sync"
 	"time"
 
@@ -46,41 +45,46 @@ type Event struct {
 	DurationNs uint64 `json:"durationNs,omitempty"`
 	// Metadata is the metadata of the event.
 	Metadata string `json:"metadata,omitempty"`
+	// Tags is a list of tags for the event.
+	Tags []string `json:"tags"`
 }
 
 // Module holds dependencies for the default module. At present, there are none.
 type Module struct {
 	once      sync.Once
 	signalMap map[string]*schema.SignalInfo
+	eventTags map[string]*schema.EventTagInfo
 	loadErr   error
 }
 
 // LoadSignalMap loads the default signal map.
-func LoadSignalMap() (map[string]*schema.SignalInfo, error) {
-	defs, err := schema.LoadDefinitionFile(strings.NewReader(schema.DefaultDefinitionsYAML()))
+func LoadSignalAndEventTagMap() (map[string]*schema.SignalInfo, map[string]*schema.EventTagInfo, error) {
+	definedSignals, err := schema.GetDefaultSignals()
 	if err != nil {
-		return nil, fmt.Errorf("failed to load default schema definitions: %w", err)
+		return nil, nil, fmt.Errorf("failed to load default signals: %w", err)
 	}
-	signalInfo, err := schema.LoadSignalsCSV(strings.NewReader(schema.VssRel42DIMO()))
-	if err != nil {
-		return nil, fmt.Errorf("failed to load default signal info: %w", err)
-	}
-	definedSignals := defs.DefinedSignal(signalInfo)
 	signalMap := make(map[string]*schema.SignalInfo, len(definedSignals))
 	for _, signal := range definedSignals {
 		signalMap[signal.JSONName] = signal
 	}
-
-	return signalMap, nil
+	eventTags, err := schema.GetDefaultEventTags()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to load default event tags: %w", err)
+	}
+	eventTagMap := make(map[string]*schema.EventTagInfo, len(eventTags))
+	for _, eventTag := range eventTags {
+		eventTagMap[eventTag.Name] = eventTag
+	}
+	return signalMap, eventTagMap, nil
 }
 
 // SignalConvert converts a default CloudEvent to DIMO's vss signals.
 func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Signal, error) {
 	m.once.Do(func() {
-		m.signalMap, m.loadErr = LoadSignalMap()
+		m.signalMap, m.eventTags, m.loadErr = LoadSignalAndEventTagMap()
 	})
 	if m.loadErr != nil {
-		return nil, fmt.Errorf("failed to load signal map: %w", m.loadErr)
+		return nil, fmt.Errorf("failed to load signals and events: %w", m.loadErr)
 	}
 
 	return SignalConvert(event, m.signalMap)
@@ -132,7 +136,13 @@ func (*Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeven
 }
 
 // EventConvert converts a default CloudEvent to events.
-func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Event, error) {
+func (m *Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Event, error) {
+	m.once.Do(func() {
+		m.signalMap, m.eventTags, m.loadErr = LoadSignalAndEventTagMap()
+	})
+	if m.loadErr != nil {
+		return nil, fmt.Errorf("failed to load signal map: %w", m.loadErr)
+	}
 	// Parse the events array from the event data
 	var eventsData EventsData
 	err := json.Unmarshal(event.Data, &eventsData)
@@ -156,6 +166,16 @@ func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss
 			decodeErrs = append(decodeErrs, fmt.Errorf("metadata for event.name %s, event.timestamp %s is not valid json", ev.Name, ev.Timestamp))
 			continue
 		}
+		unknownTags := []string{}
+		for _, tag := range ev.Tags {
+			if _, ok := m.eventTags[tag]; !ok {
+				unknownTags = append(unknownTags, tag)
+			}
+		}
+		if len(unknownTags) > 0 {
+			decodeErrs = append(decodeErrs, fmt.Errorf("event.name %s contains unknown tags %v", ev.Name, unknownTags))
+			continue
+		}
 
 		vssEvent := vss.Event{
 			Subject:      event.Subject,
@@ -166,6 +186,7 @@ func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss
 			Timestamp:    ev.Timestamp,
 			DurationNs:   ev.DurationNs,
 			Metadata:     ev.Metadata,
+			Tags:         ev.Tags,
 		}
 		vssEvents = append(vssEvents, vssEvent)
 	}
