@@ -3,6 +3,7 @@ package telemetry
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/parse"
 	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
@@ -53,6 +54,18 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				sig.SetValue(res)
 				out = append(out, sig)
 			}
+			sig := vss.Signal{
+				TokenID:   tokenID,
+				Name:      "currentLocation",
+				Timestamp: ts,
+				Source:    source,
+			}
+			sig.SetValue(vss.Location{
+				Latitude:  tvf.Latitude,
+				Longitude: tvf.Longitude,
+				HDOP:      math.NaN(),
+			})
+			out = append(out, sig)
 		case protos.Field_DetailedChargeState:
 			var tvf protos.DetailedChargeStateValue
 			switch tv := d.GetValue().Value.(type) {
