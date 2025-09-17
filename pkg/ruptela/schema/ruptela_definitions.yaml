@@ -192,6 +192,21 @@
     - originalName: "signals.108"
       originalType: string
 
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.IsChargingCableConnected
+  conversions:
+    - originalName: "signals.1191"
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.Power
+  conversions:
+    - originalName: "signals.1190" # Charging power during session kW
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.TractionBattery.StateOfHealth
+  conversions:
+    - originalName: "signals.950" # State of Health % (SoH)
+      originalType: string 
+      
 # TODO we only get batteryCapacity in percent SOH
 # - vspecName: Vehicle.Powertrain.TractionBattery.GrossCapacity
 #   conversions:

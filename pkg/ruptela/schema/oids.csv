@@ -1651,7 +1651,7 @@ Range: 0~250, Offset: 0",No,Yes,No,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No
 1 - ATH ON,
 255 - ATH status not obtained",No,Yes,Yes,No,No,Yes,No,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 949,CAN EV State of health (SOH),2,Unsigned int.,0,10000,"0,01 ; 0",%,0xFFFF,CAN EV State of health (SOH) - LCV parameter,,,,No,Yes,,,,,,,,,,,,,,,,,,,,,,,
-950,OBD EV State of health (SOH),2,Unsigned int.,0,10000,"0,01 ; 0",%,0xFFFF,OBD EV State of health (SOH) - OBD parameter,,,,No,Yes,,,,,,,,,,,,,,,,,,,,,,,
+950,OBD EV State of health (SOH),2,Unsigned int.,0,10000,"0,01 ; 0",%,0xFFFF,OBD EV State of health (SOH) - OBD parameter,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 951,Geofence Crossing,2,Bitmap,0,0xFFFF,-,-, ,Shows geofence entry/exit events. https://doc.ruptela.com/articles/#!hardware-solutions-publication/geofence-configuration,No,Yes,No,Yes,Yes,Yes,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 952,Not in use,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 953,Not in use,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -1667,11 +1667,11 @@ Range: 0~250, Offset: 0",No,Yes,No,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No
 961,OBD tire pressure front right,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 962,OBD tire pressure rear left,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 963,OBD tire pressure rear righ,2,Unsigned int.,0,65534,"0,05; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-964,OBD Oil Life remaining,1,Unsigned int.,0,254,"1;0",%,255,,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-965,CAN tire pressure front left,2,Unsigned int.,0,65534,"1; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-966,CAN tire pressure front right,2,Unsigned int.,0,65534,"1; 0",PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-967,CAN tire pressure rear left,2,Unsigned int.,0,65534,"1; 0",PSI,65535,Outer-left tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
-968,CAN tire pressure rear right,2,Unsigned int.,0,65534,"1; 0",PSI,65535,Outer-right tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+964,OBD Oil Life remaining,1,Unsigned int.,0,254,1;0,%,255,,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+965,CAN tire pressure front left,2,Unsigned int.,0,65534,1; 0,PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+966,CAN tire pressure front right,2,Unsigned int.,0,65534,1; 0,PSI,65535,,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+967,CAN tire pressure rear left,2,Unsigned int.,0,65534,1; 0,PSI,65535,Outer-left tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+968,CAN tire pressure rear right,2,Unsigned int.,0,65534,1; 0,PSI,65535,Outer-right tire pressure in case of a truck,Yes,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 969,Not in use,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 970,Not in use,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 971,Not in use,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -1722,6 +1722,8 @@ Driver1 (MSB; 1B) + Driver2 (LSB; 1B)",No,Yes,Yes,,No,Yes,No,Yes,No,No,No,No,No,
 1149,"CAN AdBlue level, l",1,Unsigned int.,0,254,1,liters,0xFF,"Remaining AdBlue level in the tank, 1 l/bit",Yes,No,Yes,,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1150,"OBD AdBlue level, %",1,Unsigned int.,0,250,0.4,%,0xFB-0xFF,"Remaining AdBlue level in tank, 0.4 %/bit",Yes,No,Yes,,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1152,Distance left until refuel ,2,Unsighed int.,0,65534,-1,km,0xFFFF,This parameter shows vehicles' estimated distance that is left to drive until refuel or recharge,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1190,OBD Charging power,4,Unsigned int.,0,4294967294,0.001,kW,4294967295,EV charging power in kilowatts,Yes,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1191,OBD Charging cable connected,1,Bitmap,0,1,-,-,255,0 - charging cable not connected 1 - charging cable connected,No,Yes,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1201,Custom CAN 1,8,HEX,0,0xFFFFFFFFFFFFFFFF,-,-,-,User defined custom can parameter,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1202,Custom CAN 2,8,HEX,0,0xFFFFFFFFFFFFFFFF,-,-,-,User defined custom can parameter,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1203,Custom CAN 3,8,HEX,0,0xFFFFFFFFFFFFFFFF,-,-,-,User defined custom can parameter,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No

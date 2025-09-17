@@ -132,6 +132,10 @@ const (
 	FieldPowertrainTractionBatteryChargingChargeVoltageUnknownType = "powertrainTractionBatteryChargingChargeVoltageUnknownType"
 	// FieldPowertrainTractionBatteryChargingIsCharging True if charging is ongoing. Charging is considered to be ongoing if energy is flowing from charger to vehicle.
 	FieldPowertrainTractionBatteryChargingIsCharging = "powertrainTractionBatteryChargingIsCharging"
+	// FieldPowertrainTractionBatteryChargingIsChargingCableConnected Indicates if a charging cable is physically connected to the vehicle or not.
+	FieldPowertrainTractionBatteryChargingIsChargingCableConnected = "powertrainTractionBatteryChargingIsChargingCableConnected"
+	// FieldPowertrainTractionBatteryChargingPower Instantaneous charging power recorded during a charging event.
+	FieldPowertrainTractionBatteryChargingPower = "powertrainTractionBatteryChargingPower"
 	// FieldPowertrainTractionBatteryCurrentPower Current electrical energy flowing in/out of battery. Positive = Energy flowing in to battery, e.g. during charging. Negative = Energy flowing out of battery, e.g. during driving.
 	FieldPowertrainTractionBatteryCurrentPower = "powertrainTractionBatteryCurrentPower"
 	// FieldPowertrainTractionBatteryCurrentVoltage Current Voltage of the battery.
@@ -144,6 +148,8 @@ const (
 	FieldPowertrainTractionBatteryStateOfChargeCurrent = "powertrainTractionBatteryStateOfChargeCurrent"
 	// FieldPowertrainTractionBatteryStateOfChargeCurrentEnergy Physical state of charge of high voltage battery expressed in kWh.
 	FieldPowertrainTractionBatteryStateOfChargeCurrentEnergy = "powertrainTractionBatteryStateOfChargeCurrentEnergy"
+	// FieldPowertrainTractionBatteryStateOfHealth Calculated battery state of health at standard conditions.
+	FieldPowertrainTractionBatteryStateOfHealth = "powertrainTractionBatteryStateOfHealth"
 	// FieldPowertrainTractionBatteryTemperatureAverage Current average temperature of the battery cells.
 	FieldPowertrainTractionBatteryTemperatureAverage = "powertrainTractionBatteryTemperatureAverage"
 	// FieldPowertrainTransmissionCurrentGear The current gear. 0=Neutral, 1/2/..=Forward, -1/-2/..=Reverse.

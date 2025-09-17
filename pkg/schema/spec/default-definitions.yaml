@@ -236,3 +236,12 @@
 - vspecName: Vehicle.OBD.Status.DTCCount
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.Power
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.IsChargingCableConnected
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.StateOfHealth
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
