@@ -50,6 +50,9 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilRelativeLevel, ValueNumber: 92, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 73.7, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldOBDStatusDTCCount, ValueNumber: 18, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryStateOfHealth, ValueNumber: 98.5, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingPower, ValueNumber: 24.400000000000002, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingIsChargingCableConnected, ValueNumber: 1, Source: "ruptela/TODO"},
 	}
 
 	slices.SortFunc(expectedSignals, sortFunc)
@@ -105,7 +108,7 @@ var fullInputJSON = `
 			"93": "0",
 			"94": "0",
 			"95": "0",
-			"950": "0",
+			"950": "267A",
 			"96": "FF",
 			"97": "FF",
 			"98": "0",
@@ -116,7 +119,9 @@ var fullInputJSON = `
 			"968": "2D",
 			"985": "0",
 			"99": "1",
-			"999": "0"
+			"999": "0",
+			"1190": "5F50",
+			"1191": "1"
 		},
 		"trigger": 7
 	},

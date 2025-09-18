@@ -339,6 +339,19 @@ func ToPowertrainFuelSystemRelativeLevel1(originalDoc []byte, val string) (float
 	return ignoreZero(Convert207(val))
 }
 
+// ToPowertrainTractionBatteryChargingIsChargingCableConnected0 converts data from field 'signals.1191' of type string to 'Vehicle.Powertrain.TractionBattery.Charging.IsChargingCableConnected' of type float64.
+// Vehicle.Powertrain.TractionBattery.Charging.IsChargingCableConnected: Indicates if a charging cable is physically connected to the vehicle or not.
+func ToPowertrainTractionBatteryChargingIsChargingCableConnected0(originalDoc []byte, val string) (float64, error) {
+	return Convert1191(val)
+}
+
+// ToPowertrainTractionBatteryChargingPower0 converts data from field 'signals.1190' of type string to 'Vehicle.Powertrain.TractionBattery.Charging.Power' of type float64.
+// Vehicle.Powertrain.TractionBattery.Charging.Power: Instantaneous charging power recorded during a charging event.
+// Unit: 'kW'
+func ToPowertrainTractionBatteryChargingPower0(originalDoc []byte, val string) (float64, error) {
+	return ignoreZero(Convert1190(val))
+}
+
 // ToPowertrainTractionBatteryRange0 converts data from field 'signals.723' of type string to 'Vehicle.Powertrain.TractionBattery.Range' of type float64.
 // Vehicle.Powertrain.TractionBattery.Range: Remaining range in kilometers using only battery.
 // Unit: 'km'
@@ -356,6 +369,13 @@ func ToPowertrainTractionBatteryRange0(originalDoc []byte, val string) (float64,
 // Unit: 'percent' Min: '0' Max: '100.0'
 func ToPowertrainTractionBatteryStateOfChargeCurrent0(originalDoc []byte, val string) (float64, error) {
 	return Convert722(val)
+}
+
+// ToPowertrainTractionBatteryStateOfHealth0 converts data from field 'signals.950' of type string to 'Vehicle.Powertrain.TractionBattery.StateOfHealth' of type float64.
+// Vehicle.Powertrain.TractionBattery.StateOfHealth: Calculated battery state of health at standard conditions.
+// Unit: 'percent' Min: '0' Max: '100'
+func ToPowertrainTractionBatteryStateOfHealth0(originalDoc []byte, val string) (float64, error) {
+	return ignoreZero(Convert950(val))
 }
 
 // ToPowertrainTransmissionTravelledDistance0 converts data from field 'signals.645' of type string to 'Vehicle.Powertrain.Transmission.TravelledDistance' of type float64.
