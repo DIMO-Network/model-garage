@@ -3,6 +3,7 @@ package schema
 import (
 	"fmt"
 	"slices"
+	"unicode"
 )
 
 // privileges are defined on chain and copied here for validation.
@@ -16,7 +17,7 @@ type InvalidError struct {
 }
 
 func (e InvalidError) Error() string {
-	return fmt.Sprintf("signal '%s' property '%s' %s", e.Name, e.Property, e.Reason)
+	return fmt.Sprintf("'%s' property '%s' %s", e.Name, e.Property, e.Reason)
 }
 
 // Validate checks if the definition is valid.
@@ -39,6 +40,23 @@ func Validate(d *DefinitionInfo) error {
 		if !slices.Contains(privileges, priv) {
 			return InvalidError{Property: "requiredPrivileges", Name: d.VspecName, Reason: fmt.Sprintf("must be one of %v", privileges)}
 		}
+	}
+	return nil
+}
+
+func ValidateEventTag(e *EventTagInfo) error {
+	if e == nil {
+		return InvalidError{Property: "", Name: "", Reason: "is nil"}
+	}
+	if e.Name == "" {
+		return InvalidError{Property: "name", Name: e.Name, Reason: "is empty"}
+	}
+	// if name has non alpha numeric characters error
+	if nonAlphaOrDot.MatchString(e.Name) {
+		return InvalidError{Property: "name", Name: e.Name, Reason: "must be a letter or have `.`"}
+	}
+	if unicode.IsUpper(rune(e.Name[0])) {
+		return InvalidError{Property: "name", Name: e.Name, Reason: "must start with a lowercase letter"}
 	}
 	return nil
 }
