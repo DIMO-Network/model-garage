@@ -12,6 +12,7 @@
   teslaType: DetailedChargeStateValue
   vssSignals:
   - Vehicle.Powertrain.TractionBattery.Charging.IsCharging
+  - Vehicle.Powertrain.TractionBattery.Charging.IsChargingCableConnected
 
 - teslaField: ACChargingPower
   teslaType: double
