@@ -26,6 +26,9 @@ var (
 	// RuptelaSource is the Ethereum address for the Ruptela connection.
 	RuptelaSource = common.HexToAddress("0xF26421509Efe92861a587482100c6d728aBf1CD0")
 
+	// KaufmannSource is the Ethereum address for the Kaufmann connection.
+	KaufmannSource = common.HexToAddress("0x8D8cDB2B26423c8fDbb27321aF20b4659Ce919fD")
+
 	// HashDogSource is the Ethereum address for the HashDog connection.
 	HashDogSource = common.HexToAddress("0x4c674ddE8189aEF6e3b58F5a36d7438b2b1f6Bc2")
 
@@ -68,6 +71,12 @@ func RegisterDefaultModules(
 	cloudEventReg.Override(RuptelaSource.String(), ruptelaModule)
 	fingerprintReg.Override(RuptelaSource.String(), ruptelaModule)
 	eventReg.Override(RuptelaSource.String(), ruptelaModule)
+
+	// Kaufmann
+	signalReg.Override(KaufmannSource.String(), ruptelaModule)
+	cloudEventReg.Override(KaufmannSource.String(), ruptelaModule)
+	fingerprintReg.Override(KaufmannSource.String(), ruptelaModule)
+	eventReg.Override(KaufmannSource.String(), ruptelaModule)
 
 	// HashDog
 	hashDogModule := &hashdog.Module{}
