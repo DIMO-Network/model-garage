@@ -76,6 +76,18 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				sig.SetValue(res)
 				out = append(out, sig)
 			}
+			if res, err := ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsChargingCableConnected(tvf); err != nil {
+				outErr = append(outErr, err)
+			} else {
+				sig := vss.Signal{
+					TokenID:   tokenID,
+					Name:      "powertrainTractionBatteryChargingIsChargingCableConnected",
+					Timestamp: ts,
+					Source:    source,
+				}
+				sig.SetValue(res)
+				out = append(out, sig)
+			}
 		case protos.Field_ACChargingPower:
 			var tvf float64
 			switch tv := d.GetValue().Value.(type) {
