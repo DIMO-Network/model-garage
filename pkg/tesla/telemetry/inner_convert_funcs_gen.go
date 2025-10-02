@@ -24,6 +24,16 @@ func ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsCharging(val
 	}
 }
 
+// ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsChargingCableConnected converts a telemetry datum with key DetailedChargeState to the VSS signal PowertrainTractionBatteryChargingIsChargingCableConnected.
+func ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsChargingCableConnected(val protos.DetailedChargeStateValue) (float64, error) {
+	switch val {
+	case protos.DetailedChargeStateValue_DetailedChargeStateDisconnected:
+		return 0, nil
+	default:
+		return 1, nil
+	}
+}
+
 // ConvertACChargingPowerToPowertrainTractionBatteryCurrentPower converts a telemetry datum with key ACChargingPower to the VSS signal PowertrainTractionBatteryCurrentPower.
 // The input value is expressed in W.
 func ConvertACChargingPowerToPowertrainTractionBatteryCurrentPower(val float64) (float64, error) {
