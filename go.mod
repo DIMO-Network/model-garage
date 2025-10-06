@@ -3,18 +3,18 @@ module github.com/DIMO-Network/model-garage
 go 1.24.0
 
 require (
-	github.com/99designs/gqlgen v0.17.79
-	github.com/DIMO-Network/clickhouse-infra v0.0.5
+	github.com/99designs/gqlgen v0.17.81
+	github.com/DIMO-Network/clickhouse-infra v0.0.7
 	github.com/DIMO-Network/cloudevent v0.1.4
 	github.com/Masterminds/sprig/v3 v3.3.0
-	github.com/ethereum/go-ethereum v1.16.3
+	github.com/ethereum/go-ethereum v1.16.4
 	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.11.1
 	github.com/teslamotors/fleet-telemetry v0.7.2
 	github.com/tidwall/gjson v1.18.0
 	golang.org/x/mod v0.28.0
 	golang.org/x/tools v0.37.0
-	google.golang.org/protobuf v1.36.9
+	google.golang.org/protobuf v1.36.10
 	gopkg.in/yaml.v3 v3.0.1
 )
 
