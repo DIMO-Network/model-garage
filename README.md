@@ -4,12 +4,14 @@
 [![GoDoc](https://godoc.org/github.com/DIMO-Network/model-garage?status.svg)](https://godoc.org/github.com/DIMO-Network/model-garage)
 [![Go Report Card](https://goreportcard.com/badge/github.com/DIMO-Network/model-garage)](https://goreportcard.com/report/github.com/DIMO-Network/model-garage)
 
-Welcome to the **Model Garage**, a Golang toolkit for managing and working with DIMO models generated from vspec CSV schemas. Model Garage provides the following features:
+Welcome to the **Model Garage**, a Golang toolkit for managing and working with DIMO vehicle signal data.
 
 ## Features
 
-1. **Model Creation**: Create models from vspec CSV schemas, represented as Go structs.
-2. **JSON Conversion**: Easily convert JSON data for your models with automatically generated and customizable conversion functions.
+1. **Signal Conversion**: Converting raw data from various hardware devices (AutoPi, Ruptela, Tesla, etc.) into standardized VSS (Vehicle Signal Specification) format
+2. **Cloud Event Processing**: Transforming raw messages into CloudEvents for the DIMO data pipeline
+3. **Modular Architecture**: A plugin-like system where each hardware provider has its own conversion module
+4. **Code Generation**: Automatic generation of conversion functions from YAML definitions
 
 ## Signal Definitions
 
@@ -77,30 +79,41 @@ see [vehicle.tmpl](internal/generator/vehicle.tmpl) for an example template.
 
 The convert generator is a built-in generator that creates conversion functions for each signal. The conversion functions are created based on the signal definitions. The conversion functions are meant to be overridden with custom logic as needed. When generation is re-run, the conversion functions are not overwritten.
 
-## Typical use cases
+## Getting Started
 
-### Updating mappings
+For comprehensive documentation on how to work with Model Garage, see the [Developer Guide](./DEVELOPER_GUIDE.md).
 
-1. Update the signal name to VSS name mappings in [definitions.yaml](./pkg/schema/spec/definitions.yaml).
-2. run `make generate`
-3. PR and github release
+Quick links:
 
-Make the mappings take across our pipeline
+- [Understanding Modules](./DEVELOPER_GUIDE.md#understanding-modules)
+- [Adding New Signals](./DEVELOPER_GUIDE.md#adding-new-signals)
+- [Code Generation](./DEVELOPER_GUIDE.md#code-generation)
+- [Module-Specific Guides](./DEVELOPER_GUIDE.md#module-specific-guides)
 
-1. In the https://github.com/DIMO-Network/benthos-plugin/ repo, update the `go.mod` version for the model-garage dependency.
-2. PR and github release
-3. In the https://github.com/DIMO-Network/stream-es repo, in `values.yaml` update the container `image.tag` to point to the latest benthos-plugin release commit hash (copy it from release view).
-4. Push to main, then go to argo to sync it to prod
-5. In the https://github.com/DIMO-Network/telemetry-api/ repo, update the `go.mod` version for the model-garage dependency.
-6. PR and github release
-7. argo to sync it to prod
+## Common Tasks
 
-### Add signals to DIMO VSS spec
+### Adding a New Signal
 
-This is when the COVESA standard does not have a signal for something we get from an external integration.
+1. Update `pkg/schema/spec/default-definitions.yaml` to add your signal
+2. Update module-specific definitions (e.g., `pkg/ruptela/schema/ruptela_definitions.yaml`)
+3. Run `make generate` to regenerate conversion code
+4. Implement custom conversion logic if needed
+5. Update tests
 
-1. Look at this repo: https://github.com/DIMO-Network/VSS/blob/main/overlays/DIMO/dimo.vspec and follow readme there.
+See the [Adding New Signals](./DEVELOPER_GUIDE.md#adding-new-signals) guide for detailed steps.
 
-```
+### Propagating Changes
 
-```
+After releasing changes to model-garage, update the following services:
+
+1. **dis** - Signal conversion and storage
+2. **telemetry-api** - API access to signals
+3. **vehicle-triggers-api** - Webhook support for signals
+
+### Adding Custom VSS Signals
+
+When the COVESA standard doesn't have a signal you need:
+
+1. Go to the [DIMO VSS repository](https://github.com/DIMO-Network/VSS)
+2. Add your signal to `overlays/DIMO/dimo.vspec`
+3. Follow the process documented in that repository
