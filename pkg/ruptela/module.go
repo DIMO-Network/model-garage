@@ -150,12 +150,12 @@ func checkVINPresenceInPayload(event *RuptelaEvent, dataMap map[string]string) b
 
 	for _, key := range vinKeys {
 		value, ok := dataMap[key]
-		if !ok || value == "0" {
-			// key does not exist or its value is 0
-			return false
+		if ok && value != "0" {
+			// key has non-zero value
+			return true
 		}
 	}
-	return true
+	return false
 }
 
 // checkEventPresenceInPayload checks if the event is present in the payload.
