@@ -206,7 +206,12 @@
   conversions:
     - originalName: "signals.950" # State of Health % (SoH)
       originalType: string 
-      
+
+- vspecName: Vehicle.IsIgnitionOn
+  conversions:
+    - originalName: "signals.409"
+      originalType: string
+
 # TODO we only get batteryCapacity in percent SOH
 # - vspecName: Vehicle.Powertrain.TractionBattery.GrossCapacity
 #   conversions:

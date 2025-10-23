@@ -401,6 +401,34 @@ func Convert29(rawValue string) (float64, error) {
 	return float64(rawInt)*multiplier + offset, nil
 }
 
+// Convert409 converts the given raw value to a float64.
+// Unit: '-' Min: '0' Max: '1'.
+func Convert409(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(1)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 1 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
 // Convert483 converts the given raw value to a float64.
 // Unit: '-' Min: '0' Max: '250'.
 func Convert483(rawValue string) (float64, error) {

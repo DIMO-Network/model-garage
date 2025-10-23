@@ -174,6 +174,12 @@ func ToExteriorAirTemperature0(originalDoc []byte, val string) (float64, error) 
 	return Convert97(val)
 }
 
+// ToIsIgnitionOn0 converts data from field 'signals.409' of type string to 'Vehicle.IsIgnitionOn' of type float64.
+// Vehicle.IsIgnitionOn: Vehicle ignition status. False - off, True - on.
+func ToIsIgnitionOn0(originalDoc []byte, val string) (float64, error) {
+	return Convert409(val)
+}
+
 // ToLowVoltageBatteryCurrentVoltage0 converts data from field 'signals.29' of type string to 'Vehicle.LowVoltageBattery.CurrentVoltage' of type float64.
 // Vehicle.LowVoltageBattery.CurrentVoltage: Current Voltage of the low voltage battery.
 // Unit: 'V'
