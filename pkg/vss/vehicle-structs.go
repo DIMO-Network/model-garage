@@ -51,6 +51,8 @@ const (
 	FieldDIMOAftermarketNSAT = "dimoAftermarketNSAT"
 	// FieldDIMOAftermarketSSID Service Set Identifier for the wifi.
 	FieldDIMOAftermarketSSID = "dimoAftermarketSSID"
+	// FieldDIMOAftermarketUnplugDetection device unplug detection
+	FieldDIMOAftermarketUnplugDetection = "dimoAftermarketUnplugDetection"
 	// FieldDIMOAftermarketWPAState Indicate the current WPA state for the device's wifi, e.g. "CONNECTED", "SCANNING", "DISCONNECTED"
 	FieldDIMOAftermarketWPAState = "dimoAftermarketWPAState"
 	// FieldExteriorAirTemperature Air temperature outside the vehicle.
