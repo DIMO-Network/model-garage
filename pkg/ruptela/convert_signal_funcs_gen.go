@@ -167,6 +167,12 @@ func ToDIMOAftermarketNSAT0(originalDoc []byte, val float64) (float64, error) {
 	return val, nil
 }
 
+// ToDIMOAftermarketUnplugDetection0 converts data from field 'signals.985' of type string to 'Vehicle.DIMO.Aftermarket.UnplugDetection' of type float64.
+// Vehicle.DIMO.Aftermarket.UnplugDetection: device unplug detection
+func ToDIMOAftermarketUnplugDetection0(originalDoc []byte, val string) (float64, error) {
+	return Convert985(val)
+}
+
 // ToExteriorAirTemperature0 converts data from field 'signals.97' of type string to 'Vehicle.Exterior.AirTemperature' of type float64.
 // Vehicle.Exterior.AirTemperature: Air temperature outside the vehicle.
 // Unit: 'celsius'
