@@ -167,12 +167,6 @@ func ToDIMOAftermarketNSAT0(originalDoc []byte, val float64) (float64, error) {
 	return val, nil
 }
 
-// ToDIMOAftermarketUnplugDetection0 converts data from field 'signals.985' of type string to 'Vehicle.DIMO.Aftermarket.UnplugDetection' of type float64.
-// Vehicle.DIMO.Aftermarket.UnplugDetection: device unplug detection
-func ToDIMOAftermarketUnplugDetection0(originalDoc []byte, val string) (float64, error) {
-	return Convert985(val)
-}
-
 // ToExteriorAirTemperature0 converts data from field 'signals.97' of type string to 'Vehicle.Exterior.AirTemperature' of type float64.
 // Vehicle.Exterior.AirTemperature: Air temperature outside the vehicle.
 // Unit: 'celsius'
@@ -235,6 +229,21 @@ func ToOBDDTCList0(originalDoc []byte, val any) (string, error) {
 // Unit: 'km'
 func ToOBDDistanceWithMIL0(originalDoc []byte, val string) (float64, error) {
 	return Convert102(val)
+}
+
+// ToOBDIsPluggedIn0 converts data from field 'signals.985' of type string to 'Vehicle.OBD.IsPluggedIn' of type float64.
+// Vehicle.OBD.IsPluggedIn: Aftermarket device plugged in status. 1 = device plugged in, 0 = device unplugged.
+func ToOBDIsPluggedIn0(originalDoc []byte, val string) (float64, error) {
+	pluggedInStatus, err := Convert985(val)
+	if err != nil {
+		return 0, err
+	}
+
+	if pluggedInStatus == 0 {
+		return 1, nil
+	}
+	return 0, nil
+
 }
 
 // ToOBDRunTime0 converts data from field 'signals.107' of type string to 'Vehicle.OBD.RunTime' of type float64.

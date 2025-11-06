@@ -181,22 +181,6 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 		retSignals = append(retSignals, sig)
 	}
 
-	val, err = DIMOAftermarketUnplugDetectionFromV1Data(jsonData)
-	if err != nil {
-		if !errors.Is(err, errNotFound) {
-			errs = append(errs, fmt.Errorf("failed to get 'DIMOAftermarketUnplugDetection': %w", err))
-		}
-	} else {
-		sig := vss.Signal{
-			Name:      "dimoAftermarketUnplugDetection",
-			TokenID:   baseSignal.TokenID,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
-		}
-		sig.SetValue(val)
-		retSignals = append(retSignals, sig)
-	}
-
 	val, err = ExteriorAirTemperatureFromV1Data(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -269,6 +253,22 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 	} else {
 		sig := vss.Signal{
 			Name:      "obdDistanceWithMIL",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = OBDIsPluggedInFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDIsPluggedIn': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdIsPluggedIn",
 			TokenID:   baseSignal.TokenID,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
@@ -885,31 +885,6 @@ func DIMOAftermarketNSATFromV1Data(jsonData []byte) (ret float64, err error) {
 	return ret, errs
 }
 
-// DIMOAftermarketUnplugDetectionFromV1Data converts the given JSON data to a float64.
-func DIMOAftermarketUnplugDetectionFromV1Data(jsonData []byte) (ret float64, err error) {
-	var errs error
-	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "signals.985")
-	if result.Exists() && result.Value() != nil {
-		val, ok := result.Value().(string)
-		if ok {
-			retVal, err := ToDIMOAftermarketUnplugDetection0(jsonData, val)
-			if err == nil {
-				return retVal, nil
-			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.985': %w", err))
-		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.985' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-		}
-	}
-
-	if errs == nil {
-		return ret, fmt.Errorf("%w 'DIMOAftermarketUnplugDetection'", errNotFound)
-	}
-
-	return ret, errs
-}
-
 // ExteriorAirTemperatureFromV1Data converts the given JSON data to a float64.
 func ExteriorAirTemperatureFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
@@ -1039,6 +1014,31 @@ func OBDDistanceWithMILFromV1Data(jsonData []byte) (ret float64, err error) {
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'OBDDistanceWithMIL'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDIsPluggedInFromV1Data converts the given JSON data to a float64.
+func OBDIsPluggedInFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.985")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDIsPluggedIn0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.985': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.985' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDIsPluggedIn'", errNotFound)
 	}
 
 	return ret, errs
