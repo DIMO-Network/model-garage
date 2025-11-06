@@ -54,7 +54,7 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingPower, ValueNumber: 24.400000000000002, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingIsChargingCableConnected, ValueNumber: 1, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldIsIgnitionOn, ValueNumber: 1, Source: "ruptela/TODO"},
-		{TokenID: 33, Timestamp: ts, Name: vss.FieldDIMOAftermarketUnplugDetection, ValueNumber: 0, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldOBDIsPluggedIn, ValueNumber: 1, Source: "ruptela/TODO"},
 	}
 
 	slices.SortFunc(expectedSignals, sortFunc)
@@ -141,9 +141,9 @@ func TestIgnoreUnplugged(t *testing.T) {
 	actualSignals, err := ruptela.SignalsFromV1Payload(event)
 	require.NoError(t, err)
 	expectedSignals := []vss.Signal{
-		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldDIMOAftermarketUnplugDetection, ValueNumber: 1, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldIsIgnitionOn, ValueNumber: 1, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDDistanceWithMIL, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
+		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDIsPluggedIn, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldPowertrainCombustionEngineTPS, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
 		{TokenID: 162682, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldSpeed, ValueNumber: 5, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},

@@ -51,8 +51,6 @@ const (
 	FieldDIMOAftermarketNSAT = "dimoAftermarketNSAT"
 	// FieldDIMOAftermarketSSID Service Set Identifier for the wifi.
 	FieldDIMOAftermarketSSID = "dimoAftermarketSSID"
-	// FieldDIMOAftermarketUnplugDetection device unplug detection
-	FieldDIMOAftermarketUnplugDetection = "dimoAftermarketUnplugDetection"
 	// FieldDIMOAftermarketWPAState Indicate the current WPA state for the device's wifi, e.g. "CONNECTED", "SCANNING", "DISCONNECTED"
 	FieldDIMOAftermarketWPAState = "dimoAftermarketWPAState"
 	// FieldExteriorAirTemperature Air temperature outside the vehicle.
@@ -79,6 +77,8 @@ const (
 	FieldOBDFuelPressure = "obdFuelPressure"
 	// FieldOBDIntakeTemp PID 0F - Intake temperature
 	FieldOBDIntakeTemp = "obdIntakeTemp"
+	// FieldOBDIsPluggedIn Aftermarket device plugged in status. 1 = device plugged in, 0 = device unplugged.
+	FieldOBDIsPluggedIn = "obdIsPluggedIn"
 	// FieldOBDLongTermFuelTrim1 PID 07 - Long Term (learned) Fuel Trim - Bank 1 - negative percent leaner, positive percent richer
 	FieldOBDLongTermFuelTrim1 = "obdLongTermFuelTrim1"
 	// FieldOBDMAP PID 0B - Intake manifold pressure

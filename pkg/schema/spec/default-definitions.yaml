@@ -245,6 +245,6 @@
 - vspecName: Vehicle.Powertrain.TractionBattery.StateOfHealth
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
-- vspecName: Vehicle.DIMO.Aftermarket.UnplugDetection
+- vspecName: Vehicle.OBD.IsPluggedIn
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
