@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS signal_window_aggregates (
 )
 ENGINE = AggregatingMergeTree()
 ORDER BY (token_id, window_start, window_size_seconds)
-PARTITION BY toYYYYMM(window_start)
+PARTITION BY toYYYYMM(window_start);
 -- +goose StatementEnd
 
 -- +goose StatementBegin
