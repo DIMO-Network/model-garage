@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS signal_state_changes (
   producer LowCardinality(String),
   cloud_event_id String DEFAULT '',
   version UInt64 DEFAULT now64(),
-  INDEX idx_token_name_ts (token_id, signal_name, timestamp)
+  INDEX idx_token_name_ts (token_id, signal_name, timestamp) TYPE minmax GRANULARITY 4
 )
 ENGINE = ReplacingMergeTree(version)
 ORDER BY (token_id, signal_name, timestamp)
