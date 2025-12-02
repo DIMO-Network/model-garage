@@ -1141,6 +1141,7 @@
 "Vehicle.OBD.ThrottlePosition","sensor","float","","percent","","","PID 11 - Throttle position - 0 = closed throttle, 100 = open throttle","","","","ec1d372020205bb4a846a014b33801e1"
 "Vehicle.OBD.AirStatus","sensor","string","","","","","PID 12 - Secondary air status","","","","548f65bf59ed505a86dfaa1c33342e4d"
 "Vehicle.OBD.IsPluggedIn","sensor","boolean","","","","","Aftermarket device plugged in status. 1 = device plugged in, 0 = device unplugged.","","","","2883d0ca339a52c58f3dc76f3d7ba4ff"
+"Vehicle.OBD.IsEngineBlocked","sensor","boolean","","","","","Engine block status, 0 = enigne blocked, 1 = engine unblocked","","","","f16cf30a5cde5c63a7526b3155b15515"
 "Vehicle.OBD.OxygenSensorsIn2Banks","sensor","uint8","","","","","PID 13 - Presence of oxygen sensors in 2 banks. [A0..A3] == Bank 1, Sensors 1-4. [A4..A7] == Bank 2, Sensors 1-4","","","","0a9ba3f0a9b256d78bafd62ee8ce73cd"
 "Vehicle.OBD.O2","branch","","","","","","Oxygen sensors (PID 14 - PID 1B)","","","","31f007df72af50f0925d2b4647682a4d"
 "Vehicle.OBD.O2.Sensor1","branch","","","","","","Oxygen sensors (PID 14 - PID 1B)","","","","3aa8859203d4545083196a9690d72627"

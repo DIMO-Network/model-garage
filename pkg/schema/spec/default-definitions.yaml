@@ -248,3 +248,6 @@
 - vspecName: Vehicle.OBD.IsPluggedIn
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.IsEngineBlocked
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
