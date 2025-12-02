@@ -232,7 +232,7 @@ func ToOBDDistanceWithMIL0(originalDoc []byte, val string) (float64, error) {
 }
 
 // ToOBDIsEngineBlocked0 converts data from field 'signals.405' of type string to 'Vehicle.OBD.IsEngineBlocked' of type float64.
-// Vehicle.OBD.IsEngineBlocked: Engine block status, 0 = enigne blocked, 1 = engine unblocked
+// Vehicle.OBD.IsEngineBlocked: Engine block status, 0 = engine unblocked, 1 = engine blocked
 func ToOBDIsEngineBlocked0(originalDoc []byte, val string) (float64, error) {
 	engineBlockedStatus, err := Convert405(val)
 	if err != nil {
