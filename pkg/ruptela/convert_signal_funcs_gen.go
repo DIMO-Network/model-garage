@@ -231,6 +231,19 @@ func ToOBDDistanceWithMIL0(originalDoc []byte, val string) (float64, error) {
 	return Convert102(val)
 }
 
+// ToOBDIsEngineBlocked0 converts data from field 'signals.405' of type string to 'Vehicle.OBD.IsEngineBlocked' of type float64.
+// Vehicle.OBD.IsEngineBlocked: Engine block status, 0 = engine unblocked, 1 = engine blocked
+func ToOBDIsEngineBlocked0(originalDoc []byte, val string) (float64, error) {
+	engineBlockedStatus, err := Convert405(val)
+	if err != nil {
+		return 0, err
+	}
+	if engineBlockedStatus == 0 {
+		return 1, nil
+	}
+	return 0, nil
+}
+
 // ToOBDIsPluggedIn0 converts data from field 'signals.985' of type string to 'Vehicle.OBD.IsPluggedIn' of type float64.
 // Vehicle.OBD.IsPluggedIn: Aftermarket device plugged in status. 1 = device plugged in, 0 = device unplugged.
 func ToOBDIsPluggedIn0(originalDoc []byte, val string) (float64, error) {

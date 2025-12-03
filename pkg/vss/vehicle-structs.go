@@ -77,6 +77,8 @@ const (
 	FieldOBDFuelPressure = "obdFuelPressure"
 	// FieldOBDIntakeTemp PID 0F - Intake temperature
 	FieldOBDIntakeTemp = "obdIntakeTemp"
+	// FieldOBDIsEngineBlocked Engine block status, 0 = engine unblocked, 1 = engine blocked
+	FieldOBDIsEngineBlocked = "obdIsEngineBlocked"
 	// FieldOBDIsPluggedIn Aftermarket device plugged in status. 1 = device plugged in, 0 = device unplugged.
 	FieldOBDIsPluggedIn = "obdIsPluggedIn"
 	// FieldOBDLongTermFuelTrim1 PID 07 - Long Term (learned) Fuel Trim - Bank 1 - negative percent leaner, positive percent richer
