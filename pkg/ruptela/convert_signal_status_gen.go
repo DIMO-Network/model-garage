@@ -261,6 +261,22 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 		retSignals = append(retSignals, sig)
 	}
 
+	val, err = OBDFuelTypeNameFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDFuelTypeName': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdFuelTypeName",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = OBDIsEngineBlockedFromV1Data(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -1030,6 +1046,31 @@ func OBDDistanceWithMILFromV1Data(jsonData []byte) (ret float64, err error) {
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'OBDDistanceWithMIL'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDFuelTypeNameFromV1Data converts the given JSON data to a string.
+func OBDFuelTypeNameFromV1Data(jsonData []byte) (ret string, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.99")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDFuelTypeName0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.99': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.99' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDFuelTypeName'", errNotFound)
 	}
 
 	return ret, errs
