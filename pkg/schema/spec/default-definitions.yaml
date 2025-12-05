@@ -251,3 +251,6 @@
 - vspecName: Vehicle.OBD.IsEngineBlocked
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.FuelTypeName
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA

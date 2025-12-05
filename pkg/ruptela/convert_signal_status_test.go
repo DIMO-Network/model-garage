@@ -56,6 +56,7 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldIsIgnitionOn, ValueNumber: 1, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldOBDIsPluggedIn, ValueNumber: 1, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldOBDIsEngineBlocked, ValueNumber: 0, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldOBDFuelTypeName, ValueString: "GASOLINE", Source: "ruptela/TODO"},
 	}
 
 	slices.SortFunc(expectedSignals, sortFunc)

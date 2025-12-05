@@ -221,6 +221,11 @@
   conversions:
     - originalName: "signals.405"
       originalType: string
+
+- vspecName: Vehicle.OBD.FuelTypeName
+  conversions:
+    - originalName: "signals.99"
+      originalType: string
       
 # TODO we only get batteryCapacity in percent SOH
 # - vspecName: Vehicle.Powertrain.TractionBattery.GrossCapacity

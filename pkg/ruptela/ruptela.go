@@ -27,6 +27,59 @@ func fuelTypeConversion(val float64) (string, error) {
 	}
 }
 
+func fuelTypeNameConversion(val float64) (string, error) {
+	switch val {
+	case 1:
+		return "GASOLINE", nil
+	case 2:
+		return "METHANOL", nil
+	case 3:
+		return "ETHANOL", nil
+	case 4:
+		return "DIESEL", nil
+	case 5:
+		return "LPG", nil
+	case 6:
+		return "CNG", nil
+	case 7:
+		return "PROPANE", nil
+	case 8:
+		return "ELECTRIC", nil
+	case 9:
+		return "BIFUEL RUNNING GASOLINE", nil
+	case 10:
+		return "BIFUEL RUNNING METHANOL", nil
+	case 11:
+		return "BIFUEL RUNNING ETHANOL", nil
+	case 12:
+		return "BIFUEL RUNNING LPG", nil
+	case 13:
+		return "BIFUEL RUNNING CNG", nil
+	case 14:
+		return "BIFUEL RUNNING PROPANE", nil
+	case 15:
+		return "BIFUEL RUNNING ELECTRICITY", nil
+	case 16:
+		return "BIFUEL RUNNING ELECTRIC AND COMBUSTION ENGINE", nil
+	case 17:
+		return "HYBRID GASOLINE", nil
+	case 18:
+		return "HYBRID ETHANOL", nil
+	case 19:
+		return "HYBRID DIESEL", nil
+	case 20:
+		return "HYBRID ELECTRIC", nil
+	case 21:
+		return "HYBRID RUNNING ELECTRIC AND COMBUSTION ENGINE", nil
+	case 22:
+		return "HYBRID REGENERATIVE", nil
+	case 23:
+		return "BIFUEL RUNNING DIESEL", nil
+	default:
+		return "", errNotFound
+	}
+}
+
 func ignoreZero(val float64, err error) (float64, error) {
 	if err != nil {
 		return 0, err

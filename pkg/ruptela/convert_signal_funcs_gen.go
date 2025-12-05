@@ -231,6 +231,16 @@ func ToOBDDistanceWithMIL0(originalDoc []byte, val string) (float64, error) {
 	return Convert102(val)
 }
 
+// ToOBDFuelTypeName0 converts data from field 'signals.99' of type string to 'Vehicle.OBD.FuelTypeName' of type string.
+// Vehicle.OBD.FuelTypeName: Fuel type names decoded from PID 51.
+func ToOBDFuelTypeName0(originalDoc []byte, val string) (string, error) {
+	num, err := Convert99(val)
+	if err != nil {
+		return "", err
+	}
+	return fuelTypeNameConversion(num)
+}
+
 // ToOBDIsEngineBlocked0 converts data from field 'signals.405' of type string to 'Vehicle.OBD.IsEngineBlocked' of type float64.
 // Vehicle.OBD.IsEngineBlocked: Engine block status, 0 = engine unblocked, 1 = engine blocked
 func ToOBDIsEngineBlocked0(originalDoc []byte, val string) (float64, error) {

@@ -75,6 +75,8 @@ const (
 	FieldOBDEngineLoad = "obdEngineLoad"
 	// FieldOBDFuelPressure PID 0A - Fuel pressure
 	FieldOBDFuelPressure = "obdFuelPressure"
+	// FieldOBDFuelTypeName Fuel type names decoded from PID 51.
+	FieldOBDFuelTypeName = "obdFuelTypeName"
 	// FieldOBDIntakeTemp PID 0F - Intake temperature
 	FieldOBDIntakeTemp = "obdIntakeTemp"
 	// FieldOBDIsEngineBlocked Engine block status, 0 = engine unblocked, 1 = engine blocked
