@@ -161,12 +161,12 @@ func TestDecodeFingerprint_JapanVIN(t *testing.T) {
 }
 
 func TestCANBasedVINOnly(t *testing.T) {
-    t.Parallel()
-    expectedVIN := "W1NGM2BB7RA057440"
+	t.Parallel()
+	expectedVIN := "W1NGM2BB7RA057440"
 
-    // Build an event that only has CAN-based VIN parts in signals 123/124/125
-    var event cloudevent.RawEvent
-    canVINEvent := `{
+	// Build an event that only has CAN-based VIN parts in signals 123/124/125
+	var event cloudevent.RawEvent
+	canVINEvent := `{
         "source": "ruptela/TODO",
         "data": {
             "signals": {
@@ -176,19 +176,19 @@ func TestCANBasedVINOnly(t *testing.T) {
             }
         }
     }`
-    err := json.Unmarshal([]byte(canVINEvent), &event)
-    require.NoError(t, err)
-    fp, err := ruptela.DecodeFingerprint(event)
-    require.NoError(t, err, "error decoding fingerprint")
-    require.Equal(t, expectedVIN, fp.VIN, "decoded VIN does not match expected VIN")
+	err := json.Unmarshal([]byte(canVINEvent), &event)
+	require.NoError(t, err)
+	fp, err := ruptela.DecodeFingerprint(event)
+	require.NoError(t, err, "error decoding fingerprint")
+	require.Equal(t, expectedVIN, fp.VIN, "decoded VIN does not match expected VIN")
 }
 
 func TestPreferStandardOverCAN(t *testing.T) {
-    t.Parallel()
-    // When both sets exist, we should prefer the standard 104/105/106
-    expectedVIN := "UALLAAAF3AA444482" // same as in TestFullFPFromDataConversion
-    var event cloudevent.RawEvent
-    eventJSON := `{
+	t.Parallel()
+	// When both sets exist, we should prefer the standard 104/105/106
+	expectedVIN := "UALLAAAF3AA444482" // same as in TestFullFPFromDataConversion
+	var event cloudevent.RawEvent
+	eventJSON := `{
         "source": "ruptela/TODO",
         "data": {
             "signals": {
@@ -201,9 +201,9 @@ func TestPreferStandardOverCAN(t *testing.T) {
             }
         }
     }`
-    err := json.Unmarshal([]byte(eventJSON), &event)
-    require.NoError(t, err)
-    fp, err := ruptela.DecodeFingerprint(event)
-    require.NoError(t, err, "error decoding fingerprint")
-    require.Equal(t, expectedVIN, fp.VIN, "decoded VIN should prefer standard fields over CAN-based ones")
+	err := json.Unmarshal([]byte(eventJSON), &event)
+	require.NoError(t, err)
+	fp, err := ruptela.DecodeFingerprint(event)
+	require.NoError(t, err, "error decoding fingerprint")
+	require.Equal(t, expectedVIN, fp.VIN, "decoded VIN should prefer standard fields over CAN-based ones")
 }
