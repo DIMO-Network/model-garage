@@ -159,3 +159,51 @@ func TestDecodeFingerprint_JapanVIN(t *testing.T) {
 		})
 	}
 }
+
+func TestCANBasedVINOnly(t *testing.T) {
+    t.Parallel()
+    expectedVIN := "W1NGM2BB7RA057440"
+
+    // Build an event that only has CAN-based VIN parts in signals 123/124/125
+    var event cloudevent.RawEvent
+    canVINEvent := `{
+        "source": "ruptela/TODO",
+        "data": {
+            "signals": {
+                "123": "57314e474d324242",
+                "124": "3752413035373434",
+                "125": "3000000000000000"
+            }
+        }
+    }`
+    err := json.Unmarshal([]byte(canVINEvent), &event)
+    require.NoError(t, err)
+    fp, err := ruptela.DecodeFingerprint(event)
+    require.NoError(t, err, "error decoding fingerprint")
+    require.Equal(t, expectedVIN, fp.VIN, "decoded VIN does not match expected VIN")
+}
+
+func TestPreferStandardOverCAN(t *testing.T) {
+    t.Parallel()
+    // When both sets exist, we should prefer the standard 104/105/106
+    expectedVIN := "UALLAAAF3AA444482" // same as in TestFullFPFromDataConversion
+    var event cloudevent.RawEvent
+    eventJSON := `{
+        "source": "ruptela/TODO",
+        "data": {
+            "signals": {
+                "104": "55414C4C41414146",
+                "105": "3341413434343438",
+                "106": "3200000000000000",
+                "123": "57314e474d324242",
+                "124": "3752413035373434",
+                "125": "3000000000000000"
+            }
+        }
+    }`
+    err := json.Unmarshal([]byte(eventJSON), &event)
+    require.NoError(t, err)
+    fp, err := ruptela.DecodeFingerprint(event)
+    require.NoError(t, err, "error decoding fingerprint")
+    require.Equal(t, expectedVIN, fp.VIN, "decoded VIN should prefer standard fields over CAN-based ones")
+}
