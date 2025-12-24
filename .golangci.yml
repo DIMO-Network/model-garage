@@ -89,3 +89,5 @@ formatters:
       - third_party$
       - builtin$
       - examples$
+issues:
+  fix: true
