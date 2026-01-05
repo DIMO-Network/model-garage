@@ -150,6 +150,7 @@ func checkVINPresenceInPayload(event *RuptelaEvent, dataMap map[string]string) b
 
 	for _, key := range vinKeys {
 		value, ok := dataMap[key]
+		// ruptela smart5 sends empty vin as long 0s
 		if ok && (value != "0" && value != "0000000000000000") {
 			// key has non-zero value
 			return true
