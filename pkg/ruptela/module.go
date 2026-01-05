@@ -145,12 +145,13 @@ func checkVINPresenceInPayload(event *RuptelaEvent, dataMap map[string]string) b
 		return false
 	}
 
-	// VIN keys in the ruptela payload
-	vinKeys := []string{"104", "105", "106"}
+	// VIN keys in the ruptela payload including CAN IO's as a backup(smart5 devices)
+	vinKeys := []string{"104", "105", "106", "123", "124", "125"}
 
 	for _, key := range vinKeys {
 		value, ok := dataMap[key]
-		if ok && value != "0" {
+		// ruptela smart5 sends empty vin as long 0s
+		if ok && (value != "0" && value != "0000000000000000") {
 			// key has non-zero value
 			return true
 		}
