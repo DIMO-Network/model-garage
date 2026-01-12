@@ -11,7 +11,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'Merge pull request')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
@@ -19,7 +19,7 @@ jobs:
         run: make tools
       - name: tidy
         run: go mod tidy
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: tools
           path: bin/
@@ -29,11 +29,11 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'Merge pull request')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v7
         with:
           name: tools
           path: bin/
@@ -47,11 +47,11 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'Merge pull request')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v7
         with:
           name: tools
           path: bin/
@@ -65,11 +65,11 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'Merge pull request')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v7
         with:
           name: tools
           path: bin/
