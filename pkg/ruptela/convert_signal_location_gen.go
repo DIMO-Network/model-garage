@@ -253,6 +253,16 @@ func SpeedFromLocationData(originalDoc []byte, result gjson.Result) (ret float64
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.spd' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
+	val2, ok := result.Value().(string)
+	if ok {
+		ret, err = ToSpeed2(originalDoc, val2)
+		if err == nil {
+			return ret, nil
+		}
+		errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.210': %w", err))
+	} else {
+		errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.210' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+	}
 
 	return ret, errs
 }

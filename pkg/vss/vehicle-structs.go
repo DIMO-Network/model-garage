@@ -5,6 +5,14 @@ package vss
 const (
 	// FieldAngularVelocityYaw Vehicle rotation rate along Z (vertical).
 	FieldAngularVelocityYaw = "angularVelocityYaw"
+	// FieldBodyLightsIsAirbagWarningOn Indicates whether the airbag/SRS warning telltale is active.
+	FieldBodyLightsIsAirbagWarningOn = "bodyLightsIsAirbagWarningOn"
+	// FieldBodyLockIsLocked Indicates whether the vehicle is locked via the central locking system. True = vehicle locked. False = vehicle unlocked.
+	FieldBodyLockIsLocked = "bodyLockIsLocked"
+	// FieldBodyTrunkFrontIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldBodyTrunkFrontIsOpen = "bodyTrunkFrontIsOpen"
+	// FieldBodyTrunkRearIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
+	FieldBodyTrunkRearIsOpen = "bodyTrunkRearIsOpen"
 	// FieldCabinDoorRow1DriverSideIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
 	FieldCabinDoorRow1DriverSideIsOpen = "cabinDoorRow1DriverSideIsOpen"
 	// FieldCabinDoorRow1DriverSideWindowIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
@@ -21,6 +29,20 @@ const (
 	FieldCabinDoorRow2PassengerSideIsOpen = "cabinDoorRow2PassengerSideIsOpen"
 	// FieldCabinDoorRow2PassengerSideWindowIsOpen Is item open or closed? True = Fully or partially open. False = Fully closed.
 	FieldCabinDoorRow2PassengerSideWindowIsOpen = "cabinDoorRow2PassengerSideWindowIsOpen"
+	// FieldCabinSeatRow1DriverSideIsBelted Is the belt engaged.
+	FieldCabinSeatRow1DriverSideIsBelted = "cabinSeatRow1DriverSideIsBelted"
+	// FieldCabinSeatRow1PassengerSideIsBelted Is the belt engaged.
+	FieldCabinSeatRow1PassengerSideIsBelted = "cabinSeatRow1PassengerSideIsBelted"
+	// FieldCabinSeatRow2DriverSideIsBelted Is the belt engaged.
+	FieldCabinSeatRow2DriverSideIsBelted = "cabinSeatRow2DriverSideIsBelted"
+	// FieldCabinSeatRow2MiddleIsBelted Is the belt engaged.
+	FieldCabinSeatRow2MiddleIsBelted = "cabinSeatRow2MiddleIsBelted"
+	// FieldCabinSeatRow2PassengerSideIsBelted Is the belt engaged.
+	FieldCabinSeatRow2PassengerSideIsBelted = "cabinSeatRow2PassengerSideIsBelted"
+	// FieldCabinSeatRow3DriverSideIsBelted Is the belt engaged.
+	FieldCabinSeatRow3DriverSideIsBelted = "cabinSeatRow3DriverSideIsBelted"
+	// FieldCabinSeatRow3PassengerSideIsBelted Is the belt engaged.
+	FieldCabinSeatRow3PassengerSideIsBelted = "cabinSeatRow3PassengerSideIsBelted"
 	// FieldChassisAxleRow1WheelLeftSpeed Rotational speed of a vehicle's wheel.
 	FieldChassisAxleRow1WheelLeftSpeed = "chassisAxleRow1WheelLeftSpeed"
 	// FieldChassisAxleRow1WheelLeftTirePressure Tire pressure in kilo-Pascal.
@@ -33,6 +55,26 @@ const (
 	FieldChassisAxleRow2WheelLeftTirePressure = "chassisAxleRow2WheelLeftTirePressure"
 	// FieldChassisAxleRow2WheelRightTirePressure Tire pressure in kilo-Pascal.
 	FieldChassisAxleRow2WheelRightTirePressure = "chassisAxleRow2WheelRightTirePressure"
+	// FieldChassisAxleRow3Weight Measured Load on axle row 3.
+	FieldChassisAxleRow3Weight = "chassisAxleRow3Weight"
+	// FieldChassisAxleRow4Weight Measured Load on axle row 3.
+	FieldChassisAxleRow4Weight = "chassisAxleRow4Weight"
+	// FieldChassisAxleRow5Weight Measured Load on axle row 3.
+	FieldChassisAxleRow5Weight = "chassisAxleRow5Weight"
+	// FieldChassisBrakeABSIsWarningOn Indicates whether the ABS warning telltale is active (any non-off state).
+	FieldChassisBrakeABSIsWarningOn = "chassisBrakeABSIsWarningOn"
+	// FieldChassisBrakeCircuit1PressurePrimary Pneumatic pressure in the service brake circuit or reservoir
+	FieldChassisBrakeCircuit1PressurePrimary = "chassisBrakeCircuit1PressurePrimary"
+	// FieldChassisBrakeCircuit2PressurePrimary Pneumatic pressure in the service brake circuit or reservoir
+	FieldChassisBrakeCircuit2PressurePrimary = "chassisBrakeCircuit2PressurePrimary"
+	// FieldChassisBrakeIsPedalPressed Indicates whether the brake pedal is pressed.
+	FieldChassisBrakeIsPedalPressed = "chassisBrakeIsPedalPressed"
+	// FieldChassisBrakePedalPosition Brake pedal position as percent. 0 = Not depressed. 100 = Fully depressed.
+	FieldChassisBrakePedalPosition = "chassisBrakePedalPosition"
+	// FieldChassisParkingBrakeIsEngaged Parking brake status. True = Parking Brake is Engaged. False = Parking Brake is not Engaged.
+	FieldChassisParkingBrakeIsEngaged = "chassisParkingBrakeIsEngaged"
+	// FieldChassisTireSystemIsWarningOn Indicates whether the tire system warning telltale is active
+	FieldChassisTireSystemIsWarningOn = "chassisTireSystemIsWarningOn"
 	// FieldCurrentLocationAltitude Current altitude relative to WGS 84 reference ellipsoid, as measured at the position of GNSS receiver antenna.
 	FieldCurrentLocationAltitude = "currentLocationAltitude"
 	// FieldCurrentLocationCoordinates Current location of the vehicle in WGS 84 coordinates.
@@ -75,12 +117,16 @@ const (
 	FieldOBDEngineLoad = "obdEngineLoad"
 	// FieldOBDFuelPressure PID 0A - Fuel pressure
 	FieldOBDFuelPressure = "obdFuelPressure"
+	// FieldOBDFuelRate PID 5E - Engine fuel rate
+	FieldOBDFuelRate = "obdFuelRate"
 	// FieldOBDFuelTypeName Fuel type names decoded from PID 51.
 	FieldOBDFuelTypeName = "obdFuelTypeName"
 	// FieldOBDIntakeTemp PID 0F - Intake temperature
 	FieldOBDIntakeTemp = "obdIntakeTemp"
 	// FieldOBDIsEngineBlocked Engine block status, 0 = engine unblocked, 1 = engine blocked
 	FieldOBDIsEngineBlocked = "obdIsEngineBlocked"
+	// FieldOBDIsPTOActive PID 1E - Auxiliary input status (power take off)
+	FieldOBDIsPTOActive = "obdIsPTOActive"
 	// FieldOBDIsPluggedIn Aftermarket device plugged in status. 1 = device plugged in, 0 = device unplugged.
 	FieldOBDIsPluggedIn = "obdIsPluggedIn"
 	// FieldOBDLongTermFuelTrim1 PID 07 - Long Term (learned) Fuel Trim - Bank 1 - negative percent leaner, positive percent richer
@@ -91,6 +137,8 @@ const (
 	FieldOBDO2WRSensor1Voltage = "obdO2WRSensor1Voltage"
 	// FieldOBDO2WRSensor2Voltage PID 2x (byte CD) - Voltage for wide range/band oxygen sensor
 	FieldOBDO2WRSensor2Voltage = "obdO2WRSensor2Voltage"
+	// FieldOBDOilTemperature PID 5C - Engine oil temperature
+	FieldOBDOilTemperature = "obdOilTemperature"
 	// FieldOBDRunTime PID 1F - Engine run time
 	FieldOBDRunTime = "obdRunTime"
 	// FieldOBDShortTermFuelTrim1 PID 06 - Short Term (immediate) Fuel Trim - Bank 1 - negative percent leaner, positive percent richer
@@ -121,8 +169,12 @@ const (
 	FieldPowertrainCombustionEngineTPS = "powertrainCombustionEngineTPS"
 	// FieldPowertrainCombustionEngineTorque Current engine torque. Shall be reported as 0 during engine breaking.
 	FieldPowertrainCombustionEngineTorque = "powertrainCombustionEngineTorque"
+	// FieldPowertrainCombustionEngineTorquePercent Actual engine output torque as a percentage of reference engine torque (FMS / J1939 parameter SPN 513).
+	FieldPowertrainCombustionEngineTorquePercent = "powertrainCombustionEngineTorquePercent"
 	// FieldPowertrainFuelSystemAbsoluteLevel Current available fuel in the fuel tank expressed in liters.
 	FieldPowertrainFuelSystemAbsoluteLevel = "powertrainFuelSystemAbsoluteLevel"
+	// FieldPowertrainFuelSystemAccumulatedConsumption Accumulated fuel consumption (totalized) reported by the vehicle (FMS SPN 250).
+	FieldPowertrainFuelSystemAccumulatedConsumption = "powertrainFuelSystemAccumulatedConsumption"
 	// FieldPowertrainFuelSystemRelativeLevel Level in fuel tank as percent of capacity. 0 = empty. 100 = full.
 	FieldPowertrainFuelSystemRelativeLevel = "powertrainFuelSystemRelativeLevel"
 	// FieldPowertrainFuelSystemSupportedFuelTypes High level information of fuel types supported
@@ -161,6 +213,14 @@ const (
 	FieldPowertrainTractionBatteryTemperatureAverage = "powertrainTractionBatteryTemperatureAverage"
 	// FieldPowertrainTransmissionCurrentGear The current gear. 0=Neutral, 1/2/..=Forward, -1/-2/..=Reverse.
 	FieldPowertrainTransmissionCurrentGear = "powertrainTransmissionCurrentGear"
+	// FieldPowertrainTransmissionIsClutchSwitchOperated Indicates if the Clutch switch is operated, so engine and transmission are partially or fully decoupled. False = Clutch switch not operated. True = Clutch switch operated.
+	FieldPowertrainTransmissionIsClutchSwitchOperated = "powertrainTransmissionIsClutchSwitchOperated"
+	// FieldPowertrainTransmissionRetarderActualTorque Actual retarder torque as a percentage (FMS / J1939 SPN 520).
+	FieldPowertrainTransmissionRetarderActualTorque = "powertrainTransmissionRetarderActualTorque"
+	// FieldPowertrainTransmissionRetarderTorqueMode Active engine torque mode.
+	FieldPowertrainTransmissionRetarderTorqueMode = "powertrainTransmissionRetarderTorqueMode"
+	// FieldPowertrainTransmissionSelectedGear The selected gear. 0=Neutral, 1/2/..=Forward, -1/-2/..=Reverse, 126=Park.
+	FieldPowertrainTransmissionSelectedGear = "powertrainTransmissionSelectedGear"
 	// FieldPowertrainTransmissionTemperature The current gearbox temperature.
 	FieldPowertrainTransmissionTemperature = "powertrainTransmissionTemperature"
 	// FieldPowertrainTransmissionTravelledDistance Odometer reading, total distance travelled during the lifetime of the transmission.
@@ -169,6 +229,8 @@ const (
 	FieldPowertrainType = "powertrainType"
 	// FieldServiceDistanceToService Remaining distance to service (of any kind). Negative values indicate service overdue.
 	FieldServiceDistanceToService = "serviceDistanceToService"
+	// FieldServiceTimeToService Remaining time to service (of any kind). Negative values indicate service overdue.
+	FieldServiceTimeToService = "serviceTimeToService"
 	// FieldSpeed Vehicle speed.
 	FieldSpeed = "speed"
 )

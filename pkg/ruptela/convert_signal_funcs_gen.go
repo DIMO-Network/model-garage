@@ -10,6 +10,153 @@ import (
 // any conversion functions already defined in this package will be coppied through.
 // note: DO NOT mutate the orginalDoc parameter which is shared between all conversion functions.
 
+// ToBodyLightsIsAirbagWarningOn0 converts data from field 'signals.347' of type string to 'Vehicle.Body.Lights.IsAirbagWarningOn' of type float64.
+// Vehicle.Body.Lights.IsAirbagWarningOn: Indicates whether the airbag/SRS warning telltale is active.
+func ToBodyLightsIsAirbagWarningOn0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert347(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANStatusToBool(status)
+
+}
+
+// ToBodyLockIsLocked0 converts data from field 'signals.538' of type string to 'Vehicle.Body.Lock.IsLocked' of type float64.
+// Vehicle.Body.Lock.IsLocked: Indicates whether the vehicle is locked via the central locking system. True = vehicle locked. False = vehicle unlocked.
+func ToBodyLockIsLocked0(originalDoc []byte, val string) (float64, error) {
+	return Convert538(val)
+}
+
+// ToBodyTrunkFrontIsOpen0 converts data from field 'signals.518' of type string to 'Vehicle.Body.Trunk.Front.IsOpen' of type float64.
+// Vehicle.Body.Trunk.Front.IsOpen: Is item open or closed? True = Fully or partially open. False = Fully closed.
+func ToBodyTrunkFrontIsOpen0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert518(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 6)
+}
+
+// ToBodyTrunkRearIsOpen0 converts data from field 'signals.518' of type string to 'Vehicle.Body.Trunk.Rear.IsOpen' of type float64.
+// Vehicle.Body.Trunk.Rear.IsOpen: Is item open or closed? True = Fully or partially open. False = Fully closed.
+func ToBodyTrunkRearIsOpen0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert518(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 5)
+}
+
+// ToCabinDoorRow1DriverSideIsOpen0 converts data from field 'signals.518' of type string to 'Vehicle.Cabin.Door.Row1.DriverSide.IsOpen' of type float64.
+// Vehicle.Cabin.Door.Row1.DriverSide.IsOpen: Is item open or closed? True = Fully or partially open. False = Fully closed.
+func ToCabinDoorRow1DriverSideIsOpen0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert518(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 0)
+}
+
+// ToCabinDoorRow1PassengerSideIsOpen0 converts data from field 'signals.518' of type string to 'Vehicle.Cabin.Door.Row1.PassengerSide.IsOpen' of type float64.
+// Vehicle.Cabin.Door.Row1.PassengerSide.IsOpen: Is item open or closed? True = Fully or partially open. False = Fully closed.
+func ToCabinDoorRow1PassengerSideIsOpen0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert518(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 1)
+}
+
+// ToCabinDoorRow2DriverSideIsOpen0 converts data from field 'signals.518' of type string to 'Vehicle.Cabin.Door.Row2.DriverSide.IsOpen' of type float64.
+// Vehicle.Cabin.Door.Row2.DriverSide.IsOpen: Is item open or closed? True = Fully or partially open. False = Fully closed.
+func ToCabinDoorRow2DriverSideIsOpen0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert518(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 2)
+}
+
+// ToCabinDoorRow2PassengerSideIsOpen0 converts data from field 'signals.518' of type string to 'Vehicle.Cabin.Door.Row2.PassengerSide.IsOpen' of type float64.
+// Vehicle.Cabin.Door.Row2.PassengerSide.IsOpen: Is item open or closed? True = Fully or partially open. False = Fully closed.
+func ToCabinDoorRow2PassengerSideIsOpen0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert518(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 3)
+}
+
+// ToCabinSeatRow1DriverSideIsBelted0 converts data from field 'signals.109' of type string to 'Vehicle.Cabin.Seat.Row1.DriverSide.IsBelted' of type float64.
+// Vehicle.Cabin.Seat.Row1.DriverSide.IsBelted: Is the belt engaged.
+func ToCabinSeatRow1DriverSideIsBelted0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert109(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 0)
+}
+
+// ToCabinSeatRow1PassengerSideIsBelted0 converts data from field 'signals.109' of type string to 'Vehicle.Cabin.Seat.Row1.PassengerSide.IsBelted' of type float64.
+// Vehicle.Cabin.Seat.Row1.PassengerSide.IsBelted: Is the belt engaged.
+func ToCabinSeatRow1PassengerSideIsBelted0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert109(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 1)
+}
+
+// ToCabinSeatRow2DriverSideIsBelted0 converts data from field 'signals.109' of type string to 'Vehicle.Cabin.Seat.Row2.DriverSide.IsBelted' of type float64.
+// Vehicle.Cabin.Seat.Row2.DriverSide.IsBelted: Is the belt engaged.
+func ToCabinSeatRow2DriverSideIsBelted0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert109(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 2)
+}
+
+// ToCabinSeatRow2MiddleIsBelted0 converts data from field 'signals.109' of type string to 'Vehicle.Cabin.Seat.Row2.Middle.IsBelted' of type float64.
+// Vehicle.Cabin.Seat.Row2.Middle.IsBelted: Is the belt engaged.
+func ToCabinSeatRow2MiddleIsBelted0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert109(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 4)
+}
+
+// ToCabinSeatRow2PassengerSideIsBelted0 converts data from field 'signals.109' of type string to 'Vehicle.Cabin.Seat.Row2.PassengerSide.IsBelted' of type float64.
+// Vehicle.Cabin.Seat.Row2.PassengerSide.IsBelted: Is the belt engaged.
+func ToCabinSeatRow2PassengerSideIsBelted0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert109(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 3)
+}
+
+// ToCabinSeatRow3DriverSideIsBelted0 converts data from field 'signals.109' of type string to 'Vehicle.Cabin.Seat.Row3.DriverSide.IsBelted' of type float64.
+// Vehicle.Cabin.Seat.Row3.DriverSide.IsBelted: Is the belt engaged.
+func ToCabinSeatRow3DriverSideIsBelted0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert109(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 5)
+}
+
+// ToCabinSeatRow3PassengerSideIsBelted0 converts data from field 'signals.109' of type string to 'Vehicle.Cabin.Seat.Row3.PassengerSide.IsBelted' of type float64.
+// Vehicle.Cabin.Seat.Row3.PassengerSide.IsBelted: Is the belt engaged.
+func ToCabinSeatRow3PassengerSideIsBelted0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert109(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANBitToBool(status, 6)
+}
+
 // ToChassisAxleRow1WheelLeftTirePressure0 converts data from field 'signals.960' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure' of type float64.
 // Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure: Tire pressure in kilo-Pascal.
 // Unit: 'kPa'
@@ -106,6 +253,115 @@ func ToChassisAxleRow2WheelRightTirePressure1(originalDoc []byte, val string) (f
 	return ConvertPSIToKPa(psi), nil
 }
 
+// ToChassisAxleRow3Weight0 converts data from field 'signals.53' of type string to 'Vehicle.Chassis.Axle.Row3.Weight' of type float64.
+// Vehicle.Chassis.Axle.Row3.Weight: Measured Load on axle row 3.
+// Unit: 'kg'
+func ToChassisAxleRow3Weight0(originalDoc []byte, val string) (float64, error) {
+	return Convert53(val)
+}
+
+// ToChassisAxleRow4Weight0 converts data from field 'signals.54' of type string to 'Vehicle.Chassis.Axle.Row4.Weight' of type float64.
+// Vehicle.Chassis.Axle.Row4.Weight: Measured Load on axle row 3.
+// Unit: 'kg'
+func ToChassisAxleRow4Weight0(originalDoc []byte, val string) (float64, error) {
+	return Convert54(val)
+}
+
+// ToChassisAxleRow5Weight0 converts data from field 'signals.55' of type string to 'Vehicle.Chassis.Axle.Row5.Weight' of type float64.
+// Vehicle.Chassis.Axle.Row5.Weight: Measured Load on axle row 3.
+// Unit: 'kg'
+func ToChassisAxleRow5Weight0(originalDoc []byte, val string) (float64, error) {
+	return Convert55(val)
+}
+
+// ToChassisBrakeABSIsWarningOn0 converts data from field 'signals.313' of type string to 'Vehicle.Chassis.Brake.ABS.IsWarningOn' of type float64.
+// Vehicle.Chassis.Brake.ABS.IsWarningOn: Indicates whether the ABS warning telltale is active (any non-off state).
+func ToChassisBrakeABSIsWarningOn0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert313(val)
+	if err != nil {
+		return 0, err
+	}
+	return CANStatusToBool(status)
+}
+
+// ToChassisBrakeCircuit1PressurePrimary0 converts data from field 'signals.355' of type string to 'Vehicle.Chassis.Brake.Circuit1.PressurePrimary' of type float64.
+// Vehicle.Chassis.Brake.Circuit1.PressurePrimary: Pneumatic pressure in the service brake circuit or reservoir
+// Unit: 'kPa'
+func ToChassisBrakeCircuit1PressurePrimary0(originalDoc []byte, val string) (float64, error) {
+	return Convert355(val)
+}
+
+// ToChassisBrakeCircuit2PressurePrimary0 converts data from field 'signals.356' of type string to 'Vehicle.Chassis.Brake.Circuit2.PressurePrimary' of type float64.
+// Vehicle.Chassis.Brake.Circuit2.PressurePrimary: Pneumatic pressure in the service brake circuit or reservoir
+// Unit: 'kPa'
+func ToChassisBrakeCircuit2PressurePrimary0(originalDoc []byte, val string) (float64, error) {
+	return Convert356(val)
+}
+
+// ToChassisBrakeIsPedalPressed0 converts data from field 'signals.36' of type string to 'Vehicle.Chassis.Brake.IsPedalPressed' of type float64.
+// Vehicle.Chassis.Brake.IsPedalPressed: Indicates whether the brake pedal is pressed.
+func ToChassisBrakeIsPedalPressed0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert36(val)
+	if err != nil {
+		return 0, err
+	}
+	switch status {
+	case 0:
+		return 0, nil
+	case 1:
+		return 1, nil
+	default:
+		return 0, errNotFound
+	}
+}
+
+// ToChassisBrakePedalPosition0 converts data from field 'signals.482' of type string to 'Vehicle.Chassis.Brake.PedalPosition' of type float64.
+// Vehicle.Chassis.Brake.PedalPosition: Brake pedal position as percent. 0 = Not depressed. 100 = Fully depressed.
+// Unit: 'percent' Min: '0' Max: '100'
+func ToChassisBrakePedalPosition0(originalDoc []byte, val string) (float64, error) {
+	return Convert482(val)
+}
+
+// ToChassisParkingBrakeIsEngaged0 converts data from field 'signals.362' of type string to 'Vehicle.Chassis.ParkingBrake.IsEngaged' of type float64.
+// Vehicle.Chassis.ParkingBrake.IsEngaged: Parking brake status. True = Parking Brake is Engaged. False = Parking Brake is not Engaged.
+func ToChassisParkingBrakeIsEngaged0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert362(val)
+	if err != nil {
+		return 0, err
+	}
+	switch status {
+	case 0:
+		return 0, nil
+	case 1:
+		return 1, nil
+	default:
+		return 0, errNotFound
+	}
+}
+
+// ToChassisTireSystemIsWarningOn0 converts data from field 'signals.316' of type string to 'Vehicle.Chassis.TireSystem.IsWarningOn' of type float64.
+// Vehicle.Chassis.TireSystem.IsWarningOn: Indicates whether the tire system warning telltale is active
+func ToChassisTireSystemIsWarningOn0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert316(val)
+	if err != nil {
+		return 0, err
+	}
+	switch status {
+	case 0:
+		return 0, nil
+
+	case 1:
+		return 1, nil
+
+	case 2:
+		return 0, errNotFound
+	case 3:
+		return 0, errNotFound
+	default:
+		return 0, errNotFound
+	}
+}
+
 // ToCurrentLocationAltitude0 converts data from field 'pos.alt' of type float64 to 'Vehicle.CurrentLocation.Altitude' of type float64.
 // Vehicle.CurrentLocation.Altitude: Current altitude relative to WGS 84 reference ellipsoid, as measured at the position of GNSS receiver antenna.
 // Unit: 'm'
@@ -174,10 +430,23 @@ func ToExteriorAirTemperature0(originalDoc []byte, val string) (float64, error) 
 	return Convert97(val)
 }
 
+// ToExteriorAirTemperature1 converts data from field 'signals.89' of type string to 'Vehicle.Exterior.AirTemperature' of type float64.
+// Vehicle.Exterior.AirTemperature: Air temperature outside the vehicle.
+// Unit: 'celsius'
+func ToExteriorAirTemperature1(originalDoc []byte, val string) (float64, error) {
+	return Convert89(val)
+}
+
 // ToIsIgnitionOn0 converts data from field 'signals.409' of type string to 'Vehicle.IsIgnitionOn' of type float64.
 // Vehicle.IsIgnitionOn: Vehicle ignition status. False - off, True - on.
 func ToIsIgnitionOn0(originalDoc []byte, val string) (float64, error) {
 	return Convert409(val)
+}
+
+// ToIsIgnitionOn1 converts data from field 'signals.522' of type string to 'Vehicle.IsIgnitionOn' of type float64.
+// Vehicle.IsIgnitionOn: Vehicle ignition status. False - off, True - on.
+func ToIsIgnitionOn1(originalDoc []byte, val string) (float64, error) {
+	return Convert522(val)
 }
 
 // ToLowVoltageBatteryCurrentVoltage0 converts data from field 'signals.29' of type string to 'Vehicle.LowVoltageBattery.CurrentVoltage' of type float64.
@@ -231,6 +500,27 @@ func ToOBDDistanceWithMIL0(originalDoc []byte, val string) (float64, error) {
 	return Convert102(val)
 }
 
+// ToOBDEngineLoad0 converts data from field 'signals.39' of type string to 'Vehicle.OBD.EngineLoad' of type float64.
+// Vehicle.OBD.EngineLoad: PID 04 - Engine load in percent - 0 = no load, 100 = full load
+// Unit: 'percent'
+func ToOBDEngineLoad0(originalDoc []byte, val string) (float64, error) {
+	return Convert39(val)
+}
+
+// ToOBDFuelRate0 converts data from field 'signals.116' of type string to 'Vehicle.OBD.FuelRate' of type float64.
+// Vehicle.OBD.FuelRate: PID 5E - Engine fuel rate
+// Unit: 'l/h'
+func ToOBDFuelRate0(originalDoc []byte, val string) (float64, error) {
+	return Convert116(val)
+}
+
+// ToOBDFuelRate1 converts data from field 'signals.100' of type string to 'Vehicle.OBD.FuelRate' of type float64.
+// Vehicle.OBD.FuelRate: PID 5E - Engine fuel rate
+// Unit: 'l/h'
+func ToOBDFuelRate1(originalDoc []byte, val string) (float64, error) {
+	return Convert100(val)
+}
+
 // ToOBDFuelTypeName0 converts data from field 'signals.99' of type string to 'Vehicle.OBD.FuelTypeName' of type string.
 // Vehicle.OBD.FuelTypeName: Fuel type names decoded from PID 51.
 func ToOBDFuelTypeName0(originalDoc []byte, val string) (string, error) {
@@ -254,6 +544,29 @@ func ToOBDIsEngineBlocked0(originalDoc []byte, val string) (float64, error) {
 	return 0, nil
 }
 
+// ToOBDIsPTOActive0 converts data from field 'signals.38' of type string to 'Vehicle.OBD.IsPTOActive' of type float64.
+// Vehicle.OBD.IsPTOActive: PID 1E - Auxiliary input status (power take off)
+func ToOBDIsPTOActive0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert38(val)
+	if err != nil {
+		return 0, err
+	}
+
+	switch status {
+	case 0:
+		return 0, nil
+
+	case 5:
+		return 1, nil
+
+	case 31:
+		return 0, errNotFound
+
+	default:
+		return 0, errNotFound
+	}
+}
+
 // ToOBDIsPluggedIn0 converts data from field 'signals.985' of type string to 'Vehicle.OBD.IsPluggedIn' of type float64.
 // Vehicle.OBD.IsPluggedIn: Aftermarket device plugged in status. 1 = device plugged in, 0 = device unplugged.
 func ToOBDIsPluggedIn0(originalDoc []byte, val string) (float64, error) {
@@ -267,6 +580,13 @@ func ToOBDIsPluggedIn0(originalDoc []byte, val string) (float64, error) {
 	}
 	return 0, nil
 
+}
+
+// ToOBDOilTemperature0 converts data from field 'signals.727' of type string to 'Vehicle.OBD.OilTemperature' of type float64.
+// Vehicle.OBD.OilTemperature: PID 5C - Engine oil temperature
+// Unit: 'celsius'
+func ToOBDOilTemperature0(originalDoc []byte, val string) (float64, error) {
+	return Convert727(val)
 }
 
 // ToOBDRunTime0 converts data from field 'signals.107' of type string to 'Vehicle.OBD.RunTime' of type float64.
@@ -303,6 +623,20 @@ func ToPowertrainCombustionEngineDieselExhaustFluidLevel0(originalDoc []byte, va
 	return Convert1150(val)
 }
 
+// ToPowertrainCombustionEngineDieselExhaustFluidLevel1 converts data from field 'signals.201' of type string to 'Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Level' of type float64.
+// Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Level: Level of the Diesel Exhaust Fluid tank as percent of capacity. 0 = empty. 100 = full.
+// Unit: 'percent' Min: '0' Max: '100'
+func ToPowertrainCombustionEngineDieselExhaustFluidLevel1(originalDoc []byte, val string) (float64, error) {
+	return Convert201(val)
+}
+
+// ToPowertrainCombustionEngineDieselExhaustFluidLevel2 converts data from field 'signals.357' of type string to 'Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Level' of type float64.
+// Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Level: Level of the Diesel Exhaust Fluid tank as percent of capacity. 0 = empty. 100 = full.
+// Unit: 'percent' Min: '0' Max: '100'
+func ToPowertrainCombustionEngineDieselExhaustFluidLevel2(originalDoc []byte, val string) (float64, error) {
+	return Convert357(val)
+}
+
 // ToPowertrainCombustionEngineECT0 converts data from field 'signals.96' of type string to 'Vehicle.Powertrain.CombustionEngine.ECT' of type float64.
 // Vehicle.Powertrain.CombustionEngine.ECT: Engine coolant temperature.
 // Unit: 'celsius'
@@ -310,10 +644,45 @@ func ToPowertrainCombustionEngineECT0(originalDoc []byte, val string) (float64, 
 	return Convert96(val)
 }
 
+// ToPowertrainCombustionEngineECT1 converts data from field 'signals.115' of type string to 'Vehicle.Powertrain.CombustionEngine.ECT' of type float64.
+// Vehicle.Powertrain.CombustionEngine.ECT: Engine coolant temperature.
+// Unit: 'celsius'
+func ToPowertrainCombustionEngineECT1(originalDoc []byte, val string) (float64, error) {
+	return Convert115(val)
+}
+
+// ToPowertrainCombustionEngineEOP0 converts data from field 'signals.728' of type string to 'Vehicle.Powertrain.CombustionEngine.EOP' of type float64.
+// Vehicle.Powertrain.CombustionEngine.EOP: Engine oil pressure.
+// Unit: 'kPa'
+func ToPowertrainCombustionEngineEOP0(originalDoc []byte, val string) (float64, error) {
+	return Convert728(val)
+}
+
 // ToPowertrainCombustionEngineEngineOilLevel0 converts data from field 'signals.964' of type string to 'Vehicle.Powertrain.CombustionEngine.EngineOilLevel' of type string.
 // Vehicle.Powertrain.CombustionEngine.EngineOilLevel: Engine oil level.
 func ToPowertrainCombustionEngineEngineOilLevel0(originalDoc []byte, val string) (string, error) {
 	num, err := Convert964(val)
+	if err != nil {
+		return "", err
+	}
+	switch {
+	case num < 25:
+		return "CRITICALLY_LOW", nil
+	case num < 50:
+		return "LOW", nil
+	case num < 75:
+		return "NORMAL", nil
+	case num < 99:
+		return "HIGH", nil
+	default:
+		return "CRITICALLY_HIGH", nil
+	}
+}
+
+// ToPowertrainCombustionEngineEngineOilLevel1 converts data from field 'signals.1187' of type string to 'Vehicle.Powertrain.CombustionEngine.EngineOilLevel' of type string.
+// Vehicle.Powertrain.CombustionEngine.EngineOilLevel: Engine oil level.
+func ToPowertrainCombustionEngineEngineOilLevel1(originalDoc []byte, val string) (string, error) {
+	num, err := Convert1187(val)
 	if err != nil {
 		return "", err
 	}
@@ -338,11 +707,25 @@ func ToPowertrainCombustionEngineEngineOilRelativeLevel0(originalDoc []byte, val
 	return ignoreZero(Convert964(val))
 }
 
+// ToPowertrainCombustionEngineEngineOilRelativeLevel1 converts data from field 'signals.1187' of type string to 'Vehicle.Powertrain.CombustionEngine.EngineOilRelativeLevel' of type float64.
+// Vehicle.Powertrain.CombustionEngine.EngineOilRelativeLevel: Engine oil level as a percentage.
+// Unit: 'percent' Min: '0' Max: '100'
+func ToPowertrainCombustionEngineEngineOilRelativeLevel1(originalDoc []byte, val string) (float64, error) {
+	return ignoreZero(Convert1187(val))
+}
+
 // ToPowertrainCombustionEngineSpeed0 converts data from field 'signals.94' of type string to 'Vehicle.Powertrain.CombustionEngine.Speed' of type float64.
 // Vehicle.Powertrain.CombustionEngine.Speed: Engine speed measured as rotations per minute.
 // Unit: 'rpm'
 func ToPowertrainCombustionEngineSpeed0(originalDoc []byte, val string) (float64, error) {
 	return ignoreZero(Convert94(val))
+}
+
+// ToPowertrainCombustionEngineSpeed1 converts data from field 'signals.197' of type string to 'Vehicle.Powertrain.CombustionEngine.Speed' of type float64.
+// Vehicle.Powertrain.CombustionEngine.Speed: Engine speed measured as rotations per minute.
+// Unit: 'rpm'
+func ToPowertrainCombustionEngineSpeed1(originalDoc []byte, val string) (float64, error) {
+	return Convert197(val)
 }
 
 // ToPowertrainCombustionEngineTPS0 converts data from field 'signals.103' of type string to 'Vehicle.Powertrain.CombustionEngine.TPS' of type float64.
@@ -353,6 +736,30 @@ func ToPowertrainCombustionEngineTPS0(originalDoc []byte, val string) (float64, 
 		return ignoreZero(Convert103(val))
 	}
 	return Convert103(val)
+}
+
+// ToPowertrainCombustionEngineTPS1 converts data from field 'signals.206' of type string to 'Vehicle.Powertrain.CombustionEngine.TPS' of type float64.
+// Vehicle.Powertrain.CombustionEngine.TPS: Current throttle position.
+// Unit: 'percent'  Max: '100'
+func ToPowertrainCombustionEngineTPS1(originalDoc []byte, val string) (float64, error) {
+	if ignitionOff(originalDoc) {
+		return ignoreZero(Convert206(val))
+	}
+	return Convert206(val)
+}
+
+// ToPowertrainCombustionEngineTorquePercent0 converts data from field 'signals.519' of type string to 'Vehicle.Powertrain.CombustionEngine.TorquePercent' of type float64.
+// Vehicle.Powertrain.CombustionEngine.TorquePercent: Actual engine output torque as a percentage of reference engine torque (FMS / J1939 parameter SPN 513).
+// Unit: 'percent'
+func ToPowertrainCombustionEngineTorquePercent0(originalDoc []byte, val string) (float64, error) {
+	return Convert519(val)
+}
+
+// ToPowertrainCombustionEngineTorquePercent1 converts data from field 'signals.101' of type string to 'Vehicle.Powertrain.CombustionEngine.TorquePercent' of type float64.
+// Vehicle.Powertrain.CombustionEngine.TorquePercent: Actual engine output torque as a percentage of reference engine torque (FMS / J1939 parameter SPN 513).
+// Unit: 'percent'
+func ToPowertrainCombustionEngineTorquePercent1(originalDoc []byte, val string) (float64, error) {
+	return Convert101(val)
 }
 
 // ToPowertrainFuelSystemAbsoluteLevel0 converts data from field 'signals.642' of type string to 'Vehicle.Powertrain.FuelSystem.AbsoluteLevel' of type float64.
@@ -369,6 +776,20 @@ func ToPowertrainFuelSystemAbsoluteLevel1(originalDoc []byte, val string) (float
 	return ignoreZero(Convert205(val))
 }
 
+// ToPowertrainFuelSystemAccumulatedConsumption0 converts data from field 'signals.208' of type string to 'Vehicle.Powertrain.FuelSystem.AccumulatedConsumption' of type float64.
+// Vehicle.Powertrain.FuelSystem.AccumulatedConsumption: Accumulated fuel consumption (totalized) reported by the vehicle (FMS SPN 250).
+// Unit: 'l'
+func ToPowertrainFuelSystemAccumulatedConsumption0(originalDoc []byte, val string) (float64, error) {
+	return Convert208(val)
+}
+
+// ToPowertrainFuelSystemAccumulatedConsumption1 converts data from field 'signals.92' of type string to 'Vehicle.Powertrain.FuelSystem.AccumulatedConsumption' of type float64.
+// Vehicle.Powertrain.FuelSystem.AccumulatedConsumption: Accumulated fuel consumption (totalized) reported by the vehicle (FMS SPN 250).
+// Unit: 'l'
+func ToPowertrainFuelSystemAccumulatedConsumption1(originalDoc []byte, val string) (float64, error) {
+	return Convert92(val)
+}
+
 // ToPowertrainFuelSystemRelativeLevel0 converts data from field 'signals.98' of type string to 'Vehicle.Powertrain.FuelSystem.RelativeLevel' of type float64.
 // Vehicle.Powertrain.FuelSystem.RelativeLevel: Level in fuel tank as percent of capacity. 0 = empty. 100 = full.
 // Unit: 'percent' Min: '0' Max: '100'
@@ -381,6 +802,12 @@ func ToPowertrainFuelSystemRelativeLevel0(originalDoc []byte, val string) (float
 // Unit: 'percent' Min: '0' Max: '100'
 func ToPowertrainFuelSystemRelativeLevel1(originalDoc []byte, val string) (float64, error) {
 	return ignoreZero(Convert207(val))
+}
+
+// ToPowertrainTractionBatteryChargingIsCharging0 converts data from field 'signals.517' of type string to 'Vehicle.Powertrain.TractionBattery.Charging.IsCharging' of type float64.
+// Vehicle.Powertrain.TractionBattery.Charging.IsCharging: True if charging is ongoing. Charging is considered to be ongoing if energy is flowing from charger to vehicle.
+func ToPowertrainTractionBatteryChargingIsCharging0(originalDoc []byte, val string) (float64, error) {
+	return Convert517(val)
 }
 
 // ToPowertrainTractionBatteryChargingIsChargingCableConnected0 converts data from field 'signals.1191' of type string to 'Vehicle.Powertrain.TractionBattery.Charging.IsChargingCableConnected' of type float64.
@@ -408,6 +835,13 @@ func ToPowertrainTractionBatteryRange0(originalDoc []byte, val string) (float64,
 	return floatValKm / 1000, nil
 }
 
+// ToPowertrainTractionBatteryRange1 converts data from field 'signals.516' of type string to 'Vehicle.Powertrain.TractionBattery.Range' of type float64.
+// Vehicle.Powertrain.TractionBattery.Range: Remaining range in kilometers using only battery.
+// Unit: 'km'
+func ToPowertrainTractionBatteryRange1(originalDoc []byte, val string) (float64, error) {
+	return Convert516(val)
+}
+
 // ToPowertrainTractionBatteryStateOfChargeCurrent0 converts data from field 'signals.722' of type string to 'Vehicle.Powertrain.TractionBattery.StateOfCharge.Current' of type float64.
 // Vehicle.Powertrain.TractionBattery.StateOfCharge.Current: Physical state of charge of the high voltage battery, relative to net capacity. This is not necessarily the state of charge being displayed to the customer.
 // Unit: 'percent' Min: '0' Max: '100.0'
@@ -415,11 +849,72 @@ func ToPowertrainTractionBatteryStateOfChargeCurrent0(originalDoc []byte, val st
 	return Convert722(val)
 }
 
+// ToPowertrainTractionBatteryStateOfChargeCurrent1 converts data from field 'signals.515' of type string to 'Vehicle.Powertrain.TractionBattery.StateOfCharge.Current' of type float64.
+// Vehicle.Powertrain.TractionBattery.StateOfCharge.Current: Physical state of charge of the high voltage battery, relative to net capacity. This is not necessarily the state of charge being displayed to the customer.
+// Unit: 'percent' Min: '0' Max: '100.0'
+func ToPowertrainTractionBatteryStateOfChargeCurrent1(originalDoc []byte, val string) (float64, error) {
+	return Convert515(val)
+}
+
+// ToPowertrainTractionBatteryStateOfChargeCurrent2 converts data from field 'signals.720' of type string to 'Vehicle.Powertrain.TractionBattery.StateOfCharge.Current' of type float64.
+// Vehicle.Powertrain.TractionBattery.StateOfCharge.Current: Physical state of charge of the high voltage battery, relative to net capacity. This is not necessarily the state of charge being displayed to the customer.
+// Unit: 'percent' Min: '0' Max: '100.0'
+func ToPowertrainTractionBatteryStateOfChargeCurrent2(originalDoc []byte, val string) (float64, error) {
+	return Convert720(val)
+}
+
 // ToPowertrainTractionBatteryStateOfHealth0 converts data from field 'signals.950' of type string to 'Vehicle.Powertrain.TractionBattery.StateOfHealth' of type float64.
 // Vehicle.Powertrain.TractionBattery.StateOfHealth: Calculated battery state of health at standard conditions.
 // Unit: 'percent' Min: '0' Max: '100'
 func ToPowertrainTractionBatteryStateOfHealth0(originalDoc []byte, val string) (float64, error) {
 	return ignoreZero(Convert950(val))
+}
+
+// ToPowertrainTransmissionCurrentGear0 converts data from field 'signals.367' of type string to 'Vehicle.Powertrain.Transmission.CurrentGear' of type float64.
+// Vehicle.Powertrain.Transmission.CurrentGear: The current gear. 0=Neutral, 1/2/..=Forward, -1/-2/..=Reverse.
+func ToPowertrainTransmissionCurrentGear0(originalDoc []byte, val string) (float64, error) {
+	return Convert367(val)
+}
+
+// ToPowertrainTransmissionIsClutchSwitchOperated0 converts data from field 'signals.35' of type string to 'Vehicle.Powertrain.Transmission.IsClutchSwitchOperated' of type float64.
+// Vehicle.Powertrain.Transmission.IsClutchSwitchOperated: Indicates if the Clutch switch is operated, so engine and transmission are partially or fully decoupled. False = Clutch switch not operated. True = Clutch switch operated.
+func ToPowertrainTransmissionIsClutchSwitchOperated0(originalDoc []byte, val string) (float64, error) {
+	status, err := Convert35(val)
+	if err != nil {
+		return 0, err
+	}
+	switch status {
+	case 0:
+		return 0, nil
+	case 1:
+		return 1, nil
+	default:
+		return 0, errNotFound
+	}
+
+}
+
+// ToPowertrainTransmissionRetarderActualTorque0 converts data from field 'signals.360' of type string to 'Vehicle.Powertrain.Transmission.Retarder.ActualTorque' of type float64.
+// Vehicle.Powertrain.Transmission.Retarder.ActualTorque: Actual retarder torque as a percentage (FMS / J1939 SPN 520).
+// Unit: 'percent'
+func ToPowertrainTransmissionRetarderActualTorque0(originalDoc []byte, val string) (float64, error) {
+	return Convert360(val)
+}
+
+// ToPowertrainTransmissionRetarderTorqueMode0 converts data from field 'signals.359' of type string to 'Vehicle.Powertrain.Transmission.Retarder.TorqueMode' of type string.
+// Vehicle.Powertrain.Transmission.Retarder.TorqueMode: Active engine torque mode.
+func ToPowertrainTransmissionRetarderTorqueMode0(originalDoc []byte, val string) (string, error) {
+	num, err := Convert359(val)
+	if err != nil {
+		return "", err
+	}
+	return TorqueModeConversion(num)
+}
+
+// ToPowertrainTransmissionSelectedGear0 converts data from field 'signals.366' of type string to 'Vehicle.Powertrain.Transmission.SelectedGear' of type float64.
+// Vehicle.Powertrain.Transmission.SelectedGear: The selected gear. 0=Neutral, 1/2/..=Forward, -1/-2/..=Reverse, 126=Park.
+func ToPowertrainTransmissionSelectedGear0(originalDoc []byte, val string) (float64, error) {
+	return Convert366(val)
 }
 
 // ToPowertrainTransmissionTravelledDistance0 converts data from field 'signals.645' of type string to 'Vehicle.Powertrain.Transmission.TravelledDistance' of type float64.
@@ -461,6 +956,18 @@ func ToPowertrainType1(originalDoc []byte, val string) (string, error) {
 	return fuelTypeConversion(num)
 }
 
+// ToServiceTimeToService0 converts data from field 'signals.520' of type string to 'Vehicle.Service.TimeToService' of type float64.
+// Vehicle.Service.TimeToService: Remaining time to service (of any kind). Negative values indicate service overdue.
+// Unit: 's'
+func ToServiceTimeToService0(originalDoc []byte, val string) (float64, error) {
+	min, err := Convert520(val)
+	if err != nil {
+		return 0, err
+	}
+	// convert minutes to seconds
+	return min * 60, nil
+}
+
 // ToSpeed0 converts data from field 'signals.95' of type string to 'Vehicle.Speed' of type float64.
 // Vehicle.Speed: Vehicle speed.
 // Unit: 'km/h'
@@ -479,4 +986,14 @@ func ToSpeed1(originalDoc []byte, val float64) (float64, error) {
 		return 0, errNotFound
 	}
 	return val, nil
+}
+
+// ToSpeed2 converts data from field 'signals.210' of type string to 'Vehicle.Speed' of type float64.
+// Vehicle.Speed: Vehicle speed.
+// Unit: 'km/h'
+func ToSpeed2(originalDoc []byte, val string) (float64, error) {
+	if ignitionOff(originalDoc) {
+		return ignoreZero(Convert210(val))
+	}
+	return Convert210(val)
 }
