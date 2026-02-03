@@ -371,3 +371,96 @@ func TestDecodeEventPartialErrors(t *testing.T) {
 	require.JSONEq(t, `{"counterValue":10}`, accelerationEvents[0].Metadata)
 	require.JSONEq(t, `{"counterValue":7}`, corneringEvents[0].Metadata)
 }
+
+func TestDecodeEventMissingSignals(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name           string
+		inputJSON      string
+		expectedEvents int
+		expectedNames  []string
+	}{
+		{
+			name: "missing signal 135 (braking)",
+			inputJSON: `{
+				"id": "test-cloud-event-id",
+				"source": "ruptela/test",
+				"producer": "test-producer",
+				"specversion": "1.0",
+				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+				"time": "2024-09-27T08:33:26Z",
+				"type": "dimo.event",
+				"data": {
+					"signals": {
+						"136": "0A",
+						"143": "07"
+					}
+				}
+			}`,
+			expectedEvents: 2,
+			expectedNames:  []string{ruptela.EventNameAcceleration, ruptela.EventNameCornering},
+		},
+		{
+			name: "missing signals 136 and 143 (acceleration and cornering)",
+			inputJSON: `{
+				"id": "test-cloud-event-id",
+				"source": "ruptela/test",
+				"producer": "test-producer",
+				"specversion": "1.0",
+				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+				"time": "2024-09-27T08:33:26Z",
+				"type": "dimo.event",
+				"data": {
+					"signals": {
+						"135": "35"
+					}
+				}
+			}`,
+			expectedEvents: 2,
+			expectedNames:  []string{ruptela.EventNameHarshBraking, ruptela.EventNameExtremeBraking},
+		},
+		{
+			name: "all signals missing",
+			inputJSON: `{
+				"id": "test-cloud-event-id",
+				"source": "ruptela/test",
+				"producer": "test-producer",
+				"specversion": "1.0",
+				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+				"time": "2024-09-27T08:33:26Z",
+				"type": "dimo.event",
+				"data": {
+					"signals": {
+						"100": "0000",
+						"101": "00"
+					}
+				}
+			}`,
+			expectedEvents: 0,
+			expectedNames:  nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			var event cloudevent.RawEvent
+			err := json.Unmarshal([]byte(tt.inputJSON), &event)
+			require.NoError(t, err)
+
+			actualEvents, err := ruptela.DecodeEvent(event)
+			require.NoError(t, err, "should not error when signals are missing")
+			require.Len(t, actualEvents, tt.expectedEvents)
+
+			if tt.expectedNames != nil {
+				actualNames := make([]string, len(actualEvents))
+				for i, evt := range actualEvents {
+					actualNames[i] = evt.Name
+				}
+				require.ElementsMatch(t, tt.expectedNames, actualNames)
+			}
+		})
+	}
+}

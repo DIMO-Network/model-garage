@@ -42,14 +42,14 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 
 	var events []vss.Event
 	var errs []error
-	if signals.Signals.Braking != zeroValue {
+	if signals.Signals.Braking != "" && signals.Signals.Braking != zeroValue {
 		brakingEvents, err := ToBrakingEvents(signals.Signals.Braking)
 		if err != nil {
 			errs = append(errs, err)
 		}
 		events = append(events, brakingEvents...)
 	}
-	if signals.Signals.Acceleration != zeroValue {
+	if signals.Signals.Acceleration != "" && signals.Signals.Acceleration != zeroValue {
 		accelerationEvent, err := ToAccelerationEvent(signals.Signals.Acceleration)
 		if err == nil {
 			events = append(events, accelerationEvent)
@@ -57,7 +57,7 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 			errs = append(errs, err)
 		}
 	}
-	if signals.Signals.Cornering != zeroValue {
+	if signals.Signals.Cornering != "" && signals.Signals.Cornering != zeroValue {
 		corneringEvent, err := ToCorneringEvent(signals.Signals.Cornering)
 		if err == nil {
 			events = append(events, corneringEvent)
