@@ -254,3 +254,150 @@
 - vspecName: Vehicle.OBD.FuelTypeName
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.CombustionEngine.EOP
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.OilTemperature
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Service.TimeToService
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Chassis.Brake.PedalPosition
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.EngineLoad
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.IsPTOActive
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Chassis.ParkingBrake.IsEngaged
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.FuelRate
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+
+
+- vspecName: Vehicle.Powertrain.FuelSystem.AccumulatedConsumption
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Chassis.Brake.ABS.IsWarningOn
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Body.Lights.IsAirbagWarningOn
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Chassis.Brake.Circuit1.PressurePrimary
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Chassis.Brake.Circuit2.PressurePrimary
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Chassis.TireSystem.IsWarningOn
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Chassis.Brake.IsPedalPressed
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Chassis.Axle.Row3.Weight
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Chassis.Axle.Row4.Weight
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Chassis.Axle.Row5.Weight
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Powertrain.Transmission.Retarder.ActualTorque
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Powertrain.CombustionEngine.TorquePercent
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Powertrain.Transmission.CurrentGear
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Powertrain.Transmission.SelectedGear
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Door.Row1.DriverSide.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Door.Row1.PassengerSide.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Door.Row2.DriverSide.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Door.Row2.PassengerSide.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Body.Trunk.Front.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Body.Trunk.Rear.IsOpen
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Seat.Row1.DriverSide.IsBelted
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Seat.Row1.PassengerSide.IsBelted
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Seat.Row2.DriverSide.IsBelted
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Seat.Row2.Middle.IsBelted
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Seat.Row2.PassengerSide.IsBelted
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Seat.Row3.DriverSide.IsBelted
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Cabin.Seat.Row3.PassengerSide.IsBelted
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Body.Lock.IsLocked
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Powertrain.Transmission.IsClutchSwitchOperated
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Powertrain.Transmission.Retarder.TorqueMode
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+

@@ -59,8 +59,8 @@
   conversions:
     - originalName: "signals.97" # OBD ambient air temperature
       originalType: string
-    # - originalName: "signals.89" # CAN ambient air temperature
-    #   originalType: string
+    - originalName: "signals.89" # CAN ambient air temperature
+      originalType: string
 
 - vspecName: Vehicle.OBD.RunTime
   conversions:
@@ -71,25 +71,29 @@
   conversions:
     - originalName: "signals.96" # OBD engine coolant temperature
       originalType: string
-    # - originalName: "signals.115" # CAN engine coolant temperature
-    #   originalType: string
+    - originalName: "signals.115" # CAN engine coolant temperature
+      originalType: string
 
 - vspecName: Vehicle.Powertrain.CombustionEngine.EngineOilLevel
   conversions:
     - originalName: "signals.964" # OBD Oil Life remaining
+      originalType: string
+    - originalName: "signals.1187" # CAN Engine oil level
       originalType: string
 
 - vspecName: Vehicle.Powertrain.CombustionEngine.EngineOilRelativeLevel
   conversions:
     - originalName: "signals.964" # OBD Oil Life remaining
       originalType: string
+    - originalName: "signals.1187" # CAN Engine oil level
+      originalType: string
 
 - vspecName: Vehicle.Powertrain.CombustionEngine.TPS
   conversions:
     - originalName: "signals.103" # OBD accelerator pedal position
       originalType: string
-    # - originalName: "signals.206" # CAN accelerator pedal position 1
-    #   originalType: string
+    - originalName: "signals.206" # CAN accelerator pedal position 1
+      originalType: string
 
 - vspecName: Vehicle.Powertrain.FuelSystem.AbsoluteLevel
   conversions:
@@ -110,16 +114,18 @@
   conversions:
     - originalName: "signals.723" # OBD EV Distance until recharge
       originalType: string
-    # - originalName: "signals.516" # CAN EV Distance until recharge
-    #   originalType: stringX
+    - originalName: "signals.516" # CAN EV Distance until recharge
+      originalType: string
 
 
 - vspecName: Vehicle.Powertrain.TractionBattery.StateOfCharge.Current
   conversions:
     - originalName: "signals.722" # OBD EV State of charge % (SOC)
       originalType: string
-    # - originalName: "signals.515" # CAN EV State of charge % (SOC)
-    #   originalType: string
+    - originalName: "signals.515" # CAN EV State of charge % (SOC)
+      originalType: string
+    - originalName: "signals.720" # CAN EV State of charge % (SOC)
+      originalType: string
 
 - vspecName: Vehicle.Powertrain.Transmission.TravelledDistance
   conversions:
@@ -141,6 +147,8 @@
       originalType: string
     - originalName: "pos.spd"
       originalType: float64
+    - originalName: "signals.210" # CAN vehicle speed
+      originalType: string
 
 - vspecName: Vehicle.DIMO.Aftermarket.HDOP
   conversions:
@@ -166,8 +174,8 @@
   conversions:
     - originalName: "signals.94" # OBD Engine Speed
       originalType: string
-    # - originalName: "signals.197" # CAN engine speed
-    #   originalType: string
+    - originalName: "signals.197" # CAN engine speed
+      originalType: string
 
 - vspecName: Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Capacity
   conversions:
@@ -179,6 +187,10 @@
 - vspecName: Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Level
   conversions:
     - originalName: "signals.1150" # OBD AdBlue level
+      originalType: string
+    - originalName: "signals.201" # CAN AdBlue level
+      originalType: string
+    - originalName: "signals.357" # CAN Fuel level liters
       originalType: string
 
 - vspecName: Vehicle.OBD.DTCList
@@ -211,6 +223,8 @@
   conversions:
     - originalName: "signals.409"
       originalType: string
+    - originalName: "signals.522"
+      originalType: string
 
 - vspecName: Vehicle.OBD.IsPluggedIn
   conversions:
@@ -226,7 +240,129 @@
   conversions:
     - originalName: "signals.99"
       originalType: string
-      
+
+- vspecName: Vehicle.OBD.FuelRate
+  conversions:
+    - originalName: "signals.116"
+      originalType: string
+    - originalName: "signals.100"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.ParkingBrake.IsEngaged
+  conversions:
+    - originalName: "signals.362"
+      originalType: string
+
+- vspecName: Vehicle.OBD.IsPTOActive
+  conversions:
+    - originalName: "signals.38"
+      originalType: string
+
+- vspecName: Vehicle.OBD.EngineLoad
+  conversions:
+    - originalName: "signals.39"
+      originalType: string
+
+- vspecName: Vehicle.Service.TimeToService
+  conversions:
+    - originalName: "signals.520"
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.combustionEngine.IsClutchSwitchOperated
+  conversions:
+    - originalName: "signals.35"
+      originalType: string
+
+- vspecName: Vehicle.OBD.OilTemperature
+  conversions:
+    - originalName: "signals.727"
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.CombustionEngine.EOP
+  conversions:
+    - originalName: "signals.728"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.Brake.PedalPosition
+  conversions:
+    - originalName: "signals.482"
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.Transmission.Retarder.ActualTorque
+  conversions:
+    - originalName: "signals.360"
+      originalType: string
+   
+- vspecName: Vehicle.Powertrain.CombustionEngine.TorquePercent
+  conversions:
+    - originalName: "signals.519"
+      originalType: string
+    - originalName: "signals.101"
+      originalType: string
+
+
+- vspecName: Vehicle.Powertrain.FuelSystem.AccumulatedConsumption
+  conversions:
+    - originalName: "signals.208"
+      originalType: string
+    - originalName: "signals.92"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.Brake.ABS.IsWarningOn
+  conversions:
+    - originalName: "signals.313"
+      originalType: string
+
+- vspecName: Vehicle.Body.Lights.IsAirbagWarningOn
+  conversions:
+    - originalName: "signals.347"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.Brake.Circuit1.PressurePrimary
+  conversions:
+    - originalName: "signals.355"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.Brake.Circuit2.PressurePrimary
+  conversions:
+    - originalName: "signals.356"
+      originalType: string      
+
+- vspecName: Vehicle.Chassis.TireSystem.IsWarningOn
+  conversions:
+    - originalName: "signals.316"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.Brake.IsPedalPressed
+  conversions:
+    - originalName: "signals.36"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.Axle.Row3.Weight
+  conversions:
+    - originalName: "signals.53"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.Axle.Row4.Weight
+  conversions:
+    - originalName: "signals.54"
+      originalType: string
+
+- vspecName: Vehicle.Chassis.Axle.Row5.Weight
+  conversions:
+    - originalName: "signals.55"
+      originalType: string
+
+
+- vspecName: Vehicle.Powertrain.Transmission.SelectedGear
+  conversions:
+    - originalName: "signals.366"
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.Transmission.CurrentGear
+  conversions:
+    - originalName: "signals.367"
+      originalType: string
 # TODO we only get batteryCapacity in percent SOH
 # - vspecName: Vehicle.Powertrain.TractionBattery.GrossCapacity
 #   conversions:
@@ -236,12 +372,91 @@
 #     - VEHICLE_NON_LOCATION_DATA
 
 # # TODO CAN ONLY
-# - vspecName: Vehicle.Powertrain.TractionBattery.Charging.IsCharging
-#   conversions:
-#     - originalName: "signals.517" # CAN EV Battery charging state
-#       originalType: "string"
-#   requiredPrivileges:
-#     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.Powertrain.TractionBattery.Charging.IsCharging
+  conversions:
+    - originalName: "signals.517" # CAN EV Battery charging state
+      originalType: "string"
+
+- vspecName: Vehicle.Cabin.Door.Row1.DriverSide.IsOpen
+  conversions:
+    - originalName: "signals.518" # CAN driver door status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Door.Row1.PassengerSide.IsOpen
+  conversions:
+    - originalName: "signals.518" # CAN passenger door status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Door.Row2.PassengerSide.IsOpen
+  conversions:
+    - originalName: "signals.518" # CAN rear left door status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Door.Row2.DriverSide.IsOpen
+  conversions:
+    - originalName: "signals.518" # CAN rear right door status
+      originalType: string
+
+- vspecName: Vehicle.Body.Trunk.Front.IsOpen
+  conversions:
+    - originalName: "signals.518" # CAN hood/trunk door status
+      originalType: string
+
+- vspecName: Vehicle.Body.Trunk.Rear.IsOpen
+  conversions:
+    - originalName: "signals.518" # CAN hood/trunk door status
+      originalType: string
+
+
+- vspecName: Vehicle.Cabin.Seat.Row1.DriverSide.IsBelted
+  conversions:
+    - originalName: "signals.109" # CAN driver seat belt status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Seat.Row1.PassengerSide.IsBelted
+  conversions:
+    - originalName: "signals.109" # CAN passenger seat belt status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Seat.Row2.DriverSide.IsBelted
+  conversions:
+    - originalName: "signals.109" # CAN rear left seat belt status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Seat.Row2.PassengerSide.IsBelted
+  conversions:
+    - originalName: "signals.109" # CAN rear right seat belt status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Seat.Row2.Middle.IsBelted
+  conversions:
+    - originalName: "signals.109" # CAN rear middle seat belt status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Seat.Row3.DriverSide.IsBelted
+  conversions:
+    - originalName: "signals.109" # CAN rear left seat belt status
+      originalType: string
+
+- vspecName: Vehicle.Cabin.Seat.Row3.PassengerSide.IsBelted
+  conversions:
+    - originalName: "signals.109" # CAN rear right seat belt status
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.Transmission.Retarder.TorqueMode
+  conversions:
+    - originalName: "signals.359" # CAN retarder torque mode
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.Transmission.IsClutchSwitchOperated
+  conversions:
+    - originalName: "signals.35" # CAN clutch switch operated
+      originalType: string
+
+- vspecName: Vehicle.Body.Lock.IsLocked
+  conversions:
+    - originalName: "signals.538" # CAN Doors locking status
+      originalType: string
 
 
 # # TODO CAN ONLY

@@ -469,8 +469,8 @@ The total weight of the truck and all attached trailers (0 to 642550 kg)",No,No,
 0=inside bus, 1=outside bus, 2=error, 3=not available",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
 365,CAN position of doors,1,Unsigned int.,0,15,-,-,14,"FMS parameter, SPN 1821
 0=at least 1 door is open, 1=closing last door, 2=all doors closed, 3-13=not defined, 14=error, 15=not available",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
-366,CAN selected gear,1,Unsigned int.,0,250,0; -125,-,254,"FMS parameter, SPN 524: negative gear are reverse gears, 0=neutral, 251=park",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
-367,CAN current gear,1,Unsigned int.,0,250,0; -125,-,254,"FMS parameter, SPN 523: negative gear are reverse gears, 0=neutral, 251=park",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
+366,CAN selected gear,1,Unsigned int.,0,251,1; -125,-,254,"FMS parameter, SPN 524: negative gear are reverse gears, 0=neutral, 251=park",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
+367,CAN current gear,1,Unsigned int.,0,251,1; -125,-,254,"FMS parameter, SPN 523: negative gear are reverse gears, 0=neutral, 251=park",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
 368,CAN lock status door 1,1,Unsigned int.,0,1,-,-,"2, 3","FMS parameter, SPN 3412: 0=unlocked, 1=locked, 2=error, 3=not available",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
 369,CAN open status door 1,1,Unsigned int.,0,1,-,-,"2, 3","FMS parameter, SPN 3413: 0=closed, 1=open, 2=error, 3=not available",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
 370,CAN enable status door 1,1,Unsigned int.,0,1,-,-,"2, 3","FMS parameter, SPN 3414: 0=disabled, 1=enabled, 2=error, 3=not available",No,Yes,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,No,,,,
@@ -741,9 +741,9 @@ Remark: if spraying only liquid this value is 100.",No,No,Yes,No,No,No,Yes,Yes,N
 Other - Unspecified",No,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
 518,CAN LCV doors state,1,Bitmap,0,255,-,-,0xFF,"0b -> Front Left; 1b -> Front Right; 2b -> Back Left;
 3b -> Back Right; 5b -> Trunk; 6b -> Bonnet.",No,Yes,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
-519,CAN actual engine percent load,1,Unsigned int.,0,250,-125 offset,%,254,"FMS parameter SPN 513 Actual engine - Percent Torque
+519,CAN actual engine percent load,1,Unsigned int.,0,250,1; -125,%,254,"FMS parameter SPN 513 Actual engine - Percent Torque
 The calculated output torque of the engine. The data is transmitted in indicated torque as a percent of reference engine torque",No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
-520,CAN Hours to service,4,Signed int.,‭-2147483648‬,‭2147483647‬,-,min,-,,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
+520,CAN Hours to service,4,Signed int.,-2147483648,2147483647,-,min,-,,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
 521,CAN EV State of charge Wh (SOC),4,Unsigned int.,0,4294967295,-,Wh,-,Remaining energy in battery 1 (Wh),No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
 522,CAN ignition,1,Unsigned int.,0,1,-,-,-,"0 - ignition OFF, 1 - ignition ON",No,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,Yes,Yes,Yes,No,Yes,Yes,Yes,,,,
 523,CAN LCV windows position,8,Bitmap,0,255,0.392,%,0xFFFFFFFFFFFFFFFF,"VAG group vehicles: percentage, how much the windows are opened (range from 0 to 255)
@@ -1722,6 +1722,7 @@ Driver1 (MSB; 1B) + Driver2 (LSB; 1B)",No,Yes,Yes,,No,Yes,No,Yes,No,No,No,No,No,
 1149,"CAN AdBlue level, l",1,Unsigned int.,0,254,1,liters,0xFF,"Remaining AdBlue level in the tank, 1 l/bit",Yes,No,Yes,,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1150,"OBD AdBlue level, %",1,Unsigned int.,0,250,0.4,%,0xFB-0xFF,"Remaining AdBlue level in tank, 0.4 %/bit",Yes,No,Yes,,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1152,Distance left until refuel ,2,Unsighed int.,0,65534,-1,km,0xFFFF,This parameter shows vehicles' estimated distance that is left to drive until refuel or recharge,No,No,Yes,No,Yes,Yes,No,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1187,CAN Engine oil level,1,Unsigned int.,0,250,0.4,%,251-255,Engine oil level percent,No,No,Yes,No,Yes,No,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1190,OBD Charging power,4,Unsigned int.,0,4294967294,0.001,kW,4294967295,EV charging power in kilowatts,Yes,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1191,OBD Charging cable connected,1,Bitmap,0,1,-,-,255,0 - charging cable not connected 1 - charging cable connected,No,Yes,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1201,Custom CAN 1,8,HEX,0,0xFFFFFFFFFFFFFFFF,-,-,-,User defined custom can parameter,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No

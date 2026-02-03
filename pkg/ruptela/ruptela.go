@@ -1,6 +1,8 @@
 package ruptela
 
-import "github.com/tidwall/gjson"
+import (
+	"github.com/tidwall/gjson"
+)
 
 const (
 	// StatusEventDS is the data version for status events.
@@ -22,6 +24,45 @@ func fuelTypeConversion(val float64) (string, error) {
 		return "ELECTRIC", nil
 	case 16, 17, 18, 19, 20, 21, 22:
 		return "HYBRID", nil
+	default:
+		return "", errNotFound
+	}
+}
+
+func TorqueModeConversion(val float64) (string, error) {
+	switch val {
+	case 0:
+		return "LOW IDLE GOVERNOR/NO REQUEST", nil
+	case 1:
+		return "ACCELERATOR PEDAL/OPERATOR SELECTION", nil
+	case 2:
+		return "CRUISE CONTROL", nil
+	case 3:
+		return "PTO GOVERNOR", nil
+	case 4:
+		return "ROAD SPEED GOVERNOR", nil
+	case 5:
+		return "ASR CONTROL", nil
+	case 6:
+		return "TRANSMISSION CONTROL", nil
+	case 7:
+		return "ABS CONTROL", nil
+	case 8:
+		return "TORQUE LIMITING", nil
+	case 9:
+		return "HIGH SPEED GOVERNOR", nil
+	case 10:
+		return "BRAKING SYSTEM", nil
+	case 11:
+		return "REMOTE ACCELERATOR", nil
+	case 12:
+		return "SERVICE PROCEDURE", nil
+	case 13:
+		return "NOT DEFINED", nil
+	case 14:
+		return "OTHER", nil
+	case 15:
+		return "NOT AVAILABLE", nil
 	default:
 		return "", errNotFound
 	}
@@ -109,4 +150,34 @@ func unplugged(originalDoc []byte) bool {
 // ConvertPSIToKPa converts a pressure value from psi to kPa.
 func ConvertPSIToKPa(psi float64) float64 {
 	return psi * 6.89476
+}
+
+func CANStatusToBool(val float64) (float64, error) {
+	switch {
+	case val == 0:
+		return 0, nil
+	case val > 0 && val <= 3:
+		return 1, nil
+	case val == 7:
+		return 0, errNotFound
+	default:
+		return 0, errNotFound
+	}
+}
+
+func CANBitToBool(val float64, bit uint) (float64, error) {
+	raw := int(val)
+	if raw < 0 || raw > 255 {
+		return 0, errNotFound
+	}
+
+	if raw == 0xFF {
+		return 0, errNotFound
+	}
+
+	mask := 1 << bit
+	if (raw & mask) != 0 {
+		return 1.0, nil
+	}
+	return 0.0, nil
 }
