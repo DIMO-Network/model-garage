@@ -28,7 +28,7 @@ func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) 
 
 // SignalConvert converts a message to signals.
 func (*Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Signal, error) {
-	if event.DataVersion == DevStatusDS || event.Type != cloudevent.TypeStatus {
+	if event.DataVersion == DevStatusDS || event.DataVersion == BattDS || event.Type != cloudevent.TypeStatus {
 		return nil, nil
 	}
 	signals, err := DecodeStatusSignals(event)
@@ -94,7 +94,7 @@ func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, 
 				TokenID:         big.NewInt(int64(*event.VehicleTokenID)),
 			}.String()
 		}
-	case DevStatusDS:
+	case DevStatusDS, BattDS:
 		subject = producer
 	default:
 		return "", fmt.Errorf("unknown DS type: %s", event.DS)

@@ -43,6 +43,7 @@ Ruptela devices send data in different schemas identified by DS (Data Schema) ty
 - **LocationEventDS** - GPS location data
 - **DTCEventDS** - Diagnostic trouble codes
 - **DevStatusDS** - Device health status
+- **BattDS** - Battery status (passthrough, no decoding)
 
 ### Signal Types
 

@@ -108,6 +108,14 @@ func TestCloudEventConvert(t *testing.T) {
 			expectedProducer: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:2",
 		},
 		{
+			name:             "Batt payload",
+			input:            []byte(`{"ds":"r/v0/batt","signature":"test","time":"2022-01-01T00:00:00Z","vehicleTokenId":1,"deviceTokenId":2,"data":{"voltage":4200,"soc":85}}`),
+			expectError:      false,
+			length:           1,
+			expectedSubject:  "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:2",
+			expectedProducer: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:2",
+		},
+		{
 			name:             "DTC status payload",
 			input:            []byte(`{ "ds":"r/v0/dtc", "signature":"test","time":"2024-09-26T14:19:14Z", "vehicleTokenId":1, "deviceTokenId":2,"data":{"dtc_codes":[{"id":"7E8","code":"P0101"},{"id":"7E8","code":"P0202"}]}}`),
 			expectError:      false,
