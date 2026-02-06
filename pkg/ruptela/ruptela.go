@@ -9,6 +9,8 @@ const (
 	StatusEventDS = "r/v0/s"
 	// DevStatusDS is the data version for device status events.
 	DevStatusDS = "r/v0/dev"
+	// BattDS is the data version for battery status (passthrough, no decoding).
+	BattDS = "r/v0/batt"
 	// LocationEventDS is the data version for location events.
 	LocationEventDS = "r/v0/loc"
 	// DTCEventDS is the data version for DTC events.
