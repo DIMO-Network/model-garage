@@ -207,3 +207,171 @@ func TestPreferStandardOverCAN(t *testing.T) {
 	require.NoError(t, err, "error decoding fingerprint")
 	require.Equal(t, expectedVIN, fp.VIN, "decoded VIN should prefer standard fields over CAN-based ones")
 }
+
+// zeroStandardVINWithCANVINPayload is a real payload where 104/105/106 are all zeros
+// and 123/124/125 contain a CAN VIN. Decoder treats zero 104/105/106 as empty and uses CAN.
+var zeroStandardVINWithCANVINPayload = `{
+  "id": "38wq8Hhcm2OzMxaZJlN96DufRlQ",
+  "source": "0x8D8cDB2B26423c8fDbb27321aF20b4659Ce919fD",
+  "producer": "did:erc721:137:0x4804e8D1661cd1a1e5dDdE1ff458A7f878c0aC6D:168286",
+  "specversion": "1.0",
+  "subject": "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:188899",
+  "time": "2026-01-29T21:08:18.001Z",
+  "type": "dimo.fingerprint",
+  "datacontenttype": "application/json",
+  "dataversion": "r/v0/s",
+  "data": {
+    "trigger": 5,
+    "prt": 0,
+    "pos": {
+      "lat": -333597333,
+      "lon": -705170183,
+      "alt": 8175,
+      "dir": 24200,
+      "spd": 0,
+      "sat": 0,
+      "hdop": 0
+    },
+    "signals": {
+      "104": "0000000000000000",
+      "105": "0000",
+      "106": "0000000000000000",
+      "123": "57314E474D324242",
+      "124": "3752413035373434",
+      "125": "3000000000000000"
+    }
+  }
+}`
+
+func TestZeroStandardVINWithCANVIN_ProducesVINFromCAN(t *testing.T) {
+	t.Parallel()
+	// 104/105/106 are all zeros; 123/124/125 have CAN VIN → decoder must use CAN and produce VIN.
+	expectedVIN := "W1NGM2BB7RA057440"
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(zeroStandardVINWithCANVINPayload), &event)
+	require.NoError(t, err)
+	fp, err := ruptela.DecodeFingerprint(event)
+	require.NoError(t, err)
+	require.Equal(t, expectedVIN, fp.VIN)
+}
+
+func TestDecodeFingerprint_NoVINData(t *testing.T) {
+	t.Parallel()
+	// Missing or incomplete VIN fields → error.
+	for i, payload := range []string{
+		`{"data":{"signals":{}}}`,
+		`{"data":{"signals":{"104":"","105":"","106":"","123":"","124":"","125":""}}}`,
+		`{"data":{"signals":{"104":"0000000000000000","105":"0000","106":"0000000000000000"}}}`,
+	} {
+		var event cloudevent.RawEvent
+		err := json.Unmarshal([]byte(payload), &event)
+		require.NoError(t, err)
+		_, err = ruptela.DecodeFingerprint(event)
+		require.Error(t, err, "payload %d should return error when no VIN data", i)
+		require.Contains(t, err.Error(), "missing fingerprint data")
+	}
+	// All six fields present but all zero hex → success with empty VIN.
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(`{"data":{"signals":{"104":"0000000000000000","105":"0000","106":"0000000000000000","123":"0000000000000000","124":"0000","125":"0000000000000000"}}}`), &event)
+	require.NoError(t, err)
+	fp, err := ruptela.DecodeFingerprint(event)
+	require.NoError(t, err)
+	require.Empty(t, fp.VIN, "all fields empty must decode to empty VIN")
+}
+
+var standardVINPayload = `{
+  "id": "39V7aTeOxpybSxW5bRjH0PzntyZ",
+  "source": "0xF26421509Efe92861a587482100c6d728aBf1CD0",
+  "producer": "did:erc721:137:0x9c94C395cBcBDe662235E0A9d3bB87Ad708561BA:31694",
+  "specversion": "1.0",
+  "subject": "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:186612",
+  "time": "2026-02-11T00:24:03Z",
+  "type": "dimo.fingerprint",
+  "datacontenttype": "application/json",
+  "dataversion": "r/v0/s",
+  "data": {
+    "trigger": 409,
+    "prt": 1,
+    "signals": {
+      "27": "E",
+      "29": "3A10",
+      "30": "106C",
+      "49": "F6",
+      "93": "0",
+      "94": "0",
+      "95": "0",
+      "96": "75",
+      "97": "2A",
+      "98": "E7",
+      "99": "1",
+      "100": "0",
+      "101": "0",
+      "102": "0",
+      "103": "0",
+      "104": "3146544657374C44",
+      "105": "3353464131323637",
+      "106": "3500000000000000",
+      "107": "6AD",
+      "108": "0",
+      "135": "0",
+      "136": "0",
+      "137": "0",
+      "143": "0",
+      "169": "0",
+      "173": "1",
+      "402": "0",
+      "403": "0",
+      "404": "0",
+      "407": "0",
+      "408": "0",
+      "409": "0",
+      "418": "1",
+      "525": "7F42F",
+      "642": "FFFF",
+      "644": "4",
+      "645": "D3F",
+      "722": "27",
+      "723": "FFFF",
+      "754": "136170",
+      "755": "1",
+      "762": "8",
+      "763": "5",
+      "905": "B",
+      "950": "0",
+      "960": "2DE",
+      "961": "2DE",
+      "962": "2D9",
+      "963": "2DE",
+      "964": "FF",
+      "965": "0",
+      "966": "0",
+      "967": "0",
+      "968": "0",
+      "985": "0",
+      "999": "C",
+      "1148": "FF",
+      "1149": "0",
+      "1150": "FF",
+      "1155": "0",
+      "5005": "0",
+      "5060": "0",
+      "49_1": "F6",
+      "49_2": "F6",
+      "49_3": "F6",
+      "49_4": "F6",
+      "102_1": "0"
+    }
+  }
+}`
+
+func TestDecodeFingerprint_StandardVINPayload(t *testing.T) {
+	t.Parallel()
+	// Real payload with standard VIN in 104/105/106 → decodes to 17-char VIN.
+	expectedVIN := "1FTFW7LD3SFA12675"
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(standardVINPayload), &event)
+	require.NoError(t, err)
+	fp, err := ruptela.DecodeFingerprint(event)
+	require.NoError(t, err)
+	require.Equal(t, expectedVIN, fp.VIN)
+}

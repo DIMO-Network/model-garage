@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/DIMO-Network/cloudevent"
 )
@@ -24,48 +25,40 @@ type signals struct {
 
 const maxVinLength = 17
 
+func isZeroHex(s string) bool { return strings.TrimLeft(s, "0") == "" }
+
+// vinParts returns the triple to use: standard (104,105,106) if present and not all zeros, else CAN (123,124,125).
+func (s *signals) vinParts() (p1, p2, p3 string) {
+	allPresent := s.VINPart1 != "" && s.VINPart2 != "" && s.VINPart3 != ""
+	allZero := isZeroHex(s.VINPart1) && isZeroHex(s.VINPart2) && isZeroHex(s.VINPart3)
+	if allPresent && !allZero {
+		return s.VINPart1, s.VINPart2, s.VINPart3
+	}
+	return s.VINPart1CAN, s.VINPart2CAN, s.VINPart3CAN
+}
+
 // DecodeFingerprint decodes a fingerprint payload into a FingerprintEvent.
 func DecodeFingerprint(event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
-	var fpData cloudevent.Fingerprint
 	var fpPayload fingerPrintSignals
-	err := json.Unmarshal(event.Data, &fpPayload)
-	if err != nil {
-		return fpData, fmt.Errorf("could not unmarshal payload: %w", err)
+	if err := json.Unmarshal(event.Data, &fpPayload); err != nil {
+		return cloudevent.Fingerprint{}, fmt.Errorf("could not unmarshal payload: %w", err)
 	}
-	// Prefer standard VIN parts (104,105,106); if missing, fall back to CAN-based VIN parts (123,124,125)
-	vinP1 := fpPayload.Signals.VINPart1
-	vinP2 := fpPayload.Signals.VINPart2
-	vinP3 := fpPayload.Signals.VINPart3
-	if vinP1 == "" || vinP2 == "" || vinP3 == "" {
-		vinP1 = fpPayload.Signals.VINPart1CAN
-		vinP2 = fpPayload.Signals.VINPart2CAN
-		vinP3 = fpPayload.Signals.VINPart3CAN
-	}
-	if vinP1 == "" || vinP2 == "" || vinP3 == "" {
-		return fpData, fmt.Errorf("missing fingerprint data")
+	p1, p2, p3 := fpPayload.Signals.vinParts()
+	if p1 == "" || p2 == "" || p3 == "" {
+		return cloudevent.Fingerprint{}, fmt.Errorf("missing fingerprint data")
 	}
 
-	part1, err := hex.DecodeString(vinP1)
-	if err != nil {
-		return fpData, fmt.Errorf("could not decode VIN part 1: %w", err)
+	var vinBytes []byte
+	for i, hexPart := range []string{p1, p2, p3} {
+		b, err := hex.DecodeString(hexPart)
+		if err != nil {
+			return cloudevent.Fingerprint{}, fmt.Errorf("could not decode VIN part %d: %w", i+1, err)
+		}
+		vinBytes = append(vinBytes, b...)
 	}
-	part2, err := hex.DecodeString(vinP2)
-	if err != nil {
-		return fpData, fmt.Errorf("could not decode VIN part 2: %w", err)
-	}
-	part3, err := hex.DecodeString(vinP3)
-	if err != nil {
-		return fpData, fmt.Errorf("could not decode VIN part 3: %w", err)
-	}
-	vinBytes := append(append(part1, part2...), part3...)
-
-	// Trim null bytes from the end to get the actual VIN length
 	vinBytes = bytes.TrimRight(vinBytes, "\x00")
-
-	if len(vinBytes) > 17 { // Validate that VIN length doesn't exceed 17 characters
-		fpData.VIN = string(vinBytes[:maxVinLength])
-	} else {
-		fpData.VIN = string(vinBytes)
+	if len(vinBytes) > maxVinLength {
+		vinBytes = vinBytes[:maxVinLength]
 	}
-	return fpData, nil
+	return cloudevent.Fingerprint{VIN: string(vinBytes)}, nil
 }
