@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"strings"
 
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
@@ -139,24 +140,29 @@ func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
 	return cloudEventTypes, nil
 }
 
-// checkVINPresenceInPayload checks if the VIN is present in the payload.
+// checkVINPresenceInPayload reports whether a VIN is present: standard (104,105,106) or CAN (123,124,125)
+// must all exist and not be effectively empty (empty string or all zeros).
 func checkVINPresenceInPayload(event *RuptelaEvent, dataMap map[string]string) bool {
 	if event.DS != StatusEventDS {
 		return false
 	}
+	return vinTripleEffective(dataMap, []string{"104", "105", "106"}) ||
+		vinTripleEffective(dataMap, []string{"123", "124", "125"})
+}
 
-	// VIN keys in the ruptela payload including CAN IO's as a backup(smart5 devices)
-	vinKeys := []string{"104", "105", "106", "123", "124", "125"}
-
-	for _, key := range vinKeys {
+// vinTripleEffective reports whether all keys exist and at least one value is not empty/all-zero.
+func vinTripleEffective(dataMap map[string]string, keys []string) bool {
+	allZero := true
+	for _, key := range keys {
 		value, ok := dataMap[key]
-		// ruptela smart5 sends empty vin as long 0s
-		if ok && (value != "0" && value != "0000000000000000") {
-			// key has non-zero value
-			return true
+		if !ok {
+			return false
+		}
+		if strings.TrimLeft(value, "0") != "" {
+			allZero = false
 		}
 	}
-	return false
+	return !allZero
 }
 
 // checkEventPresenceInPayload checks if the event is present in the payload.
