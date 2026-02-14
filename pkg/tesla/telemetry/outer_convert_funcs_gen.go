@@ -29,24 +29,12 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, fmt.Errorf("type of Location is %T instead of the expected *protos.LocationValue", tv))
 				continue
 			}
-			if res, err := ConvertLocationToCurrentLocationLatitude(tvf); err != nil {
+			if res, err := ConvertLocationToCurrentLocationCoordinates(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
 					TokenID:   tokenID,
-					Name:      "currentLocationLatitude",
-					Timestamp: ts,
-					Source:    source,
-				}
-				sig.SetValue(res)
-				out = append(out, sig)
-			}
-			if res, err := ConvertLocationToCurrentLocationLongitude(tvf); err != nil {
-				outErr = append(outErr, err)
-			} else {
-				sig := vss.Signal{
-					TokenID:   tokenID,
-					Name:      "currentLocationLongitude",
+					Name:      "currentLocationCoordinates",
 					Timestamp: ts,
 					Source:    source,
 				}

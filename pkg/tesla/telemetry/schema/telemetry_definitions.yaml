@@ -4,8 +4,7 @@
 - teslaField: Location
   teslaType: LocationValue
   vssSignals:
-  - Vehicle.CurrentLocation.Latitude
-  - Vehicle.CurrentLocation.Longitude
+  - Vehicle.CurrentLocation.Coordinates
 
 # TODO(elffjs): Express more of the subtlety of the source enum, which has 7 possibilities.
 - teslaField: DetailedChargeState

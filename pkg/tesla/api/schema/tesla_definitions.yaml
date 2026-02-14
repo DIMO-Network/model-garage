@@ -29,16 +29,9 @@
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
 
-- vspecName: Vehicle.CurrentLocation.Latitude
+- vspecName: Vehicle.CurrentLocation.Coordinates
   conversions:
     - originalName: drive_state.latitude
-      originalType: float64
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
-
-- vspecName: Vehicle.CurrentLocation.Longitude
-  conversions:
-    - originalName: drive_state.longitude
       originalType: float64
   requiredPrivileges:
     - VEHICLE_ALL_TIME_LOCATION
