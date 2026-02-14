@@ -88,30 +88,14 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 		retSignals = append(retSignals, sig)
 	}
 
-	val, ts, err = CurrentLocationLatitudeFromTesla(jsonData)
+	val, ts, err = CurrentLocationCoordinatesFromTesla(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
-			errs = append(errs, fmt.Errorf("failed to convert 'CurrentLocationLatitude': %w", err))
+			errs = append(errs, fmt.Errorf("failed to convert 'CurrentLocationCoordinates': %w", err))
 		}
 	} else {
 		sig := vss.Signal{
-			Name:      "currentLocationLatitude",
-			TokenID:   baseSignal.TokenID,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
-		}
-		sig.SetValue(val)
-		retSignals = append(retSignals, sig)
-	}
-
-	val, ts, err = CurrentLocationLongitudeFromTesla(jsonData)
-	if err != nil {
-		if !errors.Is(err, errNotFound) {
-			errs = append(errs, fmt.Errorf("failed to convert 'CurrentLocationLongitude': %w", err))
-		}
-	} else {
-		sig := vss.Signal{
-			Name:      "currentLocationLongitude",
+			Name:      "currentLocationCoordinates",
 			TokenID:   baseSignal.TokenID,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
@@ -400,15 +384,15 @@ func ChassisAxleRow2WheelRightTirePressureFromTesla(jsonData []byte) (ret float6
 	return ret, zeroTime, errs
 }
 
-// CurrentLocationLatitudeFromTesla converts the given JSON data to a float64.
-func CurrentLocationLatitudeFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
+// CurrentLocationCoordinatesFromTesla converts the given JSON data to a vss.Location.
+func CurrentLocationCoordinatesFromTesla(jsonData []byte) (ret vss.Location, ts time.Time, err error) {
 	var errs error
 	var result gjson.Result
 	result = gjson.GetBytes(jsonData, "drive_state.latitude")
 	if result.Exists() && result.Value() != nil {
 		val, ok := result.Value().(float64)
 		if ok {
-			retVal, err := ToCurrentLocationLatitude0(jsonData, val)
+			retVal, err := ToCurrentLocationCoordinates0(jsonData, val)
 			if err == nil {
 				endpoint, _, _ := strings.Cut("drive_state.latitude", ".")
 				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
@@ -427,40 +411,7 @@ func CurrentLocationLatitudeFromTesla(jsonData []byte) (ret float64, ts time.Tim
 	}
 
 	if errs == nil {
-		return ret, zeroTime, fmt.Errorf("%w 'CurrentLocationLatitude'", errNotFound)
-	}
-
-	return ret, zeroTime, errs
-}
-
-// CurrentLocationLongitudeFromTesla converts the given JSON data to a float64.
-func CurrentLocationLongitudeFromTesla(jsonData []byte) (ret float64, ts time.Time, err error) {
-	var errs error
-	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "drive_state.longitude")
-	if result.Exists() && result.Value() != nil {
-		val, ok := result.Value().(float64)
-		if ok {
-			retVal, err := ToCurrentLocationLongitude0(jsonData, val)
-			if err == nil {
-				endpoint, _, _ := strings.Cut("drive_state.longitude", ".")
-				result := gjson.GetBytes(jsonData, endpoint+".timestamp")
-
-				if result.Exists() && result.Type == gjson.Number {
-					ts := time.UnixMilli(result.Int())
-					return retVal, ts, nil
-				}
-
-				errs = errors.Join(errs, fmt.Errorf("couldn't find a timestamp for 'drive_state.longitude'"))
-			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'drive_state.longitude': %w", err))
-		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'drive_state.longitude' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-		}
-	}
-
-	if errs == nil {
-		return ret, zeroTime, fmt.Errorf("%w 'CurrentLocationLongitude'", errNotFound)
+		return ret, zeroTime, fmt.Errorf("%w 'CurrentLocationCoordinates'", errNotFound)
 	}
 
 	return ret, zeroTime, errs

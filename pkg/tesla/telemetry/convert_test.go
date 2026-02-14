@@ -55,8 +55,7 @@ func TestConvertUntyped(t *testing.T) {
 	}
 
 	expectedSignals := []vss.Signal{
-		{TokenID: 7, Timestamp: ts, Name: "currentLocationLatitude", ValueNumber: 30.267222, Source: teslaConnection},
-		{TokenID: 7, Timestamp: ts, Name: "currentLocationLongitude", ValueNumber: -97.743056, Source: teslaConnection},
+		{TokenID: 7, Timestamp: ts, Name: "currentLocationCoordinates", ValueLocation: vss.Location{Latitude: 30.267222, Longitude: -97.743056}, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryCurrentPower", ValueNumber: 5700.000084936619, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryChargingIsCharging", ValueNumber: 1, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryChargingIsChargingCableConnected", ValueNumber: 1, Source: teslaConnection},
@@ -132,8 +131,7 @@ func TestConvertTyped(t *testing.T) {
 	}
 
 	expectedSignals := []vss.Signal{
-		{TokenID: 7, Timestamp: ts, Name: "currentLocationLatitude", ValueNumber: 30.267222, Source: teslaConnection},
-		{TokenID: 7, Timestamp: ts, Name: "currentLocationLongitude", ValueNumber: -97.743056, Source: teslaConnection},
+		{TokenID: 7, Timestamp: ts, Name: "currentLocationCoordinates", ValueLocation: vss.Location{Latitude: 30.267222, Longitude: -97.743056}, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryCurrentPower", ValueNumber: 5700.000084936619, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryChargingIsCharging", ValueNumber: 1, Source: teslaConnection},
 		{TokenID: 7, Timestamp: ts, Name: "powertrainTractionBatteryChargingIsChargingCableConnected", ValueNumber: 1, Source: teslaConnection},

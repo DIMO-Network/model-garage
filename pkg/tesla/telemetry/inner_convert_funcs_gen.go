@@ -1,17 +1,17 @@
 package telemetry
 
 import (
+	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/teslamotors/fleet-telemetry/protos"
 )
 
-// ConvertLocationToCurrentLocationLatitude converts a telemetry datum with key Location to the VSS signal CurrentLocationLatitude.
-func ConvertLocationToCurrentLocationLatitude(val *protos.LocationValue) (float64, error) {
-	return val.Latitude, nil
-}
-
-// ConvertLocationToCurrentLocationLongitude converts a telemetry datum with key Location to the VSS signal CurrentLocationLongitude.
-func ConvertLocationToCurrentLocationLongitude(val *protos.LocationValue) (float64, error) {
-	return val.Longitude, nil
+// ConvertLocationToCurrentLocationCoordinates converts a telemetry datum with key Location to the VSS signal CurrentLocationCoordinates.
+func ConvertLocationToCurrentLocationCoordinates(val *protos.LocationValue) (vss.Location, error) {
+	// We don't get HDOP.
+	return vss.Location{
+		Latitude:  val.Latitude,
+		Longitude: val.Longitude,
+	}, nil
 }
 
 // ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsCharging converts a telemetry datum with key DetailedChargeState to the VSS signal PowertrainTractionBatteryChargingIsCharging.
