@@ -191,11 +191,6 @@
     - originalName: hdop
       originalType: float64
       isArray: false
-- vspecName: Vehicle.DIMO.Aftermarket.NSAT
-  conversions:
-    - originalName: nsat
-      originalType: float64
-      isArray: false
 - vspecName: Vehicle.DIMO.Aftermarket.WPAState
   conversions:
     - originalName: wpa_state # dataschema v2

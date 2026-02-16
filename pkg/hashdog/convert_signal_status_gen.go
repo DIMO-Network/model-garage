@@ -537,20 +537,6 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 			sig.SetValue(val0)
 			ret = append(ret, sig)
 		}
-	case "nsat":
-		val0, err := DIMOAftermarketNSATFromV2Data(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'nsat': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "dimoAftermarketNSAT",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
 	case "obdDTCList":
 		val0, err := OBDDTCListFromV2Data(originalDoc, valResult)
 		if err != nil {
@@ -1229,23 +1215,6 @@ func DIMOAftermarketHDOPFromV2Data(originalDoc []byte, result gjson.Result) (ret
 		errs = errors.Join(errs, fmt.Errorf("failed to convert 'hdop': %w", err))
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-
-	return ret, errs
-}
-
-// DIMOAftermarketNSATFromData converts the given JSON data to a float64.
-func DIMOAftermarketNSATFromV2Data(originalDoc []byte, result gjson.Result) (ret float64, err error) {
-	var errs error
-	val0, ok := result.Value().(float64)
-	if ok {
-		ret, err = ToDIMOAftermarketNSAT0(originalDoc, val0)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'nsat': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'nsat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
 
 	return ret, errs

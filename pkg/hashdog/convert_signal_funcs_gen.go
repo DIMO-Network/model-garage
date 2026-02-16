@@ -124,12 +124,6 @@ func ToDIMOAftermarketHDOP0(originalDoc []byte, val float64) (float64, error) {
 	return val, nil
 }
 
-// ToDIMOAftermarketNSAT0 converts data from field 'nsat' of type float64 to 'Vehicle.DIMO.Aftermarket.NSAT' of type float64.
-// Vehicle.DIMO.Aftermarket.NSAT: Number of sync satellites for GPS
-func ToDIMOAftermarketNSAT0(originalDoc []byte, val float64) (float64, error) {
-	return val, nil
-}
-
 // ToDIMOAftermarketSSID0 converts data from field 'ssid' of type string to 'Vehicle.DIMO.Aftermarket.SSID' of type string.
 // Vehicle.DIMO.Aftermarket.SSID: Service Set Identifier for the wifi.
 func ToDIMOAftermarketSSID0(originalDoc []byte, val string) (string, error) {
