@@ -55,7 +55,7 @@ tools: tools-golangci-lint # Install all tools
 clickhouse: # Run the clickhouse container
 	go run ./cmd/clickhouse-container
 
-generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-hashdog generate-vss# Generate all files for the repository
+generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-hashdog generate-autopi generate-vss# Generate all files for the repository
 
 generate-nativestatus: # Generate all files for nativestatus
 	go run ./cmd/codegen -convert.package=nativestatus -generators=convert -convert.output-file=./pkg/nativestatus/vehicle-convert-funcs_gen.go -definitions=./pkg/nativestatus/schema/native-definitions.yaml

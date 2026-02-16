@@ -125,36 +125,6 @@ func ToDIMOAftermarketHDOP0(originalDoc []byte, val float64) (float64, error) {
 	return val, nil
 }
 
-// ToDIMOAftermarketNSAT0 converts data from field 'nsat' of type float64 to 'Vehicle.DIMO.Aftermarket.NSAT' of type float64.
-// Vehicle.DIMO.Aftermarket.NSAT: Number of sync satellites for GPS
-func ToDIMOAftermarketNSAT0(originalDoc []byte, val float64) (float64, error) {
-	return val, nil
-}
-
-// ToDIMOAftermarketSSID0 converts data from field 'ssid' of type string to 'Vehicle.DIMO.Aftermarket.SSID' of type string.
-// Vehicle.DIMO.Aftermarket.SSID: Service Set Identifier for the wifi.
-func ToDIMOAftermarketSSID0(originalDoc []byte, val string) (string, error) {
-	return val, nil
-}
-
-// ToDIMOAftermarketSSID1 converts data from field 'wifi.ssid' of type string to 'Vehicle.DIMO.Aftermarket.SSID' of type string.
-// Vehicle.DIMO.Aftermarket.SSID: Service Set Identifier for the wifi.
-func ToDIMOAftermarketSSID1(originalDoc []byte, val string) (string, error) {
-	return val, nil
-}
-
-// ToDIMOAftermarketWPAState0 converts data from field 'wpa_state' of type string to 'Vehicle.DIMO.Aftermarket.WPAState' of type string.
-// Vehicle.DIMO.Aftermarket.WPAState: Indicate the current WPA state for the device's wifi, e.g. "CONNECTED", "SCANNING", "DISCONNECTED"
-func ToDIMOAftermarketWPAState0(originalDoc []byte, val string) (string, error) {
-	return val, nil
-}
-
-// ToDIMOAftermarketWPAState1 converts data from field 'wifi.wpaState' of type string to 'Vehicle.DIMO.Aftermarket.WPAState' of type string.
-// Vehicle.DIMO.Aftermarket.WPAState: Indicate the current WPA state for the device's wifi, e.g. "CONNECTED", "SCANNING", "DISCONNECTED"
-func ToDIMOAftermarketWPAState1(originalDoc []byte, val string) (string, error) {
-	return val, nil
-}
-
 // ToExteriorAirTemperature0 converts data from field 'ambientAirTemp' of type float64 to 'Vehicle.Exterior.AirTemperature' of type float64.
 // Vehicle.Exterior.AirTemperature: Air temperature outside the vehicle.
 // Unit: 'celsius'
