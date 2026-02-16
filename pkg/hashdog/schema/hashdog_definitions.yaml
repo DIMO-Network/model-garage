@@ -191,22 +191,6 @@
     - originalName: hdop
       originalType: float64
       isArray: false
-- vspecName: Vehicle.DIMO.Aftermarket.WPAState
-  conversions:
-    - originalName: wpa_state # dataschema v2
-      originalType: string
-      isArray: false
-    - originalName: wifi.wpaState # dataschema v1
-      originalType: string
-      isArray: false
-- vspecName: Vehicle.DIMO.Aftermarket.SSID
-  conversions:
-    - originalName: ssid # dataschema v2
-      originalType: string
-      isArray: false
-    - originalName: wifi.ssid # dataschema v1
-      originalType: string
-      isArray: false
 - vspecName: Vehicle.CurrentLocation.IsRedacted
   conversions:
     - originalName: isRedacted
