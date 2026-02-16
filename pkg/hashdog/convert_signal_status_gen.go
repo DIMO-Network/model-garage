@@ -537,20 +537,6 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 			sig.SetValue(val0)
 			ret = append(ret, sig)
 		}
-	case "nsat":
-		val0, err := DIMOAftermarketNSATFromV2Data(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'nsat': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "dimoAftermarketNSAT",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
 	case "obdDTCList":
 		val0, err := OBDDTCListFromV2Data(originalDoc, valResult)
 		if err != nil {
@@ -760,20 +746,6 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 			sig.SetValue(val0)
 			ret = append(ret, sig)
 		}
-	case "ssid":
-		val0, err := DIMOAftermarketSSIDFromV2Data(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'ssid': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "dimoAftermarketSSID",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
 	case "throttlePosition":
 		val0, err := PowertrainCombustionEngineTPSFromV2Data(originalDoc, valResult)
 		if err != nil {
@@ -924,48 +896,6 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 				Timestamp: baseSignal.Timestamp,
 				Source:    baseSignal.Source,
 				Name:      "obdWarmupsSinceDTCClear",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
-	case "wifi.ssid":
-		val0, err := DIMOAftermarketSSIDFromV2Data(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'wifi.ssid': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "dimoAftermarketSSID",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
-	case "wifi.wpaState":
-		val0, err := DIMOAftermarketWPAStateFromV2Data(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'wifi.wpaState': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "dimoAftermarketWPAState",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
-	case "wpa_state":
-		val0, err := DIMOAftermarketWPAStateFromV2Data(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'wpa_state': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "dimoAftermarketWPAState",
 			}
 			sig.SetValue(val0)
 			ret = append(ret, sig)
@@ -1229,77 +1159,6 @@ func DIMOAftermarketHDOPFromV2Data(originalDoc []byte, result gjson.Result) (ret
 		errs = errors.Join(errs, fmt.Errorf("failed to convert 'hdop': %w", err))
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-
-	return ret, errs
-}
-
-// DIMOAftermarketNSATFromData converts the given JSON data to a float64.
-func DIMOAftermarketNSATFromV2Data(originalDoc []byte, result gjson.Result) (ret float64, err error) {
-	var errs error
-	val0, ok := result.Value().(float64)
-	if ok {
-		ret, err = ToDIMOAftermarketNSAT0(originalDoc, val0)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'nsat': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'nsat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-
-	return ret, errs
-}
-
-// DIMOAftermarketSSIDFromData converts the given JSON data to a string.
-func DIMOAftermarketSSIDFromV2Data(originalDoc []byte, result gjson.Result) (ret string, err error) {
-	var errs error
-	val0, ok := result.Value().(string)
-	if ok {
-		ret, err = ToDIMOAftermarketSSID0(originalDoc, val0)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'ssid': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'ssid' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-	val1, ok := result.Value().(string)
-	if ok {
-		ret, err = ToDIMOAftermarketSSID1(originalDoc, val1)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'wifi.ssid': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'wifi.ssid' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-
-	return ret, errs
-}
-
-// DIMOAftermarketWPAStateFromData converts the given JSON data to a string.
-func DIMOAftermarketWPAStateFromV2Data(originalDoc []byte, result gjson.Result) (ret string, err error) {
-	var errs error
-	val0, ok := result.Value().(string)
-	if ok {
-		ret, err = ToDIMOAftermarketWPAState0(originalDoc, val0)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'wpa_state': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'wpa_state' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-	val1, ok := result.Value().(string)
-	if ok {
-		ret, err = ToDIMOAftermarketWPAState1(originalDoc, val1)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'wifi.wpaState': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'wifi.wpaState' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
 
 	return ret, errs
