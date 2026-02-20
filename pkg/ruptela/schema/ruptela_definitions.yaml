@@ -300,7 +300,6 @@
     - originalName: "signals.101"
       originalType: string
 
-
 - vspecName: Vehicle.Powertrain.FuelSystem.AccumulatedConsumption
   conversions:
     - originalName: "signals.208"
@@ -352,7 +351,6 @@
   conversions:
     - originalName: "signals.55"
       originalType: string
-
 
 - vspecName: Vehicle.Powertrain.Transmission.SelectedGear
   conversions:
@@ -458,7 +456,11 @@
     - originalName: "signals.538" # CAN Doors locking status
       originalType: string
 
-
+- vspecName: Vehicle.Connectivity.Cellular.IsJammingDetected
+  conversions:
+    - originalName: "signals.88"
+      originalType: string
+      
 # # TODO CAN ONLY
 # - vspecName: Vehicle.OBD.EngineLoad
 #   conversions:

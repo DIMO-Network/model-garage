@@ -362,6 +362,12 @@ func ToChassisTireSystemIsWarningOn0(originalDoc []byte, val string) (float64, e
 	}
 }
 
+// ToConnectivityCellularIsJammingDetected0 converts data from field 'signals.88' of type string to 'Vehicle.Connectivity.Cellular.IsJammingDetected' of type float64.
+// Vehicle.Connectivity.Cellular.IsJammingDetected: Indicates whether cellular radio signal jamming or interference is detected that prevents normal communication.
+func ToConnectivityCellularIsJammingDetected0(originalDoc []byte, val string) (float64, error) {
+	return Convert88(val)
+}
+
 // ToCurrentLocationAltitude0 converts data from field 'pos.alt' of type float64 to 'Vehicle.CurrentLocation.Altitude' of type float64.
 // Vehicle.CurrentLocation.Altitude: Current altitude relative to WGS 84 reference ellipsoid, as measured at the position of GNSS receiver antenna.
 // Unit: 'm'

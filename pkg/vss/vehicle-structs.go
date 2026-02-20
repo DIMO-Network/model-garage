@@ -75,6 +75,8 @@ const (
 	FieldChassisParkingBrakeIsEngaged = "chassisParkingBrakeIsEngaged"
 	// FieldChassisTireSystemIsWarningOn Indicates whether the tire system warning telltale is active
 	FieldChassisTireSystemIsWarningOn = "chassisTireSystemIsWarningOn"
+	// FieldConnectivityCellularIsJammingDetected Indicates whether cellular radio signal jamming or interference is detected that prevents normal communication.
+	FieldConnectivityCellularIsJammingDetected = "connectivityCellularIsJammingDetected"
 	// FieldCurrentLocationAltitude Current altitude relative to WGS 84 reference ellipsoid, as measured at the position of GNSS receiver antenna.
 	FieldCurrentLocationAltitude = "currentLocationAltitude"
 	// FieldCurrentLocationCoordinates Current location of the vehicle in WGS 84 coordinates.

@@ -401,3 +401,6 @@
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
 
+- vspecName: Vehicle.Connectivity.Cellular.IsJammingDetected
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA

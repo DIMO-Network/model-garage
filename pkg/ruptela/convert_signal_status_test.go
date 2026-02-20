@@ -101,6 +101,7 @@ func TestFullFromDataConversion(t *testing.T) {
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainTransmissionRetarderTorqueMode, ValueString: "HIGH SPEED GOVERNOR", Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldBodyLockIsLocked, ValueNumber: 1, Source: "ruptela/TODO"},
 		{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainTransmissionIsClutchSwitchOperated, ValueNumber: 1, Source: "ruptela/TODO"},
+		{TokenID: 33, Timestamp: ts, Name: vss.FieldConnectivityCellularIsJammingDetected, ValueNumber: 0, Source: "ruptela/TODO"},
 	}
 
 	slices.SortFunc(expectedSignals, sortFunc)
@@ -124,6 +125,7 @@ var fullInputJSON = `
 		"prt": 0,
 		"signals": {
 			"35": "1",
+			"88": "0", 
 			"100": "012C",
 			"101": "D5",
 			"359": "9",
