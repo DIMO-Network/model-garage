@@ -420,15 +420,6 @@ func ToDIMOAftermarketHDOP0(originalDoc []byte, val float64) (float64, error) {
 	return val, nil
 }
 
-// ToDIMOAftermarketNSAT0 converts data from field 'pos.sat' of type float64 to 'Vehicle.DIMO.Aftermarket.NSAT' of type float64.
-// Vehicle.DIMO.Aftermarket.NSAT: Number of sync satellites for GPS
-func ToDIMOAftermarketNSAT0(originalDoc []byte, val float64) (float64, error) {
-	if val == 0xff {
-		return 0, errNotFound
-	}
-	return val, nil
-}
-
 // ToExteriorAirTemperature0 converts data from field 'signals.97' of type string to 'Vehicle.Exterior.AirTemperature' of type float64.
 // Vehicle.Exterior.AirTemperature: Air temperature outside the vehicle.
 // Unit: 'celsius'

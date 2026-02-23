@@ -92,21 +92,6 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 			ret = append(ret, sig)
 		}
 
-	case "sat":
-		val0, err := DIMOAftermarketNSATFromLocationData(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.sat': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "dimoAftermarketNSAT",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
-
 	case "spd":
 		val0, err := SpeedFromLocationData(originalDoc, valResult)
 		if err != nil {
@@ -208,23 +193,6 @@ func DIMOAftermarketHDOPFromLocationData(originalDoc []byte, result gjson.Result
 		errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.hdop': %w", err))
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-
-	return ret, errs
-}
-
-// DIMOAftermarketNSATFromLocationData converts the given JSON data to a float64.
-func DIMOAftermarketNSATFromLocationData(originalDoc []byte, result gjson.Result) (ret float64, err error) {
-	var errs error
-	val0, ok := result.Value().(float64)
-	if ok {
-		ret, err = ToDIMOAftermarketNSAT0(originalDoc, val0)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.sat': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.sat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
 
 	return ret, errs

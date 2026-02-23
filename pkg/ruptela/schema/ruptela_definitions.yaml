@@ -155,11 +155,6 @@
     - originalName: pos.hdop
       originalType: float64
 
-- vspecName: Vehicle.DIMO.Aftermarket.NSAT
-  conversions:
-    - originalName: pos.sat
-      originalType: float64
-
 - vspecName: Vehicle.OBD.DistanceWithMIL
   conversions:
     - originalName: "signals.102" # OBD distance traveled while MIL is activated
