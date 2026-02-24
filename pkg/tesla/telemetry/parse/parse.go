@@ -1,7 +1,7 @@
 // Package parse contains functions for parsing typed Tesla values out
 // of strings. This is necessary to parse telemetry signals from
 // vehicles with outdated firmware.
-package parse
+package parse //nolint:revive // At peace with stdlib clash.
 
 import (
 	"fmt"
