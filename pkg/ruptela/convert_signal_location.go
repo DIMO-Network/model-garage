@@ -126,9 +126,16 @@ func NameFromV2Signal(sigResult gjson.Result) (string, error) {
 	return signalName.String(), nil
 }
 
-// posToLocation converts a gjson.Result representing a location object (with lat, lon, and optional hdop fields)
-// into a vss.Location. Returns errNotFound if lat or lon are absent or have the sentinel value -0x80000000.
-// If hdop is absent or equals the sentinel 0xff (255), HDOP defaults to 0.0.
+// posToLocation converts a gjson.Result representing an Ruptela location object with lat, lon,
+// and optional hdop fields into a vss.Location.
+//
+// If lat or lon are absent or equal to the sentinel value -0x80000000 then this function returns
+// errNotFound. If hdop is absent or equal to the sentinel 0xff then HDOP is set to zero.
+// Appropriate scaling factors are applied.
+//
+// This function is outside of the code generation regime because it combines two or three fields
+// of a Ruptela location object into one, and these fields can appear in at least two kinds of
+// locations in JSON, depending on the dataversion.
 func posToLocation(loc gjson.Result) (vss.Location, error) {
 	latResult := loc.Get("lat")
 	lonResult := loc.Get("lon")
