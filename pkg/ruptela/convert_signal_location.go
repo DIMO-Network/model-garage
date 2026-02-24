@@ -74,7 +74,7 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 			retSignals = append(retSignals, sigs...)
 			return true
 		})
-		// Emit a unified coordinates signal from the (lat, lon, hdop) triple.
+		// Special case location.
 		if coordLoc, err := posToLocation(sigData); err == nil {
 			sig := vss.Signal{
 				Name:      vss.FieldCurrentLocationCoordinates,
