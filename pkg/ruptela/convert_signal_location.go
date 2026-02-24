@@ -132,18 +132,30 @@ func NameFromV2Signal(sigResult gjson.Result) (string, error) {
 func posToLocation(loc gjson.Result) (vss.Location, error) {
 	latResult := loc.Get("lat")
 	lonResult := loc.Get("lon")
-	if !latResult.Exists() || !lonResult.Exists() {
+	if !latResult.Exists() || latResult.Value() == nil || !lonResult.Exists() || lonResult.Value() == nil {
 		return vss.Location{}, errNotFound
 	}
-	latVal := latResult.Float()
-	lonVal := lonResult.Float()
+	latVal, ok := latResult.Value().(float64)
+	if !ok {
+		return vss.Location{}, fmt.Errorf("%w, field 'lat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), latResult.Value(), latResult.Value())
+	}
+	lonVal, ok := lonResult.Value().(float64)
+	if !ok {
+		return vss.Location{}, fmt.Errorf("%w, field 'lon' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), lonResult.Value(), lonResult.Value())
+	}
 	if latVal == -0x80000000 || lonVal == -0x80000000 {
 		return vss.Location{}, errNotFound
 	}
 	var hdop float64
 	hdopResult := loc.Get("hdop")
-	if hdopResult.Exists() && hdopResult.Float() != 0xff {
-		hdop = hdopResult.Float() / 10
+	if hdopResult.Exists() && hdopResult.Value() != nil {
+		hdopVal, ok := hdopResult.Value().(float64)
+		if !ok {
+			return vss.Location{}, fmt.Errorf("%w, field 'hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), hdopResult.Value(), hdopResult.Value())
+		}
+		if hdopVal != 0xff {
+			hdop = hdopVal / 10
+		}
 	}
 	return vss.Location{
 		Latitude:  latVal / 10_000_000,
