@@ -533,54 +533,6 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 		retSignals = append(retSignals, sig)
 	}
 
-	val, err = CurrentLocationLatitudeFromV1Data(jsonData)
-	if err != nil {
-		if !errors.Is(err, errNotFound) {
-			errs = append(errs, fmt.Errorf("failed to get 'CurrentLocationLatitude': %w", err))
-		}
-	} else {
-		sig := vss.Signal{
-			Name:      "currentLocationLatitude",
-			TokenID:   baseSignal.TokenID,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
-		}
-		sig.SetValue(val)
-		retSignals = append(retSignals, sig)
-	}
-
-	val, err = CurrentLocationLongitudeFromV1Data(jsonData)
-	if err != nil {
-		if !errors.Is(err, errNotFound) {
-			errs = append(errs, fmt.Errorf("failed to get 'CurrentLocationLongitude': %w", err))
-		}
-	} else {
-		sig := vss.Signal{
-			Name:      "currentLocationLongitude",
-			TokenID:   baseSignal.TokenID,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
-		}
-		sig.SetValue(val)
-		retSignals = append(retSignals, sig)
-	}
-
-	val, err = DIMOAftermarketHDOPFromV1Data(jsonData)
-	if err != nil {
-		if !errors.Is(err, errNotFound) {
-			errs = append(errs, fmt.Errorf("failed to get 'DIMOAftermarketHDOP': %w", err))
-		}
-	} else {
-		sig := vss.Signal{
-			Name:      "dimoAftermarketHDOP",
-			TokenID:   baseSignal.TokenID,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
-		}
-		sig.SetValue(val)
-		retSignals = append(retSignals, sig)
-	}
-
 	val, err = ExteriorAirTemperatureFromV1Data(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -2086,81 +2038,6 @@ func CurrentLocationHeadingFromV1Data(jsonData []byte) (ret float64, err error) 
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'CurrentLocationHeading'", errNotFound)
-	}
-
-	return ret, errs
-}
-
-// CurrentLocationLatitudeFromV1Data converts the given JSON data to a float64.
-func CurrentLocationLatitudeFromV1Data(jsonData []byte) (ret float64, err error) {
-	var errs error
-	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "pos.lat")
-	if result.Exists() && result.Value() != nil {
-		val, ok := result.Value().(float64)
-		if ok {
-			retVal, err := ToCurrentLocationLatitude0(jsonData, val)
-			if err == nil {
-				return retVal, nil
-			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.lat': %w", err))
-		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.lat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-		}
-	}
-
-	if errs == nil {
-		return ret, fmt.Errorf("%w 'CurrentLocationLatitude'", errNotFound)
-	}
-
-	return ret, errs
-}
-
-// CurrentLocationLongitudeFromV1Data converts the given JSON data to a float64.
-func CurrentLocationLongitudeFromV1Data(jsonData []byte) (ret float64, err error) {
-	var errs error
-	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "pos.lon")
-	if result.Exists() && result.Value() != nil {
-		val, ok := result.Value().(float64)
-		if ok {
-			retVal, err := ToCurrentLocationLongitude0(jsonData, val)
-			if err == nil {
-				return retVal, nil
-			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.lon': %w", err))
-		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.lon' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-		}
-	}
-
-	if errs == nil {
-		return ret, fmt.Errorf("%w 'CurrentLocationLongitude'", errNotFound)
-	}
-
-	return ret, errs
-}
-
-// DIMOAftermarketHDOPFromV1Data converts the given JSON data to a float64.
-func DIMOAftermarketHDOPFromV1Data(jsonData []byte) (ret float64, err error) {
-	var errs error
-	var result gjson.Result
-	result = gjson.GetBytes(jsonData, "pos.hdop")
-	if result.Exists() && result.Value() != nil {
-		val, ok := result.Value().(float64)
-		if ok {
-			retVal, err := ToDIMOAftermarketHDOP0(jsonData, val)
-			if err == nil {
-				return retVal, nil
-			}
-			errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.hdop': %w", err))
-		} else {
-			errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-		}
-	}
-
-	if errs == nil {
-		return ret, fmt.Errorf("%w 'DIMOAftermarketHDOP'", errNotFound)
 	}
 
 	return ret, errs

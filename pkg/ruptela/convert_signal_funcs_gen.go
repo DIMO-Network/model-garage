@@ -390,36 +390,6 @@ func ToCurrentLocationHeading0(originalDoc []byte, val float64) (float64, error)
 	return heading, nil
 }
 
-// ToCurrentLocationLatitude0 converts data from field 'pos.lat' of type float64 to 'Vehicle.CurrentLocation.Latitude' of type float64.
-// Vehicle.CurrentLocation.Latitude: Current latitude of vehicle in WGS 84 geodetic coordinates, as measured at the position of GNSS receiver antenna.
-// Unit: 'degrees' Min: '-90' Max: '90'
-func ToCurrentLocationLatitude0(originalDoc []byte, val float64) (float64, error) {
-	if val == -0x80000000 {
-		return 0, errNotFound
-	}
-	return val / 10000000, nil
-}
-
-// ToCurrentLocationLongitude0 converts data from field 'pos.lon' of type float64 to 'Vehicle.CurrentLocation.Longitude' of type float64.
-// Vehicle.CurrentLocation.Longitude: Current longitude of vehicle in WGS 84 geodetic coordinates, as measured at the position of GNSS receiver antenna.
-// Unit: 'degrees' Min: '-180' Max: '180'
-func ToCurrentLocationLongitude0(originalDoc []byte, val float64) (float64, error) {
-	if val == -0x80000000 {
-		return 0, errNotFound
-	}
-	return val / 10000000, nil
-}
-
-// ToDIMOAftermarketHDOP0 converts data from field 'pos.hdop' of type float64 to 'Vehicle.DIMO.Aftermarket.HDOP' of type float64.
-// Vehicle.DIMO.Aftermarket.HDOP: Horizontal dilution of precision of GPS
-func ToDIMOAftermarketHDOP0(originalDoc []byte, val float64) (float64, error) {
-	if val == 0xff {
-		return 0, errNotFound
-	}
-	val = val / 10
-	return val, nil
-}
-
 // ToExteriorAirTemperature0 converts data from field 'signals.97' of type string to 'Vehicle.Exterior.AirTemperature' of type float64.
 // Vehicle.Exterior.AirTemperature: Air temperature outside the vehicle.
 // Unit: 'celsius'

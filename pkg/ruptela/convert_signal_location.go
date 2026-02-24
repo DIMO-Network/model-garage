@@ -74,6 +74,19 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 			retSignals = append(retSignals, sigs...)
 			return true
 		})
+		// Special case location.
+		if coordLoc, err := posToLocation(sigData); err == nil {
+			sig := vss.Signal{
+				Name:      vss.FieldCurrentLocationCoordinates,
+				TokenID:   signalMeta.TokenID,
+				Timestamp: ts,
+				Source:    signalMeta.Source,
+			}
+			sig.SetValue(coordLoc)
+			retSignals = append(retSignals, sig)
+		} else if !errors.Is(err, errNotFound) {
+			conversionErrors.Errors = append(conversionErrors.Errors, err)
+		}
 	}
 
 	if len(conversionErrors.Errors) > 0 {
@@ -111,4 +124,49 @@ func NameFromV2Signal(sigResult gjson.Result) (string, error) {
 		return "", convert.FieldNotFoundError{Field: "name", Lookup: lookupKey}
 	}
 	return signalName.String(), nil
+}
+
+// posToLocation converts a gjson.Result representing an Ruptela location object with lat, lon,
+// and optional hdop fields into a vss.Location.
+//
+// If lat or lon are absent or equal to the sentinel value -0x80000000 then this function returns
+// errNotFound. If hdop is absent or equal to the sentinel 0xff then HDOP is set to zero.
+// Appropriate scaling factors are applied.
+//
+// This function is outside of the code generation regime because it combines two or three fields
+// of a Ruptela location object into one, and these fields can appear in at least two kinds of
+// locations in JSON, depending on the dataversion.
+func posToLocation(loc gjson.Result) (vss.Location, error) {
+	latResult := loc.Get("lat")
+	lonResult := loc.Get("lon")
+	if !latResult.Exists() || latResult.Value() == nil || !lonResult.Exists() || lonResult.Value() == nil {
+		return vss.Location{}, errNotFound
+	}
+	latVal, ok := latResult.Value().(float64)
+	if !ok {
+		return vss.Location{}, fmt.Errorf("%w, field 'lat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), latResult.Value(), latResult.Value())
+	}
+	lonVal, ok := lonResult.Value().(float64)
+	if !ok {
+		return vss.Location{}, fmt.Errorf("%w, field 'lon' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), lonResult.Value(), lonResult.Value())
+	}
+	if latVal == -0x80000000 || lonVal == -0x80000000 {
+		return vss.Location{}, errNotFound
+	}
+	var hdop float64
+	hdopResult := loc.Get("hdop")
+	if hdopResult.Exists() && hdopResult.Value() != nil {
+		hdopVal, ok := hdopResult.Value().(float64)
+		if !ok {
+			return vss.Location{}, fmt.Errorf("%w, field 'hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), hdopResult.Value(), hdopResult.Value())
+		}
+		if hdopVal != 0xff {
+			hdop = hdopVal / 10
+		}
+	}
+	return vss.Location{
+		Latitude:  latVal / 10_000_000,
+		Longitude: lonVal / 10_000_000,
+		HDOP:      hdop,
+	}, nil
 }

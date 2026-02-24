@@ -47,51 +47,6 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 			ret = append(ret, sig)
 		}
 
-	case "hdop":
-		val0, err := DIMOAftermarketHDOPFromLocationData(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.hdop': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "dimoAftermarketHDOP",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
-
-	case "lat":
-		val0, err := CurrentLocationLatitudeFromLocationData(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.lat': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "currentLocationLatitude",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
-
-	case "lon":
-		val0, err := CurrentLocationLongitudeFromLocationData(originalDoc, valResult)
-		if err != nil {
-			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.lon': %w", err))
-		} else {
-			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "currentLocationLongitude",
-			}
-			sig.SetValue(val0)
-			ret = append(ret, sig)
-		}
-
 	case "spd":
 		val0, err := SpeedFromLocationData(originalDoc, valResult)
 		if err != nil {
@@ -142,57 +97,6 @@ func CurrentLocationHeadingFromLocationData(originalDoc []byte, result gjson.Res
 		errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.dir': %w", err))
 	} else {
 		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.dir' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-
-	return ret, errs
-}
-
-// CurrentLocationLatitudeFromLocationData converts the given JSON data to a float64.
-func CurrentLocationLatitudeFromLocationData(originalDoc []byte, result gjson.Result) (ret float64, err error) {
-	var errs error
-	val0, ok := result.Value().(float64)
-	if ok {
-		ret, err = ToCurrentLocationLatitude0(originalDoc, val0)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.lat': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.lat' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-
-	return ret, errs
-}
-
-// CurrentLocationLongitudeFromLocationData converts the given JSON data to a float64.
-func CurrentLocationLongitudeFromLocationData(originalDoc []byte, result gjson.Result) (ret float64, err error) {
-	var errs error
-	val0, ok := result.Value().(float64)
-	if ok {
-		ret, err = ToCurrentLocationLongitude0(originalDoc, val0)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.lon': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.lon' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
-	}
-
-	return ret, errs
-}
-
-// DIMOAftermarketHDOPFromLocationData converts the given JSON data to a float64.
-func DIMOAftermarketHDOPFromLocationData(originalDoc []byte, result gjson.Result) (ret float64, err error) {
-	var errs error
-	val0, ok := result.Value().(float64)
-	if ok {
-		ret, err = ToDIMOAftermarketHDOP0(originalDoc, val0)
-		if err == nil {
-			return ret, nil
-		}
-		errs = errors.Join(errs, fmt.Errorf("failed to convert 'pos.hdop': %w", err))
-	} else {
-		errs = errors.Join(errs, fmt.Errorf("%w, field 'pos.hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 	}
 
 	return ret, errs
