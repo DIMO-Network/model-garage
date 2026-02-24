@@ -74,6 +74,19 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 			retSignals = append(retSignals, sigs...)
 			return true
 		})
+		// Emit a unified coordinates signal from the (lat, lon, hdop) triple.
+		if coordLoc, err := posToLocation(sigData); err == nil {
+			sig := vss.Signal{
+				Name:      vss.FieldCurrentLocationCoordinates,
+				TokenID:   signalMeta.TokenID,
+				Timestamp: ts,
+				Source:    signalMeta.Source,
+			}
+			sig.SetValue(coordLoc)
+			retSignals = append(retSignals, sig)
+		} else if !errors.Is(err, errNotFound) {
+			conversionErrors.Errors = append(conversionErrors.Errors, err)
+		}
 	}
 
 	if len(conversionErrors.Errors) > 0 {
@@ -111,4 +124,30 @@ func NameFromV2Signal(sigResult gjson.Result) (string, error) {
 		return "", convert.FieldNotFoundError{Field: "name", Lookup: lookupKey}
 	}
 	return signalName.String(), nil
+}
+
+// posToLocation converts a gjson.Result representing a location object (with lat, lon, and optional hdop fields)
+// into a vss.Location. Returns errNotFound if lat or lon are absent or have the sentinel value -0x80000000.
+// If hdop is absent or equals the sentinel 0xff (255), HDOP defaults to 0.0.
+func posToLocation(loc gjson.Result) (vss.Location, error) {
+	latResult := loc.Get("lat")
+	lonResult := loc.Get("lon")
+	if !latResult.Exists() || !lonResult.Exists() {
+		return vss.Location{}, errNotFound
+	}
+	latVal := latResult.Float()
+	lonVal := lonResult.Float()
+	if latVal == -0x80000000 || lonVal == -0x80000000 {
+		return vss.Location{}, errNotFound
+	}
+	var hdop float64
+	hdopResult := loc.Get("hdop")
+	if hdopResult.Exists() && hdopResult.Float() != 0xff {
+		hdop = hdopResult.Float() / 10
+	}
+	return vss.Location{
+		Latitude:  latVal / 10_000_000,
+		Longitude: lonVal / 10_000_000,
+		HDOP:      hdop,
+	}, nil
 }
