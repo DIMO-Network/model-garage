@@ -44,12 +44,6 @@
 - vspecName: Vehicle.CurrentLocation.Altitude
   requiredPrivileges:
     - VEHICLE_ALL_TIME_LOCATION
-- vspecName: Vehicle.CurrentLocation.Latitude
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
-- vspecName: Vehicle.CurrentLocation.Longitude
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
 - vspecName: Vehicle.CurrentLocation.Heading
   requiredPrivileges:
     - VEHICLE_ALL_TIME_LOCATION
@@ -140,21 +134,6 @@
 - vspecName: Vehicle.Powertrain.CombustionEngine.MAF
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
-- vspecName: Vehicle.DIMO.Aftermarket.HDOP
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
-- vspecName: Vehicle.DIMO.Aftermarket.NSAT
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
-- vspecName: Vehicle.DIMO.Aftermarket.WPAState
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
-- vspecName: Vehicle.DIMO.Aftermarket.SSID
-  requiredPrivileges:
-    - VEHICLE_NON_LOCATION_DATA
-- vspecName: Vehicle.CurrentLocation.IsRedacted
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
 - vspecName: Vehicle.Powertrain.CombustionEngine.EngineOilRelativeLevel
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
