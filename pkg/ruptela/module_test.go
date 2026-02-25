@@ -108,11 +108,11 @@ func TestCloudEventConvert(t *testing.T) {
 			expectedProducer: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:2",
 		},
 		{
-			name:             "Batt payload",
+			name:             "Batt payload with vehicle (subject is vehicle)",
 			input:            []byte(`{"ds":"r/v0/batt","signature":"test","time":"2022-01-01T00:00:00Z","vehicleTokenId":1,"deviceTokenId":2,"data":{"voltage":4200,"soc":85}}`),
 			expectError:      false,
 			length:           1,
-			expectedSubject:  "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:2",
+			expectedSubject:  "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:1",
 			expectedProducer: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:2",
 		},
 		{

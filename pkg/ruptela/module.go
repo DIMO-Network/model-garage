@@ -87,7 +87,7 @@ func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss
 func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, error) {
 	var subject string
 	switch event.DS {
-	case StatusEventDS, LocationEventDS, DTCEventDS:
+	case StatusEventDS, LocationEventDS, DTCEventDS, BattDS:
 		if event.VehicleTokenID != nil {
 			subject = cloudevent.ERC721DID{
 				ChainID:         m.ChainID,
@@ -95,7 +95,7 @@ func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, 
 				TokenID:         big.NewInt(int64(*event.VehicleTokenID)),
 			}.String()
 		}
-	case DevStatusDS, BattDS:
+	case DevStatusDS:
 		subject = producer
 	default:
 		return "", fmt.Errorf("unknown DS type: %s", event.DS)
