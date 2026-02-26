@@ -36,7 +36,7 @@ func TestSignalMigration(t *testing.T) {
 	require.NoError(t, err, "Failed to get current columns")
 
 	expectedColumns := []connect.ColInfo{
-		{Name: vss.TokenIDCol, Type: "UInt32", Comment: "token_id of this device data."},
+		{Name: vss.SubjectCol, Type: "String", Comment: "subject of this device data."},
 		{Name: vss.TimestampCol, Type: "DateTime64(6, 'UTC')", Comment: "timestamp of when this data was collected."},
 		{Name: vss.NameCol, Type: "LowCardinality(String)", Comment: "name of the signal collected."},
 		{Name: vss.SourceCol, Type: "String", Comment: "source of the signal collected."},

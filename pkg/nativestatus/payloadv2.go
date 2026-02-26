@@ -19,17 +19,18 @@ func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
 			Errors: []error{fmt.Errorf("error getting tokenId: %w", err)},
 		}
 	}
+	subject := strconv.FormatUint(uint64(tokenID), 10)
 	source, err := SourceFromData(jsonData)
 	if err != nil {
 		return nil, convert.ConversionError{
-			Subject: strconv.FormatUint(uint64(tokenID), 10),
+			Subject: subject,
 			Errors:  []error{fmt.Errorf("error getting source: %w", err)},
 		}
 	}
 	signals := gjson.GetBytes(jsonData, "data.vehicle.signals")
 	if !signals.Exists() {
 		return nil, convert.ConversionError{
-			Subject: strconv.FormatUint(uint64(tokenID), 10),
+			Subject: subject,
 			Source:  source,
 			Errors:  []error{convert.FieldNotFoundError{Field: "signals", Lookup: "data.vehicle.signals"}},
 		}
@@ -40,19 +41,19 @@ func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
 			return []vss.Signal{}, nil
 		}
 		return nil, convert.ConversionError{
-			Subject: strconv.FormatUint(uint64(tokenID), 10),
+			Subject: subject,
 			Source:  source,
 			Errors:  []error{errors.New("signals field is not an array")},
 		}
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		TokenID: tokenID,
+		Subject: subject,
 		Source:  source,
 	}
 
 	conversionErrors := convert.ConversionError{
-		Subject: strconv.FormatUint(uint64(tokenID), 10),
+		Subject: subject,
 		Source:  source,
 	}
 	for _, sigData := range signals.Array() {

@@ -1,8 +1,6 @@
 package compass
 
 import (
-	"fmt"
-
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
@@ -10,17 +8,9 @@ import (
 
 // DecodeSignals decodes a compass message into signals.
 func DecodeSignals(ce cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeERC721DID(ce.Subject)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
-	}
-
-	tokenID := did.TokenID
-	source := ce.Source
-
 	baseSignal := vss.Signal{
-		TokenID:   uint32(tokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
-		Source:    source,
+		Subject:   ce.Subject,
+		Source:    ce.Source,
 		Timestamp: ce.Time,
 	}
 
@@ -28,7 +18,7 @@ func DecodeSignals(ce cloudevent.RawEvent) ([]vss.Signal, error) {
 	if len(errs) != 0 {
 		return nil, convert.ConversionError{
 			Subject:        ce.Subject,
-			Source:         source,
+			Source:         ce.Source,
 			DecodedSignals: sigs,
 			Errors:         errs,
 		}

@@ -210,8 +210,8 @@ func TestSignalConvert(t *testing.T) {
 				Data: json.RawMessage(signalData),
 			},
 			expectedSignals: []vss.Signal{
-				{TokenID: 33, Timestamp: ts, Name: vss.FieldExteriorAirTemperature, ValueNumber: -32, Source: "ruptela/TODO"},
-				{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: -32, Source: "ruptela/TODO"},
+				{Subject: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:33", Timestamp: ts, Name: vss.FieldExteriorAirTemperature, ValueNumber: -32, Source: "ruptela/TODO"},
+				{Subject: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:33", Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: -32, Source: "ruptela/TODO"},
 			},
 			expectedError: nil,
 		},
@@ -228,8 +228,8 @@ func TestSignalConvert(t *testing.T) {
 				Data: json.RawMessage(locationData),
 			},
 			expectedSignals: []vss.Signal{
-				{TokenID: 33, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 123.2, Source: "ruptela/TODO"},
-				{TokenID: 33, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 1.2, Source: "ruptela/TODO"},
+				{Subject: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:33", Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 123.2, Source: "ruptela/TODO"},
+				{Subject: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:33", Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 1.2, Source: "ruptela/TODO"},
 			},
 			expectedError: nil,
 		},
@@ -246,7 +246,7 @@ func TestSignalConvert(t *testing.T) {
 				Data: json.RawMessage(dtcData),
 			},
 			expectedSignals: []vss.Signal{
-				{TokenID: 33, Timestamp: ts, Name: "obdDTCList", ValueString: "[\"P0101\",\"P0202\"]", Source: "ruptela/TODO"},
+				{Subject: "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:33", Timestamp: ts, Name: "obdDTCList", ValueString: "[\"P0101\",\"P0202\"]", Source: "ruptela/TODO"},
 			},
 			expectedError: nil,
 		},

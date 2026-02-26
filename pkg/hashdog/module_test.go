@@ -51,8 +51,8 @@ func TestSignalConvert(t *testing.T) {
 				Data: json.RawMessage(signalData),
 			},
 			expectedSignals: []vss.Signal{
-				{TokenID: 33, Timestamp: ts, Name: vss.FieldOBDLongTermFuelTrim1, ValueNumber: 25, Source: source},
-				{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 107, Source: source},
+				{Subject: "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33", Timestamp: ts, Name: vss.FieldOBDLongTermFuelTrim1, ValueNumber: 25, Source: source},
+				{Subject: "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33", Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 107, Source: source},
 			},
 			expectedError: nil,
 		},

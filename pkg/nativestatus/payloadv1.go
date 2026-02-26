@@ -26,35 +26,44 @@ func SignalsFromV1Payload(ctx context.Context, tokenGetter TokenIDGetter, jsonDa
 			Errors: []error{fmt.Errorf("error getting timestamp: %w", err)},
 		}
 	}
-	tokenID, err := TokenIDFromV1Data(ctx, jsonData, tokenGetter)
+	subject, err := v1SubjectFromData(jsonData)
 	if err != nil {
 		return nil, convert.ConversionError{
-			Errors: []error{fmt.Errorf("error getting tokenId: %w", err)},
+			Errors: []error{fmt.Errorf("error getting subject: %w", err)},
 		}
 	}
 
 	source, err := SourceFromData(jsonData)
 	if err != nil {
 		return nil, convert.ConversionError{
-			Subject: strconv.FormatUint(uint64(tokenID), 10),
+			Subject: subject,
 			Errors:  []error{fmt.Errorf("error getting source: %w", err)},
 		}
 	}
 	baseSignal := vss.Signal{
-		TokenID:   tokenID,
+		Subject:   subject,
 		Timestamp: ts,
 		Source:    source,
 	}
 	sigs, errs := SignalsFromV1Data(baseSignal, jsonData)
 	if errs != nil {
 		return nil, convert.ConversionError{
-			Subject:        strconv.FormatUint(uint64(tokenID), 10),
+			Subject:        subject,
 			Source:         source,
 			DecodedSignals: sigs,
 			Errors:         errs,
 		}
 	}
 	return sigs, nil
+}
+
+// v1SubjectFromData returns a subject string for a V1 payload.
+// It prefers vehicleTokenId (formatted as a decimal string) over the subject field.
+func v1SubjectFromData(jsonData []byte) (string, error) {
+	if tokenID, err := TokenIDFromData(jsonData); err == nil {
+		return strconv.FormatUint(uint64(tokenID), 10), nil
+	}
+	return SubjectFromV1Data(jsonData)
 }
 
 // SubjectFromV1Data gets a subject from a v1 payload.
