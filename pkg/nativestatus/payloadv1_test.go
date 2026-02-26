@@ -173,7 +173,7 @@ var (
 	}`
 
 	expectedSignalsWithFromTokenID = []vss.Signal{
-		{Subject: "123", Timestamp: ts, Name: "speed", ValueNumber: 25.0, Source: "dimo/integration/123"},
-		{Subject: "123", Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 5024, Source: "dimo/integration/123"},
+		{Subject: "Vehicle123", Timestamp: ts, Name: "speed", ValueNumber: 25.0, Source: "dimo/integration/123"},
+		{Subject: "Vehicle123", Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 5024, Source: "dimo/integration/123"},
 	}
 )

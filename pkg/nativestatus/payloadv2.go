@@ -3,7 +3,6 @@ package nativestatus
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/DIMO-Network/model-garage/pkg/convert"
@@ -13,13 +12,12 @@ import (
 
 // SignalsFromV2Payload extracts signals from a V2 payload.
 func SignalsFromV2Payload(jsonData []byte) ([]vss.Signal, error) {
-	tokenID, err := TokenIDFromData(jsonData)
+	subject, err := SubjectFromV1Data(jsonData)
 	if err != nil {
 		return nil, convert.ConversionError{
-			Errors: []error{fmt.Errorf("error getting tokenId: %w", err)},
+			Errors: []error{fmt.Errorf("error getting subject: %w", err)},
 		}
 	}
-	subject := strconv.FormatUint(uint64(tokenID), 10)
 	source, err := SourceFromData(jsonData)
 	if err != nil {
 		return nil, convert.ConversionError{

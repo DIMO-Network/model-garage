@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const subject = "123"
+const subject = "0x98D78d711C0ec544F6fb5d54fcf6559CF41546a9"
 
 func TestFullFromV2DataConversion(t *testing.T) {
 	t.Parallel()

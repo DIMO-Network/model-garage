@@ -5,7 +5,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/DIMO-Network/model-garage/pkg/convert"
@@ -26,7 +25,7 @@ func SignalsFromV1Payload(ctx context.Context, tokenGetter TokenIDGetter, jsonDa
 			Errors: []error{fmt.Errorf("error getting timestamp: %w", err)},
 		}
 	}
-	subject, err := v1SubjectFromData(jsonData)
+	subject, err := SubjectFromV1Data(jsonData)
 	if err != nil {
 		return nil, convert.ConversionError{
 			Errors: []error{fmt.Errorf("error getting subject: %w", err)},
@@ -55,15 +54,6 @@ func SignalsFromV1Payload(ctx context.Context, tokenGetter TokenIDGetter, jsonDa
 		}
 	}
 	return sigs, nil
-}
-
-// v1SubjectFromData returns a subject string for a V1 payload.
-// It prefers vehicleTokenId (formatted as a decimal string) over the subject field.
-func v1SubjectFromData(jsonData []byte) (string, error) {
-	if tokenID, err := TokenIDFromData(jsonData); err == nil {
-		return strconv.FormatUint(uint64(tokenID), 10), nil
-	}
-	return SubjectFromV1Data(jsonData)
 }
 
 // SubjectFromV1Data gets a subject from a v1 payload.

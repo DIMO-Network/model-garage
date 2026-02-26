@@ -2,14 +2,15 @@ package autopi_test
 
 import (
 	"encoding/json"
+	"math/big"
 	"testing"
 	"time"
-
-	"github.com/stretchr/testify/require"
 
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/autopi"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFullFromV2DataConversion(t *testing.T) {
@@ -152,7 +153,7 @@ var fullAPInputJSON = `{
 }`
 
 var (
-	subject           = "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33"
+	subject           = cloudevent.ERC721DID{ChainID: 1, ContractAddress: common.HexToAddress("0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF"), TokenID: big.NewInt(33)}.String()
 	expectedV2Signals = []vss.Signal{
 		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: "obdLongTermFuelTrim1", ValueNumber: 25, ValueString: "", Source: "dimo/integration/123"},
 		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 26, 633000000, time.UTC), Name: "powertrainCombustionEngineECT", ValueNumber: 107, ValueString: "", Source: "dimo/integration/123"},

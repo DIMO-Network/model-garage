@@ -22,7 +22,7 @@ func TestVersionComparison(t *testing.T) {
 	}{
 		{
 			name:     "Version v2.0",
-			jsonData: []byte(`{"dataschema":"dimo.zone.status/v2.0", "specversion":"1.0", "vehicleTokenId": 1, "source": "source1", "data": {"vehicle": {"signals": [{"name": "speed", "timestamp": 1734957240000, "value": 1.0}]}}}`),
+			jsonData: []byte(`{"dataschema":"dimo.zone.status/v2.0", "specversion":"1.0", "vehicleTokenId": 1, "subject": "1", "source": "source1", "data": {"vehicle": {"signals": [{"name": "speed", "timestamp": 1734957240000, "value": 1.0}]}}}`),
 			expected: []vss.Signal{
 				{
 					Subject:     "1",
@@ -36,7 +36,7 @@ func TestVersionComparison(t *testing.T) {
 		},
 		{
 			name:     "Version v2 no trailing slash",
-			jsonData: []byte(`{"dataschema":"v2", "specversion":"1.0", "vehicleTokenId": 1, "source": "source1", "data": {"vehicle": {"signals": [{"name": "speed", "timestamp": 1734957240000, "value": 1.0}]}}}`),
+			jsonData: []byte(`{"dataschema":"v2", "specversion":"1.0", "vehicleTokenId": 1, "subject": "1", "source": "source1", "data": {"vehicle": {"signals": [{"name": "speed", "timestamp": 1734957240000, "value": 1.0}]}}}`),
 			expected: []vss.Signal{
 				{
 					Subject:     "1",

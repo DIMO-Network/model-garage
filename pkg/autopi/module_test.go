@@ -3,13 +3,17 @@ package autopi
 import (
 	"context"
 	"encoding/json"
+	"math/big"
 	"testing"
 	"time"
 
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/require"
 )
+
+var deviceSubject = cloudevent.ERC721DID{ChainID: 1, ContractAddress: common.HexToAddress("0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8"), TokenID: big.NewInt(33)}.String()
 
 func TestSignalConvert(t *testing.T) {
 	ts := time.Unix(1727360340, 0).UTC()
@@ -45,14 +49,14 @@ func TestSignalConvert(t *testing.T) {
 					DataVersion: DataVersion,
 					Type:        cloudevent.TypeStatus,
 					Source:      source,
-					Subject:     "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
+					Subject:     deviceSubject,
 					Time:        ts,
 				},
 				Data: json.RawMessage(signalData),
 			},
 			expectedSignals: []vss.Signal{
-				{Subject: "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33", Timestamp: ts, Name: vss.FieldOBDLongTermFuelTrim1, ValueNumber: 25, Source: source},
-				{Subject: "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33", Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 107, Source: source},
+				{Subject: deviceSubject, Timestamp: ts, Name: vss.FieldOBDLongTermFuelTrim1, ValueNumber: 25, Source: source},
+				{Subject: deviceSubject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 107, Source: source},
 			},
 			expectedError: nil,
 		},
@@ -63,8 +67,8 @@ func TestSignalConvert(t *testing.T) {
 					DataVersion: DataVersion,
 					Type:        cloudevent.TypeStatus,
 					Source:      source,
-					Subject:     "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
-					Producer:    "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
+					Subject:     deviceSubject,
+					Producer:    deviceSubject,
 					Time:        ts,
 				},
 				Data: json.RawMessage(signalData),
@@ -108,7 +112,7 @@ func TestFingerprintConvert(t *testing.T) {
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: DataVersion,
 					Type:        cloudevent.TypeFingerprint,
-					Subject:     "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
+					Subject:     deviceSubject,
 					Time:        ts,
 				},
 				Data: json.RawMessage(fingerPrintData),

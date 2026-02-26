@@ -2,15 +2,19 @@ package compass_test
 
 import (
 	"encoding/json"
+	"math/big"
 	"testing"
 	"time"
 
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/compass"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+var compassSubject = cloudevent.ERC721DID{ChainID: 137, ContractAddress: common.HexToAddress("0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF"), TokenID: big.NewInt(37)}.String()
 
 var baseDoc = []byte(`
 {
@@ -107,24 +111,24 @@ const compassConnection = "0x55BF1c27d468314Ea119CF74979E2b59F962295c"
 var (
 	ts         = time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC)
 	expSignals = []vss.Signal{
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelLeftTirePressure, ValueNumber: 282.68516, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelRightTirePressure, ValueNumber: 282.68516, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelLeftTirePressure, ValueNumber: 289.57992, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelRightTirePressure, ValueNumber: 282.68516, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: "currentLocationLatitude", ValueNumber: 34.878016, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: "currentLocationLongitude", ValueNumber: -82.223566, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 277.100006, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 16, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldIsIgnitionOn, ValueNumber: 0, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 13, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 92, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEOP, ValueNumber: 4, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEOT, ValueNumber: 89, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineSpeed, ValueNumber: 0, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAbsoluteLevel, ValueNumber: 113.85, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldPowertrainFuelSystemRelativeLevel, ValueNumber: 99, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldPowertrainTransmissionTravelledDistance, ValueNumber: 20446, Source: compassConnection},
-		{Subject: "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:37", Timestamp: ts, Name: vss.FieldSpeed, ValueNumber: 40.2336, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelLeftTirePressure, ValueNumber: 282.68516, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelRightTirePressure, ValueNumber: 282.68516, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelLeftTirePressure, ValueNumber: 289.57992, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelRightTirePressure, ValueNumber: 282.68516, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: "currentLocationLatitude", ValueNumber: 34.878016, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: "currentLocationLongitude", ValueNumber: -82.223566, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 277.100006, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 16, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldIsIgnitionOn, ValueNumber: 0, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 13, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 92, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEOP, ValueNumber: 4, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEOT, ValueNumber: 89, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineSpeed, ValueNumber: 0, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAbsoluteLevel, ValueNumber: 113.85, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemRelativeLevel, ValueNumber: 99, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldPowertrainTransmissionTravelledDistance, ValueNumber: 20446, Source: compassConnection},
+		{Subject: compassSubject, Timestamp: ts, Name: vss.FieldSpeed, ValueNumber: 40.2336, Source: compassConnection},
 	}
 )
 
