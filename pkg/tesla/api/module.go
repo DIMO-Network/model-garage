@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
@@ -14,16 +13,10 @@ const DataVersion = "fleet_api/v1.0.0"
 
 // SignalConvert converts a Tesla Fleet API response CloudEvent to DIMO's VSS rows.
 func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeERC721DID(event.Subject)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
-	}
-
-	tokenID := did.TokenID
 	source := event.Source
 
 	baseSignal := vss.Signal{
-		TokenID: uint32(tokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+		Subject: event.Subject,
 		Source:  source,
 	}
 

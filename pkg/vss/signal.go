@@ -9,8 +9,8 @@ import (
 const (
 	// TableName is the name of the distributed table in Clickhouse.
 	TableName = "signal"
-	// TokenIDCol is the name of the token_id column in Clickhouse.
-	TokenIDCol = "token_id"
+	// SubjectCol is the name of the subject column in Clickhouse.
+	SubjectCol = "subject"
 	// TimestampCol is the name of the timestamp column in Clickhouse.
 	TimestampCol = "timestamp"
 	// SourceCol is the name of the source column in Clickhouse.
@@ -32,8 +32,12 @@ const (
 // Signal represents a single signal collected from a device.
 // This is the data format that is stored in the database.
 type Signal struct {
-	// TokenID is the unique identifier of the device.
-	TokenID uint32 `ch:"token_id" json:"tokenId"`
+	// Subject is the subject of the signal.
+	//
+	// This is CloudEvent terminology. Typically, each signal comes from a CloudEvent
+	// document, and this is the subject of that CloudEvent. For us, this is normally
+	// a W3C DID.
+	Subject string `ch:"subject" json:"subject"`
 
 	// Timestamp is when this data was collected.
 	Timestamp time.Time `ch:"timestamp" json:"timestamp"`
@@ -86,7 +90,7 @@ func (s *Signal) SetValue(val any) {
 // The order of the elements in the array is guaranteed to match the order of elements in the `SignalColNames`.
 func SignalToSlice(obj Signal) []any {
 	return []any{
-		obj.TokenID,
+		obj.Subject,
 		obj.Timestamp,
 		obj.Name,
 		obj.Source,
@@ -101,7 +105,7 @@ func SignalToSlice(obj Signal) []any {
 // SignalColNames returns the column names of the Signal struct.
 func SignalColNames() []string {
 	return []string{
-		TokenIDCol,
+		SubjectCol,
 		TimestampCol,
 		NameCol,
 		SourceCol,

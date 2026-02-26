@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const tokenID = uint32(123)
+const subject = "0x98D78d711C0ec544F6fb5d54fcf6559CF41546a9"
 
 func TestFullFromV2DataConversion(t *testing.T) {
 	t.Parallel()
@@ -153,27 +153,27 @@ var fullV2InputJSON = `{
 }`
 
 var expectedV2Signals = []vss.Signal{
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: "obdLongTermFuelTrim1", ValueNumber: 25, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 26, 633000000, time.UTC), Name: "powertrainCombustionEngineECT", ValueNumber: 107, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 27, 173000000, time.UTC), Name: "powertrainCombustionEngineMAF", ValueNumber: 475.79, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 29, 314000000, time.UTC), Name: "obdEngineLoad", ValueNumber: 12.54912, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 29, 844000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 30, 382000000, time.UTC), Name: "obdShortTermFuelTrim1", ValueNumber: 12.5, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 37, 235000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 42, 256000000, time.UTC), Name: "powertrainCombustionEngineMAF", ValueNumber: 475.79, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 44, 422000000, time.UTC), Name: "obdEngineLoad", ValueNumber: 12.54912, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 44, 962000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 45, 497000000, time.UTC), Name: "obdShortTermFuelTrim1", ValueNumber: 12.5, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationIsRedacted", ValueNumber: 0, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationLongitude", ValueNumber: -56.50151833333334, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationLatitude", ValueNumber: 56.27014, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketHDOP", ValueNumber: 1.4, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketNSAT", ValueNumber: 6, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketWPAState", ValueNumber: 0, ValueString: "COMPLETED", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketSSID", ValueNumber: 0, ValueString: "foo", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "speed", ValueNumber: 39, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainCombustionEngineSpeed", ValueNumber: 2000, ValueString: "", Source: "dimo/integration/123"},
-	{TokenID: tokenID, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainFuelSystemRelativeLevel", ValueNumber: 50, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: "obdLongTermFuelTrim1", ValueNumber: 25, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 26, 633000000, time.UTC), Name: "powertrainCombustionEngineECT", ValueNumber: 107, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 27, 173000000, time.UTC), Name: "powertrainCombustionEngineMAF", ValueNumber: 475.79, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 29, 314000000, time.UTC), Name: "obdEngineLoad", ValueNumber: 12.54912, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 29, 844000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 30, 382000000, time.UTC), Name: "obdShortTermFuelTrim1", ValueNumber: 12.5, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 37, 235000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 42, 256000000, time.UTC), Name: "powertrainCombustionEngineMAF", ValueNumber: 475.79, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 44, 422000000, time.UTC), Name: "obdEngineLoad", ValueNumber: 12.54912, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 44, 962000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 45, 497000000, time.UTC), Name: "obdShortTermFuelTrim1", ValueNumber: 12.5, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationIsRedacted", ValueNumber: 0, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationLongitude", ValueNumber: -56.50151833333334, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationLatitude", ValueNumber: 56.27014, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketHDOP", ValueNumber: 1.4, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketNSAT", ValueNumber: 6, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketWPAState", ValueNumber: 0, ValueString: "COMPLETED", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketSSID", ValueNumber: 0, ValueString: "foo", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "speed", ValueNumber: 39, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainCombustionEngineSpeed", ValueNumber: 2000, ValueString: "", Source: "dimo/integration/123"},
+	{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainFuelSystemRelativeLevel", ValueNumber: 50, ValueString: "", Source: "dimo/integration/123"},
 }
 
 func TestNullSignals(t *testing.T) {

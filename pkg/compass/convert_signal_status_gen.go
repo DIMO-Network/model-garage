@@ -30,7 +30,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "chassisAxleRow1WheelLeftTirePressure",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -46,7 +46,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "chassisAxleRow1WheelRightTirePressure",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -62,7 +62,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "chassisAxleRow2WheelLeftTirePressure",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -78,7 +78,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "chassisAxleRow2WheelRightTirePressure",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -94,7 +94,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "currentLocationAltitude",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -110,7 +110,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "currentLocationHeading",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -126,7 +126,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "currentLocationLatitude",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -142,7 +142,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "currentLocationLongitude",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -158,7 +158,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "isIgnitionOn",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -174,7 +174,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "lowVoltageBatteryCurrentVoltage",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -190,7 +190,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainCombustionEngineECT",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -206,7 +206,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainCombustionEngineEOP",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -222,7 +222,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainCombustionEngineEOT",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -238,7 +238,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainCombustionEngineSpeed",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -254,7 +254,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainFuelSystemAbsoluteLevel",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -270,7 +270,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainFuelSystemRelativeLevel",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -286,7 +286,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainTransmissionTravelledDistance",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}
@@ -302,7 +302,7 @@ func SignalsFromCompass(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, [
 	} else {
 		sig := vss.Signal{
 			Name:      "speed",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}

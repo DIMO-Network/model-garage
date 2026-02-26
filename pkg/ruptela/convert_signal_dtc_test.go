@@ -52,7 +52,7 @@ func TestNoDTCPayload(t *testing.T) {
 func expectedDTCSignals() []vss.Signal {
 	ts := time.Unix(1727360354, 0).UTC()
 	return []vss.Signal{
-		{TokenID: 33, Timestamp: ts, Name: "obdDTCList", ValueString: `["P0101","P0202"]`, Source: "ruptela/TODO"},
+		{Subject: vehicleSubject33, Timestamp: ts, Name: "obdDTCList", ValueString: `["P0101","P0202"]`, Source: "ruptela/TODO"},
 	}
 }
 
