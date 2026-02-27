@@ -3,18 +3,18 @@ module github.com/DIMO-Network/model-garage
 go 1.24.0
 
 require (
-	github.com/99designs/gqlgen v0.17.81
+	github.com/99designs/gqlgen v0.17.86
 	github.com/DIMO-Network/clickhouse-infra v0.0.7
 	github.com/DIMO-Network/cloudevent v0.1.4
 	github.com/Masterminds/sprig/v3 v3.3.0
-	github.com/ethereum/go-ethereum v1.16.4
+	github.com/ethereum/go-ethereum v1.16.7
 	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.11.1
-	github.com/teslamotors/fleet-telemetry v0.7.2
+	github.com/teslamotors/fleet-telemetry v0.8.0
 	github.com/tidwall/gjson v1.18.0
-	golang.org/x/mod v0.28.0
-	golang.org/x/tools v0.37.0
-	google.golang.org/protobuf v1.36.10
+	golang.org/x/mod v0.31.0
+	golang.org/x/tools v0.40.0
+	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -119,12 +119,12 @@ require (
 	go.opentelemetry.io/otel/metric v1.37.0 // indirect
 	go.opentelemetry.io/otel/trace v1.37.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.42.0 // indirect
+	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
-	golang.org/x/net v0.44.0 // indirect
-	golang.org/x/sync v0.17.0 // indirect
-	golang.org/x/sys v0.36.0 // indirect
-	golang.org/x/text v0.29.0 // indirect
+	golang.org/x/net v0.48.0 // indirect
+	golang.org/x/sync v0.19.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250106144421-5f5ef82da422 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250324211829-b45e905df463 // indirect
 	google.golang.org/grpc v1.71.0 // indirect
