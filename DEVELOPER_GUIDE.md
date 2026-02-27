@@ -650,7 +650,7 @@ graph LR
 
 [dis](https://github.com/DIMO-Network/dis) determines a connection address from the certificate used in the request made by the connection. It uses that to look up a model-garage module. Part of what the module does is extract [`vss.Signal`](pkg/vss/signal.go) structs from the request, serialize them as JSON objects, and send them one by one onto `topic.device.signal`.
 
-[dps](https://github.com/DIMO-Network/dps) reads these messages, uses model-garage to them into tuples that exactly match the `dimo.signal` schema, and inserts them into ClickHouse with some buffering.
+[dps](https://github.com/DIMO-Network/dps) reads these messages, uses model-garage to them into tuples that exactly match the `dimo.signal` schema, and inserts them into ClickHouse with some buffering. dps is also responsible for running the migrations in this repository.
 
 [telemetry](https://github.com/DIMO-Network/telemetry-api) relies on model-garage for a lot of things:
 
