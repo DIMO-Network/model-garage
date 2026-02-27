@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS signal_v2
     `value_location` Tuple(
         latitude Float64,
         longitude Float64,
-        hdop Float64) COMMENT 'The value for location signals. Either the coordinates or the HDOP value may be blank.'
+        hdop Float64,
+        heading Float64) COMMENT 'The value for location signals. Some entries may be empty.'
 )
 ENGINE = ReplacingMergeTree
 PARTITION BY toYYYYMM(timestamp)
