@@ -1,0 +1,23 @@
+-- +goose Up
+CREATE TABLE IF NOT EXISTS signal_v2
+(
+    `subject` String COMMENT 'Subject of the signal, typically a W3C DID.',
+    `timestamp` DateTime64(6, 'UTC') COMMENT 'Timestamp, ideally from when the signal was emitted.' CODEC(Delta, ZSTD),
+    `name` LowCardinality(String) COMMENT 'Name of the signal. The set of meaningful values for name depends on subject. The name also determines which of the value_ columns is expected to be populated.',
+    `source` LowCardinality(String) COMMENT 'Source of the signal. This is typically a checksummed connection address.',
+    `producer` String COMMENT 'Producer of the collected signal, typically another W3C DID.',
+    `cloud_event_id` String COMMENT 'Id of the CloudEvent from which this signal was extracted.',
+    `value_number` Float64 COMMENT 'The value for numeric (float64) signals.',
+    `value_string` String COMMENT 'The value for string signals.',
+    `value_location` Tuple(
+        latitude Float64,
+        longitude Float64,
+        hdop Float64) COMMENT 'The value for location signals. Either the coordinates or the HDOP value may be blank.'
+)
+ENGINE = ReplacingMergeTree
+PARTITION BY toYYYYMM(timestamp)
+ORDER BY (subject, timestamp, name)
+COMMENT 'Contains signals extracted from incoming CloudEvents. Most column names refer to CloudEvent concepts.';
+
+-- +goose Down
+DROP TABLE IF EXISTS signal_v2;
