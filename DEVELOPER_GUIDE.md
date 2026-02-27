@@ -38,6 +38,7 @@ Welcome to the Model Garage developer guide! This guide will help you understand
   - [When to Import This Package](#when-to-import-this-package)
 - [Module-Specific Guides](#module-specific-guides)
 - [Additional Resources](#additional-resources)
+- [Where This Is Used](#where-this-is-used)
 
 ---
 
@@ -632,3 +633,26 @@ For detailed information about each module's implementation, see:
 - [Model Garage README](./README.md) - Overview and basic usage
 - [Signal Definitions Spec](./pkg/schema/spec/spec.md) - VSS signal documentation
 - [DIMO VSS Repository](https://github.com/DIMO-Network/VSS) - VSS specification overlays
+
+## Where This Is Used
+
+You could call this a circular reference.
+
+```mermaid
+graph LR
+  c1[Connection 1]-->dis
+  c2[Connection 2]-->dis
+  dis-->tds[topic.device.signal<br>Kafka]
+  tds-->dps
+  dps-->ch[dimo.signal<br>ClickHouse]
+  ch-->telem[telemetry-api]
+```
+
+[dis](https://github.com/DIMO-Network/dis) determines a connection address from the certificate used in the request made by the connection. It uses that to look up a model-garage module. Part of what the module does is extract [`vss.Signal`](pkg/vss/signal.go) structs from the request, serialize them as JSON objects, and send them one by one onto `topic.device.signal`.
+
+[dps](https://github.com/DIMO-Network/dps) reads these messages, uses model-garage to them into tuples that exactly match the `dimo.signal` schema, and inserts them into ClickHouse with some buffering.
+
+[telemetry](https://github.com/DIMO-Network/telemetry-api) relies on model-garage for a lot of things:
+
+1. Knowing the field names and types, for `.graphql` code generation.
+2. Knowing the names of database tables and columns in order to construct queries.
