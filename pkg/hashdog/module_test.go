@@ -34,13 +34,13 @@ func TestSignalConvert(t *testing.T) {
 	const source = "dimo/integration/2ULfuC8U9dOqRshZBAi0lMM1Rrx"
 	tests := []struct {
 		name            string
-		cloudEvent      cloudevent.CloudEvent[json.RawMessage]
+		cloudEvent      cloudevent.RawEvent
 		expectedSignals []vss.Signal
 		expectedError   error
 	}{
 		{
 			name: "Valid Signal Payload",
-			cloudEvent: cloudevent.CloudEvent[json.RawMessage]{
+			cloudEvent: cloudevent.RawEvent{
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: DataVersion,
 					Type:        cloudevent.TypeStatus,
@@ -58,7 +58,7 @@ func TestSignalConvert(t *testing.T) {
 		},
 		{
 			name: "Device Status Payload",
-			cloudEvent: cloudevent.CloudEvent[json.RawMessage]{
+			cloudEvent: cloudevent.RawEvent{
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: DataVersion,
 					Type:        cloudevent.TypeStatus,

@@ -154,7 +154,7 @@ func TestModule_CloudEventConvert(t *testing.T) {
 func TestFullFromDataConversion(t *testing.T) {
 	var module Module
 	t.Parallel()
-	event := cloudevent.CloudEvent[json.RawMessage]{}
+	event := cloudevent.RawEvent{}
 
 	for _, test := range []struct {
 		ExpectedVin   string

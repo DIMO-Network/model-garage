@@ -12,7 +12,7 @@ import (
 func TestFullFromDataConversion(t *testing.T) {
 	t.Parallel()
 	expectedVIN := "1C4SJSBP8RS133747"
-	event := cloudevent.CloudEvent[json.RawMessage]{}
+	event := cloudevent.RawEvent{}
 
 	err := json.Unmarshal([]byte(fullInputJSON), &event)
 	require.NoError(t, err, "error unmarshalling JSON")
