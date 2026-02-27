@@ -70,7 +70,6 @@ Current modules include:
 - **Ruptela** - Ruptela hardware devices
 - **Tesla** - Tesla API and telemetry data
 - **HashDog** - HashDog (Macaron) hardware devices
-- **Compass** - Compass IoT hardware devices
 - **DefaultModule** - Fallback for unknown sources
 
 ### Module Interfaces
@@ -625,8 +624,6 @@ For detailed information about each module's implementation, see:
 - [Ruptela Module Guide](./pkg/ruptela/RUPTELA.md)
 - [Tesla Module Guide](./pkg/tesla/TESLA.md)
 - [HashDog Module Guide](./pkg/hashdog/HASHDOG.md)
-- [Compass Module Guide](./pkg/compass/COMPASS.md)
-- [Native Status Module Guide](./pkg/nativestatus/NATIVESTATUS.md)
 
 ---
 
