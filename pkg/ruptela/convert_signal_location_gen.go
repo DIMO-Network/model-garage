@@ -23,7 +23,7 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.alt': %w", err))
 		} else {
 			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
+				Subject:   baseSignal.Subject,
 				Timestamp: baseSignal.Timestamp,
 				Source:    baseSignal.Source,
 				Name:      "currentLocationAltitude",
@@ -38,7 +38,7 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.dir': %w", err))
 		} else {
 			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
+				Subject:   baseSignal.Subject,
 				Timestamp: baseSignal.Timestamp,
 				Source:    baseSignal.Source,
 				Name:      "currentLocationHeading",
@@ -53,7 +53,7 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.spd': %w", err))
 		} else {
 			sig := vss.Signal{
-				TokenID:   baseSignal.TokenID,
+				Subject:   baseSignal.Subject,
 				Timestamp: baseSignal.Timestamp,
 				Source:    baseSignal.Source,
 				Name:      "speed",

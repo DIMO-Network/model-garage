@@ -19,11 +19,10 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
 	}
 
-	tokenID := did.TokenID
 	source := event.Source
 
 	baseSignal := vss.Signal{
-		TokenID: uint32(tokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+		Subject: did.String(),
 		Source:  source,
 	}
 

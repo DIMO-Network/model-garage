@@ -38,7 +38,7 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		TokenID: uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+		Subject: did.String(),
 		Source:  event.Source,
 	}
 
@@ -78,7 +78,7 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 		if coordLoc, err := posToLocation(sigData); err == nil {
 			sig := vss.Signal{
 				Name:      vss.FieldCurrentLocationCoordinates,
-				TokenID:   signalMeta.TokenID,
+				Subject:   signalMeta.Subject,
 				Timestamp: ts,
 				Source:    signalMeta.Source,
 			}

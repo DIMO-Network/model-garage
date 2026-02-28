@@ -17,7 +17,7 @@ func SignalsFromDTCPayload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	dtcValue, errs := OBDDTCListFromV1Data(event.Data)
 
 	dtcSignal := vss.Signal{
-		TokenID:   uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+		Subject:   did.String(), //nolint:gosec // will not exceed uint32 max value
 		Timestamp: event.Time,
 		Source:    event.Source,
 		Name:      vss.FieldOBDDTCList,

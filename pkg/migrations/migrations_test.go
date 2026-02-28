@@ -36,15 +36,15 @@ func TestSignalMigration(t *testing.T) {
 	require.NoError(t, err, "Failed to get current columns")
 
 	expectedColumns := []connect.ColInfo{
-		{Name: vss.TokenIDCol, Type: "UInt32", Comment: "token_id of this device data."},
-		{Name: vss.TimestampCol, Type: "DateTime64(6, 'UTC')", Comment: "timestamp of when this data was collected."},
-		{Name: vss.NameCol, Type: "LowCardinality(String)", Comment: "name of the signal collected."},
-		{Name: vss.SourceCol, Type: "String", Comment: "source of the signal collected."},
-		{Name: vss.ProducerCol, Type: "String", Comment: "producer of the collected signal."},
-		{Name: vss.CloudEventIDCol, Type: "String", Comment: "Id of the Cloud Event that this signal was extracted from."},
-		{Name: vss.ValueNumberCol, Type: "Float64", Comment: "float64 value of the signal collected."},
-		{Name: vss.ValueStringCol, Type: "String", Comment: "string value of the signal collected."},
-		{Name: vss.ValueLocationCol, Type: "Tuple(latitude Float64, longitude Float64, hdop Float64)", Comment: "Location value of the signal collected."},
+		{Name: vss.SubjectCol, Type: "String", Comment: "Subject of the signal, typically a W3C DID."},
+		{Name: vss.TimestampCol, Type: "DateTime64(6, 'UTC')", Comment: "Timestamp, ideally from when the signal was emitted."},
+		{Name: vss.NameCol, Type: "LowCardinality(String)", Comment: "Name of the signal. The set of meaningful values for name depends on subject. The name also determines which of the value_ columns is expected to be populated."},
+		{Name: vss.SourceCol, Type: "LowCardinality(String)", Comment: "Source of the signal. This is typically a checksummed connection address."},
+		{Name: vss.ProducerCol, Type: "String", Comment: "Producer of the collected signal, typically another W3C DID."},
+		{Name: vss.CloudEventIDCol, Type: "String", Comment: "Id of the CloudEvent from which this signal was extracted."},
+		{Name: vss.ValueNumberCol, Type: "Float64", Comment: "The value for numeric (float64) signals."},
+		{Name: vss.ValueStringCol, Type: "String", Comment: "The value for string signals."},
+		{Name: vss.ValueLocationCol, Type: "Tuple(latitude Float64, longitude Float64, hdop Float64, heading Float64)", Comment: "The value for location signals. Some entries may be empty."},
 	}
 
 	// Check if the actual columns match the expected columns
