@@ -1,5 +1,7 @@
 -- +goose Up
-CREATE TABLE IF NOT EXISTS signal_v2
+RENAME TABLE signal TO signal_backup;
+
+CREATE TABLE IF NOT EXISTS signal;
 (
     `subject` String COMMENT 'Subject of the signal, typically a W3C DID.',
     `timestamp` DateTime64(6, 'UTC') COMMENT 'Timestamp, ideally from when the signal was emitted.' CODEC(Delta, ZSTD),
@@ -21,4 +23,6 @@ ORDER BY (subject, timestamp, name)
 COMMENT 'Contains signals extracted from incoming CloudEvents. Most column names refer to CloudEvent concepts.';
 
 -- +goose Down
-DROP TABLE IF EXISTS signal_v2;
+DROP TABLE IF EXISTS signal;
+
+RENAME TABLE signal_backup TO signal;
