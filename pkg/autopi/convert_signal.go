@@ -39,7 +39,7 @@ func SignalsFromV2Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		TokenID: uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+		Subject: did.String(),
 		Source:  event.Source,
 	}
 

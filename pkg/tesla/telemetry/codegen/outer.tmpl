@@ -10,7 +10,7 @@ import (
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 )
 
-func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]vss.Signal, []error) {
+func ProcessPayload(payload *protos.Payload, subject string, source string) ([]vss.Signal, []error) {
 	var out []vss.Signal
 	var outErr []error
 	{{/* Is it worth it to reuse more variables? */}}
@@ -55,7 +55,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID: tokenID,
+					Subject: subject,
 					Name: "{{.JSONName}}",
 					Timestamp: ts,
 					Source: source,

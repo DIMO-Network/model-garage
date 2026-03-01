@@ -25,7 +25,7 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 	}else {
 		sig := vss.Signal{
 			Name: "{{ $sig.JSONName }}",
-			TokenID: baseSignal.TokenID,
+			Subject: baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source: baseSignal.Source,
 		}

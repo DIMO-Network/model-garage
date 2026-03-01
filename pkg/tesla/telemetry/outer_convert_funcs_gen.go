@@ -10,7 +10,7 @@ import (
 	"github.com/teslamotors/fleet-telemetry/protos"
 )
 
-func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]vss.Signal, []error) {
+func ProcessPayload(payload *protos.Payload, subject string, source string) ([]vss.Signal, []error) {
 	var out []vss.Signal
 	var outErr []error
 
@@ -33,7 +33,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "currentLocationCoordinates",
 					Timestamp: ts,
 					Source:    source,
@@ -56,7 +56,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryChargingIsCharging",
 					Timestamp: ts,
 					Source:    source,
@@ -68,7 +68,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryChargingIsChargingCableConnected",
 					Timestamp: ts,
 					Source:    source,
@@ -99,7 +99,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryCurrentPower",
 					Timestamp: ts,
 					Source:    source,
@@ -130,7 +130,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryCurrentPower",
 					Timestamp: ts,
 					Source:    source,
@@ -160,7 +160,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryChargingAddedEnergy",
 					Timestamp: ts,
 					Source:    source,
@@ -190,7 +190,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryStateOfChargeCurrentEnergy",
 					Timestamp: ts,
 					Source:    source,
@@ -220,7 +220,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryStateOfChargeCurrent",
 					Timestamp: ts,
 					Source:    source,
@@ -251,7 +251,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "chassisAxleRow1WheelLeftTirePressure",
 					Timestamp: ts,
 					Source:    source,
@@ -282,7 +282,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "chassisAxleRow1WheelRightTirePressure",
 					Timestamp: ts,
 					Source:    source,
@@ -313,7 +313,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "chassisAxleRow2WheelLeftTirePressure",
 					Timestamp: ts,
 					Source:    source,
@@ -344,7 +344,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "chassisAxleRow2WheelRightTirePressure",
 					Timestamp: ts,
 					Source:    source,
@@ -374,7 +374,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "exteriorAirTemperature",
 					Timestamp: ts,
 					Source:    source,
@@ -405,7 +405,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainRange",
 					Timestamp: ts,
 					Source:    source,
@@ -435,7 +435,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryChargingChargeLimit",
 					Timestamp: ts,
 					Source:    source,
@@ -466,7 +466,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTransmissionTravelledDistance",
 					Timestamp: ts,
 					Source:    source,
@@ -497,7 +497,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "speed",
 					Timestamp: ts,
 					Source:    source,
@@ -527,7 +527,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "cabinDoorRow1DriverSideIsOpen",
 					Timestamp: ts,
 					Source:    source,
@@ -539,7 +539,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "cabinDoorRow1PassengerSideIsOpen",
 					Timestamp: ts,
 					Source:    source,
@@ -551,7 +551,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "cabinDoorRow2DriverSideIsOpen",
 					Timestamp: ts,
 					Source:    source,
@@ -563,7 +563,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "cabinDoorRow2PassengerSideIsOpen",
 					Timestamp: ts,
 					Source:    source,
@@ -593,7 +593,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "cabinDoorRow1DriverSideWindowIsOpen",
 					Timestamp: ts,
 					Source:    source,
@@ -623,7 +623,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "cabinDoorRow1PassengerSideWindowIsOpen",
 					Timestamp: ts,
 					Source:    source,
@@ -653,7 +653,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "cabinDoorRow2DriverSideWindowIsOpen",
 					Timestamp: ts,
 					Source:    source,
@@ -683,7 +683,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "cabinDoorRow2PassengerSideWindowIsOpen",
 					Timestamp: ts,
 					Source:    source,
@@ -713,7 +713,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryChargingChargeCurrentAC",
 					Timestamp: ts,
 					Source:    source,
@@ -743,7 +743,7 @@ func ProcessPayload(payload *protos.Payload, tokenID uint32, source string) ([]v
 				outErr = append(outErr, err)
 			} else {
 				sig := vss.Signal{
-					TokenID:   tokenID,
+					Subject:   subject,
 					Name:      "powertrainTractionBatteryChargingChargeVoltageUnknownType",
 					Timestamp: ts,
 					Source:    source,

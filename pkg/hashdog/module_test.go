@@ -31,7 +31,10 @@ func TestSignalConvert(t *testing.T) {
 		]
     }}`
 
-	const source = "dimo/integration/2ULfuC8U9dOqRshZBAi0lMM1Rrx"
+	const (
+		source  = "dimo/integration/2ULfuC8U9dOqRshZBAi0lMM1Rrx"
+		subject = "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33"
+	)
 	tests := []struct {
 		name            string
 		cloudEvent      cloudevent.CloudEvent[json.RawMessage]
@@ -45,14 +48,14 @@ func TestSignalConvert(t *testing.T) {
 					DataVersion: DataVersion,
 					Type:        cloudevent.TypeStatus,
 					Source:      source,
-					Subject:     "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
+					Subject:     subject,
 					Time:        ts,
 				},
 				Data: json.RawMessage(signalData),
 			},
 			expectedSignals: []vss.Signal{
-				{TokenID: 33, Timestamp: ts, Name: vss.FieldOBDLongTermFuelTrim1, ValueNumber: 25, Source: source},
-				{TokenID: 33, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 107, Source: source},
+				{Subject: subject, Timestamp: ts, Name: vss.FieldOBDLongTermFuelTrim1, ValueNumber: 25, Source: source},
+				{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 107, Source: source},
 			},
 			expectedError: nil,
 		},

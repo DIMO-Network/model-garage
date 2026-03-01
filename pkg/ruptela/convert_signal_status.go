@@ -18,7 +18,7 @@ func SignalsFromV1Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	}
 
 	baseSignal := vss.Signal{
-		TokenID:   uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+		Subject:   did.String(),
 		Timestamp: event.Time,
 		Source:    event.Source,
 	}
@@ -26,7 +26,7 @@ func SignalsFromV1Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	if coordLoc, err := currentLocationCoordinatesFromV1Data(event.Data); err == nil {
 		sig := vss.Signal{
 			Name:      vss.FieldCurrentLocationCoordinates,
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
 		}

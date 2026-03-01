@@ -28,7 +28,6 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
 	}
 
-	tokenID := uint32(did.TokenID.Uint64()) //nolint:gosec // will not exceed uint32 max value
 	source := event.Source
 
 	var td TelemetryData
@@ -45,7 +44,7 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 			batchedErrs = append(batchedErrs, fmt.Errorf("failed to unmarshal payload at index %d: %w", i, err))
 			continue
 		}
-		sigs, errs := ProcessPayload(&pl, tokenID, source)
+		sigs, errs := ProcessPayload(&pl, did.String(), source)
 		batchedSigs = append(batchedSigs, sigs...)
 		batchedErrs = append(batchedErrs, errs...)
 	}
