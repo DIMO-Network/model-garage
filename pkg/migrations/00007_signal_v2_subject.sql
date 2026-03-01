@@ -156,4 +156,3 @@ WHERE
   s.name IN ('isIgnitionOn') AND
   (ls.last_value IS NULL OR s.value_number != ls.last_value) AND
   (ls.last_timestamp IS NULL OR s.timestamp > ls.last_timestamp);
--- +goose StatementEnd
