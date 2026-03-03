@@ -1,10 +1,11 @@
 -- +goose Up
-
+-- +goose StatementBegin
 -- Drop these state change views first, since they reference signal.
 DROP VIEW IF EXISTS signal_state_changes_mv;
 DROP VIEW IF EXISTS signal_last_state_mv;
 
--- Back up existing tables.
+-- Back up existing tables. Migration takes a long time and depends on environment-specific
+-- constants, so the operator has to do it by hand. These will also have to be manually dropped.
 RENAME TABLE signal TO signal_backup;
 RENAME TABLE signal_last_state TO signal_last_state_backup;
 RENAME TABLE signal_state_changes TO signal_state_changes_backup;
@@ -100,9 +101,10 @@ WHERE
   s.name IN ('isIgnitionOn') AND
   (ls.last_value IS NULL OR s.value_number != ls.last_value) AND
   (ls.last_timestamp IS NULL OR s.timestamp > ls.last_timestamp);
+-- +goose StatementEnd
 
 -- +goose Down
-
+-- +goose StatementBegin
 -- Drop the new views and tables.
 DROP VIEW IF EXISTS signal_state_changes_mv;
 DROP VIEW IF EXISTS signal_last_state_mv;
@@ -156,3 +158,4 @@ WHERE
   s.name IN ('isIgnitionOn') AND
   (ls.last_value IS NULL OR s.value_number != ls.last_value) AND
   (ls.last_timestamp IS NULL OR s.timestamp > ls.last_timestamp);
+-- +goose StatementEnd

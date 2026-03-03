@@ -2,7 +2,6 @@ package ruptela
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
@@ -12,13 +11,8 @@ import (
 
 // SignalsFromV1Payload gets a slice signals from a v1 payload.
 func SignalsFromV1Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeERC721DID(event.Subject)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
-	}
-
 	baseSignal := vss.Signal{
-		Subject:   did.String(),
+		Subject:   event.Subject,
 		Timestamp: event.Time,
 		Source:    event.Source,
 	}

@@ -13,10 +13,6 @@ import (
 
 // SignalsFromLocationPayload extracts signals from a V2 payload.
 func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeERC721DID(event.Subject)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode subject DID: %w", err)
-	}
 	signals := gjson.GetBytes(event.Data, "location")
 	if !signals.Exists() {
 		return nil, convert.ConversionError{
@@ -38,7 +34,7 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		Subject: did.String(),
+		Subject: event.Subject,
 		Source:  event.Source,
 	}
 
