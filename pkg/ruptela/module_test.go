@@ -195,13 +195,13 @@ func TestSignalConvert(t *testing.T) {
 
 	tests := []struct {
 		name            string
-		cloudEvent      cloudevent.CloudEvent[json.RawMessage]
+		cloudEvent      cloudevent.RawEvent
 		expectedSignals []vss.Signal
 		expectedError   error
 	}{
 		{
 			name: "Valid Signal Payload",
-			cloudEvent: cloudevent.CloudEvent[json.RawMessage]{
+			cloudEvent: cloudevent.RawEvent{
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: ruptela.StatusEventDS,
 					Type:        cloudevent.TypeStatus,
@@ -219,7 +219,7 @@ func TestSignalConvert(t *testing.T) {
 		},
 		{
 			name: "Valid Location Payload",
-			cloudEvent: cloudevent.CloudEvent[json.RawMessage]{
+			cloudEvent: cloudevent.RawEvent{
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: ruptela.LocationEventDS,
 					Type:        cloudevent.TypeStatus,
@@ -237,7 +237,7 @@ func TestSignalConvert(t *testing.T) {
 		},
 		{
 			name: "Valid DTC Payload",
-			cloudEvent: cloudevent.CloudEvent[json.RawMessage]{
+			cloudEvent: cloudevent.RawEvent{
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: ruptela.DTCEventDS,
 					Type:        cloudevent.TypeStatus,
@@ -254,7 +254,7 @@ func TestSignalConvert(t *testing.T) {
 		},
 		{
 			name: "Invalid DTC Payload",
-			cloudEvent: cloudevent.CloudEvent[json.RawMessage]{
+			cloudEvent: cloudevent.RawEvent{
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: ruptela.DTCEventDS,
 					Type:        cloudevent.TypeStatus,
@@ -268,7 +268,7 @@ func TestSignalConvert(t *testing.T) {
 		},
 		{
 			name: "Invalid Event DataVersion",
-			cloudEvent: cloudevent.CloudEvent[json.RawMessage]{
+			cloudEvent: cloudevent.RawEvent{
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: "unknownVersion",
 					Type:        cloudevent.TypeStatus,
@@ -279,7 +279,7 @@ func TestSignalConvert(t *testing.T) {
 		},
 		{
 			name: "Non-Status Event Type",
-			cloudEvent: cloudevent.CloudEvent[json.RawMessage]{
+			cloudEvent: cloudevent.RawEvent{
 				CloudEventHeader: cloudevent.CloudEventHeader{
 					DataVersion: ruptela.StatusEventDS,
 					Type:        "fingerprint",
