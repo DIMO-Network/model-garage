@@ -64,6 +64,33 @@ func defaultSignalToVSS(signal *Signal, signalMap map[string]*schema.SignalInfo)
 			return vss.Signal{}, fmt.Errorf("signal %s is not a string", signal.Name)
 		}
 		vssSig.ValueString = str
+	case "vss.Location":
+		// This gets unmarshaled into type any.
+		// This is ugly. Should we do more sanity checks here? Maybe we don't want (lat, 0, 0).
+		m, ok := signal.Value.(map[string]any)
+		if !ok {
+			return vss.Signal{}, fmt.Errorf("signal %s is not a location object", signal.Name)
+		}
+		var loc vss.Location
+		if v, exists := m["latitude"]; exists {
+			loc.Latitude, ok = v.(float64)
+			if !ok {
+				return vss.Signal{}, fmt.Errorf("signal %s has a non-float64 latitude", signal.Name)
+			}
+		}
+		if v, exists := m["longitude"]; exists {
+			loc.Longitude, ok = v.(float64)
+			if !ok {
+				return vss.Signal{}, fmt.Errorf("signal %s has a non-float64 longitude", signal.Name)
+			}
+		}
+		if v, exists := m["hdop"]; exists {
+			loc.HDOP, ok = v.(float64)
+			if !ok {
+				return vss.Signal{}, fmt.Errorf("signal %s has a non-float64 hdop", signal.Name)
+			}
+		}
+		vssSig.ValueLocation = loc
 	default:
 		return vss.Signal{}, fmt.Errorf("signal %s has an unsupported base type %s", signal.Name, signalInfo.BaseGoType)
 	}

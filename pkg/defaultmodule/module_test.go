@@ -241,8 +241,12 @@ func TestModule_SignalConvert(t *testing.T) {
 						},
 						{
 							"timestamp": "2024-12-01T15:31:12.378075897Z",
-							"name": "currentLocationLatitude",
-							"value": 37.7749
+							"name": "currentLocationCoordinates",
+							"value": {
+								"latitude": 37.7749,
+								"longitude": -23.45833,
+								"hdop": 3
+							}
 						}
 					]
 				}
@@ -259,9 +263,13 @@ func TestModule_SignalConvert(t *testing.T) {
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
 				},
 				{
-					Name:        "currentLocationLatitude",
-					ValueNumber: 37.7749,
-					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
+					Name: "currentLocationCoordinates",
+					ValueLocation: vss.Location{
+						Latitude:  37.7749,
+						Longitude: -23.45833,
+						HDOP:      3,
+					},
+					Timestamp: time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
 				},
 			},
 			expectError: false,

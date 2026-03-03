@@ -55,12 +55,7 @@ tools: tools-golangci-lint # Install all tools
 clickhouse: # Run the clickhouse container
 	go run ./cmd/clickhouse-container
 
-generate: generate-nativestatus generate-ruptela generate-tesla generate-compass generate-hashdog generate-autopi generate-vss# Generate all files for the repository
-
-generate-nativestatus: # Generate all files for nativestatus
-	go run ./cmd/codegen -convert.package=nativestatus -generators=convert -convert.output-file=./pkg/nativestatus/vehicle-convert-funcs_gen.go -definitions=./pkg/nativestatus/schema/native-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/nativestatus/vehicle-v1-convert_gen.go -custom.template-file=./pkg/nativestatus/convertv1.tmpl -custom.format=true -definitions=./pkg/nativestatus/schema/native-definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/nativestatus/vehicle-v2-convert_gen.go -custom.template-file=./pkg/nativestatus/convertv2.tmpl -custom.format=true -definitions=./pkg/nativestatus/schema/native-definitions.yaml
+generate: generate-ruptela generate-tesla generate-hashdog generate-autopi generate-vss# Generate all files for the repository
 
 generate-ruptela: # Generate all files for ruptela
 	go run ./cmd/codegen -convert.package=ruptela -generators=convert -convert.output-file=./pkg/ruptela/convert_signal_funcs_gen.go -definitions=./pkg/ruptela/schema/ruptela_definitions.yaml
@@ -81,10 +76,6 @@ generate-tesla: # Generate all files for tesla
 	go run ./cmd/codegen -convert.package=api -generators=convert -convert.output-file=./pkg/tesla/api/convert_signal_funcs_gen.go -definitions=./pkg/tesla/api/schema/tesla_definitions.yaml
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/tesla/api/convert_signal_status_gen.go -custom.template-file=./pkg/tesla/api/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/tesla/api/schema/tesla_definitions.yaml
 	go run ./pkg/tesla/telemetry/codegen
-
-generate-compass: # Generate all files for compass
-	go run ./cmd/codegen -convert.package=compass -generators=convert -convert.output-file=./pkg/compass/convert_signal_funcs_gen.go -definitions=./pkg/compass/schema/compass_definitions.yaml
-	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/compass/convert_signal_status_gen.go -custom.template-file=./pkg/compass/codegen/convert_signal_status.tmpl -custom.format=true -definitions=./pkg/compass/schema/compass_definitions.yaml
 
 generate-vss: # Generate all files for vss
 	go run ./cmd/codegen -generators=custom -custom.output-file=./pkg/vss/vehicle-structs.go -custom.template-file=./internal/generator/vehicle.tmpl -custom.format=true

@@ -60,7 +60,7 @@ func (e ConversionError) Error() string {
 		errBuilder.WriteString("'")
 	}
 	if len(e.Errors) != 0 {
-		errBuilder.WriteString(fmt.Sprintf(": %v", e.Errors))
+		fmt.Fprintf(&errBuilder, ": %v", e.Errors)
 	}
 	return errBuilder.String()
 }

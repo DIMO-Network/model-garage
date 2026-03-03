@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/DIMO-Network/model-garage/pkg/autopi"
-	"github.com/DIMO-Network/model-garage/pkg/compass"
 	"github.com/DIMO-Network/model-garage/pkg/defaultmodule"
 	"github.com/DIMO-Network/model-garage/pkg/hashdog"
 	"github.com/DIMO-Network/model-garage/pkg/ruptela"
@@ -31,9 +30,6 @@ var (
 
 	// HashDogSource is the Ethereum address for the HashDog connection.
 	HashDogSource = common.HexToAddress("0x4c674ddE8189aEF6e3b58F5a36d7438b2b1f6Bc2")
-
-	// CompassSource is the Ethereum address for the Compass IOT connection.
-	CompassSource = common.HexToAddress("0x55BF1c27d468314Ea119CF74979E2b59F962295c")
 
 	// TeslaSource is the Ethereum address for the Tesla connection.
 	TeslaSource = common.HexToAddress("0xc4035Fecb1cc906130423EF05f9C20977F643722")
@@ -83,12 +79,6 @@ func RegisterDefaultModules(
 	signalReg.Override(HashDogSource.String(), hashDogModule)
 	cloudEventReg.Override(HashDogSource.String(), hashDogModule)
 	fingerprintReg.Override(HashDogSource.String(), hashDogModule)
-
-	// Compass IOT
-	compassModule := &compass.Module{}
-	signalReg.Override(CompassSource.String(), compassModule)
-	cloudEventReg.Override(CompassSource.String(), compassModule)
-	fingerprintReg.Override(CompassSource.String(), compassModule)
 
 	// Tesla
 	teslaModule := &tesla.Module{}

@@ -34,20 +34,6 @@
   requiredPrivileges:
     - VEHICLE_ALL_TIME_LOCATION
 
-- vspecName: Vehicle.CurrentLocation.Latitude
-  conversions:
-    - originalName: pos.lat
-      originalType: float64
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
-
-- vspecName: Vehicle.CurrentLocation.Longitude
-  conversions:
-    - originalName: pos.lon
-      originalType: float64
-  requiredPrivileges:
-    - VEHICLE_ALL_TIME_LOCATION
-
 - vspecName: Vehicle.CurrentLocation.Heading
   conversions:
     - originalName: pos.dir
@@ -149,16 +135,6 @@
       originalType: float64
     - originalName: "signals.210" # CAN vehicle speed
       originalType: string
-
-- vspecName: Vehicle.DIMO.Aftermarket.HDOP
-  conversions:
-    - originalName: pos.hdop
-      originalType: float64
-
-- vspecName: Vehicle.DIMO.Aftermarket.NSAT
-  conversions:
-    - originalName: pos.sat
-      originalType: float64
 
 - vspecName: Vehicle.OBD.DistanceWithMIL
   conversions:
@@ -300,7 +276,6 @@
     - originalName: "signals.101"
       originalType: string
 
-
 - vspecName: Vehicle.Powertrain.FuelSystem.AccumulatedConsumption
   conversions:
     - originalName: "signals.208"
@@ -352,7 +327,6 @@
   conversions:
     - originalName: "signals.55"
       originalType: string
-
 
 - vspecName: Vehicle.Powertrain.Transmission.SelectedGear
   conversions:
@@ -458,7 +432,11 @@
     - originalName: "signals.538" # CAN Doors locking status
       originalType: string
 
-
+- vspecName: Vehicle.Connectivity.Cellular.IsJammingDetected
+  conversions:
+    - originalName: "signals.88"
+      originalType: string
+      
 # # TODO CAN ONLY
 # - vspecName: Vehicle.OBD.EngineLoad
 #   conversions:

@@ -1,5 +1,5 @@
 // Package version provides the version of the application.
-package version
+package version //nolint:revive // At peace with stdlib clash.
 
 import "golang.org/x/mod/semver"
 

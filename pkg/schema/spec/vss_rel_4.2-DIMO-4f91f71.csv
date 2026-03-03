@@ -1584,6 +1584,8 @@
 "Vehicle.Service.TimeToService","sensor","int32","","s","","","Remaining time to service (of any kind). Negative values indicate service overdue.","","","","c968be91a5685fa9ae30b84a0f91934e"
 "Vehicle.Connectivity","branch","","","","","","Connectivity data.","","","","89c267fccea35f3da9871cca2b4dc4df"
 "Vehicle.Connectivity.IsConnectivityAvailable","sensor","boolean","","","","","Indicates if connectivity between vehicle and cloud is available. True = Connectivity is available. False = Connectivity is not available.","This signal can be used by onboard vehicle services to decide what features that shall be offered to the driver, for example disable the 'check for update' button if vehicle does not have connectivity.","","","b6d11be2a6565996b68ffb07a96595a7"
+"Vehicle.Connectivity.Cellular","branch","","","","","","Cellular network connectivity and status information.","","","","48506eaab6ca5e4a80dc322fb9237983"
+"Vehicle.Connectivity.Cellular.IsJammingDetected","sensor","boolean","","","","","Indicates whether cellular radio signal jamming or interference is detected that prevents normal communication.","","","","1f3341856f0f538a8b3601330851dbcc"
 "Vehicle.DIMO","branch","","","","","","dimo specific metadata.","","","","9236bd87666d5490bfe805912da4dbe2"
 "Vehicle.DIMO.Aftermarket","branch","","","","","","holds information about the aftermarket dimo device","","","","ea9dca04c8bc5f1abbb2fdbf65bfe049"
 "Vehicle.DIMO.Aftermarket.HDOP","sensor","float","","","","","Horizontal dilution of precision of GPS","","","","54678b5268115b2db78a12ed08caf4e6"

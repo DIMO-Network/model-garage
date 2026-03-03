@@ -75,26 +75,14 @@ const (
 	FieldChassisParkingBrakeIsEngaged = "chassisParkingBrakeIsEngaged"
 	// FieldChassisTireSystemIsWarningOn Indicates whether the tire system warning telltale is active
 	FieldChassisTireSystemIsWarningOn = "chassisTireSystemIsWarningOn"
+	// FieldConnectivityCellularIsJammingDetected Indicates whether cellular radio signal jamming or interference is detected that prevents normal communication.
+	FieldConnectivityCellularIsJammingDetected = "connectivityCellularIsJammingDetected"
 	// FieldCurrentLocationAltitude Current altitude relative to WGS 84 reference ellipsoid, as measured at the position of GNSS receiver antenna.
 	FieldCurrentLocationAltitude = "currentLocationAltitude"
 	// FieldCurrentLocationCoordinates Current location of the vehicle in WGS 84 coordinates.
 	FieldCurrentLocationCoordinates = "currentLocationCoordinates"
 	// FieldCurrentLocationHeading Current heading relative to geographic north. 0 = North, 90 = East, 180 = South, 270 = West.
 	FieldCurrentLocationHeading = "currentLocationHeading"
-	// FieldCurrentLocationIsRedacted Indicates if the latitude and longitude signals at the current timestamp have been redacted using a privacy zone.
-	FieldCurrentLocationIsRedacted = "currentLocationIsRedacted"
-	// FieldCurrentLocationLatitude Current latitude of vehicle in WGS 84 geodetic coordinates, as measured at the position of GNSS receiver antenna.
-	FieldCurrentLocationLatitude = "currentLocationLatitude"
-	// FieldCurrentLocationLongitude Current longitude of vehicle in WGS 84 geodetic coordinates, as measured at the position of GNSS receiver antenna.
-	FieldCurrentLocationLongitude = "currentLocationLongitude"
-	// FieldDIMOAftermarketHDOP Horizontal dilution of precision of GPS
-	FieldDIMOAftermarketHDOP = "dimoAftermarketHDOP"
-	// FieldDIMOAftermarketNSAT Number of sync satellites for GPS
-	FieldDIMOAftermarketNSAT = "dimoAftermarketNSAT"
-	// FieldDIMOAftermarketSSID Service Set Identifier for the wifi.
-	FieldDIMOAftermarketSSID = "dimoAftermarketSSID"
-	// FieldDIMOAftermarketWPAState Indicate the current WPA state for the device's wifi, e.g. "CONNECTED", "SCANNING", "DISCONNECTED"
-	FieldDIMOAftermarketWPAState = "dimoAftermarketWPAState"
 	// FieldExteriorAirTemperature Air temperature outside the vehicle.
 	FieldExteriorAirTemperature = "exteriorAirTemperature"
 	// FieldIsIgnitionOn Vehicle ignition status. False - off, True - on.

@@ -124,7 +124,7 @@ func getDeclaredFunctionsForFile(fset *token.FileSet, filePath string) (map[stri
 // writeConvertFuncs writes the generated conversion functions to a file.
 func writeConvertFuncs(convertFunc []funcTmplData, existingFuncs map[string]FunctionInfo, tmpl *template.Template, outputPath string, packageName string, copyComments bool) error {
 	var convertBuff bytes.Buffer
-	convertBuff.WriteString(fmt.Sprintf(header, packageName))
+	fmt.Fprintf(&convertBuff, header, packageName)
 	slices.SortStableFunc(convertFunc, func(a, b funcTmplData) int {
 		// split funcName to get digits at the end and compare the name then by the digit value
 		// get the function name without the digits at the end
