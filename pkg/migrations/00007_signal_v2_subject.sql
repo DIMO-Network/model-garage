@@ -1,16 +1,37 @@
 -- +goose Up
--- +goose StatementBegin
+
+-- The ClickHouse driver does not support sending multiple statements at once, 
+-- so if we want to have these StatementBegin lines (whose utility is questionable
+-- to me) then we need a bunch of them.
+
 -- Drop these state change views first, since they reference signal.
+
+-- +goose StatementBegin
 DROP VIEW IF EXISTS signal_state_changes_mv;
+-- +goose StatementEnd
+
+-- +goose StatementBegin
 DROP VIEW IF EXISTS signal_last_state_mv;
+-- +goose StatementEnd
 
 -- Back up existing tables. Migration takes a long time and depends on environment-specific
 -- constants, so the operator has to do it by hand. These will also have to be manually dropped.
-RENAME TABLE signal TO signal_backup;
-RENAME TABLE signal_last_state TO signal_last_state_backup;
-RENAME TABLE signal_state_changes TO signal_state_changes_backup;
 
--- Recreate signal with subject instead of token_id.
+-- +goose StatementBegin
+RENAME TABLE signal TO signal_backup;
+-- +goose StatementEnd
+
+-- +goose StatementBegin
+RENAME TABLE signal_last_state TO signal_last_state_backup;
+-- +goose StatementEnd
+
+-- +goose StatementBegin
+RENAME TABLE signal_state_changes TO signal_state_changes_backup;
+-- +goose StatementEnd
+
+-- The core: recreate signal with subject instead of token_id.
+
+-- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS signal
 (
     `subject` String COMMENT 'Subject of the signal, typically a W3C DID.',
@@ -31,8 +52,11 @@ ENGINE = ReplacingMergeTree
 PARTITION BY toYYYYMM(timestamp)
 ORDER BY (subject, timestamp, name)
 COMMENT 'Contains signals extracted from incoming CloudEvents. Most column names refer to CloudEvent concepts.';
+-- +goose StatementEnd
 
--- Recreate signal_last_state and the associated view, based on the new signal table.
+-- Recreate the view tables around the new, re-keyed, signal table.
+
+-- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS signal_last_state (
   subject String,
   signal_name LowCardinality(String),
@@ -44,7 +68,9 @@ CREATE TABLE IF NOT EXISTS signal_last_state (
 )
 ENGINE = ReplacingMergeTree(version)
 ORDER BY (subject, signal_name);
+-- +goose StatementEnd
 
+-- +goose StatementBegin
 CREATE MATERIALIZED VIEW IF NOT EXISTS signal_last_state_mv
 TO signal_last_state
 AS
@@ -58,7 +84,9 @@ SELECT
   now64() as version
 FROM signal
 WHERE name IN ('isIgnitionOn');
+-- +goose StatementEnd
 
+-- +goose StatementBegin
 -- Recreate signal_state_changes similarly.
 CREATE TABLE IF NOT EXISTS signal_state_changes (
   subject String,
@@ -76,7 +104,9 @@ CREATE TABLE IF NOT EXISTS signal_state_changes (
 ENGINE = ReplacingMergeTree(version)
 ORDER BY (subject, signal_name, timestamp)
 PARTITION BY toYYYYMM(timestamp);
+-- +goose StatementEnd
 
+-- +goose StatementBegin
 CREATE MATERIALIZED VIEW IF NOT EXISTS signal_state_changes_mv
 TO signal_state_changes
 AS
@@ -104,22 +134,46 @@ WHERE
 -- +goose StatementEnd
 
 -- +goose Down
--- +goose StatementBegin
+
 -- Drop the new views and tables.
+
+-- +goose StatementBegin
 DROP VIEW IF EXISTS signal_state_changes_mv;
+-- +goose StatementEnd
+
+-- +goose StatementBegin
 DROP VIEW IF EXISTS signal_last_state_mv;
+-- +goose StatementEnd
 
+-- +goose StatementBegin
 DROP TABLE IF EXISTS signal_state_changes;
+-- +goose StatementEnd
+
+-- +goose StatementBegin
 DROP TABLE IF EXISTS signal_last_state;
+-- +goose StatementEnd
 
+-- +goose StatementBegin
 DROP TABLE IF EXISTS signal;
+-- +goose StatementEnd
 
--- Restore backups.
+-- Restore all of the backup tables.
+
+-- +goose StatementBegin
 RENAME TABLE signal_backup TO signal;
+-- +goose StatementEnd
+
+-- +goose StatementBegin
 RENAME TABLE signal_last_state_backup TO signal_last_state;
+-- +goose StatementEnd
+
+-- +goose StatementBegin
 RENAME TABLE signal_state_changes_backup TO signal_state_changes;
+-- +goose StatementEnd
 
 -- Recreate the original materialized views with token_id.
+
+-- +goose StatementBegin
 CREATE MATERIALIZED VIEW IF NOT EXISTS signal_last_state_mv
 TO signal_last_state
 AS
@@ -133,7 +187,9 @@ SELECT
   now64() as version
 FROM signal
 WHERE name IN ('isIgnitionOn');
+-- +goose StatementEnd
 
+-- +goose StatementBegin
 CREATE MATERIALIZED VIEW IF NOT EXISTS signal_state_changes_mv
 TO signal_state_changes
 AS
