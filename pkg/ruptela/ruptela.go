@@ -15,6 +15,8 @@ const (
 	LocationEventDS = "r/v0/loc"
 	// DTCEventDS is the data version for DTC events.
 	DTCEventDS = "r/v0/dtc"
+	// CmdEventDS is the data version for command-sourced events (e.g. engine block/unblock).
+	CmdEventDS = "r/v0/cmd"
 )
 
 // fuelTypeConversion Encodings taken from https://en.wikipedia.org/wiki/OBD-II_PIDs#Fuel_Type_Coding

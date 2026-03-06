@@ -16,6 +16,8 @@ const (
 	EventNameExtremeBraking = "ExtremeBraking"
 	EventNameAcceleration   = "HarshAcceleration"
 	EventNameCornering      = "HarshCornering"
+	EventNameEngineBlock    = "EngineBlock"
+	EventNameEngineUnblock  = "EngineUnblock"
 	zeroValue               = "0"
 )
 
@@ -23,9 +25,10 @@ type eventSignals struct {
 	Signals eventSignal `json:"signals"`
 }
 type eventSignal struct {
-	Braking      string `json:"135"`
-	Acceleration string `json:"136"`
-	Cornering    string `json:"143"`
+	Braking      string  `json:"135"`
+	Acceleration string  `json:"136"`
+	Cornering    string  `json:"143"`
+	EngineBlock  *string `json:"405,omitempty"`
 }
 
 // CounterMetadata is the metadata for events with a counter value.
@@ -61,6 +64,14 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 		corneringEvent, err := ToCorneringEvent(signals.Signals.Cornering)
 		if err == nil {
 			events = append(events, corneringEvent)
+		} else if !errors.Is(err, errNotFound) {
+			errs = append(errs, err)
+		}
+	}
+	if signals.Signals.EngineBlock != nil {
+		engineEvent, err := ToEngineEvent(*signals.Signals.EngineBlock)
+		if err == nil {
+			events = append(events, engineEvent)
 		} else if !errors.Is(err, errNotFound) {
 			errs = append(errs, err)
 		}
@@ -158,6 +169,17 @@ func ToAccelerationEvent(rawValue string) (vss.Event, error) {
 		Metadata: string(metaCounterJSON),
 		Tags:     []string{vss.TagBehaviorHarshAcceleration},
 	}, nil
+}
+
+func ToEngineEvent(rawValue string) (vss.Event, error) {
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return vss.Event{}, fmt.Errorf("could not parse uint: %w", err)
+	}
+	if rawInt != 0 {
+		return vss.Event{Name: EventNameEngineBlock, Tags: []string{vss.TagSecurityEngineBlock}}, nil
+	}
+	return vss.Event{Name: EventNameEngineUnblock, Tags: []string{vss.TagSecurityEngineUnblock}}, nil
 }
 
 func ToCorneringEvent(rawValue string) (vss.Event, error) {
