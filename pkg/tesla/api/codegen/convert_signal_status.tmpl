@@ -26,7 +26,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name: "{{ $sig.JSONName }}",
-			TokenID: baseSignal.TokenID,
+			Subject: baseSignal.Subject,
 			Timestamp: ts,
 			Source: baseSignal.Source,
 		}

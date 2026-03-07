@@ -32,7 +32,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "chassisAxleRow1WheelLeftTirePressure",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -48,7 +48,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "chassisAxleRow1WheelRightTirePressure",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -64,7 +64,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "chassisAxleRow2WheelLeftTirePressure",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -80,7 +80,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "chassisAxleRow2WheelRightTirePressure",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -96,7 +96,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "currentLocationCoordinates",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -112,7 +112,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "exteriorAirTemperature",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -128,7 +128,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainRange",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -144,7 +144,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainTractionBatteryChargingAddedEnergy",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -160,7 +160,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainTractionBatteryChargingChargeLimit",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -176,7 +176,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainTractionBatteryChargingIsCharging",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -192,7 +192,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainTractionBatteryCurrentPower",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -208,7 +208,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainTractionBatteryStateOfChargeCurrent",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -224,7 +224,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainTransmissionTravelledDistance",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}
@@ -240,7 +240,7 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 	} else {
 		sig := vss.Signal{
 			Name:      "speed",
-			TokenID:   baseSignal.TokenID,
+			Subject:   baseSignal.Subject,
 			Timestamp: ts,
 			Source:    baseSignal.Source,
 		}

@@ -14,10 +14,6 @@ import (
 
 // SignalsFromV2Payload extracts signals from a V2 payload.
 func SignalsFromV2Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
-	did, err := cloudevent.DecodeERC721DID(event.Subject)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode DID: %w", err)
-	}
 	signals := gjson.GetBytes(event.Data, "vehicle.signals")
 	if !signals.Exists() {
 		return nil, convert.ConversionError{
@@ -39,7 +35,7 @@ func SignalsFromV2Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		TokenID: uint32(did.TokenID.Uint64()), //nolint:gosec // will not exceed uint32 max value
+		Subject: event.Subject,
 		Source:  event.Source,
 	}
 

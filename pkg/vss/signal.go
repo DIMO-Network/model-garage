@@ -9,8 +9,8 @@ import (
 const (
 	// TableName is the name of the distributed table in Clickhouse.
 	TableName = "signal"
-	// TokenIDCol is the name of the token_id column in Clickhouse.
-	TokenIDCol = "token_id"
+	// SubjectCol is the name of the subject column in ClickHouse.
+	SubjectCol = "subject"
 	// TimestampCol is the name of the timestamp column in Clickhouse.
 	TimestampCol = "timestamp"
 	// SourceCol is the name of the source column in Clickhouse.
@@ -32,8 +32,8 @@ const (
 // Signal represents a single signal collected from a device.
 // This is the data format that is stored in the database.
 type Signal struct {
-	// TokenID is the unique identifier of the device.
-	TokenID uint32 `ch:"token_id" json:"tokenId"`
+	// Subject is the subject of the signal. Typically a W3C DID.
+	Subject string `ch:"subject" json:"subject"`
 
 	// Timestamp is when this data was collected.
 	Timestamp time.Time `ch:"timestamp" json:"timestamp"`
@@ -61,11 +61,13 @@ type Signal struct {
 }
 
 // Location represents a point on the earth in WSG-84 coordinates,
-// optionally with a Horizontal Dilution of Position (HDOP) value.
+// optionally with a Horizontal Dilution of Position (HDOP) value or a
+// heading value.
 type Location struct {
 	Latitude  float64 `ch:"latitude"`
 	Longitude float64 `ch:"longitude"`
 	HDOP      float64 `ch:"hdop"`
+	Heading   float64 `ch:"heading"`
 }
 
 // SetValue dynamically set the appropriate value field based on the type of the value.
@@ -86,7 +88,7 @@ func (s *Signal) SetValue(val any) {
 // The order of the elements in the array is guaranteed to match the order of elements in the `SignalColNames`.
 func SignalToSlice(obj Signal) []any {
 	return []any{
-		obj.TokenID,
+		obj.Subject,
 		obj.Timestamp,
 		obj.Name,
 		obj.Source,
@@ -101,7 +103,7 @@ func SignalToSlice(obj Signal) []any {
 // SignalColNames returns the column names of the Signal struct.
 func SignalColNames() []string {
 	return []string{
-		TokenIDCol,
+		SubjectCol,
 		TimestampCol,
 		NameCol,
 		SourceCol,

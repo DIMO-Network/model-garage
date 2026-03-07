@@ -20,7 +20,7 @@ func SignalsFromV2Data(originalDoc []byte, baseSignal vss.Signal, signalName str
 			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert '{{ $origInfo.Name }}': %w", err))
 		} else {
 			sig := vss.Signal{
-				TokenID: baseSignal.TokenID,
+				Subject: baseSignal.Subject,
 				Timestamp: baseSignal.Timestamp,
 				Source: baseSignal.Source,
 				Name: "{{ $sig.JSONName }}",
