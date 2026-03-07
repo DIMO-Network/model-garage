@@ -87,7 +87,7 @@ func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss
 func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, error) {
 	var subject string
 	switch event.DS {
-	case StatusEventDS, LocationEventDS, DTCEventDS, BattDS:
+	case StatusEventDS, LocationEventDS, DTCEventDS, BattDS, CmdEventDS:
 		if event.VehicleTokenID != nil {
 			subject = cloudevent.ERC721DID{
 				ChainID:         m.ChainID,
@@ -121,6 +121,10 @@ func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType strin
 
 // getCloudEventTypes gets the cloud event types contained in the ruptela event.
 func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
+	// Command events are always discrete events, never status updates.
+	if event.DS == CmdEventDS {
+		return []string{cloudevent.TypeEvent}, nil
+	}
 	// always include the status event
 	cloudEventTypes := []string{cloudevent.TypeStatus}
 	if event.DS != StatusEventDS {

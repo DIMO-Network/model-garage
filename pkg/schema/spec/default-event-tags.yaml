@@ -6,6 +6,10 @@
   description: "harshCornering an event that indicates a harsh cornering was detected"
 - name : safety.collision
   description: "collision an event that indicates a collision was detected"
+- name: security.engineBlock
+  description: "engineBlock an event that indicates the engine was blocked via a command"
+- name: security.engineUnblock
+  description: "engineUnblock an event that indicates the engine was unblocked via a command"
 
 # Future Events
 # - name : charging.sessionStart

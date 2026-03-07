@@ -233,4 +233,8 @@ const (
 	TagBehaviorHarshCornering = "behavior.harshCornering"
 	// TagSafetyCollision collision an event that indicates a collision was detected
 	TagSafetyCollision = "safety.collision"
+	// TagSecurityEngineBlock engineBlock an event that indicates the engine was blocked via a command
+	TagSecurityEngineBlock = "security.engineBlock"
+	// TagSecurityEngineUnblock engineUnblock an event that indicates the engine was unblocked via a command
+	TagSecurityEngineUnblock = "security.engineUnblock"
 )
