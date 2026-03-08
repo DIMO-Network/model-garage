@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 )
 
@@ -21,7 +22,7 @@ type CloudEventModule interface {
 
 // FingerprintModule is an interface for converting messages to fingerprint events.
 type FingerprintModule interface {
-	FingerprintConvert(ctx context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error)
+	FingerprintConvert(ctx context.Context, event cloudevent.RawEvent) (modelce.Fingerprint, error)
 }
 
 // EventModule is an interface for converting messages to events.
@@ -82,7 +83,7 @@ func ConvertToCloudEvents(ctx context.Context, source string, rawData []byte) ([
 
 // ConvertToFingerprint takes a module source and raw payload and returns a fingerprint event.
 // Falls back to the default module (empty source) if the specified module is not found.
-func ConvertToFingerprint(ctx context.Context, source string, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
+func ConvertToFingerprint(ctx context.Context, source string, event cloudevent.RawEvent) (modelce.Fingerprint, error) {
 	// Try to get the specific module
 	module, ok := FingerprintRegistry.Get(source)
 
@@ -90,13 +91,13 @@ func ConvertToFingerprint(ctx context.Context, source string, event cloudevent.R
 	if !ok {
 		module, ok = FingerprintRegistry.Get("")
 		if !ok {
-			return cloudevent.Fingerprint{}, NotFoundError(fmt.Sprintf("fingerprint module '%s' not found and no default module registered", source))
+			return modelce.Fingerprint{}, NotFoundError(fmt.Sprintf("fingerprint module '%s' not found and no default module registered", source))
 		}
 	}
 
 	fingerprint, err := module.FingerprintConvert(ctx, event)
 	if err != nil {
-		return cloudevent.Fingerprint{}, fmt.Errorf("failed to convert fingerprint with module '%s': %w", source, err)
+		return modelce.Fingerprint{}, fmt.Errorf("failed to convert fingerprint with module '%s': %w", source, err)
 	}
 
 	return fingerprint, nil

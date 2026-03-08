@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/tidwall/gjson"
@@ -44,8 +45,8 @@ func IsFingerprint(event cloudevent.RawEvent) bool {
 
 // FingerprintConvert extracts a fingerprint from a Fleet API vehicle_data response.
 // We expect this to always succeed.
-func FingerprintConvert(event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
-	var fp cloudevent.Fingerprint
+func FingerprintConvert(event cloudevent.RawEvent) (modelce.Fingerprint, error) {
+	var fp modelce.Fingerprint
 
 	result := gjson.GetBytes(event.Data, "vin")
 

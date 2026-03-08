@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/ethereum/go-ethereum/common"
@@ -23,7 +24,7 @@ type Module struct {
 }
 
 // FingerprintConvert converts a message to a fingerprint.
-func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
+func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (modelce.Fingerprint, error) {
 	return DecodeFingerprint(event)
 }
 

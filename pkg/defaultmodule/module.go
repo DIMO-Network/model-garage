@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/schema"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
@@ -91,12 +92,12 @@ func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]
 }
 
 // FingerprintConvert converts a default CloudEvent to a FingerprintEvent.
-func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
+func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (modelce.Fingerprint, error) {
 	result := gjson.GetBytes(event.Data, "vin")
 	if !result.Exists() {
-		return cloudevent.Fingerprint{}, fmt.Errorf("vin not found in event data")
+		return modelce.Fingerprint{}, fmt.Errorf("vin not found in event data")
 	}
-	return cloudevent.Fingerprint{VIN: result.String()}, nil
+	return modelce.Fingerprint{VIN: result.String()}, nil
 }
 
 // CloudEventConvert marshals the input message to Cloud Events and sets the type based on the message content.
