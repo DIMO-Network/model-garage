@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/ethereum/go-ethereum/common"
@@ -20,8 +21,8 @@ type Module struct {
 }
 
 // FingerprintConvert converts a message to a fingerprint.
-func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
-	var fpData cloudevent.Fingerprint
+func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (modelce.Fingerprint, error) {
+	var fpData modelce.Fingerprint
 	err := json.Unmarshal(event.Data, &fpData)
 	if err != nil {
 		return fpData, fmt.Errorf("failed unmarshal vin data: %w", err)

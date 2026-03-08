@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/teslamotors/fleet-telemetry/protos"
@@ -66,8 +67,8 @@ func IsFingerprint(event cloudevent.RawEvent) bool {
 
 // FingerprintConvert extracts a fingerprint from the first Fleet Telemetry protobuf
 // Payload. We expect this to always succeed.
-func FingerprintConvert(event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
-	var fp cloudevent.Fingerprint
+func FingerprintConvert(event cloudevent.RawEvent) (modelce.Fingerprint, error) {
+	var fp modelce.Fingerprint
 
 	var tlmData TelemetryData
 	if err := json.Unmarshal(event.Data, &tlmData); err != nil {

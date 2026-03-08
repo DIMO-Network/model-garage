@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/ethereum/go-ethereum/common"
@@ -19,15 +20,15 @@ type Module struct {
 	VehicleContractAddr     common.Address `json:"vehicle_contract_addr"`
 }
 type HashdogPayload struct {
-	DecodedPayload cloudevent.Fingerprint `json:"decodedPayload"`
+	DecodedPayload modelce.Fingerprint `json:"decodedPayload"`
 }
 
 // FingerprintConvert converts a message to a fingerprint.
-func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
+func (*Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (modelce.Fingerprint, error) {
 	var fpData HashdogPayload
 	err := json.Unmarshal(event.Data, &fpData)
 	if err != nil {
-		return cloudevent.Fingerprint{}, fmt.Errorf("failed to unmarshal hashdog fingerprint data: %w", err)
+		return modelce.Fingerprint{}, fmt.Errorf("failed to unmarshal hashdog fingerprint data: %w", err)
 	}
 	return fpData.DecodedPayload, nil
 }

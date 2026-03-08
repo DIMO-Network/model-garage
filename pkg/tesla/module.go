@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/tesla/api"
 	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
@@ -58,7 +59,7 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 }
 
 // FingerprintConvert converts a Tesla CloudEvent to a FingerprintEvent.
-func (m *Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
+func (m *Module) FingerprintConvert(_ context.Context, event cloudevent.RawEvent) (modelce.Fingerprint, error) {
 	if event.DataVersion == telemetry.DataVersion {
 		return telemetry.FingerprintConvert(event)
 	}

@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 )
 
 type fingerPrintSignals struct {
@@ -38,21 +39,21 @@ func (s *signals) vinParts() (p1, p2, p3 string) {
 }
 
 // DecodeFingerprint decodes a fingerprint payload into a FingerprintEvent.
-func DecodeFingerprint(event cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
+func DecodeFingerprint(event cloudevent.RawEvent) (modelce.Fingerprint, error) {
 	var fpPayload fingerPrintSignals
 	if err := json.Unmarshal(event.Data, &fpPayload); err != nil {
-		return cloudevent.Fingerprint{}, fmt.Errorf("could not unmarshal payload: %w", err)
+		return modelce.Fingerprint{}, fmt.Errorf("could not unmarshal payload: %w", err)
 	}
 	p1, p2, p3 := fpPayload.Signals.vinParts()
 	if p1 == "" || p2 == "" || p3 == "" {
-		return cloudevent.Fingerprint{}, fmt.Errorf("missing fingerprint data")
+		return modelce.Fingerprint{}, fmt.Errorf("missing fingerprint data")
 	}
 
 	var vinBytes []byte
 	for i, hexPart := range []string{p1, p2, p3} {
 		b, err := hex.DecodeString(hexPart)
 		if err != nil {
-			return cloudevent.Fingerprint{}, fmt.Errorf("could not decode VIN part %d: %w", i+1, err)
+			return modelce.Fingerprint{}, fmt.Errorf("could not decode VIN part %d: %w", i+1, err)
 		}
 		vinBytes = append(vinBytes, b...)
 	}
@@ -60,5 +61,5 @@ func DecodeFingerprint(event cloudevent.RawEvent) (cloudevent.Fingerprint, error
 	if len(vinBytes) > maxVinLength {
 		vinBytes = vinBytes[:maxVinLength]
 	}
-	return cloudevent.Fingerprint{VIN: string(vinBytes)}, nil
+	return modelce.Fingerprint{VIN: string(vinBytes)}, nil
 }

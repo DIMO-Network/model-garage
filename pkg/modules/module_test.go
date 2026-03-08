@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/DIMO-Network/cloudevent"
+	modelce "github.com/DIMO-Network/model-garage/pkg/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/modules"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/assert"
@@ -17,7 +18,7 @@ type MockModule struct {
 	SignalResult      []vss.Signal
 	CloudEventData    []byte
 	CloudEventHeaders []cloudevent.CloudEventHeader
-	FingerprintResult cloudevent.Fingerprint
+	FingerprintResult modelce.Fingerprint
 	EventResult       []vss.Event
 	ShouldError       bool
 }
@@ -36,9 +37,9 @@ func (m *MockModule) CloudEventConvert(_ context.Context, _ []byte) ([]cloudeven
 	return m.CloudEventHeaders, m.CloudEventData, nil
 }
 
-func (m *MockModule) FingerprintConvert(_ context.Context, _ cloudevent.RawEvent) (cloudevent.Fingerprint, error) {
+func (m *MockModule) FingerprintConvert(_ context.Context, _ cloudevent.RawEvent) (modelce.Fingerprint, error) {
 	if m.ShouldError {
-		return cloudevent.Fingerprint{}, errors.New("fingerprint conversion error")
+		return modelce.Fingerprint{}, errors.New("fingerprint conversion error")
 	}
 	return m.FingerprintResult, nil
 }
@@ -279,11 +280,11 @@ func TestFingerprintConversion(t *testing.T) {
 	sourceA := "sourceA"
 	defaultSource := ""
 
-	fingerprintA := cloudevent.Fingerprint{
+	fingerprintA := modelce.Fingerprint{
 		VIN: "VIN A",
 	}
 
-	fingerprintDefault := cloudevent.Fingerprint{
+	fingerprintDefault := modelce.Fingerprint{
 		VIN: "Default VIN",
 	}
 
@@ -307,7 +308,7 @@ func TestFingerprintConversion(t *testing.T) {
 	tests := []struct {
 		name                string
 		source              string
-		expectedFingerprint cloudevent.Fingerprint
+		expectedFingerprint modelce.Fingerprint
 		setupFunc           func()
 		expectError         bool
 	}{
@@ -328,7 +329,7 @@ func TestFingerprintConversion(t *testing.T) {
 		{
 			name:                "Module error",
 			source:              sourceA,
-			expectedFingerprint: cloudevent.Fingerprint{},
+			expectedFingerprint: modelce.Fingerprint{},
 			setupFunc: func() {
 				modules.FingerprintRegistry.Override(sourceA, errorModule)
 			},
@@ -337,7 +338,7 @@ func TestFingerprintConversion(t *testing.T) {
 		{
 			name:                "No modules registered",
 			source:              "nonexistent",
-			expectedFingerprint: cloudevent.Fingerprint{},
+			expectedFingerprint: modelce.Fingerprint{},
 			setupFunc: func() {
 				modules.FingerprintRegistry = modules.NewModuleRegistry[modules.FingerprintModule]()
 			},
