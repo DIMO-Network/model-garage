@@ -65,7 +65,7 @@ To send vehicle events, use the `events` array:
 - **timestamp**: RFC3339 timestamp when the event occurred
 - **durationNs**: Optional duration of the event in nanoseconds
 - **metadata**: Optional JSON string with additional event data
-- **tags**: Optional array of event tags
+- **tags**: Optional array of event names
 
 ### Fingerprint (VIN)
 
@@ -133,7 +133,7 @@ The module validates:
 - Signal values must match the expected type (number or string)
 - Event timestamps must not be zero
 - Event metadata (if provided) must be valid JSON
-- Event tags must be defined in the event tag schema
+- Event names must be defined in the event name schema
 
 ## No Code Generation Required
 

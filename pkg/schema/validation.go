@@ -44,7 +44,7 @@ func Validate(d *DefinitionInfo) error {
 	return nil
 }
 
-func ValidateEventTag(e *EventTagInfo) error {
+func ValidateEventName(e *EventNameInfo) error {
 	if e == nil {
 		return InvalidError{Property: "", Name: "", Reason: "is nil"}
 	}

@@ -23,11 +23,14 @@ func TestValidDTCPayload(t *testing.T) {
 
 	// sort the signals so diffs are easier to read
 	sortFunc := func(a, b vss.Signal) int {
-		return cmp.Compare(a.Name, b.Name)
+		return cmp.Compare(a.Data.Name, b.Data.Name)
 	}
-	expected := expectedDTCSignals()
+	expected := expectedDTCSignals(event.CloudEventHeader)
 	slices.SortFunc(expected, sortFunc)
 	slices.SortFunc(actualSignals, sortFunc)
+	assertGeneratedSignalFields(t, actualSignals, event.ID)
+	normalizeSignalsForComparison(actualSignals)
+	normalizeSignalsForComparison(expected)
 	require.Equal(t, expected, actualSignals, "converted vehicle does not match expected vehicle")
 }
 
@@ -49,11 +52,10 @@ func TestNoDTCPayload(t *testing.T) {
 	require.Errorf(t, err, "error converting full input data: %v", err)
 }
 
-func expectedDTCSignals() []vss.Signal {
+func expectedDTCSignals(baseHeader cloudevent.CloudEventHeader) []vss.Signal {
 	ts := time.Unix(1727360354, 0).UTC()
-	subject := "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33"
 	return []vss.Signal{
-		{Subject: subject, Timestamp: ts, Name: "obdDTCList", ValueString: `["P0101","P0202"]`, Source: "ruptela/TODO"},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: "obdDTCList", ValueString: `["P0101","P0202"]`}},
 	}
 }
 
@@ -84,7 +86,7 @@ var emptyDtcInputJSON = `
 	   "source":"ruptela/TODO",
 	   "data":{
 	      "dtc_codes":[
-	        
+
 	      ]
 	   },
 	   "ds":"r/v0/dtc",

@@ -34,9 +34,10 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		Subject: event.Subject,
-		Source:  event.Source,
+		CloudEventHeader: event.CloudEventHeader,
 	}
+	hdr := event.CloudEventHeader
+	hdr.Type = cloudevent.TypeSignal
 
 	conversionErrors := convert.ConversionError{
 		Subject: event.Subject,
@@ -61,25 +62,26 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 				// skip the timestamp field
 				return true
 			}
-			signalMeta.Timestamp = ts
-			sigs, err := SignalsFromLocationData(event.Data, signalMeta, key.String(), value)
+			signalMeta.Data.Timestamp = ts
+			sigDatas, err := SignalsFromLocationData(event.Data, signalMeta, key.String(), value)
 			if err != nil {
 				conversionErrors.Errors = append(conversionErrors.Errors, err)
 				return true
 			}
-			retSignals = append(retSignals, sigs...)
+			for _, sd := range sigDatas {
+				retSignals = append(retSignals, vss.Signal{CloudEventHeader: hdr, Data: sd})
+			}
 			return true
 		})
 		// Special case location.
 		if coordLoc, err := posToLocation(sigData); err == nil {
-			sig := vss.Signal{
-				Name:      vss.FieldCurrentLocationCoordinates,
-				Subject:   signalMeta.Subject,
-				Timestamp: ts,
-				Source:    signalMeta.Source,
+			sd := vss.SignalData{
+				Name:         vss.FieldCurrentLocationCoordinates,
+				Timestamp:    ts,
+				CloudEventID: event.ID,
 			}
-			sig.SetValue(coordLoc)
-			retSignals = append(retSignals, sig)
+			sd.SetValue(coordLoc)
+			retSignals = append(retSignals, vss.Signal{CloudEventHeader: hdr, Data: sd})
 		} else if !errors.Is(err, errNotFound) {
 			conversionErrors.Errors = append(conversionErrors.Errors, err)
 		}

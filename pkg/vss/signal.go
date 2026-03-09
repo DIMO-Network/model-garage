@@ -4,6 +4,8 @@ package vss
 import (
 	"fmt"
 	"time"
+
+	"github.com/DIMO-Network/cloudevent"
 )
 
 const (
@@ -29,49 +31,26 @@ const (
 	ValueLocationCol = "value_location"
 )
 
-// Signal represents a single signal collected from a device.
-// This is the data format that is stored in the database.
-type Signal struct {
-	// Subject is the subject of the signal. Typically a W3C DID.
-	Subject string `ch:"subject" json:"subject"`
-
+// SignalData holds the per-signal data fields.
+type SignalData struct {
 	// Timestamp is when this data was collected.
 	Timestamp time.Time `ch:"timestamp" json:"timestamp"`
-
 	// Name is the name of the signal collected.
 	Name string `ch:"name" json:"name"`
-
 	// ValueNumber is the value of the signal collected.
 	ValueNumber float64 `ch:"value_number" json:"valueNumber"`
-
 	// ValueString is the value of the signal collected.
 	ValueString string `ch:"value_string" json:"valueString"`
-
 	// ValueLocation is the value of the signal collected.
 	ValueLocation Location `ch:"value_location" json:"valueLocation"`
-
-	// Source is the source of the signal collected.
-	Source string `ch:"source" json:"source"`
-
-	// Producer is the producer of the signal collected.
-	Producer string `ch:"producer" json:"producer"`
-
-	// CloudEventID is the ID of the CloudEvent that this signal was extracted from.
+	// CloudEventID is the ID of the source CloudEvent that this signal was extracted from.
+	// This is persisted to the database and is distinct from Signal.ID, which is the
+	// signal's own CloudEvent identity (not persisted).
 	CloudEventID string `ch:"cloud_event_id" json:"cloudEventId"`
 }
 
-// Location represents a point on the earth in WSG-84 coordinates,
-// optionally with a Horizontal Dilution of Position (HDOP) value or a
-// heading value.
-type Location struct {
-	Latitude  float64 `ch:"latitude"`
-	Longitude float64 `ch:"longitude"`
-	HDOP      float64 `ch:"hdop"`
-	Heading   float64 `ch:"heading"`
-}
-
 // SetValue dynamically set the appropriate value field based on the type of the value.
-func (s *Signal) SetValue(val any) {
+func (s *SignalData) SetValue(val any) {
 	switch typedVal := val.(type) {
 	case float64:
 		s.ValueNumber = typedVal
@@ -84,19 +63,33 @@ func (s *Signal) SetValue(val any) {
 	}
 }
 
+// Signal represents a single signal collected from a device.
+// This is a CloudEvent with SignalData as the payload.
+type Signal = cloudevent.CloudEvent[SignalData]
+
+// Location represents a point on the earth in WSG-84 coordinates,
+// optionally with a Horizontal Dilution of Position (HDOP) value or a
+// heading value.
+type Location struct {
+	Latitude  float64 `ch:"latitude" json:"latitude"`
+	Longitude float64 `ch:"longitude" json:"longitude"`
+	HDOP      float64 `ch:"hdop" json:"hdop"`
+	Heading   float64 `ch:"heading" json:"heading"`
+}
+
 // SignalToSlice converts a Signal to an array of any for Clickhouse insertion.
 // The order of the elements in the array is guaranteed to match the order of elements in the `SignalColNames`.
 func SignalToSlice(obj Signal) []any {
 	return []any{
 		obj.Subject,
-		obj.Timestamp,
-		obj.Name,
+		obj.Data.Timestamp,
+		obj.Data.Name,
 		obj.Source,
 		obj.Producer,
-		obj.CloudEventID,
-		obj.ValueNumber,
-		obj.ValueString,
-		obj.ValueLocation,
+		obj.Data.CloudEventID,
+		obj.Data.ValueNumber,
+		obj.Data.ValueString,
+		obj.Data.ValueLocation,
 	}
 }
 
@@ -113,4 +106,35 @@ func SignalColNames() []string {
 		ValueStringCol,
 		ValueLocationCol,
 	}
+}
+
+// SignalsPayload is the data payload for a signals CloudEvent on the wire.
+type SignalsPayload struct {
+	Signals []SignalData `json:"signals"`
+}
+
+// SignalCloudEvent is a CloudEvent carrying multiple signals on the wire.
+type SignalCloudEvent = cloudevent.CloudEvent[SignalsPayload]
+
+// PackSignals wraps extracted signals into a single CloudEvent for wire transport.
+// Only data fields (Timestamp, Name, Value*) are preserved from each Signal.
+// Header fields on individual Signal structs are ignored — use the header param.
+func PackSignals(header cloudevent.CloudEventHeader, signals []Signal) SignalCloudEvent {
+	payload := SignalsPayload{Signals: make([]SignalData, 0, len(signals))}
+	for _, s := range signals {
+		payload.Signals = append(payload.Signals, s.Data)
+	}
+	return SignalCloudEvent{CloudEventHeader: header, Data: payload}
+}
+
+// UnpackSignals extracts individual signals from a wire CloudEvent.
+// Each unpacked Signal gets header fields from the envelope.
+func UnpackSignals(msg SignalCloudEvent) []Signal {
+	signals := make([]Signal, len(msg.Data.Signals))
+	for i, sd := range msg.Data.Signals {
+		hdr := msg.CloudEventHeader
+		hdr.Type = cloudevent.TypeSignal
+		signals[i] = Signal{CloudEventHeader: hdr, Data: sd}
+	}
+	return signals
 }

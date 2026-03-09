@@ -97,9 +97,10 @@ func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, 
 			}.String()
 		}
 	case DevStatusDS:
+		// Device status events are about the device itself, not the vehicle.
 		subject = producer
 	default:
-		return "", fmt.Errorf("unknown DS type: %s", event.DS)
+		subject = producer
 	}
 	return subject, nil
 }
@@ -124,7 +125,11 @@ func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType strin
 func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
 	// always include the status event
 	cloudEventTypes := []string{cloudevent.TypeStatus}
-	if event.DS != StatusEventDS {
+	switch event.DS {
+	case DevStatusDS:
+		return cloudEventTypes, nil
+	case StatusEventDS:
+	default:
 		return cloudEventTypes, nil
 	}
 	var dataContent DataContent
@@ -136,7 +141,7 @@ func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
 		cloudEventTypes = append(cloudEventTypes, cloudevent.TypeFingerprint)
 	}
 	if checkEventPresenceInPayload(event, dataContent.Signals) {
-		cloudEventTypes = append(cloudEventTypes, cloudevent.TypeEvent)
+		cloudEventTypes = append(cloudEventTypes, cloudevent.TypeEvents)
 	}
 	return cloudEventTypes, nil
 }

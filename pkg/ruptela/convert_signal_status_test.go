@@ -10,100 +10,127 @@ import (
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+// normalizeSignalsForComparison zeros out fields that are dynamically set by generated code
+// (Type, ID, Time, Data.CloudEventID) so that signals can be compared by value.
+func normalizeSignalsForComparison(signals []vss.Signal) {
+	for i := range signals {
+		signals[i].Type = ""
+		signals[i].ID = ""
+		signals[i].Time = time.Time{}
+		signals[i].Data.CloudEventID = ""
+	}
+}
+
+// assertGeneratedSignalFields checks that signals from generated code have the expected new fields.
+// Generated signals are identified by having Type == cloudevent.TypeSignal.
+func assertGeneratedSignalFields(t *testing.T, signals []vss.Signal, expectedCloudEventID string) {
+	t.Helper()
+	for i, sig := range signals {
+		if sig.Type == cloudevent.TypeSignal {
+			assert.False(t, sig.Time.IsZero(), "generated signal %d (%s) should have non-zero Time", i, sig.Data.Name)
+			assert.Equal(t, expectedCloudEventID, sig.Data.CloudEventID, "generated signal %d (%s) should reference original event ID", i, sig.Data.Name)
+		}
+	}
+}
 
 func TestFullFromDataConversion(t *testing.T) {
 	t.Parallel()
 	var event cloudevent.RawEvent
 	err := json.Unmarshal([]byte(fullInputJSON), &event)
 	require.NoError(t, err)
+	baseHeader := event.CloudEventHeader
 	actualSignals, err := ruptela.SignalsFromV1Payload(event)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
 
 	// sort the signals so diffs are easier to read
 	sortFunc := func(a, b vss.Signal) int {
-		return cmp.Compare(a.Name, b.Name)
+		return cmp.Compare(a.Data.Name, b.Data.Name)
 	}
 	ts := time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC)
-	const subject = "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33"
 
 	expectedSignals := []vss.Signal{
-		{Subject: subject, Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 14.335, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAbsoluteLevel, ValueNumber: 5, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 104.8, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 52.2721466, Longitude: -0.9014316, HDOP: 0.6}, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainType, ValueString: "COMBUSTION", Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemRelativeLevel, ValueNumber: 19.200000000000003, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDDistanceWithMIL, ValueNumber: 0, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineTPS, ValueNumber: 18, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTransmissionTravelledDistance, ValueNumber: 8, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldSpeed, ValueNumber: 31.24609375, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryRange, ValueNumber: 31, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelLeftTirePressure, ValueNumber: 262.00088, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelRightTirePressure, ValueNumber: 310.2642, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelLeftTirePressure, ValueNumber: 282.68516, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelRightTirePressure, ValueNumber: 310.2642, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilLevel, ValueString: "LOW", Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilRelativeLevel, ValueNumber: 36.800000000000004, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 73.7, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDStatusDTCCount, ValueNumber: 18, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryStateOfHealth, ValueNumber: 98.5, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingPower, ValueNumber: 24.400000000000002, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingIsChargingCableConnected, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldIsIgnitionOn, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDIsPluggedIn, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDIsEngineBlocked, ValueNumber: 0, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDFuelTypeName, ValueString: "GASOLINE", Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldBodyLightsIsAirbagWarningOn, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisBrakeABSIsWarningOn, ValueNumber: 0, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisTireSystemIsWarningOn, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisBrakeCircuit1PressurePrimary, ValueNumber: 376.00, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisBrakeCircuit2PressurePrimary, ValueNumber: 1016.00, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineSpeed, ValueNumber: 996.125, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldExteriorAirTemperature, ValueNumber: 103.59375, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryStateOfChargeCurrent, ValueNumber: 55, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 85, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineDieselExhaustFluidLevel, ValueNumber: 24.400000000000002, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEOP, ValueNumber: 368, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDOilTemperature, ValueNumber: 103.59375, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingIsCharging, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisBrakePedalPosition, ValueNumber: 24, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDEngineLoad, ValueNumber: 60, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDIsPTOActive, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisParkingBrakeIsEngaged, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldOBDFuelRate, ValueNumber: 15, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisAxleRow3Weight, ValueNumber: 106, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisAxleRow4Weight, ValueNumber: 22, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisAxleRow5Weight, ValueNumber: 10, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldChassisBrakeIsPedalPressed, ValueNumber: 0, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAccumulatedConsumption, ValueNumber: 3990.5, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineTorquePercent, ValueNumber: 88, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTransmissionRetarderActualTorque, ValueNumber: 72, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTransmissionCurrentGear, ValueNumber: -1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTransmissionSelectedGear, ValueNumber: 126, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldServiceTimeToService, ValueNumber: 2419200, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinDoorRow1DriverSideIsOpen, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinDoorRow1PassengerSideIsOpen, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinDoorRow2DriverSideIsOpen, ValueNumber: 0, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinDoorRow2PassengerSideIsOpen, ValueNumber: 0, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldBodyTrunkFrontIsOpen, ValueNumber: 0, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldBodyTrunkRearIsOpen, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinSeatRow1DriverSideIsBelted, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinSeatRow1PassengerSideIsBelted, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinSeatRow2DriverSideIsBelted, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinSeatRow2MiddleIsBelted, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinSeatRow2PassengerSideIsBelted, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinSeatRow3DriverSideIsBelted, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCabinSeatRow3PassengerSideIsBelted, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTransmissionRetarderTorqueMode, ValueString: "HIGH SPEED GOVERNOR", Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldBodyLockIsLocked, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainTransmissionIsClutchSwitchOperated, ValueNumber: 1, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldConnectivityCellularIsJammingDetected, ValueNumber: 0, Source: "ruptela/TODO"},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldLowVoltageBatteryCurrentVoltage, ValueNumber: 14.335}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAbsoluteLevel, ValueNumber: 5}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 104.8}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 52.2721466, Longitude: -0.9014316, HDOP: 0.6}}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainType, ValueString: "COMBUSTION"}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainFuelSystemRelativeLevel, ValueNumber: 19.200000000000003}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDDistanceWithMIL, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineTPS, ValueNumber: 18}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTransmissionTravelledDistance, ValueNumber: 8}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldSpeed, ValueNumber: 31.24609375}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryRange, ValueNumber: 31}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelLeftTirePressure, ValueNumber: 262.00088}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisAxleRow1WheelRightTirePressure, ValueNumber: 310.2642}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelLeftTirePressure, ValueNumber: 282.68516}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisAxleRow2WheelRightTirePressure, ValueNumber: 310.2642}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilLevel, ValueString: "LOW"}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEngineOilRelativeLevel, ValueNumber: 36.800000000000004}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 73.7}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDStatusDTCCount, ValueNumber: 18}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryStateOfHealth, ValueNumber: 98.5}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingPower, ValueNumber: 24.400000000000002}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingIsChargingCableConnected, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldIsIgnitionOn, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDIsPluggedIn, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDIsEngineBlocked, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDFuelTypeName, ValueString: "GASOLINE"}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldBodyLightsIsAirbagWarningOn, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisBrakeABSIsWarningOn, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisTireSystemIsWarningOn, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisBrakeCircuit1PressurePrimary, ValueNumber: 376.00}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisBrakeCircuit2PressurePrimary, ValueNumber: 1016.00}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineSpeed, ValueNumber: 996.125}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldExteriorAirTemperature, ValueNumber: 103.59375}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryStateOfChargeCurrent, ValueNumber: 55}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 85}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineDieselExhaustFluidLevel, ValueNumber: 24.400000000000002}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineEOP, ValueNumber: 368}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDOilTemperature, ValueNumber: 103.59375}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTractionBatteryChargingIsCharging, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisBrakePedalPosition, ValueNumber: 24}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDEngineLoad, ValueNumber: 60}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDIsPTOActive, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisParkingBrakeIsEngaged, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDFuelRate, ValueNumber: 15}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisAxleRow3Weight, ValueNumber: 106}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisAxleRow4Weight, ValueNumber: 22}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisAxleRow5Weight, ValueNumber: 10}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldChassisBrakeIsPedalPressed, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainFuelSystemAccumulatedConsumption, ValueNumber: 3990.5}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineTorquePercent, ValueNumber: 88}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTransmissionRetarderActualTorque, ValueNumber: 72}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTransmissionCurrentGear, ValueNumber: -1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTransmissionSelectedGear, ValueNumber: 126}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldServiceTimeToService, ValueNumber: 2419200}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinDoorRow1DriverSideIsOpen, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinDoorRow1PassengerSideIsOpen, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinDoorRow2DriverSideIsOpen, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinDoorRow2PassengerSideIsOpen, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldBodyTrunkFrontIsOpen, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldBodyTrunkRearIsOpen, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinSeatRow1DriverSideIsBelted, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinSeatRow1PassengerSideIsBelted, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinSeatRow2DriverSideIsBelted, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinSeatRow2MiddleIsBelted, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinSeatRow2PassengerSideIsBelted, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinSeatRow3DriverSideIsBelted, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCabinSeatRow3PassengerSideIsBelted, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTransmissionRetarderTorqueMode, ValueString: "HIGH SPEED GOVERNOR"}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldBodyLockIsLocked, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainTransmissionIsClutchSwitchOperated, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldConnectivityCellularIsJammingDetected, ValueNumber: 0}},
 	}
 
 	slices.SortFunc(expectedSignals, sortFunc)
 	slices.SortFunc(actualSignals, sortFunc)
+	assertGeneratedSignalFields(t, actualSignals, event.ID)
+	normalizeSignalsForComparison(actualSignals)
+	normalizeSignalsForComparison(expectedSignals)
 	require.Equal(t, expectedSignals, actualSignals, "converted vehicle does not match expected vehicle")
 }
 
@@ -123,7 +150,7 @@ var fullInputJSON = `
 		"prt": 0,
 		"signals": {
 			"35": "1",
-			"88": "0", 
+			"88": "0",
 			"100": "012C",
 			"101": "D5",
 			"359": "9",
@@ -177,10 +204,10 @@ var fullInputJSON = `
 			"727": "2F13",
 			"517": "1",
 			"482": "3C",
-			"39": "3C",	
+			"39": "3C",
 			"38": "5",
 			"362": "1",
-			"116": "FFFF", 
+			"116": "FFFF",
 			"53": "D4",
 			"54": "2C",
 			"55": "14",
@@ -226,17 +253,20 @@ func TestIgnoreUnplugged(t *testing.T) {
 	var event cloudevent.RawEvent
 	err := json.Unmarshal([]byte(ignoreTestDoc), &event)
 	require.NoError(t, err)
+	baseHeader := event.CloudEventHeader
 	actualSignals, err := ruptela.SignalsFromV1Payload(event)
 	require.NoError(t, err)
-	const subject = "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:162682"
 	expectedSignals := []vss.Signal{
-		{Subject: subject, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldIsIgnitionOn, ValueNumber: 1, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
-		{Subject: subject, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDDistanceWithMIL, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
-		{Subject: subject, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDIsPluggedIn, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
-		{Subject: subject, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
-		{Subject: subject, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldPowertrainCombustionEngineTPS, ValueNumber: 0, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
-		{Subject: subject, Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldSpeed, ValueNumber: 5, Source: "0xF26421509Efe92861a587482100c6d728aBf1CD0"},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldIsIgnitionOn, ValueNumber: 1}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDDistanceWithMIL, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDIsPluggedIn, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldOBDStatusDTCCount, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldPowertrainCombustionEngineTPS, ValueNumber: 0}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: time.Date(2025, 3, 28, 0, 51, 29, 0, time.UTC), Name: vss.FieldSpeed, ValueNumber: 5}},
 	}
+	assertGeneratedSignalFields(t, actualSignals, event.ID)
+	normalizeSignalsForComparison(actualSignals)
+	normalizeSignalsForComparison(expectedSignals)
 	require.Equal(t, expectedSignals, actualSignals)
 }
 

@@ -23,10 +23,10 @@ func TestDecodeEventWithAllEventTypes(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": {
 			"signals": {
-				"135": "35", 
+				"135": "35",
 				"136": "A",
 				"143": "7"
 			}
@@ -42,12 +42,18 @@ func TestDecodeEventWithAllEventTypes(t *testing.T) {
 	require.Len(t, actualEvents, 4, "should have 4 events total")
 
 	// Verify common fields are set for all events
+	seenIDs := map[string]bool{}
 	for _, evt := range actualEvents {
 		require.Equal(t, "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33", evt.Subject)
 		require.Equal(t, "ruptela/test", evt.Source)
 		require.Equal(t, "test-producer", evt.Producer)
-		require.Equal(t, "test-cloud-event-id", evt.CloudEventID)
-		require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Timestamp)
+		require.NotEmpty(t, evt.ID, "event ID should be a non-empty ksuid")
+		require.False(t, seenIDs[evt.ID], "event IDs should be unique")
+		seenIDs[evt.ID] = true
+		require.Equal(t, cloudevent.TypeEvent, evt.Type)
+		require.False(t, evt.Time.IsZero(), "event Time should be set to a recent time")
+		require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+		require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
 	}
 
 	// Check specific events
@@ -57,7 +63,7 @@ func TestDecodeEventWithAllEventTypes(t *testing.T) {
 	var corneringEvents []vss.Event
 
 	for _, evt := range actualEvents {
-		switch evt.Name {
+		switch evt.Data.Name {
 		case ruptela.EventNameHarshBraking:
 			harshBrakingEvents = append(harshBrakingEvents, evt)
 		case ruptela.EventNameExtremeBraking:
@@ -75,18 +81,14 @@ func TestDecodeEventWithAllEventTypes(t *testing.T) {
 	require.Len(t, corneringEvents, 1, "should have 1 cornering event")
 
 	// Verify braking event metadata
-	require.JSONEq(t, `{"counterValue":5}`, harshBrakingEvents[0].Metadata)
-	require.Equal(t, []string{vss.TagBehaviorHarshBraking}, harshBrakingEvents[0].Tags)
-	require.JSONEq(t, `{"counterValue":3}`, extremeBrakingEvents[0].Metadata)
-	require.Equal(t, []string{vss.TagSafetyCollision}, extremeBrakingEvents[0].Tags)
+	require.JSONEq(t, `{"counterValue":5}`, harshBrakingEvents[0].Data.Metadata)
+	require.JSONEq(t, `{"counterValue":3}`, extremeBrakingEvents[0].Data.Metadata)
 
 	// Verify acceleration event metadata
-	require.JSONEq(t, `{"counterValue":10}`, accelerationEvents[0].Metadata)
-	require.Equal(t, []string{vss.TagBehaviorHarshAcceleration}, accelerationEvents[0].Tags)
+	require.JSONEq(t, `{"counterValue":10}`, accelerationEvents[0].Data.Metadata)
 
 	// Verify cornering event metadata
-	require.JSONEq(t, `{"counterValue":7}`, corneringEvents[0].Metadata)
-	require.Equal(t, []string{vss.TagBehaviorHarshCornering}, corneringEvents[0].Tags)
+	require.JSONEq(t, `{"counterValue":7}`, corneringEvents[0].Data.Metadata)
 }
 
 func TestDecodeEventBrakingOnly(t *testing.T) {
@@ -100,7 +102,7 @@ func TestDecodeEventBrakingOnly(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": {
 			"signals": {
 				"135": "8",
@@ -119,8 +121,13 @@ func TestDecodeEventBrakingOnly(t *testing.T) {
 	require.Len(t, actualEvents, 1, "should have 1 braking event")
 
 	evt := actualEvents[0]
-	require.Equal(t, ruptela.EventNameHarshBraking, evt.Name)
-	require.JSONEq(t, `{"counterValue":8}`, evt.Metadata)
+	require.NotEmpty(t, evt.ID, "event ID should be a non-empty ksuid")
+	require.Equal(t, cloudevent.TypeEvent, evt.Type)
+	require.False(t, evt.Time.IsZero(), "event Time should be set to a recent time")
+	require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+	require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
+	require.Equal(t, ruptela.EventNameHarshBraking, evt.Data.Name)
+	require.JSONEq(t, `{"counterValue":8}`, evt.Data.Metadata)
 }
 
 func TestDecodeEventAccelerationOnly(t *testing.T) {
@@ -134,7 +141,7 @@ func TestDecodeEventAccelerationOnly(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": {
 			"signals": {
 				"135": "0",
@@ -153,8 +160,13 @@ func TestDecodeEventAccelerationOnly(t *testing.T) {
 	require.Len(t, actualEvents, 1, "should have 1 acceleration event")
 
 	evt := actualEvents[0]
-	require.Equal(t, ruptela.EventNameAcceleration, evt.Name)
-	require.JSONEq(t, `{"counterValue":15}`, evt.Metadata)
+	require.NotEmpty(t, evt.ID, "event ID should be a non-empty ksuid")
+	require.Equal(t, cloudevent.TypeEvent, evt.Type)
+	require.False(t, evt.Time.IsZero(), "event Time should be set to a recent time")
+	require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+	require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
+	require.Equal(t, ruptela.EventNameAcceleration, evt.Data.Name)
+	require.JSONEq(t, `{"counterValue":15}`, evt.Data.Metadata)
 }
 
 func TestDecodeEventCorneringOnly(t *testing.T) {
@@ -168,7 +180,7 @@ func TestDecodeEventCorneringOnly(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": {
 			"signals": {
 				"135": "0",
@@ -187,8 +199,13 @@ func TestDecodeEventCorneringOnly(t *testing.T) {
 	require.Len(t, actualEvents, 1, "should have 1 cornering event")
 
 	evt := actualEvents[0]
-	require.Equal(t, ruptela.EventNameCornering, evt.Name)
-	require.JSONEq(t, `{"counterValue":12}`, evt.Metadata)
+	require.NotEmpty(t, evt.ID, "event ID should be a non-empty ksuid")
+	require.Equal(t, cloudevent.TypeEvent, evt.Type)
+	require.False(t, evt.Time.IsZero(), "event Time should be set to a recent time")
+	require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+	require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
+	require.Equal(t, ruptela.EventNameCornering, evt.Data.Name)
+	require.JSONEq(t, `{"counterValue":12}`, evt.Data.Metadata)
 }
 
 func TestDecodeEventNoEvents(t *testing.T) {
@@ -202,7 +219,7 @@ func TestDecodeEventNoEvents(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": {
 			"signals": {
 				"135": "0",
@@ -232,7 +249,7 @@ func TestDecodeEventInvalidJSON(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": "invalid json structure"
 	}`
 
@@ -256,7 +273,7 @@ func TestDecodeEventHarshBrakingOnly(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": {
 			"signals": {
 				"135": "5",
@@ -275,8 +292,13 @@ func TestDecodeEventHarshBrakingOnly(t *testing.T) {
 	require.Len(t, actualEvents, 1, "should have 1 harsh braking event")
 
 	evt := actualEvents[0]
-	require.Equal(t, ruptela.EventNameHarshBraking, evt.Name)
-	require.JSONEq(t, `{"counterValue":5}`, evt.Metadata)
+	require.NotEmpty(t, evt.ID, "event ID should be a non-empty ksuid")
+	require.Equal(t, cloudevent.TypeEvent, evt.Type)
+	require.False(t, evt.Time.IsZero(), "event Time should be set to a recent time")
+	require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+	require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
+	require.Equal(t, ruptela.EventNameHarshBraking, evt.Data.Name)
+	require.JSONEq(t, `{"counterValue":5}`, evt.Data.Metadata)
 }
 
 func TestDecodeEventExtremeBrakingOnly(t *testing.T) {
@@ -291,7 +313,7 @@ func TestDecodeEventExtremeBrakingOnly(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": {
 			"signals": {
 				"135": "50",
@@ -310,8 +332,13 @@ func TestDecodeEventExtremeBrakingOnly(t *testing.T) {
 	require.Len(t, actualEvents, 1, "should have 1 extreme braking event")
 
 	evt := actualEvents[0]
-	require.Equal(t, ruptela.EventNameExtremeBraking, evt.Name)
-	require.JSONEq(t, `{"counterValue":5}`, evt.Metadata)
+	require.NotEmpty(t, evt.ID, "event ID should be a non-empty ksuid")
+	require.Equal(t, cloudevent.TypeEvent, evt.Type)
+	require.False(t, evt.Time.IsZero(), "event Time should be set to a recent time")
+	require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+	require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
+	require.Equal(t, ruptela.EventNameExtremeBraking, evt.Data.Name)
+	require.JSONEq(t, `{"counterValue":5}`, evt.Data.Metadata)
 }
 
 func TestDecodeEventPartialErrors(t *testing.T) {
@@ -325,7 +352,7 @@ func TestDecodeEventPartialErrors(t *testing.T) {
 		"specversion": "1.0",
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
-		"type": "dimo.event",
+		"type": "dimo.status",
 		"data": {
 			"signals": {
 				"135": "ZZ",
@@ -357,7 +384,7 @@ func TestDecodeEventPartialErrors(t *testing.T) {
 	var corneringEvents []vss.Event
 
 	for _, evt := range conversionError.DecodedEvents {
-		switch evt.Name {
+		switch evt.Data.Name {
 		case ruptela.EventNameAcceleration:
 			accelerationEvents = append(accelerationEvents, evt)
 		case ruptela.EventNameCornering:
@@ -368,8 +395,17 @@ func TestDecodeEventPartialErrors(t *testing.T) {
 	require.Len(t, accelerationEvents, 1, "should have 1 acceleration event")
 	require.Len(t, corneringEvents, 1, "should have 1 cornering event")
 
-	require.JSONEq(t, `{"counterValue":10}`, accelerationEvents[0].Metadata)
-	require.JSONEq(t, `{"counterValue":7}`, corneringEvents[0].Metadata)
+	// Verify dynamic fields on decoded events from the conversion error
+	for _, evt := range conversionError.DecodedEvents {
+		require.NotEmpty(t, evt.ID, "event ID should be a non-empty ksuid")
+		require.Equal(t, cloudevent.TypeEvent, evt.Type)
+		require.False(t, evt.Time.IsZero(), "event Time should be set to a recent time")
+		require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+		require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
+	}
+
+	require.JSONEq(t, `{"counterValue":10}`, accelerationEvents[0].Data.Metadata)
+	require.JSONEq(t, `{"counterValue":7}`, corneringEvents[0].Data.Metadata)
 }
 
 func TestDecodeEventMissingSignals(t *testing.T) {
@@ -390,7 +426,7 @@ func TestDecodeEventMissingSignals(t *testing.T) {
 				"specversion": "1.0",
 				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 				"time": "2024-09-27T08:33:26Z",
-				"type": "dimo.event",
+				"type": "dimo.status",
 				"data": {
 					"signals": {
 						"136": "0A",
@@ -410,7 +446,7 @@ func TestDecodeEventMissingSignals(t *testing.T) {
 				"specversion": "1.0",
 				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 				"time": "2024-09-27T08:33:26Z",
-				"type": "dimo.event",
+				"type": "dimo.status",
 				"data": {
 					"signals": {
 						"135": "35"
@@ -429,7 +465,7 @@ func TestDecodeEventMissingSignals(t *testing.T) {
 				"specversion": "1.0",
 				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 				"time": "2024-09-27T08:33:26Z",
-				"type": "dimo.event",
+				"type": "dimo.status",
 				"data": {
 					"signals": {
 						"100": "0000",
@@ -457,9 +493,18 @@ func TestDecodeEventMissingSignals(t *testing.T) {
 			if tt.expectedNames != nil {
 				actualNames := make([]string, len(actualEvents))
 				for i, evt := range actualEvents {
-					actualNames[i] = evt.Name
+					actualNames[i] = evt.Data.Name
 				}
 				require.ElementsMatch(t, tt.expectedNames, actualNames)
+			}
+
+			// Verify dynamic fields on all returned events
+			for _, evt := range actualEvents {
+				require.NotEmpty(t, evt.ID, "event ID should be a non-empty ksuid")
+				require.Equal(t, cloudevent.TypeEvent, evt.Type)
+				require.False(t, evt.Time.IsZero(), "event Time should be set to a recent time")
+				require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+				require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
 			}
 		})
 	}

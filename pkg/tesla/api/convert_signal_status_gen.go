@@ -14,10 +14,10 @@ import (
 
 var errNotFound = errors.New("field not found")
 
-// SignalsFromV1Data creates a slice of vss.Signal from the given v1 status JSON data.
+// SignalsFromTesla creates a slice of vss.SignalData from the given Tesla Fleet API JSON data.
 // On error, partial results may be returned.
-func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []error) {
-	var retSignals []vss.Signal
+func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.SignalData, []error) {
+	var retSignals []vss.SignalData
 
 	var val any
 	var ts time.Time
@@ -30,11 +30,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'ChassisAxleRow1WheelLeftTirePressure': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow1WheelLeftTirePressure",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "chassisAxleRow1WheelLeftTirePressure",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -46,11 +45,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'ChassisAxleRow1WheelRightTirePressure': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow1WheelRightTirePressure",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "chassisAxleRow1WheelRightTirePressure",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -62,11 +60,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'ChassisAxleRow2WheelLeftTirePressure': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow2WheelLeftTirePressure",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "chassisAxleRow2WheelLeftTirePressure",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -78,11 +75,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'ChassisAxleRow2WheelRightTirePressure': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow2WheelRightTirePressure",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "chassisAxleRow2WheelRightTirePressure",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -94,11 +90,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'CurrentLocationCoordinates': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "currentLocationCoordinates",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "currentLocationCoordinates",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -110,11 +105,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'ExteriorAirTemperature': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "exteriorAirTemperature",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "exteriorAirTemperature",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -126,11 +120,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'PowertrainRange': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainRange",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "powertrainRange",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -142,11 +135,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'PowertrainTractionBatteryChargingAddedEnergy': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryChargingAddedEnergy",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "powertrainTractionBatteryChargingAddedEnergy",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -158,11 +150,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'PowertrainTractionBatteryChargingChargeLimit': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryChargingChargeLimit",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "powertrainTractionBatteryChargingChargeLimit",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -174,11 +165,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'PowertrainTractionBatteryChargingIsCharging': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryChargingIsCharging",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "powertrainTractionBatteryChargingIsCharging",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -190,11 +180,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'PowertrainTractionBatteryCurrentPower': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryCurrentPower",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "powertrainTractionBatteryCurrentPower",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -206,11 +195,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'PowertrainTractionBatteryStateOfChargeCurrent': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryStateOfChargeCurrent",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "powertrainTractionBatteryStateOfChargeCurrent",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -222,11 +210,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'PowertrainTransmissionTravelledDistance': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTransmissionTravelledDistance",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "powertrainTransmissionTravelledDistance",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -238,11 +225,10 @@ func SignalsFromTesla(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []e
 			errs = append(errs, fmt.Errorf("failed to convert 'Speed': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "speed",
-			Subject:   baseSignal.Subject,
-			Timestamp: ts,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    ts,
+			Name:         "speed",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)

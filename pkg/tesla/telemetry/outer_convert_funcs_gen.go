@@ -4,14 +4,15 @@ package telemetry
 import (
 	"fmt"
 
+	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/parse"
 	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/teslamotors/fleet-telemetry/protos"
 )
 
-func ProcessPayload(payload *protos.Payload, subject string, source string) ([]vss.Signal, []error) {
-	var out []vss.Signal
+func ProcessPayload(payload *protos.Payload, baseHeader cloudevent.CloudEventHeader) ([]vss.SignalData, []error) {
+	var out []vss.SignalData
 	var outErr []error
 
 	ts := payload.GetCreatedAt().AsTime()
@@ -32,11 +33,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertLocationToCurrentLocationCoordinates(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "currentLocationCoordinates",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "currentLocationCoordinates",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -55,11 +55,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsCharging(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryChargingIsCharging",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryChargingIsCharging",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -67,11 +66,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertDetailedChargeStateToPowertrainTractionBatteryChargingIsChargingCableConnected(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryChargingIsChargingCableConnected",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryChargingIsChargingCableConnected",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -98,11 +96,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertACChargingPowerToPowertrainTractionBatteryCurrentPower(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryCurrentPower",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryCurrentPower",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -129,11 +126,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertDCChargingPowerToPowertrainTractionBatteryCurrentPower(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryCurrentPower",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryCurrentPower",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -159,11 +155,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertDCChargingEnergyInToPowertrainTractionBatteryChargingAddedEnergy(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryChargingAddedEnergy",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryChargingAddedEnergy",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -189,11 +184,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertEnergyRemainingToPowertrainTractionBatteryStateOfChargeCurrentEnergy(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryStateOfChargeCurrentEnergy",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryStateOfChargeCurrentEnergy",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -219,11 +213,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertSocToPowertrainTractionBatteryStateOfChargeCurrent(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryStateOfChargeCurrent",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryStateOfChargeCurrent",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -250,11 +243,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertTpmsPressureFlToChassisAxleRow1WheelLeftTirePressure(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "chassisAxleRow1WheelLeftTirePressure",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "chassisAxleRow1WheelLeftTirePressure",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -281,11 +273,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertTpmsPressureFrToChassisAxleRow1WheelRightTirePressure(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "chassisAxleRow1WheelRightTirePressure",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "chassisAxleRow1WheelRightTirePressure",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -312,11 +303,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertTpmsPressureRlToChassisAxleRow2WheelLeftTirePressure(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "chassisAxleRow2WheelLeftTirePressure",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "chassisAxleRow2WheelLeftTirePressure",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -343,11 +333,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertTpmsPressureRrToChassisAxleRow2WheelRightTirePressure(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "chassisAxleRow2WheelRightTirePressure",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "chassisAxleRow2WheelRightTirePressure",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -373,11 +362,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertOutsideTempToExteriorAirTemperature(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "exteriorAirTemperature",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "exteriorAirTemperature",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -404,11 +392,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertEstBatteryRangeToPowertrainRange(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainRange",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainRange",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -434,11 +421,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertChargeLimitSocToPowertrainTractionBatteryChargingChargeLimit(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryChargingChargeLimit",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryChargingChargeLimit",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -465,11 +451,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertOdometerToPowertrainTransmissionTravelledDistance(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTransmissionTravelledDistance",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTransmissionTravelledDistance",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -496,11 +481,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertVehicleSpeedToSpeed(utv); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "speed",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "speed",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -526,11 +510,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertDoorStateToCabinDoorRow1DriverSideIsOpen(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "cabinDoorRow1DriverSideIsOpen",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "cabinDoorRow1DriverSideIsOpen",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -538,11 +521,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertDoorStateToCabinDoorRow1PassengerSideIsOpen(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "cabinDoorRow1PassengerSideIsOpen",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "cabinDoorRow1PassengerSideIsOpen",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -550,11 +532,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertDoorStateToCabinDoorRow2DriverSideIsOpen(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "cabinDoorRow2DriverSideIsOpen",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "cabinDoorRow2DriverSideIsOpen",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -562,11 +543,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertDoorStateToCabinDoorRow2PassengerSideIsOpen(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "cabinDoorRow2PassengerSideIsOpen",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "cabinDoorRow2PassengerSideIsOpen",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -592,11 +572,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertFdWindowToCabinDoorRow1DriverSideWindowIsOpen(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "cabinDoorRow1DriverSideWindowIsOpen",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "cabinDoorRow1DriverSideWindowIsOpen",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -622,11 +601,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertFpWindowToCabinDoorRow1PassengerSideWindowIsOpen(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "cabinDoorRow1PassengerSideWindowIsOpen",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "cabinDoorRow1PassengerSideWindowIsOpen",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -652,11 +630,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertRdWindowToCabinDoorRow2DriverSideWindowIsOpen(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "cabinDoorRow2DriverSideWindowIsOpen",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "cabinDoorRow2DriverSideWindowIsOpen",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -682,11 +659,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertRpWindowToCabinDoorRow2PassengerSideWindowIsOpen(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "cabinDoorRow2PassengerSideWindowIsOpen",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "cabinDoorRow2PassengerSideWindowIsOpen",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -712,11 +688,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertChargeAmpsToPowertrainTractionBatteryChargingChargeCurrentAC(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryChargingChargeCurrentAC",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryChargingChargeCurrentAC",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)
@@ -742,11 +717,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			if res, err := ConvertChargerVoltageToPowertrainTractionBatteryChargingChargeVoltageUnknownType(tvf); err != nil {
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject:   subject,
-					Name:      "powertrainTractionBatteryChargingChargeVoltageUnknownType",
-					Timestamp: ts,
-					Source:    source,
+				sig := vss.SignalData{
+					Name:         "powertrainTractionBatteryChargingChargeVoltageUnknownType",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res)
 				out = append(out, sig)

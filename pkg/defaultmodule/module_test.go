@@ -165,26 +165,26 @@ func TestModule_SignalConvert(t *testing.T) {
 				}
 			}`),
 			expectedSignals: []vss.Signal{
-				{
+				{Data: vss.SignalData{
 					Name:        "speed",
 					ValueNumber: 100.5,
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
-				{
+				}},
+				{Data: vss.SignalData{
 					Name:        "speed",
 					ValueNumber: 102,
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
-				{
+				}},
+				{Data: vss.SignalData{
 					Name:        "speed",
 					ValueNumber: 100,
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
-				{
+				}},
+				{Data: vss.SignalData{
 					Name:        "speed",
 					ValueNumber: 0,
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
+				}},
 			},
 			expectError: false,
 		},
@@ -209,11 +209,11 @@ func TestModule_SignalConvert(t *testing.T) {
 				}
 			}`),
 			expectedSignals: []vss.Signal{
-				{
+				{Data: vss.SignalData{
 					Name:        "powertrainType",
 					ValueString: "HYBRID",
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
+				}},
 			},
 			expectError: false,
 		},
@@ -252,17 +252,17 @@ func TestModule_SignalConvert(t *testing.T) {
 				}
 			}`),
 			expectedSignals: []vss.Signal{
-				{
+				{Data: vss.SignalData{
 					Name:        "speed",
 					ValueNumber: 100.5,
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
-				{
+				}},
+				{Data: vss.SignalData{
 					Name:        "powertrainType",
 					ValueString: "HYBRID",
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
-				{
+				}},
+				{Data: vss.SignalData{
 					Name: "currentLocationCoordinates",
 					ValueLocation: vss.Location{
 						Latitude:  37.7749,
@@ -270,7 +270,7 @@ func TestModule_SignalConvert(t *testing.T) {
 						HDOP:      3,
 					},
 					Timestamp: time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
+				}},
 			},
 			expectError: false,
 		},
@@ -368,11 +368,11 @@ func TestModule_SignalConvert(t *testing.T) {
 				}
 			}`),
 			expectedSignals: []vss.Signal{
-				{
+				{Data: vss.SignalData{
 					Name:        "speed",
 					ValueNumber: 100.5,
 					Timestamp:   time.Date(2024, 12, 1, 15, 31, 12, 378075897, time.UTC),
-				},
+				}},
 			},
 			expectError: true,
 		},
@@ -400,17 +400,20 @@ func TestModule_SignalConvert(t *testing.T) {
 			// Check signal details
 			for i, expectedSignal := range tt.expectedSignals {
 				if i < len(signals) {
-					assert.Equal(t, expectedSignal.Name, signals[i].Name)
+					assert.Equal(t, expectedSignal.Data.Name, signals[i].Data.Name)
 
 					// Check the appropriate value based on type
-					if expectedSignal.ValueNumber != 0 {
-						assert.Equal(t, expectedSignal.ValueNumber, signals[i].ValueNumber)
-					} else if expectedSignal.ValueString != "" {
-						assert.Equal(t, expectedSignal.ValueString, signals[i].ValueString)
+					if expectedSignal.Data.ValueNumber != 0 {
+						assert.Equal(t, expectedSignal.Data.ValueNumber, signals[i].Data.ValueNumber)
+					} else if expectedSignal.Data.ValueString != "" {
+						assert.Equal(t, expectedSignal.Data.ValueString, signals[i].Data.ValueString)
 					}
 
 					// Check timestamp - using WithinDuration to avoid any potential timestamp precision issues
-					assert.WithinDuration(t, expectedSignal.Timestamp, signals[i].Timestamp, time.Millisecond)
+					assert.WithinDuration(t, expectedSignal.Data.Timestamp, signals[i].Data.Timestamp, time.Millisecond)
+
+					// Verify CloudEventID is set from the original event's ID
+					assert.Equal(t, "2pcYwspbaBFJ7NPGZ2kivkuJ12a", signals[i].Data.CloudEventID)
 				}
 			}
 		})
@@ -439,18 +442,18 @@ func TestModule_EventConvert(t *testing.T) {
 				"subject": "test-subject",
 				"specversion": "1.0",
 				"time": "` + cloudEventTs.Format(time.RFC3339Nano) + `",
-				"type": "dimo.event",
+				"type": "dimo.events",
 				"data": {
 					"events": [
 						{
-							"name": "harsh_braking",
+							"name": "behavior.harshBraking",
 							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
 							"durationNs": 0,
 							"metadata": "{\"side\":\"left\"}",
-							"tags": ["` + vss.TagBehaviorHarshAcceleration + `"]
+							"tags": ["driving"]
 						},
 						{
-							"name": "charging_stopped",
+							"name": "behavior.extremeBraking",
 							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
 							"durationNs": ` + strconv.Itoa(int((time.Second * 5).Nanoseconds())) + `,
 							"metadata": "{\"temp\":72}"
@@ -459,18 +462,8 @@ func TestModule_EventConvert(t *testing.T) {
 				}
 			}`,
 			expectedEvents: []vss.Event{
-				{
-					Name:       "harsh_braking",
-					Timestamp:  eventTs,
-					DurationNs: 0,
-					Metadata:   `{"side":"left"}`,
-				},
-				{
-					Name:       "charging_stopped",
-					Timestamp:  eventTs,
-					DurationNs: uint64(5 * time.Second.Nanoseconds()),
-					Metadata:   `{"temp":72}`,
-				},
+				{Data: vss.EventData{Name: "behavior.harshBraking", Timestamp: eventTs, DurationNs: 0, Metadata: `{"side":"left"}`}},
+				{Data: vss.EventData{Name: "behavior.extremeBraking", Timestamp: eventTs, DurationNs: uint64(5 * time.Second.Nanoseconds()), Metadata: `{"temp":72}`}},
 			},
 			expectError: false,
 		},
@@ -483,14 +476,37 @@ func TestModule_EventConvert(t *testing.T) {
 				"subject": "test-subject",
 				"specversion": "1.0",
 				"time": "` + cloudEventTs.Format(time.RFC3339Nano) + `",
-				"type": "dimo.event",
+				"type": "dimo.events",
 				"data": {
 					"events": [
 						{
-							"name": "bad_event",
+							"name": "behavior.harshBraking",
 							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
 							"durationNs": 0,
 							"metadata": "{\"bad\":}"
+						}
+					]
+				}
+			}`,
+			expectedEvents: nil,
+			expectError:    true,
+		},
+		{
+			name: "invalid uppercase tag",
+			inputJSON: `{
+				"id": "evt-tag",
+				"source": "test-source",
+				"producer": "test-producer",
+				"subject": "test-subject",
+				"specversion": "1.0",
+				"time": "` + cloudEventTs.Format(time.RFC3339Nano) + `",
+				"type": "dimo.events",
+				"data": {
+					"events": [
+						{
+							"name": "behavior.harshBraking",
+							"timestamp": "` + eventTs.Format(time.RFC3339Nano) + `",
+							"tags": ["InvalidTag"]
 						}
 					]
 				}
@@ -507,7 +523,7 @@ func TestModule_EventConvert(t *testing.T) {
 				"subject": "test-subject",
 				"specversion": "1.0",
 				"time": "` + cloudEventTs.Format(time.RFC3339Nano) + `",
-				"type": "dimo.event",
+				"type": "dimo.events",
 				"data": {
 					"events": []
 				}
@@ -529,10 +545,16 @@ func TestModule_EventConvert(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Len(t, events, len(tt.expectedEvents))
 				for i, expected := range tt.expectedEvents {
-					assert.Equal(t, expected.Name, events[i].Name)
-					assert.Equal(t, expected.Timestamp, events[i].Timestamp)
-					assert.Equal(t, expected.DurationNs, events[i].DurationNs)
-					assert.Equal(t, expected.Metadata, events[i].Metadata)
+					assert.Equal(t, expected.Data.Name, events[i].Data.Name)
+					assert.Equal(t, expected.Data.Timestamp, events[i].Data.Timestamp)
+					assert.Equal(t, expected.Data.DurationNs, events[i].Data.DurationNs)
+					assert.Equal(t, expected.Data.Metadata, events[i].Data.Metadata)
+					// Verify CloudEventID is set from the original event's ID
+					assert.Equal(t, rawEvent.ID, events[i].Data.CloudEventID)
+					// Verify dynamic fields
+					assert.NotEmpty(t, events[i].ID, "event ID should be a non-empty ksuid")
+					assert.Equal(t, cloudevent.TypeEvent, events[i].Type)
+					assert.False(t, events[i].Time.IsZero(), "event Time should be set to a recent time")
 				}
 			}
 		})
