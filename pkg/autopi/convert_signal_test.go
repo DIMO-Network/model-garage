@@ -176,8 +176,6 @@ var fullAPInputJSON = `{
     }
 }`
 
-var subject = "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33"
-
 func expectedV2Signals(hdr cloudevent.CloudEventHeader) []vss.Signal {
 	return []vss.Signal{
 		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: "obdLongTermFuelTrim1", ValueNumber: 25, ValueString: ""}},

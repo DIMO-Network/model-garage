@@ -62,10 +62,7 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 		ContractAddress: m.AftermarketContractAddr,
 		TokenID:         big.NewInt(int64(*event.DeviceTokenID)),
 	}.String()
-	subject, err := m.determineSubject(&event, producer)
-	if err != nil {
-		return nil, nil, err
-	}
+	subject := m.determineSubject(&event, producer)
 	cloudEventTypes, err := getCloudEventTypes(&event)
 	if err != nil {
 		return nil, nil, err
@@ -85,24 +82,21 @@ func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss
 }
 
 // determineSubject determines the subject of the cloud event based on the DS type.
-func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, error) {
-	var subject string
+func (m Module) determineSubject(event *RuptelaEvent, producer string) string {
 	switch event.DS {
 	case StatusEventDS, LocationEventDS, DTCEventDS, BattDS:
 		if event.VehicleTokenID != nil {
-			subject = cloudevent.ERC721DID{
+			return cloudevent.ERC721DID{
 				ChainID:         m.ChainID,
 				ContractAddress: m.VehicleContractAddr,
 				TokenID:         big.NewInt(int64(*event.VehicleTokenID)),
 			}.String()
 		}
-	case DevStatusDS:
-		// Device status events are about the device itself, not the vehicle.
-		subject = producer
+		return ""
 	default:
-		subject = producer
+		// Device status events and unknown DS types use the producer as subject.
+		return producer
 	}
-	return subject, nil
 }
 
 // createCloudEvent creates a cloud event from a ruptela event.
