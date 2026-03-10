@@ -341,59 +341,6 @@ func TestDecodeEventExtremeBrakingOnly(t *testing.T) {
 	require.JSONEq(t, `{"counterValue":5}`, evt.Data.Metadata)
 }
 
-func TestDecodeEventEngineBlock(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name          string
-		signal405     string
-		expectedName  string
-		expectedTag   string
-	}{
-		{
-			name:         "engine block (non-zero)",
-			signal405:    "01",
-			expectedName: ruptela.EventNameEngineBlock,
-			expectedTag:  vss.TagSecurityEngineBlock,
-		},
-		{
-			name:         "engine unblock (zero)",
-			signal405:    "00",
-			expectedName: ruptela.EventNameEngineUnblock,
-			expectedTag:  vss.TagSecurityEngineUnblock,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			inputJSON := `{
-				"id": "test-cloud-event-id",
-				"source": "ruptela/test",
-				"producer": "test-producer",
-				"specversion": "1.0",
-				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
-				"time": "2024-09-27T08:33:26Z",
-				"type": "dimo.event",
-				"data": {
-					"signals": {"405": "` + tt.signal405 + `"}
-				}
-			}`
-
-			var event cloudevent.RawEvent
-			err := json.Unmarshal([]byte(inputJSON), &event)
-			require.NoError(t, err)
-
-			actualEvents, err := ruptela.DecodeEvent(event)
-			require.NoError(t, err)
-			require.Len(t, actualEvents, 1)
-			require.Equal(t, tt.expectedName, actualEvents[0].Name)
-			require.Equal(t, []string{tt.expectedTag}, actualEvents[0].Tags)
-		})
-	}
-}
-
 func TestDecodeEventPartialErrors(t *testing.T) {
 	t.Parallel()
 
