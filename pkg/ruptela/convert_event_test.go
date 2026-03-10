@@ -509,3 +509,181 @@ func TestDecodeEventMissingSignals(t *testing.T) {
 		})
 	}
 }
+
+func TestDecodeEventEngineSecurityEvents(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name         string
+		engineValue  string
+		expectedName string
+		expectedTags []string
+	}{
+		{
+			name:         "engine block",
+			engineValue:  "1",
+			expectedName: ruptela.EventNameEngineBlock,
+			expectedTags: []string{vss.EventSecurityEngineBlockName},
+		},
+		{
+			name:         "engine unblock",
+			engineValue:  "0",
+			expectedName: ruptela.EventNameEngineUnblock,
+			expectedTags: []string{vss.EventSecurityEngineUnblockName},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			inputJSON := `{
+				"id": "test-cloud-event-id",
+				"source": "ruptela/test",
+				"producer": "test-producer",
+				"specversion": "1.0",
+				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+				"time": "2024-09-27T08:33:26Z",
+				"type": "dimo.status",
+				"data": {
+					"signals": {
+						"135": "0",
+						"136": "0",
+						"143": "0",
+						"405": "` + tt.engineValue + `"
+					}
+				}
+			}`
+
+			var event cloudevent.RawEvent
+			err := json.Unmarshal([]byte(inputJSON), &event)
+			require.NoError(t, err)
+
+			actualEvents, err := ruptela.DecodeEvent(event)
+			require.NoError(t, err)
+			require.Len(t, actualEvents, 1)
+
+			evt := actualEvents[0]
+			require.Equal(t, tt.expectedName, evt.Data.Name)
+			require.Equal(t, tt.expectedTags, evt.Data.Tags)
+			require.Equal(t, "test-cloud-event-id", evt.Data.CloudEventID)
+			require.Equal(t, time.Date(2024, 9, 27, 8, 33, 26, 0, time.UTC), evt.Data.Timestamp)
+		})
+	}
+}
+
+func TestDecodeEventEngineSecuritySignalEmptyIsIgnored(t *testing.T) {
+	t.Parallel()
+
+	inputJSON := `{
+		"id": "test-cloud-event-id",
+		"source": "ruptela/test",
+		"producer": "test-producer",
+		"specversion": "1.0",
+		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+		"time": "2024-09-27T08:33:26Z",
+		"type": "dimo.status",
+		"data": {
+			"signals": {
+				"135": "0",
+				"136": "0",
+				"143": "0",
+				"405": ""
+			}
+		}
+	}`
+
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(inputJSON), &event)
+	require.NoError(t, err)
+
+	actualEvents, err := ruptela.DecodeEvent(event)
+	require.NoError(t, err)
+	require.Len(t, actualEvents, 0)
+}
+
+func TestDecodeEventEngineSecurityPartialError(t *testing.T) {
+	t.Parallel()
+
+	inputJSON := `{
+		"id": "test-cloud-event-id",
+		"source": "ruptela/test",
+		"producer": "test-producer",
+		"specversion": "1.0",
+		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+		"time": "2024-09-27T08:33:26Z",
+		"type": "dimo.status",
+		"data": {
+			"signals": {
+				"135": "0",
+				"136": "A",
+				"143": "0",
+				"405": "ZZ"
+			}
+		}
+	}`
+
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(inputJSON), &event)
+	require.NoError(t, err)
+
+	actualEvents, err := ruptela.DecodeEvent(event)
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "could not parse uint")
+	require.Len(t, actualEvents, 0)
+
+	var conversionError convert.ConversionError
+	require.ErrorAs(t, err, &conversionError)
+	require.Len(t, conversionError.DecodedEvents, 1)
+	require.Equal(t, ruptela.EventNameAcceleration, conversionError.DecodedEvents[0].Data.Name)
+	require.JSONEq(t, `{"counterValue":10}`, conversionError.DecodedEvents[0].Data.Metadata)
+}
+
+func TestToEngineSecurityEvent(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name         string
+		rawValue     string
+		expectedName string
+		expectedTags []string
+		expectErr    bool
+	}{
+		{
+			name:         "zero value maps to unblock",
+			rawValue:     "0",
+			expectedName: ruptela.EventNameEngineUnblock,
+			expectedTags: []string{vss.EventSecurityEngineUnblockName},
+			expectErr:    false,
+		},
+		{
+			name:         "non-zero value maps to block",
+			rawValue:     "A",
+			expectedName: ruptela.EventNameEngineBlock,
+			expectedTags: []string{vss.EventSecurityEngineBlockName},
+			expectErr:    false,
+		},
+		{
+			name:      "invalid value returns error",
+			rawValue:  "ZZ",
+			expectErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual, err := ruptela.ToEngineSecurityEvent(tt.rawValue)
+			if tt.expectErr {
+				require.Error(t, err)
+				require.Contains(t, err.Error(), "could not parse uint from engine security event")
+				return
+			}
+
+			require.NoError(t, err)
+			require.Equal(t, tt.expectedName, actual.Name)
+			require.Equal(t, tt.expectedTags, actual.Tags)
+		})
+	}
+}

@@ -25,7 +25,7 @@ type FingerprintModule interface {
 	FingerprintConvert(ctx context.Context, event cloudevent.RawEvent) (modelce.Fingerprint, error)
 }
 
-// EventModule is an interface for converting messages to events.
+// EventModule is an interface for converting messages to vehicle events.
 type EventModule interface {
 	EventConvert(ctx context.Context, event cloudevent.RawEvent) ([]vss.Event, error)
 }
