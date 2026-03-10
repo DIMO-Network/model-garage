@@ -17,6 +17,8 @@ const (
 	EventNameExtremeBraking = vss.EventBehaviorExtremeBrakingName
 	EventNameAcceleration   = vss.EventBehaviorHarshAccelerationName
 	EventNameCornering      = vss.EventBehaviorHarshCorneringName
+	EventNameEngineBlock    = vss.EventSecurityEngineBlockName
+	EventNameEngineUnblock  = vss.EventSecurityEngineUnblockName
 	zeroValue               = "0"
 )
 
@@ -24,9 +26,10 @@ type eventSignals struct {
 	Signals eventSignal `json:"signals"`
 }
 type eventSignal struct {
-	Braking      string `json:"135"`
-	Acceleration string `json:"136"`
-	Cornering    string `json:"143"`
+	Braking      string  `json:"135"`
+	Acceleration string  `json:"136"`
+	Cornering    string  `json:"143"`
+	EngineBlock  *string `json:"405,omitempty"`
 }
 
 // CounterMetadata is the metadata for events with a counter value.
@@ -34,7 +37,7 @@ type CounterMetadata struct {
 	CounterValue uint `json:"counterValue"`
 }
 
-// EventConvert converts a ruptela event to a vss event.
+// DecodeEvent converts a ruptela vehicle event to a vss event, in terms of a vehicle event or command that we can trigger on
 func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 	var signals eventSignals
 	if err := json.Unmarshal(cEvent.Data, &signals); err != nil {
@@ -63,6 +66,15 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 	}
 	if signals.Signals.Cornering != "" && signals.Signals.Cornering != zeroValue {
 		data, err := ToCorneringEventData(signals.Signals.Cornering)
+		if err == nil {
+			events = append(events, wrapEventData(cEvent, data))
+		} else if !errors.Is(err, errNotFound) {
+			errs = append(errs, err)
+		}
+	}
+	if signals.Signals.EngineBlock != nil && *signals.Signals.EngineBlock != "" {
+		// this handles both engine block and unblock
+		data, err := ToEngineSecurityEvent(*signals.Signals.EngineBlock)
 		if err == nil {
 			events = append(events, wrapEventData(cEvent, data))
 		} else if !errors.Is(err, errNotFound) {
@@ -166,6 +178,20 @@ func ToAccelerationEventData(rawValue string) (vss.EventData, error) {
 		Name:     EventNameAcceleration,
 		Metadata: string(metaCounterJSON),
 	}, nil
+}
+
+func ToEngineSecurityEvent(rawValue string) (vss.EventData, error) {
+	if rawValue == "" {
+		return vss.EventData{}, nil // same as nothing
+	}
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return vss.EventData{}, fmt.Errorf("could not parse uint: %w", err)
+	}
+	if rawInt != 0 {
+		return vss.EventData{Name: EventNameEngineBlock, Tags: []string{vss.EventSecurityEngineBlockName}}, nil
+	}
+	return vss.EventData{Name: EventNameEngineUnblock, Tags: []string{vss.EventSecurityEngineUnblockName}}, nil
 }
 
 // ToCorneringEventData parses a hex cornering value into EventData.

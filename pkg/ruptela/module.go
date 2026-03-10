@@ -76,7 +76,7 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 	return hdrs, event.Data, nil
 }
 
-// EventConvert converts a message to events.
+// EventConvert converts a message to vehicle events.
 func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Event, error) {
 	return DecodeEvent(event)
 }
@@ -115,7 +115,7 @@ func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType strin
 	}
 }
 
-// getCloudEventTypes gets the cloud event types contained in the ruptela event.
+// getCloudEventTypes gets the cloud event types contained in the ruptela event. Cloud event is not a vehicle event, just a payload.
 func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
 	// Command events are always discrete events, never status updates.
 	if event.DS == CmdEventDS {
