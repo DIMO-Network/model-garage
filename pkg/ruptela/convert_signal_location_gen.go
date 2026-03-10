@@ -10,9 +10,9 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// SignalsFromLocationData converts the given JSON data to a slice of signals.
-func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalName string, valResult gjson.Result) ([]vss.Signal, error) {
-	ret := make([]vss.Signal, 0)
+// SignalsFromLocationData converts the given JSON data to a slice of signal data.
+func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalName string, valResult gjson.Result) ([]vss.SignalData, error) {
+	ret := make([]vss.SignalData, 0)
 	var retErrs error
 
 	switch signalName {
@@ -22,11 +22,10 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 		if err != nil {
 			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.alt': %w", err))
 		} else {
-			sig := vss.Signal{
-				Subject:   baseSignal.Subject,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "currentLocationAltitude",
+			sig := vss.SignalData{
+				Timestamp:    baseSignal.Data.Timestamp,
+				Name:         "currentLocationAltitude",
+				CloudEventID: baseSignal.CloudEventHeader.ID,
 			}
 			sig.SetValue(val0)
 			ret = append(ret, sig)
@@ -37,11 +36,10 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 		if err != nil {
 			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.dir': %w", err))
 		} else {
-			sig := vss.Signal{
-				Subject:   baseSignal.Subject,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "currentLocationHeading",
+			sig := vss.SignalData{
+				Timestamp:    baseSignal.Data.Timestamp,
+				Name:         "currentLocationHeading",
+				CloudEventID: baseSignal.CloudEventHeader.ID,
 			}
 			sig.SetValue(val0)
 			ret = append(ret, sig)
@@ -52,11 +50,10 @@ func SignalsFromLocationData(originalDoc []byte, baseSignal vss.Signal, signalNa
 		if err != nil {
 			retErrs = errors.Join(retErrs, fmt.Errorf("failed to convert 'pos.spd': %w", err))
 		} else {
-			sig := vss.Signal{
-				Subject:   baseSignal.Subject,
-				Timestamp: baseSignal.Timestamp,
-				Source:    baseSignal.Source,
-				Name:      "speed",
+			sig := vss.SignalData{
+				Timestamp:    baseSignal.Data.Timestamp,
+				Name:         "speed",
+				CloudEventID: baseSignal.CloudEventHeader.ID,
 			}
 			sig.SetValue(val0)
 			ret = append(ret, sig)

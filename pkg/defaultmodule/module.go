@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -13,6 +14,7 @@ import (
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/schema"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/segmentio/ksuid"
 	"github.com/tidwall/gjson"
 )
 
@@ -52,14 +54,14 @@ type Event struct {
 
 // Module holds dependencies for the default module. At present, there are none.
 type Module struct {
-	once      sync.Once
-	signalMap map[string]*schema.SignalInfo
-	eventTags map[string]*schema.EventTagInfo
-	loadErr   error
+	once         sync.Once
+	signalMap    map[string]*schema.SignalInfo
+	eventNameMap map[string]*schema.EventNameInfo
+	loadErr      error
 }
 
-// LoadSignalMap loads the default signal map.
-func LoadSignalAndEventTagMap() (map[string]*schema.SignalInfo, map[string]*schema.EventTagInfo, error) {
+// LoadSignalAndEventNameMap loads the default signal and event name maps.
+func LoadSignalAndEventNameMap() (map[string]*schema.SignalInfo, map[string]*schema.EventNameInfo, error) {
 	definedSignals, err := schema.GetDefaultSignals()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to load default signals: %w", err)
@@ -68,24 +70,26 @@ func LoadSignalAndEventTagMap() (map[string]*schema.SignalInfo, map[string]*sche
 	for _, signal := range definedSignals {
 		signalMap[signal.JSONName] = signal
 	}
-	eventTags, err := schema.GetDefaultEventTags()
+
+	eventNames, err := schema.GetDefaultEventNames()
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to load default event tags: %w", err)
+		return nil, nil, fmt.Errorf("failed to load default event names: %w", err)
 	}
-	eventTagMap := make(map[string]*schema.EventTagInfo, len(eventTags))
-	for _, eventTag := range eventTags {
-		eventTagMap[eventTag.Name] = eventTag
+	eventNameMap := make(map[string]*schema.EventNameInfo, len(eventNames))
+	for _, eventName := range eventNames {
+		eventNameMap[eventName.Name] = eventName
 	}
-	return signalMap, eventTagMap, nil
+
+	return signalMap, eventNameMap, nil
 }
 
 // SignalConvert converts a default CloudEvent to DIMO's vss signals.
 func (m *Module) SignalConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Signal, error) {
 	m.once.Do(func() {
-		m.signalMap, m.eventTags, m.loadErr = LoadSignalAndEventTagMap()
+		m.signalMap, m.eventNameMap, m.loadErr = LoadSignalAndEventNameMap()
 	})
 	if m.loadErr != nil {
-		return nil, fmt.Errorf("failed to load signals and events: %w", m.loadErr)
+		return nil, fmt.Errorf("failed to load signal and event name maps: %w", m.loadErr)
 	}
 
 	return SignalConvert(event, m.signalMap)
@@ -122,7 +126,7 @@ func (*Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeven
 	events := gjson.GetBytes(event.Data, "events")
 	if events.Exists() && events.IsArray() && len(events.Array()) > 0 {
 		statusHdr := event.CloudEventHeader
-		statusHdr.Type = cloudevent.TypeEvent
+		statusHdr.Type = cloudevent.TypeEvents
 		hdrs = append(hdrs, statusHdr)
 	}
 
@@ -139,11 +143,12 @@ func (*Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeven
 // EventConvert converts a default CloudEvent to events.
 func (m *Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss.Event, error) {
 	m.once.Do(func() {
-		m.signalMap, m.eventTags, m.loadErr = LoadSignalAndEventTagMap()
+		m.signalMap, m.eventNameMap, m.loadErr = LoadSignalAndEventNameMap()
 	})
 	if m.loadErr != nil {
-		return nil, fmt.Errorf("failed to load signal map: %w", m.loadErr)
+		return nil, fmt.Errorf("failed to load signal and event name maps: %w", m.loadErr)
 	}
+
 	// Parse the events array from the event data
 	var eventsData EventsData
 	err := json.Unmarshal(event.Data, &eventsData)
@@ -162,32 +167,46 @@ func (m *Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]v
 			decodeErrs = append(decodeErrs, fmt.Errorf("event.timestamp is zero for event.name %s", ev.Name))
 			continue
 		}
+		if _, ok := m.eventNameMap[ev.Name]; !ok {
+			decodeErrs = append(decodeErrs, fmt.Errorf("unknown event name: %s", ev.Name))
+			continue
+		}
 		if len(ev.Metadata) > 0 && !json.Valid([]byte(ev.Metadata)) {
 			// We do not expect to get this far if the metadata is not valid json. Since it would invalidate the entire cloudevent.
 			decodeErrs = append(decodeErrs, fmt.Errorf("metadata for event.name %s, event.timestamp %s is not valid json", ev.Name, ev.Timestamp))
 			continue
 		}
-		unknownTags := []string{}
+		invalidTag := false
 		for _, tag := range ev.Tags {
-			if _, ok := m.eventTags[tag]; !ok {
-				unknownTags = append(unknownTags, tag)
+			if tag != strings.ToLower(tag) {
+				decodeErrs = append(decodeErrs, fmt.Errorf("tag %q for event.name %s must be lowercase", tag, ev.Name))
+				invalidTag = true
+				break
 			}
 		}
-		if len(unknownTags) > 0 {
-			decodeErrs = append(decodeErrs, fmt.Errorf("event.name %s contains unknown tags %v", ev.Name, unknownTags))
+		if invalidTag {
 			continue
 		}
 
 		vssEvent := vss.Event{
-			Subject:      event.Subject,
-			Source:       event.Source,
-			Producer:     event.Producer,
-			CloudEventID: event.ID,
-			Name:         ev.Name,
-			Timestamp:    ev.Timestamp,
-			DurationNs:   ev.DurationNs,
-			Metadata:     ev.Metadata,
-			Tags:         ev.Tags,
+			CloudEventHeader: cloudevent.CloudEventHeader{
+				SpecVersion: "1.0",
+				Subject:     event.Subject,
+				Source:      event.Source,
+				Producer:    event.Producer,
+				ID:          ksuid.New().String(),
+				Time:        event.Time,
+				Type:        cloudevent.TypeEvent,
+				DataVersion: event.DataVersion,
+			},
+			Data: vss.EventData{
+				Name:         ev.Name,
+				Timestamp:    ev.Timestamp,
+				DurationNs:   ev.DurationNs,
+				Metadata:     ev.Metadata,
+				CloudEventID: event.ID,
+				Tags:         ensureTags(ev.Tags),
+			},
 		}
 		vssEvents = append(vssEvents, vssEvent)
 	}
@@ -202,4 +221,12 @@ func (m *Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]v
 	}
 
 	return vssEvents, nil
+}
+
+// ensureTags returns tags as-is if non-nil, or an empty slice otherwise.
+func ensureTags(tags []string) []string {
+	if tags == nil {
+		return []string{}
+	}
+	return tags
 }

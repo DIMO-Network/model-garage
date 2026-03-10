@@ -31,6 +31,10 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 		return nil, fmt.Errorf("failed to unmarshal telemetry wrapper: %w", err)
 	}
 
+	baseHeader := event.CloudEventHeader
+	hdr := baseHeader
+	hdr.Type = cloudevent.TypeSignal
+
 	var batchedSigs []vss.Signal
 	var batchedErrs []error
 	for i, payload := range td.Payloads {
@@ -40,8 +44,10 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 			batchedErrs = append(batchedErrs, fmt.Errorf("failed to unmarshal payload at index %d: %w", i, err))
 			continue
 		}
-		sigs, errs := ProcessPayload(&pl, event.Subject, source)
-		batchedSigs = append(batchedSigs, sigs...)
+		sigDatas, errs := ProcessPayload(&pl, baseHeader)
+		for _, sd := range sigDatas {
+			batchedSigs = append(batchedSigs, vss.Signal{CloudEventHeader: hdr, Data: sd})
+		}
 		batchedErrs = append(batchedErrs, errs...)
 	}
 

@@ -12,20 +12,27 @@ import (
 // SignalsFromV1Payload gets a slice signals from a v1 payload.
 func SignalsFromV1Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	baseSignal := vss.Signal{
-		Subject:   event.Subject,
-		Timestamp: event.Time,
-		Source:    event.Source,
+		CloudEventHeader: event.CloudEventHeader,
+		Data: vss.SignalData{
+			Timestamp: event.Time,
+		},
 	}
-	sigs, errs := SignalsFromV1Data(baseSignal, event.Data)
+	hdr := event.CloudEventHeader
+	hdr.Type = cloudevent.TypeSignal
+
+	sigDatas, errs := SignalsFromV1Data(baseSignal, event.Data)
+	var sigs []vss.Signal
+	for _, sd := range sigDatas {
+		sigs = append(sigs, vss.Signal{CloudEventHeader: hdr, Data: sd})
+	}
 	if coordLoc, err := currentLocationCoordinatesFromV1Data(event.Data); err == nil {
-		sig := vss.Signal{
-			Name:      vss.FieldCurrentLocationCoordinates,
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sd := vss.SignalData{
+			Name:         vss.FieldCurrentLocationCoordinates,
+			Timestamp:    baseSignal.Data.Timestamp,
+			CloudEventID: event.ID,
 		}
-		sig.SetValue(coordLoc)
-		sigs = append(sigs, sig)
+		sd.SetValue(coordLoc)
+		sigs = append(sigs, vss.Signal{CloudEventHeader: hdr, Data: sd})
 	} else if !errors.Is(err, errNotFound) {
 		errs = append(errs, err)
 	}

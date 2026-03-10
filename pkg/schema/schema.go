@@ -51,15 +51,15 @@ type SignalInfo struct {
 	Privileges  []string
 }
 
-// EventTagInfo contains the information for an event tag.
-type EventTagInfo struct {
-	// Name is the name of the event tag.
+// EventNameInfo contains the information for an event name.
+type EventNameInfo struct {
+	// Name is the name of the event name.
 	Name string `json:"name" yaml:"name"`
-	// Desc is the description of the event tag.
+	// Desc is the description of the event name.
 	Desc string `json:"description" yaml:"description"`
-	// JSONName is the name of the event tag in the JSON format this is the same as the Name but defined here for parity with the signals.
+	// JSONName is the name of the event name in the JSON format this is the same as the Name but defined here for parity with the signals.
 	JSONName string `json:"jsonName" yaml:"jsonName"`
-	// GOName is the name of the event tag in the Go format this is the same as the Name but defined here for parity with the signals.
+	// GOName is the name of the event name in the Go format this is the same as the Name but defined here for parity with the signals.
 	GOName string `json:"goName" yaml:"goName"`
 }
 
@@ -91,8 +91,8 @@ type SignalDefinitions struct {
 // TemplateData contains the data to be used during template execution.
 type TemplateData struct {
 	SignalDefinitions
-	ModelName string
-	EventTags []*EventTagInfo
+	ModelName  string
+	EventNames []*EventNameInfo
 }
 
 // Definitions is a map of definitions from clickhouse Name to definition info.
@@ -205,10 +205,13 @@ func VSSToJSONName(name string) string {
 	return nameBuilder.String()
 }
 
-func EventTagToGoName(name string) string {
+func EventNameToGoName(name string) string {
 	splitName := strings.Split(name, ".")
 	var nameBuilder strings.Builder
 	for _, component := range splitName {
+		if component == "" {
+			continue
+		}
 		_, _ = nameBuilder.WriteRune(unicode.ToUpper(rune(component[0])))
 		_, _ = nameBuilder.WriteString(component[1:])
 	}
@@ -222,7 +225,7 @@ func splitAndSanitizeName(name string) (string, string) {
 	if len(splitName) == 1 {
 		return nonAlphaNum.ReplaceAllString(splitName[0], ""), ""
 	}
-	// remove branch prefix if it exists i.e. Vehcile.Speed -> Speed
+	// remove branch prefix if it exists i.e. Vehicle.Speed -> Speed
 	splitName = splitName[1:]
 
 	return nonAlphaNum.ReplaceAllString(splitName[0], ""), nonAlphaNum.ReplaceAllString(strings.Join(splitName[1:], ""), "")

@@ -29,8 +29,8 @@ github.com/ClickHouse/clickhouse-go/v2 v2.43.0 h1:fUR05TrF1GyvLDa/mAQjkx7KbgwdLR
 github.com/ClickHouse/clickhouse-go/v2 v2.43.0/go.mod h1:o6jf7JM/zveWC/PP277BLxjHy5KjnGX/jfljhM4s34g=
 github.com/DIMO-Network/clickhouse-infra v0.0.7 h1:TAsjkFFKu3D5Xg6dwBcRBryjCVSlXsNjVbTwJ4UDlTg=
 github.com/DIMO-Network/clickhouse-infra v0.0.7/go.mod h1:XS80lhSJNWBWGgZ+m4j7++zFj1wAXfmtV2gJfhGlabQ=
-github.com/DIMO-Network/cloudevent v0.2.2 h1:nSVLa6AIv2I5w0X180Dbds19ttZzqtrqEJfTG8ff2AI=
-github.com/DIMO-Network/cloudevent v0.2.2/go.mod h1:zFG6pf7ejwC0y3//mHpISDHR/blsSz8Lew2c4ebc8Lw=
+github.com/DIMO-Network/cloudevent v0.2.5 h1:3s6ZKtBXHYy0ujMYBdOBF9uJAc5C+EKEF7/SToW2cJA=
+github.com/DIMO-Network/cloudevent v0.2.5/go.mod h1:zFG6pf7ejwC0y3//mHpISDHR/blsSz8Lew2c4ebc8Lw=
 github.com/Masterminds/goutils v1.1.1 h1:5nUrii3FMTL5diU80unEVvNevw1nH4+ZV4DSLVJLSYI=
 github.com/Masterminds/goutils v1.1.1/go.mod h1:8cTjp+g8YejhMuvIA5y2vz3BpJxksy863GQaJW2MFNU=
 github.com/Masterminds/semver/v3 v3.4.0 h1:Zog+i5UMtVoCU8oKka5P7i9q9HgrJeGzI9SA1Xbatp0=

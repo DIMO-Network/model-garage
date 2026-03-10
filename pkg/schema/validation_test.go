@@ -90,15 +90,15 @@ func TestValidate(t *testing.T) {
 	}
 }
 
-func TestValidateEventTag(t *testing.T) {
+func TestValidateEventName(t *testing.T) {
 	tests := []struct {
 		name        string
-		e           *EventTagInfo
+		e           *EventNameInfo
 		expectedErr bool
 	}{
 		{
-			name: "Valid EventTag",
-			e: &EventTagInfo{
+			name: "Valid EventName",
+			e: &EventNameInfo{
 				Name:     "behavior.harshBraking",
 				Desc:     "Harsh braking behavior",
 				JSONName: "behavior.harshBraking",
@@ -108,7 +108,7 @@ func TestValidateEventTag(t *testing.T) {
 		},
 		{
 			name: "Valid EventTag - collision",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "safety.collision",
 				Desc:     "collision an event that indicates a collision was detected",
 				JSONName: "safety.collision",
@@ -117,13 +117,13 @@ func TestValidateEventTag(t *testing.T) {
 			expectedErr: false,
 		},
 		{
-			name:        "Nil EventTag",
+			name:        "Nil EventName",
 			e:           nil,
 			expectedErr: true,
 		},
 		{
 			name: "Empty Name",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "",
 				Desc:     "Some description",
 				JSONName: "",
@@ -133,7 +133,7 @@ func TestValidateEventTag(t *testing.T) {
 		},
 		{
 			name: "Name with invalid characters - hyphen",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "behavior.harsh-braking",
 				Desc:     "Harsh braking behavior with invalid hyphen",
 				JSONName: "behavior.harsh-braking",
@@ -143,7 +143,7 @@ func TestValidateEventTag(t *testing.T) {
 		},
 		{
 			name: "Name with invalid characters - underscore",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "safety.collision_detected",
 				Desc:     "Collision detection with invalid underscore",
 				JSONName: "safety.collision_detected",
@@ -153,7 +153,7 @@ func TestValidateEventTag(t *testing.T) {
 		},
 		{
 			name: "Name with invalid characters - space",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "behavior.harsh braking",
 				Desc:     "Harsh braking with invalid space",
 				JSONName: "behavior.harsh braking",
@@ -163,7 +163,7 @@ func TestValidateEventTag(t *testing.T) {
 		},
 		{
 			name: "Name with invalid characters - special symbols",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "safety.collision@detected",
 				Desc:     "Collision detection with invalid symbol",
 				JSONName: "safety.collision@detected",
@@ -173,7 +173,7 @@ func TestValidateEventTag(t *testing.T) {
 		},
 		{
 			name: "Name starting with uppercase letter",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "Behavior.harshBraking",
 				Desc:     "Harsh braking with uppercase first letter",
 				JSONName: "Behavior.harshBraking",
@@ -183,7 +183,7 @@ func TestValidateEventTag(t *testing.T) {
 		},
 		{
 			name: "Name starting with uppercase letter - single word",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "Collision",
 				Desc:     "Collision event with uppercase first letter",
 				JSONName: "Collision",
@@ -193,7 +193,7 @@ func TestValidateEventTag(t *testing.T) {
 		},
 		{
 			name: "Name starting with number",
-			e: &EventTagInfo{
+			e: &EventNameInfo{
 				Name:     "1safety.collision",
 				Desc:     "Collision event starting with number",
 				JSONName: "1safety.collision",
@@ -205,7 +205,7 @@ func TestValidateEventTag(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			err := ValidateEventTag(test.e)
+			err := ValidateEventName(test.e)
 			if test.expectedErr && err == nil {
 				t.Errorf("Expected error, got nil")
 			} else if !test.expectedErr && err != nil {

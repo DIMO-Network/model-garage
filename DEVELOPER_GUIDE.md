@@ -34,7 +34,7 @@ Welcome to the Model Garage developer guide! This guide will help you understand
     - [Getting All Default Signals](#getting-all-default-signals)
     - [Signal Information Available](#signal-information-available)
     - [Common Usage Patterns](#common-usage-patterns)
-    - [Getting Event Tags](#getting-event-tags)
+    - [Getting Event Names](#getting-event-names)
   - [When to Import This Package](#when-to-import-this-package)
 - [Module-Specific Guides](#module-specific-guides)
 - [Additional Resources](#additional-resources)
@@ -461,20 +461,20 @@ signal.SetValue(65.5) // Sets ValueNumber
 
 ### Event Structure
 
-The `vss.Event` struct represents vehicle events (harsh braking, collisions, etc.) and **directly corresponds to the database schema**:
+The `vss.Event` type is a CloudEvent type alias (`type Event = cloudevent.CloudEvent[EventData]`) representing vehicle events (harsh braking, collisions, etc.) and **directly corresponds to the database schema**:
 
 ```go
-type Event struct {
-    Subject      string      // Vehicle/entity DID
-    Source       string      // Integration source
-    Producer     string      // Device DID
-    CloudEventID string      // CloudEvent identifier
-    Name         string      // Event name (e.g., "behavior.harshBraking")
-    Timestamp    time.Time   // When the event occurred
-    DurationNs   uint64      // Event duration in nanoseconds
-    Metadata     string      // JSON metadata
-    Tags         []string    // Event tags
+// EventData holds the domain-specific payload for an event.
+type EventData struct {
+    Name       string      // Event name (e.g., "behavior.harshBraking")
+    Timestamp  time.Time   // When the event occurred
+    DurationNs uint64      // Event duration in nanoseconds
+    Metadata   string      // JSON metadata
 }
+
+// Event is a CloudEvent with EventData as the payload.
+// Fields from CloudEventHeader: Subject, Source, Producer, ID, Type, DataVersion, Tags
+type Event = cloudevent.CloudEvent[EventData]
 ```
 
 **Database Mapping**:
@@ -583,20 +583,20 @@ if containsPrivilege(signal.Privileges, "VEHICLE_ALL_TIME_LOCATION") {
 }
 ```
 
-#### Getting Event Tags
+#### Getting Event Names
 
-Similarly, you can get all defined event tags:
+Similarly, you can get all defined event names:
 
 ```go
 import "github.com/DIMO-Network/model-garage/pkg/schema"
 
-eventTags, err := schema.GetDefaultEventTags()
+eventNames, err := schema.GetDefaultEventNames()
 if err != nil {
-    return fmt.Errorf("failed to load event tags: %w", err)
+    return fmt.Errorf("failed to load event names: %w", err)
 }
 
-for _, tag := range eventTags {
-    fmt.Printf("Event: %s - %s\n", tag.Name, tag.Desc)
+for _, eventName := range eventNames {
+    fmt.Printf("Event: %s - %s\n", eventName.Name, eventName.Desc)
 }
 ```
 

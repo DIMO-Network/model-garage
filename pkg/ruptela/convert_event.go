@@ -9,13 +9,14 @@ import (
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/convert"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/segmentio/ksuid"
 )
 
 const (
-	EventNameHarshBraking   = "HarshBraking"
-	EventNameExtremeBraking = "ExtremeBraking"
-	EventNameAcceleration   = "HarshAcceleration"
-	EventNameCornering      = "HarshCornering"
+	EventNameHarshBraking   = vss.EventBehaviorHarshBrakingName
+	EventNameExtremeBraking = vss.EventBehaviorExtremeBrakingName
+	EventNameAcceleration   = vss.EventBehaviorHarshAccelerationName
+	EventNameCornering      = vss.EventBehaviorHarshCorneringName
 	zeroValue               = "0"
 )
 
@@ -40,38 +41,33 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 		return nil, fmt.Errorf("failed to unmarshal event data: %w", err)
 	}
 
-	var events []vss.Event
+	events := make([]vss.Event, 0, 4)
 	var errs []error
 	if signals.Signals.Braking != "" && signals.Signals.Braking != zeroValue {
-		brakingEvents, err := ToBrakingEvents(signals.Signals.Braking)
-		if err != nil {
+		brakingData, err := ToBrakingEventData(signals.Signals.Braking)
+		if err == nil {
+			for _, data := range brakingData {
+				events = append(events, wrapEventData(cEvent, data))
+			}
+		} else {
 			errs = append(errs, err)
 		}
-		events = append(events, brakingEvents...)
 	}
 	if signals.Signals.Acceleration != "" && signals.Signals.Acceleration != zeroValue {
-		accelerationEvent, err := ToAccelerationEvent(signals.Signals.Acceleration)
+		data, err := ToAccelerationEventData(signals.Signals.Acceleration)
 		if err == nil {
-			events = append(events, accelerationEvent)
+			events = append(events, wrapEventData(cEvent, data))
 		} else if !errors.Is(err, errNotFound) {
 			errs = append(errs, err)
 		}
 	}
 	if signals.Signals.Cornering != "" && signals.Signals.Cornering != zeroValue {
-		corneringEvent, err := ToCorneringEvent(signals.Signals.Cornering)
+		data, err := ToCorneringEventData(signals.Signals.Cornering)
 		if err == nil {
-			events = append(events, corneringEvent)
+			events = append(events, wrapEventData(cEvent, data))
 		} else if !errors.Is(err, errNotFound) {
 			errs = append(errs, err)
 		}
-	}
-
-	for i := range events {
-		events[i].Subject = cEvent.Subject
-		events[i].Source = cEvent.Source
-		events[i].Producer = cEvent.Producer
-		events[i].CloudEventID = cEvent.ID
-		events[i].Timestamp = cEvent.Time
 	}
 
 	if len(errs) > 0 {
@@ -86,7 +82,30 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 	return events, nil
 }
 
-func ToBrakingEvents(rawValue string) ([]vss.Event, error) {
+// wrapEventData wraps EventData in a full vss.Event with CloudEvent header fields from the source event.
+func wrapEventData(cEvent cloudevent.RawEvent, data vss.EventData) vss.Event {
+	data.Timestamp = cEvent.Time
+	data.CloudEventID = cEvent.ID
+	if data.Tags == nil {
+		data.Tags = []string{}
+	}
+	return vss.Event{
+		CloudEventHeader: cloudevent.CloudEventHeader{
+			Subject:     cEvent.Subject,
+			Source:      cEvent.Source,
+			Producer:    cEvent.Producer,
+			ID:          ksuid.New().String(),
+			SpecVersion: "1.0",
+			Time:        cEvent.Time,
+			Type:        cloudevent.TypeEvent,
+			DataVersion: cEvent.DataVersion,
+		},
+		Data: data,
+	}
+}
+
+// ToBrakingEventData parses a hex braking value into EventData entries.
+func ToBrakingEventData(rawValue string) ([]vss.EventData, error) {
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
 		return nil, fmt.Errorf("could not parse uint: %w", err)
@@ -98,86 +117,72 @@ func ToBrakingEvents(rawValue string) ([]vss.Event, error) {
 	}
 	value := uint8(rawInt)
 
-	var events []vss.Event
+	var data []vss.EventData
 
 	// Check 4 LSB (bits 0-3)
 	lsb := value & 0x0F
 	if lsb != 0 {
-		metaCounter := CounterMetadata{
-			CounterValue: uint(lsb),
-		}
-		metaCounterJSON, err := json.Marshal(metaCounter)
+		metaCounterJSON, err := json.Marshal(CounterMetadata{CounterValue: uint(lsb)})
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal metadata: %w", err)
 		}
-		events = append(events, vss.Event{
+		data = append(data, vss.EventData{
 			Name:     EventNameHarshBraking,
 			Metadata: string(metaCounterJSON),
-			Tags:     []string{vss.TagBehaviorHarshBraking},
 		})
 	}
 
 	// Check 4 MSB (bits 4-7)
 	msb := (value >> 4) & 0x0F
 	if msb != 0 {
-		metaCounter := CounterMetadata{
-			CounterValue: uint(msb),
-		}
-		metaCounterJSON, err := json.Marshal(metaCounter)
+		metaCounterJSON, err := json.Marshal(CounterMetadata{CounterValue: uint(msb)})
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal metadata: %w", err)
 		}
-		events = append(events, vss.Event{
+		data = append(data, vss.EventData{
 			Name:     EventNameExtremeBraking,
 			Metadata: string(metaCounterJSON),
-			Tags:     []string{vss.TagSafetyCollision},
 		})
 	}
 
-	return events, nil
+	return data, nil
 }
 
-func ToAccelerationEvent(rawValue string) (vss.Event, error) {
+// ToAccelerationEventData parses a hex acceleration value into EventData.
+func ToAccelerationEventData(rawValue string) (vss.EventData, error) {
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
-		return vss.Event{}, fmt.Errorf("could not parse uint: %w", err)
+		return vss.EventData{}, fmt.Errorf("could not parse uint: %w", err)
 	}
 	if rawInt == 0 {
-		return vss.Event{}, errNotFound
+		return vss.EventData{}, errNotFound
 	}
 
-	metaCounter := CounterMetadata{
-		CounterValue: uint(rawInt),
-	}
-	metaCounterJSON, err := json.Marshal(metaCounter)
+	metaCounterJSON, err := json.Marshal(CounterMetadata{CounterValue: uint(rawInt)})
 	if err != nil {
-		return vss.Event{}, fmt.Errorf("failed to marshal metadata: %w", err)
+		return vss.EventData{}, fmt.Errorf("failed to marshal metadata: %w", err)
 	}
-	return vss.Event{
+	return vss.EventData{
 		Name:     EventNameAcceleration,
 		Metadata: string(metaCounterJSON),
-		Tags:     []string{vss.TagBehaviorHarshAcceleration},
 	}, nil
 }
 
-func ToCorneringEvent(rawValue string) (vss.Event, error) {
+// ToCorneringEventData parses a hex cornering value into EventData.
+func ToCorneringEventData(rawValue string) (vss.EventData, error) {
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
-		return vss.Event{}, fmt.Errorf("could not parse uint: %w", err)
+		return vss.EventData{}, fmt.Errorf("could not parse uint: %w", err)
 	}
 	if rawInt == 0 {
-		return vss.Event{}, errNotFound
+		return vss.EventData{}, errNotFound
 	}
-	metaCounter := CounterMetadata{
-		CounterValue: uint(rawInt),
-	}
-	metaCounterJSON, err := json.Marshal(metaCounter)
+	metaCounterJSON, err := json.Marshal(CounterMetadata{CounterValue: uint(rawInt)})
 	if err != nil {
-		return vss.Event{}, fmt.Errorf("failed to marshal metadata: %w", err)
+		return vss.EventData{}, fmt.Errorf("failed to marshal metadata: %w", err)
 	}
-	return vss.Event{
+	return vss.EventData{
 		Name:     EventNameCornering,
 		Metadata: string(metaCounterJSON),
-		Tags:     []string{vss.TagBehaviorHarshCornering},
 	}, nil
 }

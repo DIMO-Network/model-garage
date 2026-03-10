@@ -23,34 +23,36 @@ func TestLocationPayload(t *testing.T) {
 
 	// sort the signals so diffs are easier to read
 	sortFunc := func(a, b vss.Signal) int {
-		if c := cmp.Compare(a.Name, b.Name); c != 0 {
+		if c := cmp.Compare(a.Data.Name, b.Data.Name); c != 0 {
 			return c
 		}
-		if c := cmp.Compare(a.Timestamp.Unix(), b.Timestamp.Unix()); c != 0 {
+		if c := cmp.Compare(a.Data.Timestamp.Unix(), b.Data.Timestamp.Unix()); c != 0 {
 			return c
 		}
-		return cmp.Compare(a.ValueNumber, b.ValueNumber)
+		return cmp.Compare(a.Data.ValueNumber, b.Data.ValueNumber)
 	}
 
-	expected := expectedLocationSignals()
+	expected := expectedLocationSignals(event.CloudEventHeader)
 	slices.SortFunc(expected, sortFunc)
 	slices.SortFunc(actualSignals, sortFunc)
+	assertGeneratedSignalFields(t, actualSignals, event.ID)
+	normalizeSignalsForComparison(actualSignals)
+	normalizeSignalsForComparison(expected)
 	require.Equal(t, expected, actualSignals, "converted vehicle does not match expected vehicle")
 }
 
-func expectedLocationSignals() []vss.Signal {
+func expectedLocationSignals(baseHeader cloudevent.CloudEventHeader) []vss.Signal {
 	ts := time.Unix(1727360340, 0).UTC()
-	const subject = "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33"
 	return []vss.Signal{
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 123.2, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 43.2699983, Longitude: -71.50142, HDOP: 0}, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 197.3, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 1.2, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 44.2699983, Longitude: -71.50142, HDOP: 0.1}, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationHeading, ValueNumber: 93.9, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 0.2, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 45.2699983, Longitude: -71.50142, HDOP: 0.2}, Source: "ruptela/TODO"},
-		{Subject: subject, Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationHeading, ValueNumber: 3.59, Source: "ruptela/TODO"},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 123.2}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 43.2699983, Longitude: -71.50142, HDOP: 0}}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 197.3}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 1.2}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 44.2699983, Longitude: -71.50142, HDOP: 0.1}}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationHeading, ValueNumber: 93.9}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 0.2}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 45.2699983, Longitude: -71.50142, HDOP: 0.2}}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationHeading, ValueNumber: 3.59}},
 	}
 }
 

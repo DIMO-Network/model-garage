@@ -45,16 +45,16 @@ func Execute(vspecReader, definitionsReader io.Reader, generators []string, cfg 
 		return fmt.Errorf("failed to get defined signals: %w", err)
 	}
 
-	eventTags, err := schema.GetDefaultEventTags()
+	eventNames, err := schema.GetDefaultEventNames()
 	if err != nil {
-		return fmt.Errorf("failed to get default event tags: %w", err)
+		return fmt.Errorf("failed to get default event names: %w", err)
 	}
 
 	tmplData := &schema.TemplateData{
 		SignalDefinitions: signalDefs,
 		// default package name that is usually overridden by the convert generator
-		ModelName: "model",
-		EventTags: eventTags,
+		ModelName:  "model",
+		EventNames: eventNames,
 	}
 
 	if slices.Contains(generators, AllGenerator) || slices.Contains(generators, ConvertGenerator) {

@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/DIMO-Network/cloudevent"
@@ -12,16 +13,40 @@ import (
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 )
 
+func assertAndNormalizeSignals(t *testing.T, signals []vss.Signal, expectedCloudEventID string) {
+	t.Helper()
+	for i := range signals {
+		assert.Equal(t, cloudevent.TypeSignal, signals[i].Type, "signal %d should have TypeSignal", i)
+		assert.False(t, signals[i].Time.IsZero(), "signal %d should have a non-zero Time", i)
+		assert.Equal(t, expectedCloudEventID, signals[i].Data.CloudEventID, "signal %d should reference original event ID", i)
+		signals[i].Type = ""
+		signals[i].Time = time.Time{}
+		signals[i].Data.CloudEventID = ""
+	}
+}
+
+func normalizeExpectedSignals(signals []vss.Signal) {
+	for i := range signals {
+		signals[i].Type = ""
+		signals[i].Time = time.Time{}
+		signals[i].Data.CloudEventID = ""
+	}
+}
+
 func TestFullFromV2DataConversion(t *testing.T) {
 	t.Parallel()
 	var event cloudevent.RawEvent
 	err := json.Unmarshal([]byte(fullAPInputJSON), &event)
 	require.NoError(t, err)
+	baseHeader := event.CloudEventHeader
 	actualSignals, err := autopi.SignalsFromV2Payload(event)
 
+	expectedSignals := expectedV2Signals(baseHeader)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
-	require.Len(t, actualSignals, len(expectedV2Signals), "actual signals length does not match expected")
-	require.Equalf(t, expectedV2Signals, actualSignals, "converted vehicle does not match expected vehicle")
+	require.Len(t, actualSignals, len(expectedSignals), "actual signals length does not match expected")
+	assertAndNormalizeSignals(t, actualSignals, "2fHbFXPWzrVActDb7WqWCfqeiYe")
+	normalizeExpectedSignals(expectedSignals)
+	require.Equalf(t, expectedSignals, actualSignals, "converted vehicle does not match expected vehicle")
 }
 
 var fullAPInputJSON = `{
@@ -151,44 +176,49 @@ var fullAPInputJSON = `{
     }
 }`
 
-var (
-	subject           = "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33"
-	expectedV2Signals = []vss.Signal{
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: "obdLongTermFuelTrim1", ValueNumber: 25, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 26, 633000000, time.UTC), Name: "powertrainCombustionEngineECT", ValueNumber: 107, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 27, 173000000, time.UTC), Name: "powertrainCombustionEngineMAF", ValueNumber: 475.79, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 29, 314000000, time.UTC), Name: "obdEngineLoad", ValueNumber: 12.54912, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 29, 844000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 30, 382000000, time.UTC), Name: "obdShortTermFuelTrim1", ValueNumber: 12.5, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 37, 235000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 42, 256000000, time.UTC), Name: "powertrainCombustionEngineMAF", ValueNumber: 475.79, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 44, 422000000, time.UTC), Name: "obdEngineLoad", ValueNumber: 12.54912, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 44, 962000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 45, 497000000, time.UTC), Name: "obdShortTermFuelTrim1", ValueNumber: 12.5, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationIsRedacted", ValueNumber: 0, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationLongitude", ValueNumber: -56.50151833333334, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationLatitude", ValueNumber: 56.27014, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketHDOP", ValueNumber: 1.4, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "speed", ValueNumber: 39, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainCombustionEngineSpeed", ValueNumber: 2000, ValueString: "", Source: "dimo/integration/123"},
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainFuelSystemRelativeLevel", ValueNumber: 50, ValueString: "", Source: "dimo/integration/123"},
+func expectedV2Signals(hdr cloudevent.CloudEventHeader) []vss.Signal {
+	return []vss.Signal{
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: "obdLongTermFuelTrim1", ValueNumber: 25, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 26, 633000000, time.UTC), Name: "powertrainCombustionEngineECT", ValueNumber: 107, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 27, 173000000, time.UTC), Name: "powertrainCombustionEngineMAF", ValueNumber: 475.79, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 29, 314000000, time.UTC), Name: "obdEngineLoad", ValueNumber: 12.54912, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 29, 844000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 30, 382000000, time.UTC), Name: "obdShortTermFuelTrim1", ValueNumber: 12.5, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 37, 235000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 42, 256000000, time.UTC), Name: "powertrainCombustionEngineMAF", ValueNumber: 475.79, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 44, 422000000, time.UTC), Name: "obdEngineLoad", ValueNumber: 12.54912, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 44, 962000000, time.UTC), Name: "powertrainCombustionEngineTPS", ValueNumber: 23.529600000000002, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 45, 497000000, time.UTC), Name: "obdShortTermFuelTrim1", ValueNumber: 12.5, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationIsRedacted", ValueNumber: 0, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationLongitude", ValueNumber: -56.50151833333334, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "currentLocationLatitude", ValueNumber: 56.27014, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "dimoAftermarketHDOP", ValueNumber: 1.4, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "speed", ValueNumber: 39, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainCombustionEngineSpeed", ValueNumber: 2000, ValueString: ""}},
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 46, 435000000, time.UTC), Name: "powertrainFuelSystemRelativeLevel", ValueNumber: 50, ValueString: ""}},
 	}
+}
 
-	expectedDTCErrorsSignals = []vss.Signal{
-		{Subject: subject, Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: vss.FieldOBDDTCList, ValueString: `["P00BD","P0456","P0446"]`, Source: "dimo/integration/123"},
+func expectedDTCErrorsSignals(hdr cloudevent.CloudEventHeader) []vss.Signal {
+	return []vss.Signal{
+		{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: time.Date(2024, time.April, 18, 17, 20, 23, 243000000, time.UTC), Name: vss.FieldOBDDTCList, ValueString: `["P00BD","P0456","P0446"]`}},
 	}
-)
+}
 
 func TestDTCErrorCodesConversion(t *testing.T) {
 	t.Parallel()
 	var event cloudevent.RawEvent
 	err := json.Unmarshal([]byte(dtcErrorsAPInputJSON), &event)
 	require.NoError(t, err)
+	baseHeader := event.CloudEventHeader
 	actualSignals, err := autopi.SignalsFromV2Payload(event)
 
+	expectedSignals := expectedDTCErrorsSignals(baseHeader)
 	require.NoErrorf(t, err, "error converting full input data: %v", err)
-	require.Len(t, actualSignals, len(expectedDTCErrorsSignals), "actual signals length does not match expected")
-	require.Equalf(t, expectedDTCErrorsSignals, actualSignals, "converted vehicle does not match expected vehicle")
+	require.Len(t, actualSignals, len(expectedSignals), "actual signals length does not match expected")
+	assertAndNormalizeSignals(t, actualSignals, "2fHbFXPWzrVActDb7WqWCfqeiYe")
+	normalizeExpectedSignals(expectedSignals)
+	require.Equalf(t, expectedSignals, actualSignals, "converted vehicle does not match expected vehicle")
 }
 
 var dtcErrorsAPInputJSON = `{

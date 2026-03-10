@@ -194,10 +194,10 @@ func TestSignalConvert(t *testing.T) {
 	subject := "did:erc721:1:0x06012c8cf97BEaD5deAe237070F9587f8E7A266d:33"
 
 	tests := []struct {
-		name            string
-		cloudEvent      cloudevent.RawEvent
-		expectedSignals []vss.Signal
-		expectedError   error
+		name                string
+		cloudEvent          cloudevent.RawEvent
+		expectedSignalsFunc func(hdr cloudevent.CloudEventHeader) []vss.Signal
+		expectedError       error
 	}{
 		{
 			name: "Valid Signal Payload",
@@ -211,9 +211,11 @@ func TestSignalConvert(t *testing.T) {
 				},
 				Data: json.RawMessage(signalData),
 			},
-			expectedSignals: []vss.Signal{
-				{Subject: subject, Timestamp: ts, Name: vss.FieldExteriorAirTemperature, ValueNumber: -32, Source: "ruptela/TODO"},
-				{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: -32, Source: "ruptela/TODO"},
+			expectedSignalsFunc: func(hdr cloudevent.CloudEventHeader) []vss.Signal {
+				return []vss.Signal{
+					{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldExteriorAirTemperature, ValueNumber: -32}},
+					{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: -32}},
+				}
 			},
 			expectedError: nil,
 		},
@@ -229,9 +231,11 @@ func TestSignalConvert(t *testing.T) {
 				},
 				Data: json.RawMessage(locationData),
 			},
-			expectedSignals: []vss.Signal{
-				{Subject: subject, Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 123.2, Source: "ruptela/TODO"},
-				{Subject: subject, Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 1.2, Source: "ruptela/TODO"},
+			expectedSignalsFunc: func(hdr cloudevent.CloudEventHeader) []vss.Signal {
+				return []vss.Signal{
+					{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationAltitude, ValueNumber: 123.2}},
+					{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 1.2}},
+				}
 			},
 			expectedError: nil,
 		},
@@ -247,8 +251,10 @@ func TestSignalConvert(t *testing.T) {
 				},
 				Data: json.RawMessage(dtcData),
 			},
-			expectedSignals: []vss.Signal{
-				{Subject: subject, Timestamp: ts, Name: "obdDTCList", ValueString: "[\"P0101\",\"P0202\"]", Source: "ruptela/TODO"},
+			expectedSignalsFunc: func(hdr cloudevent.CloudEventHeader) []vss.Signal {
+				return []vss.Signal{
+					{CloudEventHeader: hdr, Data: vss.SignalData{Timestamp: ts, Name: "obdDTCList", ValueString: "[\"P0101\",\"P0202\"]"}},
+				}
 			},
 			expectedError: nil,
 		},
@@ -303,7 +309,13 @@ func TestSignalConvert(t *testing.T) {
 				require.Contains(t, err.Error(), tt.expectedError.Error())
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, tt.expectedSignals, signals)
+				if tt.expectedSignalsFunc != nil {
+					expected := tt.expectedSignalsFunc(tt.cloudEvent.CloudEventHeader)
+					assertGeneratedSignalFields(t, signals, tt.cloudEvent.ID)
+					normalizeSignalsForComparison(signals)
+					normalizeSignalsForComparison(expected)
+					require.Equal(t, expected, signals)
+				}
 			}
 		})
 	}

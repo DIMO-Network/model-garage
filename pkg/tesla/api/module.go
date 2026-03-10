@@ -17,11 +17,18 @@ func SignalConvert(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	source := event.Source
 
 	baseSignal := vss.Signal{
-		Subject: event.Subject,
-		Source:  source,
+		CloudEventHeader: event.CloudEventHeader,
 	}
+	baseSignal.Source = source
 
-	sigs, errs := SignalsFromTesla(baseSignal, event.Data)
+	hdr := baseSignal.CloudEventHeader
+	hdr.Type = cloudevent.TypeSignal
+
+	sigDatas, errs := SignalsFromTesla(baseSignal, event.Data)
+	var sigs []vss.Signal
+	for _, sd := range sigDatas {
+		sigs = append(sigs, vss.Signal{CloudEventHeader: hdr, Data: sd})
+	}
 	if len(errs) != 0 {
 		return nil, convert.ConversionError{
 			Subject:        event.Subject,

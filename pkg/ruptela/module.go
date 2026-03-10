@@ -62,10 +62,7 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 		ContractAddress: m.AftermarketContractAddr,
 		TokenID:         big.NewInt(int64(*event.DeviceTokenID)),
 	}.String()
-	subject, err := m.determineSubject(&event, producer)
-	if err != nil {
-		return nil, nil, err
-	}
+	subject := m.determineSubject(&event, producer)
 	cloudEventTypes, err := getCloudEventTypes(&event)
 	if err != nil {
 		return nil, nil, err
@@ -85,23 +82,21 @@ func (*Module) EventConvert(_ context.Context, event cloudevent.RawEvent) ([]vss
 }
 
 // determineSubject determines the subject of the cloud event based on the DS type.
-func (m Module) determineSubject(event *RuptelaEvent, producer string) (string, error) {
-	var subject string
+func (m Module) determineSubject(event *RuptelaEvent, producer string) string {
 	switch event.DS {
 	case StatusEventDS, LocationEventDS, DTCEventDS, BattDS:
 		if event.VehicleTokenID != nil {
-			subject = cloudevent.ERC721DID{
+			return cloudevent.ERC721DID{
 				ChainID:         m.ChainID,
 				ContractAddress: m.VehicleContractAddr,
 				TokenID:         big.NewInt(int64(*event.VehicleTokenID)),
 			}.String()
 		}
-	case DevStatusDS:
-		subject = producer
+		return ""
 	default:
-		return "", fmt.Errorf("unknown DS type: %s", event.DS)
+		// Device status events and unknown DS types use the producer as subject.
+		return producer
 	}
-	return subject, nil
 }
 
 // createCloudEvent creates a cloud event from a ruptela event.
@@ -124,7 +119,11 @@ func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType strin
 func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
 	// always include the status event
 	cloudEventTypes := []string{cloudevent.TypeStatus}
-	if event.DS != StatusEventDS {
+	switch event.DS {
+	case DevStatusDS:
+		return cloudEventTypes, nil
+	case StatusEventDS:
+	default:
 		return cloudEventTypes, nil
 	}
 	var dataContent DataContent
@@ -136,7 +135,7 @@ func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
 		cloudEventTypes = append(cloudEventTypes, cloudevent.TypeFingerprint)
 	}
 	if checkEventPresenceInPayload(event, dataContent.Signals) {
-		cloudEventTypes = append(cloudEventTypes, cloudevent.TypeEvent)
+		cloudEventTypes = append(cloudEventTypes, cloudevent.TypeEvents)
 	}
 	return cloudEventTypes, nil
 }

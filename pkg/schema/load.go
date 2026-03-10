@@ -30,8 +30,11 @@ func LoadSignalsCSV(r io.Reader) ([]*SignalInfo, error) {
 
 	var signals []*SignalInfo
 	for i := 1; i < len(records); i++ {
-		record := records[i]
-		signals = append(signals, NewSignalInfo(record))
+		sig := NewSignalInfo(records[i])
+		if sig == nil {
+			continue
+		}
+		signals = append(signals, sig)
 	}
 	// Sort the signals by name
 	slices.SortStableFunc(signals, func(a, b *SignalInfo) int {
@@ -47,7 +50,7 @@ func LoadDefinitionFile(r io.Reader) (*Definitions, error) {
 	var defInfos []*DefinitionInfo
 	err := decoder.Decode(&defInfos)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode json: %w", err)
+		return nil, fmt.Errorf("failed to decode yaml: %w", err)
 	}
 	definitions := &Definitions{
 		FromName: map[string]*DefinitionInfo{},
@@ -62,30 +65,30 @@ func LoadDefinitionFile(r io.Reader) (*Definitions, error) {
 	return definitions, nil
 }
 
-func LoadEventTags(r io.Reader) ([]*EventTagInfo, error) {
+func LoadEventNames(r io.Reader) ([]*EventNameInfo, error) {
 	decoder := yaml.NewDecoder(r)
-	var eventTagInfos []*EventTagInfo
-	err := decoder.Decode(&eventTagInfos)
+	var eventNameInfos []*EventNameInfo
+	err := decoder.Decode(&eventNameInfos)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode json: %w", err)
+		return nil, fmt.Errorf("failed to decode yaml: %w", err)
 	}
-	slices.SortStableFunc(eventTagInfos, func(a, b *EventTagInfo) int {
+	slices.SortStableFunc(eventNameInfos, func(a, b *EventNameInfo) int {
 		return strings.Compare(a.Name, b.Name)
 	})
 
-	for _, eventTagInfo := range eventTagInfos {
-		if eventTagInfo.GOName == "" {
-			eventTagInfo.GOName = EventTagToGoName(eventTagInfo.Name)
+	for _, eventNameInfo := range eventNameInfos {
+		if eventNameInfo.GOName == "" {
+			eventNameInfo.GOName = EventNameToGoName(eventNameInfo.Name)
 		}
-		if eventTagInfo.JSONName == "" {
-			eventTagInfo.JSONName = eventTagInfo.Name
+		if eventNameInfo.JSONName == "" {
+			eventNameInfo.JSONName = eventNameInfo.Name
 		}
-		if err := ValidateEventTag(eventTagInfo); err != nil {
-			return nil, fmt.Errorf("error validating event tag: %w", err)
+		if err := ValidateEventName(eventNameInfo); err != nil {
+			return nil, fmt.Errorf("error validating event name: %w", err)
 		}
 	}
 
-	return eventTagInfos, nil
+	return eventNameInfos, nil
 }
 
 // GetDefaultSignals reads the default signals and definitions files and merges them.
@@ -99,9 +102,9 @@ func GetDefaultSignals() ([]*SignalInfo, error) {
 	return signalDefinitions.Signals, nil
 }
 
-// GetDefaultEventTags reads the default event tags file and returns the event tags.
-func GetDefaultEventTags() ([]*EventTagInfo, error) {
-	return LoadEventTags(strings.NewReader(DefaultEventTagsYAML()))
+// GetDefaultEventNames reads the default event names file and returns the event names.
+func GetDefaultEventNames() ([]*EventNameInfo, error) {
+	return LoadEventNames(strings.NewReader(DefaultEventNamesYAML()))
 }
 
 // GetDefinedSignals reads the signals and definitions files and merges them.
@@ -116,18 +119,6 @@ func GetDefinedSignals(specReader, definitionReader io.Reader) (SignalDefinition
 		return SignalDefinitions{}, fmt.Errorf("error reading definition file: %w", err)
 	}
 	signals = definitions.DefinedSignal(signals)
-
-	originalNameMap := map[string]map[string]*SignalInfo{}
-	for _, signal := range signals {
-		for _, conv := range signal.Conversions {
-			signalsForName := originalNameMap[conv.OriginalName]
-			if signalsForName == nil {
-				signalsForName = map[string]*SignalInfo{}
-			}
-			signalsForName[signal.Name] = signal
-			originalNameMap[conv.OriginalName] = signalsForName
-		}
-	}
 
 	signalDefs := SignalDefinitions{
 		Signals:       signals,

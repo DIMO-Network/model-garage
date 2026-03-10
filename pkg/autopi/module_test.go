@@ -8,15 +8,36 @@ import (
 
 	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+func assertAndNormalizeSignals(t *testing.T, signals []vss.Signal, expectedCloudEventID string) {
+	t.Helper()
+	for i := range signals {
+		assert.Equal(t, cloudevent.TypeSignal, signals[i].Type, "signal %d should have TypeSignal", i)
+		assert.False(t, signals[i].Time.IsZero(), "signal %d should have a non-zero Time", i)
+		assert.Equal(t, expectedCloudEventID, signals[i].Data.CloudEventID, "signal %d should reference original event ID", i)
+		signals[i].Type = ""
+		signals[i].Time = time.Time{}
+		signals[i].Data.CloudEventID = ""
+	}
+}
+
+func normalizeExpectedSignals(signals []vss.Signal) {
+	for i := range signals {
+		signals[i].Type = ""
+		signals[i].Time = time.Time{}
+		signals[i].Data.CloudEventID = ""
+	}
+}
 
 func TestSignalConvert(t *testing.T) {
 	ts := time.Unix(1727360340, 0).UTC()
 
 	// Signal payload data
 	signalData := `{
-    "vehicle": {		
+    "vehicle": {
          "signals": [
 			 {
                     "timestamp": 1727360340000,
@@ -35,6 +56,15 @@ func TestSignalConvert(t *testing.T) {
 		source  = "dimo/integration/27qftVRWQYpVDcO5DltO5Ojbjxk"
 		subject = "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33"
 	)
+
+	validHeader := cloudevent.CloudEventHeader{
+		DataVersion: DataVersion,
+		Type:        cloudevent.TypeStatus,
+		Source:      source,
+		Subject:     subject,
+		Time:        ts,
+	}
+
 	tests := []struct {
 		name            string
 		cloudEvent      cloudevent.RawEvent
@@ -44,18 +74,12 @@ func TestSignalConvert(t *testing.T) {
 		{
 			name: "Valid Signal Payload",
 			cloudEvent: cloudevent.RawEvent{
-				CloudEventHeader: cloudevent.CloudEventHeader{
-					DataVersion: DataVersion,
-					Type:        cloudevent.TypeStatus,
-					Source:      source,
-					Subject:     "did:erc721:1:0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8:33",
-					Time:        ts,
-				},
-				Data: json.RawMessage(signalData),
+				CloudEventHeader: validHeader,
+				Data:             json.RawMessage(signalData),
 			},
 			expectedSignals: []vss.Signal{
-				{Subject: subject, Timestamp: ts, Name: vss.FieldOBDLongTermFuelTrim1, ValueNumber: 25, Source: source},
-				{Subject: subject, Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 107, Source: source},
+				{CloudEventHeader: validHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldOBDLongTermFuelTrim1, ValueNumber: 25}},
+				{CloudEventHeader: validHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldPowertrainCombustionEngineECT, ValueNumber: 107}},
 			},
 			expectedError: nil,
 		},
@@ -88,6 +112,10 @@ func TestSignalConvert(t *testing.T) {
 				require.Contains(t, err.Error(), tt.expectedError.Error())
 			} else {
 				require.NoError(t, err)
+				if tt.expectedSignals != nil {
+					assertAndNormalizeSignals(t, signals, tt.cloudEvent.ID)
+					normalizeExpectedSignals(tt.expectedSignals)
+				}
 				require.Equal(t, tt.expectedSignals, signals)
 			}
 		})

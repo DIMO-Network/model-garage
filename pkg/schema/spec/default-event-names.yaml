@@ -4,6 +4,8 @@
   description: "harshAcceleration an event that indicates a harsh acceleration was detected"
 - name : behavior.harshCornering
   description: "harshCornering an event that indicates a harsh cornering was detected"
+- name : behavior.extremeBraking
+  description: "extremeBraking an event that indicates extreme braking was detected"
 - name : safety.collision
   description: "collision an event that indicates a collision was detected"
 

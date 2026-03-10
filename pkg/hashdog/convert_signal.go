@@ -34,9 +34,10 @@ func SignalsFromV2Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	}
 	retSignals := []vss.Signal{}
 	signalMeta := vss.Signal{
-		Subject: event.Subject,
-		Source:  event.Source,
+		CloudEventHeader: event.CloudEventHeader,
 	}
+	hdr := event.CloudEventHeader
+	hdr.Type = cloudevent.TypeSignal
 
 	conversionErrors := convert.ConversionError{
 		Subject: event.Subject,
@@ -54,13 +55,15 @@ func SignalsFromV2Payload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 			conversionErrors.Errors = append(conversionErrors.Errors, err)
 			continue
 		}
-		signalMeta.Timestamp = ts
-		sigs, err := SignalsFromV2Data(event.Data, signalMeta, originalName, sigData)
+		signalMeta.Data.Timestamp = ts
+		sigDatas, err := SignalsFromV2Data(event.Data, signalMeta, originalName, sigData)
 		if err != nil {
 			conversionErrors.Errors = append(conversionErrors.Errors, err)
 			continue
 		}
-		retSignals = append(retSignals, sigs...)
+		for _, sd := range sigDatas {
+			retSignals = append(retSignals, vss.Signal{CloudEventHeader: hdr, Data: sd})
+		}
 	}
 
 	if len(conversionErrors.Errors) > 0 {

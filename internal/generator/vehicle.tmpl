@@ -9,10 +9,10 @@ const (
 {{- end}}
 )
 
-// JSON names for defined event tags
+// JSON names for defined event names
 const (
-{{- range .EventTags}}
-	// Tag{{ .GOName }} {{ .Desc }}
-	Tag{{ .GOName }} = "{{ .JSONName }}"
+{{- range .EventNames}}
+	// Event{{ .GOName }}Name {{ .Desc }}
+	Event{{ .GOName }}Name = "{{ .JSONName }}"
 {{- end}}
 )

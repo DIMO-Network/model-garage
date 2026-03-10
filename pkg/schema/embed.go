@@ -10,8 +10,8 @@ var vssRel42DIMO string
 //go:embed spec/default-definitions.yaml
 var defaultDefinitionsYAML string
 
-//go:embed spec/default-event-tags.yaml
-var defaultEventTagsYAML string
+//go:embed spec/default-event-names.yaml
+var defaultEventNamesYAML string
 
 // VssRel42DIMO is the embedded CSV file containing the VSS schema for DIMO.
 func VssRel42DIMO() string {
@@ -23,7 +23,7 @@ func DefaultDefinitionsYAML() string {
 	return defaultDefinitionsYAML
 }
 
-// DefaultEventTagsYAML is the embedded YAML file containing information about event tags.
-func DefaultEventTagsYAML() string {
-	return defaultEventTagsYAML
+// DefaultEventNamesYAML is the embedded YAML file containing information about event names.
+func DefaultEventNamesYAML() string {
+	return defaultEventNamesYAML
 }

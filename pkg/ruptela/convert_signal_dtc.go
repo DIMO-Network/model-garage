@@ -12,13 +12,17 @@ import (
 func SignalsFromDTCPayload(event cloudevent.RawEvent) ([]vss.Signal, error) {
 	dtcValue, errs := OBDDTCListFromV1Data(event.Data)
 
+	hdr := event.CloudEventHeader
+	hdr.Type = cloudevent.TypeSignal
 	dtcSignal := vss.Signal{
-		Subject:   event.Subject, //nolint:gosec // will not exceed uint32 max value
-		Timestamp: event.Time,
-		Source:    event.Source,
-		Name:      vss.FieldOBDDTCList,
+		CloudEventHeader: hdr,
+		Data: vss.SignalData{
+			Timestamp:    event.Time,
+			Name:         vss.FieldOBDDTCList,
+			CloudEventID: event.ID,
+		},
 	}
-	dtcSignal.SetValue(dtcValue)
+	dtcSignal.Data.SetValue(dtcValue)
 
 	if errs != nil {
 		return nil, convert.ConversionError{

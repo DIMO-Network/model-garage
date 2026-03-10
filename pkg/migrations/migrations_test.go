@@ -9,6 +9,7 @@ import (
 	"github.com/DIMO-Network/clickhouse-infra/pkg/connect"
 	"github.com/DIMO-Network/clickhouse-infra/pkg/connect/config"
 	"github.com/DIMO-Network/clickhouse-infra/pkg/container"
+	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/migrations"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/assert"
@@ -82,6 +83,8 @@ func TestEventMigration(t *testing.T) {
 		{Name: vss.EventSourceCol, Type: "String", Comment: "the entity that identified and submitted the event (oracle)."},
 		{Name: vss.EventProducerCol, Type: "String", Comment: "the specific origin of the data used to determine the event (device)."},
 		{Name: vss.EventCloudEventIDCol, Type: "String", Comment: "identifier for the cloudevent."},
+		{Name: vss.EventTypeCol, Type: "String", Comment: "CloudEvent type of the event."},
+		{Name: vss.EventDataVersionCol, Type: "String", Comment: "Version of the data schema."},
 		{Name: vss.EventNameCol, Type: "String", Comment: "name of the event indicated by the oracle transmitting it."},
 		{Name: vss.EventTimestampCol, Type: "DateTime64(6, 'UTC')", Comment: "time at which the event described occurred, transmitted by oracle."},
 		{Name: vss.EventDurationNsCol, Type: "UInt64", Comment: "duration in nanoseconds of the event."},
@@ -93,15 +96,21 @@ func TestEventMigration(t *testing.T) {
 	require.Equal(t, expectedColumns, columns, "Unexpected table columns")
 
 	event := vss.Event{
-		Subject:      "subject",
-		Source:       "source",
-		Producer:     "producer",
-		CloudEventID: "cloudEventId",
-		Name:         "name",
-		Timestamp:    time.Now().Truncate(time.Microsecond),
-		DurationNs:   1000000000,
-		Metadata:     "metadata",
-		Tags:         []string{"tag1", "tag2"},
+		CloudEventHeader: cloudevent.CloudEventHeader{
+			Subject:     "subject",
+			Source:      "source",
+			Producer:    "producer",
+			Type:        cloudevent.TypeEvent,
+			DataVersion: "v1",
+		},
+		Data: vss.EventData{
+			Name:         "name",
+			Timestamp:    time.Now().Truncate(time.Microsecond),
+			DurationNs:   1000000000,
+			Metadata:     "metadata",
+			CloudEventID: "parentCloudEventId",
+			Tags:         []string{"tag1", "tag2"},
+		},
 	}
 	batch, err := conn.PrepareBatch(context.Background(), "INSERT INTO "+vss.EventTableName)
 	require.NoError(t, err, "Failed to prepare batch")
@@ -120,7 +129,12 @@ func TestEventMigration(t *testing.T) {
 	events := []vss.Event{}
 	for rows.Next() {
 		var event vss.Event
-		err = rows.Scan(&event.Subject, &event.Source, &event.Producer, &event.CloudEventID, &event.Name, &event.Timestamp, &event.DurationNs, &event.Metadata, &event.Tags)
+		err = rows.Scan(
+			&event.Subject, &event.Source, &event.Producer, &event.Data.CloudEventID,
+			&event.Type, &event.DataVersion,
+			&event.Data.Name, &event.Data.Timestamp, &event.Data.DurationNs,
+			&event.Data.Metadata, &event.Data.Tags,
+		)
 
 		require.NoError(t, err, "Failed to scan event")
 		events = append(events, event)
@@ -128,8 +142,8 @@ func TestEventMigration(t *testing.T) {
 
 	require.Equal(t, 1, len(events), "Expected 1 event")
 
-	assert.Truef(t, event.Timestamp.Equal(events[0].Timestamp), "Event timestamp mismatch: %v != %v", event.Timestamp, events[0].Timestamp)
-	event.Timestamp = events[0].Timestamp
+	assert.Truef(t, event.Data.Timestamp.Equal(events[0].Data.Timestamp), "Event timestamp mismatch: %v != %v", event.Data.Timestamp, events[0].Data.Timestamp)
+	event.Data.Timestamp = events[0].Data.Timestamp
 	assert.Equal(t, event, events[0], "Event mismatch")
 
 	// Close the DB connection

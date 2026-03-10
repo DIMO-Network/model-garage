@@ -223,14 +223,16 @@ const (
 	FieldSpeed = "speed"
 )
 
-// JSON names for defined event tags
+// JSON names for defined event names
 const (
-	// TagBehaviorHarshAcceleration harshAcceleration an event that indicates a harsh acceleration was detected
-	TagBehaviorHarshAcceleration = "behavior.harshAcceleration"
-	// TagBehaviorHarshBraking harshBraking an event that indicates a harsh braking was detected
-	TagBehaviorHarshBraking = "behavior.harshBraking"
-	// TagBehaviorHarshCornering harshCornering an event that indicates a harsh cornering was detected
-	TagBehaviorHarshCornering = "behavior.harshCornering"
-	// TagSafetyCollision collision an event that indicates a collision was detected
-	TagSafetyCollision = "safety.collision"
+	// EventBehaviorExtremeBrakingName extremeBraking an event that indicates extreme braking was detected
+	EventBehaviorExtremeBrakingName = "behavior.extremeBraking"
+	// EventBehaviorHarshAccelerationName harshAcceleration an event that indicates a harsh acceleration was detected
+	EventBehaviorHarshAccelerationName = "behavior.harshAcceleration"
+	// EventBehaviorHarshBrakingName harshBraking an event that indicates a harsh braking was detected
+	EventBehaviorHarshBrakingName = "behavior.harshBraking"
+	// EventBehaviorHarshCorneringName harshCornering an event that indicates a harsh cornering was detected
+	EventBehaviorHarshCorneringName = "behavior.harshCornering"
+	// EventSafetyCollisionName collision an event that indicates a collision was detected
+	EventSafetyCollisionName = "safety.collision"
 )

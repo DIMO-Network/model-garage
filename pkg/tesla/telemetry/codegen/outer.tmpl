@@ -4,14 +4,16 @@ package {{.Package}}
 import (
 	"fmt"
 	"strconv"
+	"time"
 
+	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/tesla/telemetry/unit"
-	"github.com/teslamotors/fleet-telemetry/protos"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
+	"github.com/teslamotors/fleet-telemetry/protos"
 )
 
-func ProcessPayload(payload *protos.Payload, subject string, source string) ([]vss.Signal, []error) {
-	var out []vss.Signal
+func ProcessPayload(payload *protos.Payload, baseHeader cloudevent.CloudEventHeader) ([]vss.SignalData, []error) {
+	var out []vss.SignalData
 	var outErr []error
 	{{/* Is it worth it to reuse more variables? */}}
 
@@ -54,11 +56,10 @@ func ProcessPayload(payload *protos.Payload, subject string, source string) ([]v
 			{{- end}}
 				outErr = append(outErr, err)
 			} else {
-				sig := vss.Signal{
-					Subject: subject,
-					Name: "{{.JSONName}}",
-					Timestamp: ts,
-					Source: source,
+				sig := vss.SignalData{
+					Name:         "{{.JSONName}}",
+					Timestamp:    ts,
+					CloudEventID: baseHeader.ID,
 				}
 				sig.SetValue(res) {{/* Would be nice to skip the runtime check, since we know the type. */}}
 				out = append(out, sig)

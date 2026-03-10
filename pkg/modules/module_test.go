@@ -93,8 +93,8 @@ func TestSignalConversion(t *testing.T) {
 	sourceA := "sourceA"
 	defaultSource := ""
 
-	signalA := vss.Signal{Name: "Signal A", ValueNumber: 123}
-	signalDefault := vss.Signal{Name: "Default Signal", ValueString: "default"}
+	signalA := vss.Signal{Data: vss.SignalData{Name: "Signal A", ValueNumber: 123}}
+	signalDefault := vss.Signal{Data: vss.SignalData{Name: "Default Signal", ValueString: "default"}}
 
 	moduleA := &MockModule{
 		SignalResult: []vss.Signal{signalA},
@@ -373,8 +373,14 @@ func TestEventConversion(t *testing.T) {
 	sourceA := "sourceA"
 	defaultSource := ""
 
-	eventA := vss.Event{Name: "Event A", Subject: "subject A"}
-	eventDefault := vss.Event{Name: "Default Event", Subject: "default subject"}
+	eventA := vss.Event{
+		CloudEventHeader: cloudevent.CloudEventHeader{Subject: "subject A"},
+		Data:             vss.EventData{Name: "Event A"},
+	}
+	eventDefault := vss.Event{
+		CloudEventHeader: cloudevent.CloudEventHeader{Subject: "default subject"},
+		Data:             vss.EventData{Name: "Default Event"},
+	}
 
 	moduleA := &MockModule{
 		EventResult: []vss.Event{eventA},

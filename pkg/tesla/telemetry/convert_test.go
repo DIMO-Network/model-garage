@@ -4,11 +4,26 @@ import (
 	"testing"
 	"time"
 
+	"github.com/DIMO-Network/cloudevent"
 	"github.com/DIMO-Network/model-garage/pkg/vss"
 	"github.com/stretchr/testify/assert"
 	"github.com/teslamotors/fleet-telemetry/protos"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
+
+func assertAndNormalizeSignalDatas(t *testing.T, sigDatas []vss.SignalData, expectedCloudEventID string) {
+	t.Helper()
+	for i := range sigDatas {
+		assert.Equal(t, expectedCloudEventID, sigDatas[i].CloudEventID, "signal %d should reference original event ID", i)
+		sigDatas[i].CloudEventID = ""
+	}
+}
+
+func normalizeExpectedSignalDatas(sigDatas []vss.SignalData) {
+	for i := range sigDatas {
+		sigDatas[i].CloudEventID = ""
+	}
+}
 
 func TestConvertUntyped(t *testing.T) {
 	teslaConnection := "0xc4035Fecb1cc906130423EF05f9C20977F643722" // This is the real value in dev and prod.
@@ -50,41 +65,43 @@ func TestConvertUntyped(t *testing.T) {
 		Vin:       vin,
 	}
 
-	signals, errors := ProcessPayload(pl, subject, teslaConnection)
+	sigDatas, errors := ProcessPayload(pl, cloudevent.CloudEventHeader{Subject: subject, Source: teslaConnection, Time: ts})
 	if len(errors) != 0 {
 		t.Fatalf("Unexpected errors from conversion: %v", errors)
 	}
 
-	expectedSignals := []vss.Signal{
-		{Subject: subject, Timestamp: ts, Name: "currentLocationCoordinates", ValueLocation: vss.Location{Latitude: 30.267222, Longitude: -97.743056}, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryCurrentPower", ValueNumber: 5700.000084936619, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingIsCharging", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingIsChargingCableConnected", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingAddedEnergy", ValueNumber: 2.380388924359452, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryStateOfChargeCurrent", ValueNumber: 18.155283129013426, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "chassisAxleRow1WheelLeftTirePressure", ValueNumber: 296.375629416341, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "chassisAxleRow1WheelRightTirePressure", ValueNumber: 245.71312866141088, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "chassisAxleRow2WheelLeftTirePressure", ValueNumber: 283.71000422760847, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "chassisAxleRow2WheelRightTirePressure", ValueNumber: 283.71000422760847, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "exteriorAirTemperature", ValueNumber: 2.5, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainRange", ValueNumber: 31.872594320493704, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeLimit", ValueNumber: 80, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "speed", ValueNumber: 33.796224, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 98213.07266487041, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryStateOfChargeCurrentEnergy", ValueNumber: 39.61999911442399, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow1DriverSideIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow1PassengerSideIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow2DriverSideIsOpen", ValueNumber: 0, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow2PassengerSideIsOpen", ValueNumber: 0, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow1DriverSideWindowIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow1PassengerSideWindowIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow2DriverSideWindowIsOpen", ValueNumber: 0, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow2PassengerSideWindowIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeVoltageUnknownType", ValueNumber: 114.774, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeCurrentAC", ValueNumber: 12.0, Source: teslaConnection},
+	expectedSigDatas := []vss.SignalData{
+		{Timestamp: ts, Name: "currentLocationCoordinates", ValueLocation: vss.Location{Latitude: 30.267222, Longitude: -97.743056}},
+		{Timestamp: ts, Name: "powertrainTractionBatteryCurrentPower", ValueNumber: 5700.000084936619},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingIsCharging", ValueNumber: 1},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingIsChargingCableConnected", ValueNumber: 1},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingAddedEnergy", ValueNumber: 2.380388924359452},
+		{Timestamp: ts, Name: "powertrainTractionBatteryStateOfChargeCurrent", ValueNumber: 18.155283129013426},
+		{Timestamp: ts, Name: "chassisAxleRow1WheelLeftTirePressure", ValueNumber: 296.375629416341},
+		{Timestamp: ts, Name: "chassisAxleRow1WheelRightTirePressure", ValueNumber: 245.71312866141088},
+		{Timestamp: ts, Name: "chassisAxleRow2WheelLeftTirePressure", ValueNumber: 283.71000422760847},
+		{Timestamp: ts, Name: "chassisAxleRow2WheelRightTirePressure", ValueNumber: 283.71000422760847},
+		{Timestamp: ts, Name: "exteriorAirTemperature", ValueNumber: 2.5},
+		{Timestamp: ts, Name: "powertrainRange", ValueNumber: 31.872594320493704},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeLimit", ValueNumber: 80},
+		{Timestamp: ts, Name: "speed", ValueNumber: 33.796224},
+		{Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 98213.07266487041},
+		{Timestamp: ts, Name: "powertrainTractionBatteryStateOfChargeCurrentEnergy", ValueNumber: 39.61999911442399},
+		{Timestamp: ts, Name: "cabinDoorRow1DriverSideIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "cabinDoorRow1PassengerSideIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "cabinDoorRow2DriverSideIsOpen", ValueNumber: 0},
+		{Timestamp: ts, Name: "cabinDoorRow2PassengerSideIsOpen", ValueNumber: 0},
+		{Timestamp: ts, Name: "cabinDoorRow1DriverSideWindowIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "cabinDoorRow1PassengerSideWindowIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "cabinDoorRow2DriverSideWindowIsOpen", ValueNumber: 0},
+		{Timestamp: ts, Name: "cabinDoorRow2PassengerSideWindowIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeVoltageUnknownType", ValueNumber: 114.774},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeCurrentAC", ValueNumber: 12.0},
 	}
 
-	assert.ElementsMatch(t, expectedSignals, signals)
+	assertAndNormalizeSignalDatas(t, sigDatas, "")
+	normalizeExpectedSignalDatas(expectedSigDatas)
+	assert.ElementsMatch(t, expectedSigDatas, sigDatas)
 }
 
 func TestConvertTyped(t *testing.T) {
@@ -127,41 +144,43 @@ func TestConvertTyped(t *testing.T) {
 		Vin:       vin,
 	}
 
-	signals, errors := ProcessPayload(pl, subject, teslaConnection)
+	sigDatas, errors := ProcessPayload(pl, cloudevent.CloudEventHeader{Subject: subject, Source: teslaConnection, Time: ts})
 	if len(errors) != 0 {
 		t.Fatalf("Unexpected errors from conversion: %v", errors)
 	}
 
-	expectedSignals := []vss.Signal{
-		{Subject: subject, Timestamp: ts, Name: "currentLocationCoordinates", ValueLocation: vss.Location{Latitude: 30.267222, Longitude: -97.743056}, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryCurrentPower", ValueNumber: 5700.000084936619, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingIsCharging", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingIsChargingCableConnected", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingAddedEnergy", ValueNumber: 2.380388924359452, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryStateOfChargeCurrent", ValueNumber: 18.155283129013426, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "chassisAxleRow1WheelLeftTirePressure", ValueNumber: 296.375629416341, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "chassisAxleRow1WheelRightTirePressure", ValueNumber: 245.71312866141088, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "chassisAxleRow2WheelLeftTirePressure", ValueNumber: 283.71000422760847, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "chassisAxleRow2WheelRightTirePressure", ValueNumber: 283.71000422760847, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "exteriorAirTemperature", ValueNumber: 2.5, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainRange", ValueNumber: 31.872594320493704, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeLimit", ValueNumber: 80, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "speed", ValueNumber: 33.796224, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 98213.07266487041, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryStateOfChargeCurrentEnergy", ValueNumber: 39.61999911442399, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow1DriverSideIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow1PassengerSideIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow2DriverSideIsOpen", ValueNumber: 0, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow2PassengerSideIsOpen", ValueNumber: 0, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow1DriverSideWindowIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow1PassengerSideWindowIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow2DriverSideWindowIsOpen", ValueNumber: 0, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "cabinDoorRow2PassengerSideWindowIsOpen", ValueNumber: 1, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeVoltageUnknownType", ValueNumber: 114.774, Source: teslaConnection},
-		{Subject: subject, Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeCurrentAC", ValueNumber: 12.0, Source: teslaConnection},
+	expectedSigDatas := []vss.SignalData{
+		{Timestamp: ts, Name: "currentLocationCoordinates", ValueLocation: vss.Location{Latitude: 30.267222, Longitude: -97.743056}},
+		{Timestamp: ts, Name: "powertrainTractionBatteryCurrentPower", ValueNumber: 5700.000084936619},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingIsCharging", ValueNumber: 1},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingIsChargingCableConnected", ValueNumber: 1},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingAddedEnergy", ValueNumber: 2.380388924359452},
+		{Timestamp: ts, Name: "powertrainTractionBatteryStateOfChargeCurrent", ValueNumber: 18.155283129013426},
+		{Timestamp: ts, Name: "chassisAxleRow1WheelLeftTirePressure", ValueNumber: 296.375629416341},
+		{Timestamp: ts, Name: "chassisAxleRow1WheelRightTirePressure", ValueNumber: 245.71312866141088},
+		{Timestamp: ts, Name: "chassisAxleRow2WheelLeftTirePressure", ValueNumber: 283.71000422760847},
+		{Timestamp: ts, Name: "chassisAxleRow2WheelRightTirePressure", ValueNumber: 283.71000422760847},
+		{Timestamp: ts, Name: "exteriorAirTemperature", ValueNumber: 2.5},
+		{Timestamp: ts, Name: "powertrainRange", ValueNumber: 31.872594320493704},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeLimit", ValueNumber: 80},
+		{Timestamp: ts, Name: "speed", ValueNumber: 33.796224},
+		{Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 98213.07266487041},
+		{Timestamp: ts, Name: "powertrainTractionBatteryStateOfChargeCurrentEnergy", ValueNumber: 39.61999911442399},
+		{Timestamp: ts, Name: "cabinDoorRow1DriverSideIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "cabinDoorRow1PassengerSideIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "cabinDoorRow2DriverSideIsOpen", ValueNumber: 0},
+		{Timestamp: ts, Name: "cabinDoorRow2PassengerSideIsOpen", ValueNumber: 0},
+		{Timestamp: ts, Name: "cabinDoorRow1DriverSideWindowIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "cabinDoorRow1PassengerSideWindowIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "cabinDoorRow2DriverSideWindowIsOpen", ValueNumber: 0},
+		{Timestamp: ts, Name: "cabinDoorRow2PassengerSideWindowIsOpen", ValueNumber: 1},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeVoltageUnknownType", ValueNumber: 114.774},
+		{Timestamp: ts, Name: "powertrainTractionBatteryChargingChargeCurrentAC", ValueNumber: 12.0},
 	}
 
-	assert.ElementsMatch(t, expectedSignals, signals)
+	assertAndNormalizeSignalDatas(t, sigDatas, "")
+	normalizeExpectedSignalDatas(expectedSigDatas)
+	assert.ElementsMatch(t, expectedSigDatas, sigDatas)
 }
 
 func TestIgnoreInvalids(t *testing.T) {
@@ -184,16 +203,18 @@ func TestIgnoreInvalids(t *testing.T) {
 		Vin:       vin,
 	}
 
-	signals, errors := ProcessPayload(pl, subject, teslaConnection)
+	sigDatas, errors := ProcessPayload(pl, cloudevent.CloudEventHeader{Subject: subject, Source: teslaConnection, Time: ts})
 	if len(errors) != 0 {
 		t.Fatalf("Unexpected errors from conversion: %v", err)
 	}
 
-	expectedSignals := []vss.Signal{
-		{Subject: subject, Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 98213.07266487041, Source: teslaConnection},
+	expectedSigDatas := []vss.SignalData{
+		{Timestamp: ts, Name: "powertrainTransmissionTravelledDistance", ValueNumber: 98213.07266487041},
 	}
 
-	assert.ElementsMatch(t, expectedSignals, signals)
+	assertAndNormalizeSignalDatas(t, sigDatas, "")
+	normalizeExpectedSignalDatas(expectedSigDatas)
+	assert.ElementsMatch(t, expectedSigDatas, sigDatas)
 }
 
 func TestConversionErrors(t *testing.T) {
@@ -215,8 +236,8 @@ func TestConversionErrors(t *testing.T) {
 		Vin:       vin,
 	}
 
-	signals, errors := ProcessPayload(pl, subject, teslaConnection)
-	if len(signals) != 0 {
+	sigDatas, errors := ProcessPayload(pl, cloudevent.CloudEventHeader{Subject: subject, Source: teslaConnection, Time: ts})
+	if len(sigDatas) != 0 {
 		t.Errorf("Should not have gotten any signals.")
 	}
 	if len(errors) != 1 {

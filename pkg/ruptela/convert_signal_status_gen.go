@@ -12,10 +12,10 @@ import (
 
 var errNotFound = errors.New("field not found")
 
-// SignalsFromV1Data creates a slice of vss.Signal from the given v1 status JSON data.
+// SignalsFromV1Data creates a slice of vss.SignalData from the given v1 status JSON data.
 // On error, partial results may be returned.
-func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []error) {
-	var retSignals []vss.Signal
+func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.SignalData, []error) {
+	var retSignals []vss.SignalData
 
 	var val any
 	var err error
@@ -27,11 +27,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'BodyLightsIsAirbagWarningOn': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "bodyLightsIsAirbagWarningOn",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "bodyLightsIsAirbagWarningOn",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -43,11 +42,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'BodyLockIsLocked': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "bodyLockIsLocked",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "bodyLockIsLocked",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -59,11 +57,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'BodyTrunkFrontIsOpen': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "bodyTrunkFrontIsOpen",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "bodyTrunkFrontIsOpen",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -75,11 +72,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'BodyTrunkRearIsOpen': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "bodyTrunkRearIsOpen",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "bodyTrunkRearIsOpen",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -91,11 +87,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinDoorRow1DriverSideIsOpen': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinDoorRow1DriverSideIsOpen",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinDoorRow1DriverSideIsOpen",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -107,11 +102,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinDoorRow1PassengerSideIsOpen': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinDoorRow1PassengerSideIsOpen",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinDoorRow1PassengerSideIsOpen",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -123,11 +117,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinDoorRow2DriverSideIsOpen': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinDoorRow2DriverSideIsOpen",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinDoorRow2DriverSideIsOpen",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -139,11 +132,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinDoorRow2PassengerSideIsOpen': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinDoorRow2PassengerSideIsOpen",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinDoorRow2PassengerSideIsOpen",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -155,11 +147,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinSeatRow1DriverSideIsBelted': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinSeatRow1DriverSideIsBelted",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinSeatRow1DriverSideIsBelted",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -171,11 +162,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinSeatRow1PassengerSideIsBelted': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinSeatRow1PassengerSideIsBelted",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinSeatRow1PassengerSideIsBelted",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -187,11 +177,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinSeatRow2DriverSideIsBelted': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinSeatRow2DriverSideIsBelted",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinSeatRow2DriverSideIsBelted",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -203,11 +192,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinSeatRow2MiddleIsBelted': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinSeatRow2MiddleIsBelted",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinSeatRow2MiddleIsBelted",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -219,11 +207,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinSeatRow2PassengerSideIsBelted': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinSeatRow2PassengerSideIsBelted",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinSeatRow2PassengerSideIsBelted",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -235,11 +222,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinSeatRow3DriverSideIsBelted': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinSeatRow3DriverSideIsBelted",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinSeatRow3DriverSideIsBelted",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -251,11 +237,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CabinSeatRow3PassengerSideIsBelted': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "cabinSeatRow3PassengerSideIsBelted",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "cabinSeatRow3PassengerSideIsBelted",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -267,11 +252,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisAxleRow1WheelLeftTirePressure': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow1WheelLeftTirePressure",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisAxleRow1WheelLeftTirePressure",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -283,11 +267,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisAxleRow1WheelRightTirePressure': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow1WheelRightTirePressure",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisAxleRow1WheelRightTirePressure",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -299,11 +282,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisAxleRow2WheelLeftTirePressure': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow2WheelLeftTirePressure",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisAxleRow2WheelLeftTirePressure",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -315,11 +297,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisAxleRow2WheelRightTirePressure': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow2WheelRightTirePressure",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisAxleRow2WheelRightTirePressure",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -331,11 +312,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisAxleRow3Weight': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow3Weight",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisAxleRow3Weight",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -347,11 +327,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisAxleRow4Weight': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow4Weight",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisAxleRow4Weight",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -363,11 +342,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisAxleRow5Weight': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisAxleRow5Weight",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisAxleRow5Weight",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -379,11 +357,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisBrakeABSIsWarningOn': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisBrakeABSIsWarningOn",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisBrakeABSIsWarningOn",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -395,11 +372,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisBrakeCircuit1PressurePrimary': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisBrakeCircuit1PressurePrimary",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisBrakeCircuit1PressurePrimary",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -411,11 +387,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisBrakeCircuit2PressurePrimary': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisBrakeCircuit2PressurePrimary",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisBrakeCircuit2PressurePrimary",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -427,11 +402,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisBrakeIsPedalPressed': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisBrakeIsPedalPressed",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisBrakeIsPedalPressed",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -443,11 +417,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisBrakePedalPosition': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisBrakePedalPosition",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisBrakePedalPosition",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -459,11 +432,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisParkingBrakeIsEngaged': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisParkingBrakeIsEngaged",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisParkingBrakeIsEngaged",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -475,11 +447,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ChassisTireSystemIsWarningOn': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "chassisTireSystemIsWarningOn",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "chassisTireSystemIsWarningOn",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -491,11 +462,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ConnectivityCellularIsJammingDetected': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "connectivityCellularIsJammingDetected",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "connectivityCellularIsJammingDetected",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -507,11 +477,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CurrentLocationAltitude': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "currentLocationAltitude",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "currentLocationAltitude",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -523,11 +492,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'CurrentLocationHeading': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "currentLocationHeading",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "currentLocationHeading",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -539,11 +507,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ExteriorAirTemperature': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "exteriorAirTemperature",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "exteriorAirTemperature",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -555,11 +522,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'IsIgnitionOn': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "isIgnitionOn",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "isIgnitionOn",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -571,11 +537,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'LowVoltageBatteryCurrentVoltage': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "lowVoltageBatteryCurrentVoltage",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "lowVoltageBatteryCurrentVoltage",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -587,11 +552,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDDTCList': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdDTCList",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdDTCList",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -603,11 +567,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDDistanceWithMIL': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdDistanceWithMIL",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdDistanceWithMIL",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -619,11 +582,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDEngineLoad': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdEngineLoad",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdEngineLoad",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -635,11 +597,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDFuelRate': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdFuelRate",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdFuelRate",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -651,11 +612,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDFuelTypeName': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdFuelTypeName",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdFuelTypeName",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -667,11 +627,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDIsEngineBlocked': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdIsEngineBlocked",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdIsEngineBlocked",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -683,11 +642,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDIsPTOActive': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdIsPTOActive",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdIsPTOActive",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -699,11 +657,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDIsPluggedIn': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdIsPluggedIn",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdIsPluggedIn",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -715,11 +672,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDOilTemperature': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdOilTemperature",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdOilTemperature",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -731,11 +687,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDRunTime': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdRunTime",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdRunTime",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -747,11 +702,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'OBDStatusDTCCount': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "obdStatusDTCCount",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "obdStatusDTCCount",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -763,11 +717,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineDieselExhaustFluidCapacity': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineDieselExhaustFluidCapacity",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineDieselExhaustFluidCapacity",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -779,11 +732,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineDieselExhaustFluidLevel': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineDieselExhaustFluidLevel",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineDieselExhaustFluidLevel",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -795,11 +747,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineECT': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineECT",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineECT",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -811,11 +762,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineEOP': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineEOP",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineEOP",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -827,11 +777,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineEngineOilLevel': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineEngineOilLevel",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineEngineOilLevel",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -843,11 +792,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineEngineOilRelativeLevel': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineEngineOilRelativeLevel",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineEngineOilRelativeLevel",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -859,11 +807,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineSpeed': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineSpeed",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineSpeed",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -875,11 +822,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineTPS': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineTPS",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineTPS",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -891,11 +837,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainCombustionEngineTorquePercent': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainCombustionEngineTorquePercent",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainCombustionEngineTorquePercent",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -907,11 +852,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainFuelSystemAbsoluteLevel': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainFuelSystemAbsoluteLevel",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainFuelSystemAbsoluteLevel",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -923,11 +867,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainFuelSystemAccumulatedConsumption': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainFuelSystemAccumulatedConsumption",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainFuelSystemAccumulatedConsumption",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -939,11 +882,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainFuelSystemRelativeLevel': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainFuelSystemRelativeLevel",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainFuelSystemRelativeLevel",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -955,11 +897,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTractionBatteryChargingIsCharging': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryChargingIsCharging",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTractionBatteryChargingIsCharging",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -971,11 +912,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTractionBatteryChargingIsChargingCableConnected': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryChargingIsChargingCableConnected",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTractionBatteryChargingIsChargingCableConnected",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -987,11 +927,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTractionBatteryChargingPower': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryChargingPower",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTractionBatteryChargingPower",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1003,11 +942,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTractionBatteryRange': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryRange",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTractionBatteryRange",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1019,11 +957,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTractionBatteryStateOfChargeCurrent': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryStateOfChargeCurrent",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTractionBatteryStateOfChargeCurrent",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1035,11 +972,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTractionBatteryStateOfHealth': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTractionBatteryStateOfHealth",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTractionBatteryStateOfHealth",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1051,11 +987,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTransmissionCurrentGear': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTransmissionCurrentGear",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTransmissionCurrentGear",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1067,11 +1002,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTransmissionIsClutchSwitchOperated': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTransmissionIsClutchSwitchOperated",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTransmissionIsClutchSwitchOperated",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1083,11 +1017,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTransmissionRetarderActualTorque': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTransmissionRetarderActualTorque",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTransmissionRetarderActualTorque",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1099,11 +1032,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTransmissionRetarderTorqueMode': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTransmissionRetarderTorqueMode",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTransmissionRetarderTorqueMode",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1115,11 +1047,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTransmissionSelectedGear': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTransmissionSelectedGear",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTransmissionSelectedGear",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1131,11 +1062,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTransmissionTravelledDistance': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainTransmissionTravelledDistance",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainTransmissionTravelledDistance",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1147,11 +1077,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'PowertrainType': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "powertrainType",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "powertrainType",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1163,11 +1092,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'ServiceTimeToService': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "serviceTimeToService",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "serviceTimeToService",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
@@ -1179,11 +1107,10 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 			errs = append(errs, fmt.Errorf("failed to get 'Speed': %w", err))
 		}
 	} else {
-		sig := vss.Signal{
-			Name:      "speed",
-			Subject:   baseSignal.Subject,
-			Timestamp: baseSignal.Timestamp,
-			Source:    baseSignal.Source,
+		sig := vss.SignalData{
+			Timestamp:    baseSignal.Data.Timestamp,
+			Name:         "speed",
+			CloudEventID: baseSignal.CloudEventHeader.ID,
 		}
 		sig.SetValue(val)
 		retSignals = append(retSignals, sig)
