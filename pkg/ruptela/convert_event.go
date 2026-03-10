@@ -181,9 +181,6 @@ func ToAccelerationEventData(rawValue string) (vss.EventData, error) {
 }
 
 func ToEngineSecurityEvent(rawValue string) (vss.EventData, error) {
-	if rawValue == "" {
-		return vss.EventData{}, nil // same as nothing
-	}
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
 		return vss.EventData{}, fmt.Errorf("could not parse uint: %w", err)
