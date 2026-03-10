@@ -1745,6 +1745,18 @@ Driver1 (MSB; 1B) + Driver2 (LSB; 1B)",No,Yes,Yes,,No,Yes,No,Yes,No,No,No,No,No,
 1218,Custom CAN 18,8,HEX,0,0xFFFFFFFFFFFFFFFF,-,-,-,User defined custom can parameter,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1219,Custom CAN 19,8,HEX,0,0xFFFFFFFFFFFFFFFF,-,-,-,User defined custom can parameter,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
 1220,Custom CAN 20,8,HEX,0,0xFFFFFFFFFFFFFFFF,-,-,-,User defined custom can parameter,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1221,OBD Engine load,1,Unsigned int.,0,254,100/255;0,%,255,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1222,OBD Long Term Fuel Trim Bank 1,1,Unsigned int.,0,254,100/128; -100,%,255,http://en.wikipedia.org/wiki/OBD-II_PIDs-100 to 99.2% normal value,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1223,OBD Long Term Fuel Trim Bank 2,1,Unsigned int.,0,254,100/128; -100,%,255,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1224,OBD Intake manifold absolute pressure,1,Unsigned int.,0,254,1;0,kPa,255,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1225,OBD Intake air temperature,1,Unsigned int.,0,254,1; -40,°C,255,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1226,OBD Mass Air Flow Sensor,2,Unsigned int.,0,65534,1/100;0,g/s,65535,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1227,OBD Throttle Position,1,Unsigned int.,0,254,100/255;0,%,255,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1228,OBD Fuel Rail Pressure,2,Unsigned int.,0,65524,0.079,kPa,65535,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1229,OBD Absolute Barometric Pressure,1,Unsigned int.,0,254,1;0,kPa,255,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1230,OBD Ethanol fuel %,1,Unsigned int.,0,254,100/255;0,%,255,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1231,OBD Engine Oil Temp,1,Unsigned int.,0,254,1; -40,°C,255,http://en.wikipedia.org/wiki/OBD-II_PIDs,No,No,Yes,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No
+1232,OBD Transmission Actual Gear,4,Unsigned int.,0,4294966294,-,-,4294967295,ABCD; A 0 bit=1  - supported; A 0 bit=0 - not supported; (256*C+D)/1000 = gear ratio;B/ 0x10 = gear (0x00 - neutrul; 0x10 - gear 1; 0x20 - gear 2; 0x30 - gear 3; 0x40 - gear 4…. 0xF0 - gear 15,No,Yes,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No																													
 5005,Time to GNSS fix,2,Unsigned int.,0,65535,1,s,65535,Shows time in seconds until device gets GNSS fix,Yes,No,Yes,,Yes,Yes,Yes,Yes,Yes,Yes,Yes,,,,,,,,,,,,,,,,,
 5011,EPE accuracy values,8,HEX,0x0000000000000000,0xFFFFFFFFFFFFFFFF,-,-,-,"First 4 B is P1 value
 Last 4 B is P2 value

@@ -103,8 +103,12 @@ const (
 	FieldOBDDistanceWithMIL = "obdDistanceWithMIL"
 	// FieldOBDEngineLoad PID 04 - Engine load in percent - 0 = no load, 100 = full load
 	FieldOBDEngineLoad = "obdEngineLoad"
+	// FieldOBDEthanolPercent PID 52 - Percentage of ethanol in the fuel
+	FieldOBDEthanolPercent = "obdEthanolPercent"
 	// FieldOBDFuelPressure PID 0A - Fuel pressure
 	FieldOBDFuelPressure = "obdFuelPressure"
+	// FieldOBDFuelRailPressure Fuel rail pressure from OBD. Uses PID 0x22 (fuel rail pressure relative to manifold vacuum) when available, otherwise falls back to PID 0x23 (fuel rail pressure direct injection).
+	FieldOBDFuelRailPressure = "obdFuelRailPressure"
 	// FieldOBDFuelRate PID 5E - Engine fuel rate
 	FieldOBDFuelRate = "obdFuelRate"
 	// FieldOBDFuelTypeName Fuel type names decoded from PID 51.
@@ -119,8 +123,12 @@ const (
 	FieldOBDIsPluggedIn = "obdIsPluggedIn"
 	// FieldOBDLongTermFuelTrim1 PID 07 - Long Term (learned) Fuel Trim - Bank 1 - negative percent leaner, positive percent richer
 	FieldOBDLongTermFuelTrim1 = "obdLongTermFuelTrim1"
+	// FieldOBDLongTermFuelTrim2 PID 09 - Long Term (learned) Fuel Trim - Bank 2 - negative percent leaner, positive percent richer
+	FieldOBDLongTermFuelTrim2 = "obdLongTermFuelTrim2"
 	// FieldOBDMAP PID 0B - Intake manifold pressure
 	FieldOBDMAP = "obdMAP"
+	// FieldOBDMaxMAF PID 50 - Maximum flow for mass air flow sensor
+	FieldOBDMaxMAF = "obdMaxMAF"
 	// FieldOBDO2WRSensor1Voltage PID 2x (byte CD) - Voltage for wide range/band oxygen sensor
 	FieldOBDO2WRSensor1Voltage = "obdO2WRSensor1Voltage"
 	// FieldOBDO2WRSensor2Voltage PID 2x (byte CD) - Voltage for wide range/band oxygen sensor
@@ -133,6 +141,8 @@ const (
 	FieldOBDShortTermFuelTrim1 = "obdShortTermFuelTrim1"
 	// FieldOBDStatusDTCCount Number of Diagnostic Trouble Codes (DTC)
 	FieldOBDStatusDTCCount = "obdStatusDTCCount"
+	// FieldOBDThrottlePosition PID 11 - Throttle position - 0 = closed throttle, 100 = open throttle
+	FieldOBDThrottlePosition = "obdThrottlePosition"
 	// FieldOBDWarmupsSinceDTCClear PID 30 - Number of warm-ups since codes cleared
 	FieldOBDWarmupsSinceDTCClear = "obdWarmupsSinceDTCClear"
 	// FieldPowertrainCombustionEngineDieselExhaustFluidCapacity Capacity in liters of the Diesel Exhaust Fluid Tank.
@@ -199,6 +209,10 @@ const (
 	FieldPowertrainTractionBatteryStateOfHealth = "powertrainTractionBatteryStateOfHealth"
 	// FieldPowertrainTractionBatteryTemperatureAverage Current average temperature of the battery cells.
 	FieldPowertrainTractionBatteryTemperatureAverage = "powertrainTractionBatteryTemperatureAverage"
+	// FieldPowertrainTransmissionActualGear Actual transmission gear currently engaged. 0 = neutral, 1-15 = gear number.
+	FieldPowertrainTransmissionActualGear = "powertrainTransmissionActualGear"
+	// FieldPowertrainTransmissionActualGearRatio Actual transmission gear ratio.
+	FieldPowertrainTransmissionActualGearRatio = "powertrainTransmissionActualGearRatio"
 	// FieldPowertrainTransmissionCurrentGear The current gear. 0=Neutral, 1/2/..=Forward, -1/-2/..=Reverse.
 	FieldPowertrainTransmissionCurrentGear = "powertrainTransmissionCurrentGear"
 	// FieldPowertrainTransmissionIsClutchSwitchOperated Indicates if the Clutch switch is operated, so engine and transmission are partially or fully decoupled. False = Clutch switch not operated. True = Clutch switch operated.

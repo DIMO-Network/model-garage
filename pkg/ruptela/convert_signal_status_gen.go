@@ -581,6 +581,22 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 		retSignals = append(retSignals, sig)
 	}
 
+	val, err = OBDBarometricPressureFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDBarometricPressure': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdBarometricPressure",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = OBDDTCListFromV1Data(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -629,6 +645,38 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 		retSignals = append(retSignals, sig)
 	}
 
+	val, err = OBDEthanolPercentFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDEthanolPercent': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdEthanolPercent",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = OBDFuelRailPressureFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDFuelRailPressure': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdFuelRailPressure",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = OBDFuelRateFromV1Data(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -653,6 +701,22 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 	} else {
 		sig := vss.Signal{
 			Name:      "obdFuelTypeName",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = OBDIntakeTempFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDIntakeTemp': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdIntakeTemp",
 			TokenID:   baseSignal.TokenID,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
@@ -709,6 +773,70 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 		retSignals = append(retSignals, sig)
 	}
 
+	val, err = OBDLongTermFuelTrim1FromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDLongTermFuelTrim1': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdLongTermFuelTrim1",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = OBDLongTermFuelTrim2FromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDLongTermFuelTrim2': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdLongTermFuelTrim2",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = OBDMAPFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDMAP': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdMAP",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = OBDMaxMAFFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDMaxMAF': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdMaxMAF",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
 	val, err = OBDOilTemperatureFromV1Data(jsonData)
 	if err != nil {
 		if !errors.Is(err, errNotFound) {
@@ -749,6 +877,22 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 	} else {
 		sig := vss.Signal{
 			Name:      "obdStatusDTCCount",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = OBDThrottlePositionFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'OBDThrottlePosition': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "obdThrottlePosition",
 			TokenID:   baseSignal.TokenID,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
@@ -1037,6 +1181,38 @@ func SignalsFromV1Data(baseSignal vss.Signal, jsonData []byte) ([]vss.Signal, []
 	} else {
 		sig := vss.Signal{
 			Name:      "powertrainTractionBatteryStateOfHealth",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = PowertrainTransmissionActualGearFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTransmissionActualGear': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "powertrainTransmissionActualGear",
+			TokenID:   baseSignal.TokenID,
+			Timestamp: baseSignal.Timestamp,
+			Source:    baseSignal.Source,
+		}
+		sig.SetValue(val)
+		retSignals = append(retSignals, sig)
+	}
+
+	val, err = PowertrainTransmissionActualGearRatioFromV1Data(jsonData)
+	if err != nil {
+		if !errors.Is(err, errNotFound) {
+			errs = append(errs, fmt.Errorf("failed to get 'PowertrainTransmissionActualGearRatio': %w", err))
+		}
+	} else {
+		sig := vss.Signal{
+			Name:      "powertrainTransmissionActualGearRatio",
 			TokenID:   baseSignal.TokenID,
 			Timestamp: baseSignal.Timestamp,
 			Source:    baseSignal.Source,
@@ -2144,6 +2320,31 @@ func LowVoltageBatteryCurrentVoltageFromV1Data(jsonData []byte) (ret float64, er
 	return ret, errs
 }
 
+// OBDBarometricPressureFromV1Data converts the given JSON data to a float64.
+func OBDBarometricPressureFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1229")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDBarometricPressure0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1229': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1229' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDBarometricPressure'", errNotFound)
+	}
+
+	return ret, errs
+}
+
 // OBDDTCListFromV1Data converts the given JSON data to a string.
 func OBDDTCListFromV1Data(jsonData []byte) (ret string, err error) {
 	var errs error
@@ -2220,9 +2421,72 @@ func OBDEngineLoadFromV1Data(jsonData []byte) (ret float64, err error) {
 			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.39' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
+	result = gjson.GetBytes(jsonData, "signals.1221")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDEngineLoad1(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1221': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1221' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'OBDEngineLoad'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDEthanolPercentFromV1Data converts the given JSON data to a float64.
+func OBDEthanolPercentFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1230")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDEthanolPercent0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1230': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1230' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDEthanolPercent'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDFuelRailPressureFromV1Data converts the given JSON data to a float64.
+func OBDFuelRailPressureFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1228")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDFuelRailPressure0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1228': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1228' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDFuelRailPressure'", errNotFound)
 	}
 
 	return ret, errs
@@ -2286,6 +2550,31 @@ func OBDFuelTypeNameFromV1Data(jsonData []byte) (ret string, err error) {
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'OBDFuelTypeName'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDIntakeTempFromV1Data converts the given JSON data to a float64.
+func OBDIntakeTempFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1225")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDIntakeTemp0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1225': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1225' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDIntakeTemp'", errNotFound)
 	}
 
 	return ret, errs
@@ -2366,6 +2655,106 @@ func OBDIsPluggedInFromV1Data(jsonData []byte) (ret float64, err error) {
 	return ret, errs
 }
 
+// OBDLongTermFuelTrim1FromV1Data converts the given JSON data to a float64.
+func OBDLongTermFuelTrim1FromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1222")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDLongTermFuelTrim10(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1222': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1222' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDLongTermFuelTrim1'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDLongTermFuelTrim2FromV1Data converts the given JSON data to a float64.
+func OBDLongTermFuelTrim2FromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1223")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDLongTermFuelTrim20(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1223': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1223' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDLongTermFuelTrim2'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDMAPFromV1Data converts the given JSON data to a float64.
+func OBDMAPFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1224")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDMAP0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1224': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1224' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDMAP'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDMaxMAFFromV1Data converts the given JSON data to a float64.
+func OBDMaxMAFFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1226")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDMaxMAF0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1226': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1226' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDMaxMAF'", errNotFound)
+	}
+
+	return ret, errs
+}
+
 // OBDOilTemperatureFromV1Data converts the given JSON data to a float64.
 func OBDOilTemperatureFromV1Data(jsonData []byte) (ret float64, err error) {
 	var errs error
@@ -2381,6 +2770,19 @@ func OBDOilTemperatureFromV1Data(jsonData []byte) (ret float64, err error) {
 			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.727': %w", err))
 		} else {
 			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.727' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+	result = gjson.GetBytes(jsonData, "signals.1231")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDOilTemperature1(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1231': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1231' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
 		}
 	}
 
@@ -2436,6 +2838,31 @@ func OBDStatusDTCCountFromV1Data(jsonData []byte) (ret float64, err error) {
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'OBDStatusDTCCount'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// OBDThrottlePositionFromV1Data converts the given JSON data to a float64.
+func OBDThrottlePositionFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1227")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToOBDThrottlePosition0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1227': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1227' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'OBDThrottlePosition'", errNotFound)
 	}
 
 	return ret, errs
@@ -3081,6 +3508,56 @@ func PowertrainTractionBatteryStateOfHealthFromV1Data(jsonData []byte) (ret floa
 
 	if errs == nil {
 		return ret, fmt.Errorf("%w 'PowertrainTractionBatteryStateOfHealth'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// PowertrainTransmissionActualGearFromV1Data converts the given JSON data to a float64.
+func PowertrainTransmissionActualGearFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1232")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToPowertrainTransmissionActualGear0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1232': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1232' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'PowertrainTransmissionActualGear'", errNotFound)
+	}
+
+	return ret, errs
+}
+
+// PowertrainTransmissionActualGearRatioFromV1Data converts the given JSON data to a float64.
+func PowertrainTransmissionActualGearRatioFromV1Data(jsonData []byte) (ret float64, err error) {
+	var errs error
+	var result gjson.Result
+	result = gjson.GetBytes(jsonData, "signals.1232")
+	if result.Exists() && result.Value() != nil {
+		val, ok := result.Value().(string)
+		if ok {
+			retVal, err := ToPowertrainTransmissionActualGearRatio0(jsonData, val)
+			if err == nil {
+				return retVal, nil
+			}
+			errs = errors.Join(errs, fmt.Errorf("failed to convert 'signals.1232': %w", err))
+		} else {
+			errs = errors.Join(errs, fmt.Errorf("%w, field 'signals.1232' is not of type 'string' got '%v' of type '%T'", convert.InvalidTypeError(), result.Value(), result.Value()))
+		}
+	}
+
+	if errs == nil {
+		return ret, fmt.Errorf("%w 'PowertrainTransmissionActualGearRatio'", errNotFound)
 	}
 
 	return ret, errs

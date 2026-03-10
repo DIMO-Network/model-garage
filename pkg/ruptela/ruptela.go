@@ -183,3 +183,14 @@ func CANBitToBool(val float64, bit uint) (float64, error) {
 	}
 	return 0.0, nil
 }
+
+func splitUint32ToBytes(raw float64) (a uint8, b uint8, c uint8, d uint8, err error) {
+	v := uint32(raw)
+
+	a = uint8((v >> 24) & 0xFF)
+	b = uint8((v >> 16) & 0xFF)
+	c = uint8((v >> 8) & 0xFF)
+	d = uint8(v & 0xFF)
+
+	return a, b, c, d, nil
+}
