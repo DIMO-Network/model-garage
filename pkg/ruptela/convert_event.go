@@ -77,7 +77,7 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 		data, err := ToEngineSecurityEvent(*signals.Signals.EngineBlock)
 		if err == nil {
 			events = append(events, wrapEventData(cEvent, data))
-		} else if !errors.Is(err, errNotFound) {
+		} else {
 			errs = append(errs, err)
 		}
 	}
