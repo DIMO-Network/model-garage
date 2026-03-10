@@ -235,4 +235,8 @@ const (
 	EventBehaviorHarshCorneringName = "behavior.harshCornering"
 	// EventSafetyCollisionName collision an event that indicates a collision was detected
 	EventSafetyCollisionName = "safety.collision"
+	// EventSecurityEngineBlockName engineBlock an event that indicates the engine was blocked via a command
+	EventSecurityEngineBlockName = "security.engineBlock"
+	// EventSecurityEngineUnblockName engineUnblock an event that indicates the engine was unblocked via a command
+	EventSecurityEngineUnblockName = "security.engineUnblock"
 )
