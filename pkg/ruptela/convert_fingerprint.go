@@ -57,7 +57,7 @@ func DecodeFingerprint(event cloudevent.RawEvent) (modelce.Fingerprint, error) {
 		}
 		vinBytes = append(vinBytes, b...)
 	}
-	vinBytes = bytes.TrimRight(vinBytes, "\x00")
+	vinBytes = bytes.TrimRight(vinBytes, "\x00 ")
 	if len(vinBytes) > maxVinLength {
 		vinBytes = vinBytes[:maxVinLength]
 	}

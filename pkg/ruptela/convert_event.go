@@ -72,8 +72,8 @@ func DecodeEvent(cEvent cloudevent.RawEvent) ([]vss.Event, error) {
 			errs = append(errs, err)
 		}
 	}
-	if signals.Signals.EngineBlock != nil && *signals.Signals.EngineBlock != "" {
-		// this handles both engine block and unblock
+	if cEvent.DataVersion == CmdEventDS && signals.Signals.EngineBlock != nil && *signals.Signals.EngineBlock != "" {
+		// engine block/unblock events should only come from the command topic
 		data, err := ToEngineSecurityEvent(*signals.Signals.EngineBlock)
 		if err == nil {
 			events = append(events, wrapEventData(cEvent, data))

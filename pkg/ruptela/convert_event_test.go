@@ -545,6 +545,7 @@ func TestDecodeEventEngineSecurityEvents(t *testing.T) {
 				"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 				"time": "2024-09-27T08:33:26Z",
 				"type": "dimo.status",
+				"dataversion": "r/v0/cmd",
 				"data": {
 					"signals": {
 						"135": "0",
@@ -583,6 +584,7 @@ func TestDecodeEventEngineSecuritySignalEmptyIsIgnored(t *testing.T) {
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
 		"type": "dimo.status",
+		"dataversion": "r/v0/cmd",
 		"data": {
 			"signals": {
 				"135": "0",
@@ -602,6 +604,37 @@ func TestDecodeEventEngineSecuritySignalEmptyIsIgnored(t *testing.T) {
 	require.Len(t, actualEvents, 0)
 }
 
+func TestDecodeEventEngineSecurityIgnoredOnNonCmdTopic(t *testing.T) {
+	t.Parallel()
+
+	inputJSON := `{
+		"id": "test-cloud-event-id",
+		"source": "ruptela/test",
+		"producer": "test-producer",
+		"specversion": "1.0",
+		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
+		"time": "2024-09-27T08:33:26Z",
+		"type": "dimo.status",
+		"dataversion": "r/v0/s",
+		"data": {
+			"signals": {
+				"135": "0",
+				"136": "0",
+				"143": "0",
+				"405": "1"
+			}
+		}
+	}`
+
+	var event cloudevent.RawEvent
+	err := json.Unmarshal([]byte(inputJSON), &event)
+	require.NoError(t, err)
+
+	actualEvents, err := ruptela.DecodeEvent(event)
+	require.NoError(t, err)
+	require.Len(t, actualEvents, 0, "engine block signal should be ignored on non-cmd topics")
+}
+
 func TestDecodeEventEngineSecurityPartialError(t *testing.T) {
 	t.Parallel()
 
@@ -613,6 +646,7 @@ func TestDecodeEventEngineSecurityPartialError(t *testing.T) {
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
 		"time": "2024-09-27T08:33:26Z",
 		"type": "dimo.status",
+		"dataversion": "r/v0/cmd",
 		"data": {
 			"signals": {
 				"135": "0",
