@@ -120,7 +120,7 @@ func wrapEventData(cEvent cloudevent.RawEvent, data vss.EventData) vss.Event {
 func ToBrakingEventData(rawValue string) ([]vss.EventData, error) {
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
-		return nil, fmt.Errorf("could not parse uint: %w", err)
+		return nil, fmt.Errorf("could not parse uint from braking event: %w", err)
 	}
 
 	// Ensure we're only working with 8 bits
@@ -136,7 +136,7 @@ func ToBrakingEventData(rawValue string) ([]vss.EventData, error) {
 	if lsb != 0 {
 		metaCounterJSON, err := json.Marshal(CounterMetadata{CounterValue: uint(lsb)})
 		if err != nil {
-			return nil, fmt.Errorf("failed to marshal metadata: %w", err)
+			return nil, fmt.Errorf("failed to marshal harsh braking metadata: %w", err)
 		}
 		data = append(data, vss.EventData{
 			Name:     EventNameHarshBraking,
@@ -149,7 +149,7 @@ func ToBrakingEventData(rawValue string) ([]vss.EventData, error) {
 	if msb != 0 {
 		metaCounterJSON, err := json.Marshal(CounterMetadata{CounterValue: uint(msb)})
 		if err != nil {
-			return nil, fmt.Errorf("failed to marshal metadata: %w", err)
+			return nil, fmt.Errorf("failed to marshal extreme braking metadata: %w", err)
 		}
 		data = append(data, vss.EventData{
 			Name:     EventNameExtremeBraking,
@@ -164,7 +164,7 @@ func ToBrakingEventData(rawValue string) ([]vss.EventData, error) {
 func ToAccelerationEventData(rawValue string) (vss.EventData, error) {
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
-		return vss.EventData{}, fmt.Errorf("could not parse uint: %w", err)
+		return vss.EventData{}, fmt.Errorf("could not parse uint from acceleration event: %w", err)
 	}
 	if rawInt == 0 {
 		return vss.EventData{}, errNotFound
@@ -172,7 +172,7 @@ func ToAccelerationEventData(rawValue string) (vss.EventData, error) {
 
 	metaCounterJSON, err := json.Marshal(CounterMetadata{CounterValue: uint(rawInt)})
 	if err != nil {
-		return vss.EventData{}, fmt.Errorf("failed to marshal metadata: %w", err)
+		return vss.EventData{}, fmt.Errorf("failed to marshal acceleration metadata: %w", err)
 	}
 	return vss.EventData{
 		Name:     EventNameAcceleration,
@@ -183,7 +183,7 @@ func ToAccelerationEventData(rawValue string) (vss.EventData, error) {
 func ToEngineSecurityEvent(rawValue string) (vss.EventData, error) {
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
-		return vss.EventData{}, fmt.Errorf("could not parse uint: %w", err)
+		return vss.EventData{}, fmt.Errorf("could not parse uint from engine security event: %w", err)
 	}
 	if rawInt != 0 {
 		return vss.EventData{Name: EventNameEngineBlock, Tags: []string{vss.EventSecurityEngineBlockName}}, nil
@@ -195,14 +195,14 @@ func ToEngineSecurityEvent(rawValue string) (vss.EventData, error) {
 func ToCorneringEventData(rawValue string) (vss.EventData, error) {
 	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
 	if err != nil {
-		return vss.EventData{}, fmt.Errorf("could not parse uint: %w", err)
+		return vss.EventData{}, fmt.Errorf("could not parse uint from cornering event: %w", err)
 	}
 	if rawInt == 0 {
 		return vss.EventData{}, errNotFound
 	}
 	metaCounterJSON, err := json.Marshal(CounterMetadata{CounterValue: uint(rawInt)})
 	if err != nil {
-		return vss.EventData{}, fmt.Errorf("failed to marshal metadata: %w", err)
+		return vss.EventData{}, fmt.Errorf("failed to marshal cornering metadata: %w", err)
 	}
 	return vss.EventData{
 		Name:     EventNameCornering,
