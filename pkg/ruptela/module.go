@@ -119,7 +119,7 @@ func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType strin
 func getCloudEventTypes(event *RuptelaEvent) ([]string, error) {
 	// Command events are always discrete events, never status updates.
 	if event.DS == CmdEventDS {
-		return []string{cloudevent.TypeEvent}, nil
+		return []string{cloudevent.TypeEvents}, nil
 	}
 	// always include the status event
 	cloudEventTypes := []string{cloudevent.TypeStatus}
