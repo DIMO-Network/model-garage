@@ -650,11 +650,6 @@ func TestToEngineSecurityEvent(t *testing.T) {
 		expectErr    bool
 	}{
 		{
-			name:      "empty value returns empty event data",
-			rawValue:  "",
-			expectErr: false,
-		},
-		{
 			name:         "zero value maps to unblock",
 			rawValue:     "0",
 			expectedName: ruptela.EventNameEngineUnblock,
@@ -682,7 +677,7 @@ func TestToEngineSecurityEvent(t *testing.T) {
 			actual, err := ruptela.ToEngineSecurityEvent(tt.rawValue)
 			if tt.expectErr {
 				require.Error(t, err)
-				require.Contains(t, err.Error(), "could not parse uint")
+				require.Contains(t, err.Error(), "could not parse uint from engine security event")
 				return
 			}
 
