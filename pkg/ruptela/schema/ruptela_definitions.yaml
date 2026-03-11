@@ -238,6 +238,8 @@
   conversions:
     - originalName: "signals.39"
       originalType: string
+    - originalName: "signals.1221"
+      originalType: string
 
 - vspecName: Vehicle.Service.TimeToService
   conversions:
@@ -252,6 +254,8 @@
 - vspecName: Vehicle.OBD.OilTemperature
   conversions:
     - originalName: "signals.727"
+      originalType: string
+    - originalName: "signals.1231" # OBD oil temperature
       originalType: string
 
 - vspecName: Vehicle.Powertrain.CombustionEngine.EOP
@@ -436,7 +440,62 @@
   conversions:
     - originalName: "signals.88"
       originalType: string
-      
+
+- vspecName: Vehicle.OBD.LongTermFuelTrim1
+  conversions:
+    - originalName: "signals.1222" # OBD long term fuel trim bank 1
+      originalType: string
+
+- vspecName: Vehicle.OBD.LongTermFuelTrim2
+  conversions:
+    - originalName: "signals.1223" # OBD long term fuel trim bank 2
+      originalType: string
+
+- vspecName: Vehicle.OBD.MAP
+  conversions:
+    - originalName: "signals.1224" # OBD manifold absolute pressure
+      originalType: string
+
+- vspecName: Vehicle.OBD.IntakeTemp
+  conversions:
+    - originalName: "signals.1225" # OBD intake air temperature
+      originalType: string
+
+- vspecName: Vehicle.OBD.MaxMAF
+  conversions:
+    - originalName: "signals.1226" # OBD Mass Air Flow Sensor
+      originalType: string
+
+- vspecName: Vehicle.OBD.ThrottlePosition
+  conversions:
+    - originalName: "signals.1227" # OBD throttle position
+      originalType: string
+
+- vspecName: Vehicle.OBD.FuelRailPressure
+  conversions:
+    - originalName: "signals.1228" # OBD fuel rail pressure
+      originalType: string
+
+- vspecName: Vehicle.OBD.BarometricPressure
+  conversions:
+    - originalName: "signals.1229" # OBD barometric pressure
+      originalType: string
+
+- vspecName: Vehicle.OBD.EthanolPercent
+  conversions:
+    - originalName: "signals.1230" # OBD ethanol fuel percentage
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.Transmission.ActualGear
+  conversions:
+    - originalName: "signals.1232" # CAN actual gear
+      originalType: string
+
+- vspecName: Vehicle.Powertrain.Transmission.ActualGearRatio
+  conversions:
+    - originalName: "signals.1232" # CAN actual gear
+      originalType: string
+    
 # # TODO CAN ONLY
 # - vspecName: Vehicle.OBD.EngineLoad
 #   conversions:

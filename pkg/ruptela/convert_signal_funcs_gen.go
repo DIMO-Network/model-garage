@@ -431,6 +431,13 @@ func ToLowVoltageBatteryCurrentVoltage0(originalDoc []byte, val string) (float64
 	return mV / 1000, nil
 }
 
+// ToOBDBarometricPressure0 converts data from field 'signals.1229' of type string to 'Vehicle.OBD.BarometricPressure' of type float64.
+// Vehicle.OBD.BarometricPressure: PID 33 - Barometric pressure
+// Unit: 'kPa'
+func ToOBDBarometricPressure0(originalDoc []byte, val string) (float64, error) {
+	return Convert1229(val)
+}
+
 // ToOBDDTCList0 converts data from field 'dtc_codes' of type any to 'Vehicle.OBD.DTCList' of type string.
 // Vehicle.OBD.DTCList: List of currently active DTCs formatted according OBD II (SAE-J2012DA_201812) standard ([P|C|B|U]XXXXX )
 func ToOBDDTCList0(originalDoc []byte, val any) (string, error) {
@@ -474,6 +481,27 @@ func ToOBDEngineLoad0(originalDoc []byte, val string) (float64, error) {
 	return Convert39(val)
 }
 
+// ToOBDEngineLoad1 converts data from field 'signals.1221' of type string to 'Vehicle.OBD.EngineLoad' of type float64.
+// Vehicle.OBD.EngineLoad: PID 04 - Engine load in percent - 0 = no load, 100 = full load
+// Unit: 'percent'
+func ToOBDEngineLoad1(originalDoc []byte, val string) (float64, error) {
+	return Convert1221(val)
+}
+
+// ToOBDEthanolPercent0 converts data from field 'signals.1230' of type string to 'Vehicle.OBD.EthanolPercent' of type float64.
+// Vehicle.OBD.EthanolPercent: PID 52 - Percentage of ethanol in the fuel
+// Unit: 'percent'
+func ToOBDEthanolPercent0(originalDoc []byte, val string) (float64, error) {
+	return Convert1230(val)
+}
+
+// ToOBDFuelRailPressure0 converts data from field 'signals.1228' of type string to 'Vehicle.OBD.FuelRailPressure' of type float64.
+// Vehicle.OBD.FuelRailPressure: Fuel rail pressure from OBD. Uses PID 0x22 (fuel rail pressure relative to manifold vacuum) when available, otherwise falls back to PID 0x23 (fuel rail pressure direct injection).
+// Unit: 'kPa'
+func ToOBDFuelRailPressure0(originalDoc []byte, val string) (float64, error) {
+	return Convert1228(val)
+}
+
 // ToOBDFuelRate0 converts data from field 'signals.116' of type string to 'Vehicle.OBD.FuelRate' of type float64.
 // Vehicle.OBD.FuelRate: PID 5E - Engine fuel rate
 // Unit: 'l/h'
@@ -496,6 +524,13 @@ func ToOBDFuelTypeName0(originalDoc []byte, val string) (string, error) {
 		return "", err
 	}
 	return fuelTypeNameConversion(num)
+}
+
+// ToOBDIntakeTemp0 converts data from field 'signals.1225' of type string to 'Vehicle.OBD.IntakeTemp' of type float64.
+// Vehicle.OBD.IntakeTemp: PID 0F - Intake temperature
+// Unit: 'celsius'
+func ToOBDIntakeTemp0(originalDoc []byte, val string) (float64, error) {
+	return Convert1225(val)
 }
 
 // ToOBDIsEngineBlocked0 converts data from field 'signals.405' of type string to 'Vehicle.OBD.IsEngineBlocked' of type float64.
@@ -549,11 +584,46 @@ func ToOBDIsPluggedIn0(originalDoc []byte, val string) (float64, error) {
 
 }
 
+// ToOBDLongTermFuelTrim10 converts data from field 'signals.1222' of type string to 'Vehicle.OBD.LongTermFuelTrim1' of type float64.
+// Vehicle.OBD.LongTermFuelTrim1: PID 07 - Long Term (learned) Fuel Trim - Bank 1 - negative percent leaner, positive percent richer
+// Unit: 'percent'
+func ToOBDLongTermFuelTrim10(originalDoc []byte, val string) (float64, error) {
+	return Convert1222(val)
+}
+
+// ToOBDLongTermFuelTrim20 converts data from field 'signals.1223' of type string to 'Vehicle.OBD.LongTermFuelTrim2' of type float64.
+// Vehicle.OBD.LongTermFuelTrim2: PID 09 - Long Term (learned) Fuel Trim - Bank 2 - negative percent leaner, positive percent richer
+// Unit: 'percent'
+func ToOBDLongTermFuelTrim20(originalDoc []byte, val string) (float64, error) {
+	return Convert1223(val)
+}
+
+// ToOBDMAP0 converts data from field 'signals.1224' of type string to 'Vehicle.OBD.MAP' of type float64.
+// Vehicle.OBD.MAP: PID 0B - Intake manifold pressure
+// Unit: 'kPa'
+func ToOBDMAP0(originalDoc []byte, val string) (float64, error) {
+	return Convert1224(val)
+}
+
+// ToOBDMaxMAF0 converts data from field 'signals.1226' of type string to 'Vehicle.OBD.MaxMAF' of type float64.
+// Vehicle.OBD.MaxMAF: PID 50 - Maximum flow for mass air flow sensor
+// Unit: 'g/s'
+func ToOBDMaxMAF0(originalDoc []byte, val string) (float64, error) {
+	return Convert1226(val)
+}
+
 // ToOBDOilTemperature0 converts data from field 'signals.727' of type string to 'Vehicle.OBD.OilTemperature' of type float64.
 // Vehicle.OBD.OilTemperature: PID 5C - Engine oil temperature
 // Unit: 'celsius'
 func ToOBDOilTemperature0(originalDoc []byte, val string) (float64, error) {
 	return Convert727(val)
+}
+
+// ToOBDOilTemperature1 converts data from field 'signals.1231' of type string to 'Vehicle.OBD.OilTemperature' of type float64.
+// Vehicle.OBD.OilTemperature: PID 5C - Engine oil temperature
+// Unit: 'celsius'
+func ToOBDOilTemperature1(originalDoc []byte, val string) (float64, error) {
+	return Convert1231(val)
 }
 
 // ToOBDRunTime0 converts data from field 'signals.107' of type string to 'Vehicle.OBD.RunTime' of type float64.
@@ -567,6 +637,13 @@ func ToOBDRunTime0(originalDoc []byte, val string) (float64, error) {
 // Vehicle.OBD.Status.DTCCount: Number of Diagnostic Trouble Codes (DTC)
 func ToOBDStatusDTCCount0(originalDoc []byte, val string) (float64, error) {
 	return Convert108(val)
+}
+
+// ToOBDThrottlePosition0 converts data from field 'signals.1227' of type string to 'Vehicle.OBD.ThrottlePosition' of type float64.
+// Vehicle.OBD.ThrottlePosition: PID 11 - Throttle position - 0 = closed throttle, 100 = open throttle
+// Unit: 'percent'
+func ToOBDThrottlePosition0(originalDoc []byte, val string) (float64, error) {
+	return Convert1227(val)
 }
 
 // ToPowertrainCombustionEngineDieselExhaustFluidCapacity0 converts data from field 'signals.1148' of type string to 'Vehicle.Powertrain.CombustionEngine.DieselExhaustFluid.Capacity' of type float64.
@@ -835,6 +912,56 @@ func ToPowertrainTractionBatteryStateOfChargeCurrent2(originalDoc []byte, val st
 // Unit: 'percent' Min: '0' Max: '100'
 func ToPowertrainTractionBatteryStateOfHealth0(originalDoc []byte, val string) (float64, error) {
 	return ignoreZero(Convert950(val))
+}
+
+// ToPowertrainTransmissionActualGear0 converts data from field 'signals.1232' of type string to 'Vehicle.Powertrain.Transmission.ActualGear' of type float64.
+// Vehicle.Powertrain.Transmission.ActualGear: Actual transmission gear currently engaged. 0 = neutral, 1-15 = gear number.
+func ToPowertrainTransmissionActualGear0(originalDoc []byte, val string) (float64, error) {
+	raw, err := Convert1232(val)
+	if err != nil {
+		return 0, err
+	}
+
+	a, b, _, _, err := splitUint32ToBytes(raw)
+	if err != nil {
+		return 0, err
+	}
+
+	if a&0x01 == 0 {
+		return 0, errNotFound
+	}
+
+	if b&0x0F != 0 {
+		return 0, errNotFound
+	}
+
+	gear := b / 0x10
+	return float64(gear), nil
+}
+
+// ToPowertrainTransmissionActualGearRatio0 converts data from field 'signals.1232' of type string to 'Vehicle.Powertrain.Transmission.ActualGearRatio' of type float64.
+// Vehicle.Powertrain.Transmission.ActualGearRatio: Actual transmission gear ratio.
+func ToPowertrainTransmissionActualGearRatio0(originalDoc []byte, val string) (float64, error) {
+	raw, err := Convert1232(val)
+	if err != nil {
+		return 0, err
+	}
+
+	a, b, c, d, err := splitUint32ToBytes(raw)
+	if err != nil {
+		return 0, err
+	}
+
+	if a&0x01 == 0 {
+		return 0, errNotFound
+	}
+
+	if b&0x0F != 0 {
+		return 0, errNotFound
+	}
+
+	ratio := float64(uint16(c)<<8|uint16(d)) / 1000.0
+	return ratio, nil
 }
 
 // ToPowertrainTransmissionCurrentGear0 converts data from field 'signals.367' of type string to 'Vehicle.Powertrain.Transmission.CurrentGear' of type float64.

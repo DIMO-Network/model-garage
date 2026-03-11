@@ -493,6 +493,390 @@ func Convert1191(rawValue string) (float64, error) {
 	return float64(rawInt)*multiplier + offset, nil
 }
 
+// Convert1221 converts the given raw value to a float64.
+// Unit: '%' Min: '0' Max: '254'.
+func Convert1221(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(0.39215686274509803)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1222 converts the given raw value to a float64.
+// Unit: '%' Min: '0' Max: '254'.
+func Convert1222(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(-100)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(0.78125)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1223 converts the given raw value to a float64.
+// Unit: '%' Min: '0' Max: '254'.
+func Convert1223(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(-100)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(0.78125)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1224 converts the given raw value to a float64.
+// Unit: 'kPa' Min: '0' Max: '254'.
+func Convert1224(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(1)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1225 converts the given raw value to a float64.
+// Unit: '°C' Min: '0' Max: '254'.
+func Convert1225(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(-40)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(1)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1226 converts the given raw value to a float64.
+// Unit: 'g/s' Min: '0' Max: '65534'.
+func Convert1226(rawValue string) (float64, error) {
+	const byteSize = 2
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(0.01)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{65535}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 65534 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1227 converts the given raw value to a float64.
+// Unit: '%' Min: '0' Max: '254'.
+func Convert1227(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(0.39215686274509803)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1228 converts the given raw value to a float64.
+// Unit: 'kPa' Min: '0' Max: '65524'.
+func Convert1228(rawValue string) (float64, error) {
+	const byteSize = 2
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(0.079)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{65535}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 65524 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1229 converts the given raw value to a float64.
+// Unit: 'kPa' Min: '0' Max: '254'.
+func Convert1229(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(1)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1230 converts the given raw value to a float64.
+// Unit: '%' Min: '0' Max: '254'.
+func Convert1230(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(0.39215686274509803)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1231 converts the given raw value to a float64.
+// Unit: '°C' Min: '0' Max: '254'.
+func Convert1231(rawValue string) (float64, error) {
+	const byteSize = 1
+	const offset = float64(-40)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(1)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{255}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 254 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
+// Convert1232 converts the given raw value to a float64.
+// Unit: '-' Min: '0' Max: '4294966294'.
+func Convert1232(rawValue string) (float64, error) {
+	const byteSize = 4
+	const offset = float64(0)
+	const maxSize = 1<<(byteSize*bitsInByte) - 1
+	const multiplier = float64(1)
+	rawInt, err := strconv.ParseUint(rawValue, 16, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse uint: %w", err)
+	}
+
+	// Check if the value is equal to the maximum value for the given size.
+	if rawInt == maxSize {
+		return 0, errNotFound
+	}
+
+	// Check if the value is in the error set.
+	if slices.Contains([]uint64{4294967295}, rawInt) {
+		return 0, errNotFound
+	}
+	// Check if the value is less than the minimum value.
+	if rawInt < 0 {
+		return 0, errNotFound
+	}
+	// Check if the value is greater than the maximum value.
+	if rawInt > 4294966294 {
+		return 0, errNotFound
+	}
+	return float64(rawInt)*multiplier + offset, nil
+}
+
 // Convert197 converts the given raw value to a float64.
 // Unit: 'RPM' Min: '0' Max: '64255'.
 func Convert197(rawValue string) (float64, error) {
