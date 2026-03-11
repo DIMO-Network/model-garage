@@ -922,10 +922,7 @@ func ToPowertrainTransmissionActualGear0(originalDoc []byte, val string) (float6
 		return 0, err
 	}
 
-	a, b, _, _, err := splitUint32ToBytes(raw)
-	if err != nil {
-		return 0, err
-	}
+	a, b, _, _ := splitUint32ToBytes(raw)
 
 	if a&0x01 == 0 {
 		return 0, errNotFound
@@ -947,10 +944,7 @@ func ToPowertrainTransmissionActualGearRatio0(originalDoc []byte, val string) (f
 		return 0, err
 	}
 
-	a, b, c, d, err := splitUint32ToBytes(raw)
-	if err != nil {
-		return 0, err
-	}
+	a, b, c, d := splitUint32ToBytes(raw)
 
 	if a&0x01 == 0 {
 		return 0, errNotFound
