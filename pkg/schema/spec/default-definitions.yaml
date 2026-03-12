@@ -143,6 +143,9 @@
 - vspecName: Vehicle.OBD.LongTermFuelTrim1
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
+- vspecName: Vehicle.OBD.LongTermFuelTrim2
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
 - vspecName: Vehicle.OBD.ShortTermFuelTrim1
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
@@ -381,5 +384,29 @@
     - VEHICLE_NON_LOCATION_DATA
 
 - vspecName: Vehicle.Connectivity.Cellular.IsJammingDetected
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.OBD.MaxMAF
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.OBD.ThrottlePosition
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.OBD.EthanolPercent
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.OBD.FuelRailPressure
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Powertrain.Transmission.ActualGearRatio
+  requiredPrivileges:
+    - VEHICLE_NON_LOCATION_DATA
+
+- vspecName: Vehicle.Powertrain.Transmission.ActualGear
   requiredPrivileges:
     - VEHICLE_NON_LOCATION_DATA
