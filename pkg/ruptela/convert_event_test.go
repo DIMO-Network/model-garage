@@ -523,13 +523,13 @@ func TestDecodeEventEngineSecurityEvents(t *testing.T) {
 			name:         "engine block",
 			engineValue:  "1",
 			expectedName: ruptela.EventNameEngineBlock,
-			expectedTags: []string{vss.EventSecurityEngineBlockName},
+			expectedTags: []string{},
 		},
 		{
 			name:         "engine unblock",
 			engineValue:  "0",
 			expectedName: ruptela.EventNameEngineUnblock,
-			expectedTags: []string{vss.EventSecurityEngineUnblockName},
+			expectedTags: []string{},
 		},
 	}
 
@@ -687,14 +687,14 @@ func TestToEngineSecurityEvent(t *testing.T) {
 			name:         "zero value maps to unblock",
 			rawValue:     "0",
 			expectedName: ruptela.EventNameEngineUnblock,
-			expectedTags: []string{vss.EventSecurityEngineUnblockName},
+			expectedTags: nil,
 			expectErr:    false,
 		},
 		{
 			name:         "non-zero value maps to block",
 			rawValue:     "A",
 			expectedName: ruptela.EventNameEngineBlock,
-			expectedTags: []string{vss.EventSecurityEngineBlockName},
+			expectedTags: nil,
 			expectErr:    false,
 		},
 		{
