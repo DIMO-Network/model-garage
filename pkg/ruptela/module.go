@@ -67,9 +67,16 @@ func (m Module) CloudEventConvert(_ context.Context, msgData []byte) ([]cloudeve
 	if err != nil {
 		return nil, nil, err
 	}
+	// Status and fingerprint share the same ID (identical payload).
+	// Events get a separate ID since they represent different data.
+	statusID := ksuid.New().String()
 	hdrs := make([]cloudevent.CloudEventHeader, 0, len(cloudEventTypes))
 	for _, cloudEventType := range cloudEventTypes {
-		cloudEventHdr := createCloudEventHdr(&event, producer, subject, cloudEventType)
+		id := statusID
+		if cloudEventType == cloudevent.TypeEvents {
+			id = ksuid.New().String()
+		}
+		cloudEventHdr := createCloudEventHdr(&event, producer, subject, id, cloudEventType)
 		hdrs = append(hdrs, cloudEventHdr)
 	}
 
@@ -100,10 +107,10 @@ func (m Module) determineSubject(event *RuptelaEvent, producer string) string {
 }
 
 // createCloudEvent creates a cloud event from a ruptela event.
-func createCloudEventHdr(event *RuptelaEvent, producer, subject, eventType string) cloudevent.CloudEventHeader {
+func createCloudEventHdr(event *RuptelaEvent, producer, subject, id, eventType string) cloudevent.CloudEventHeader {
 	return cloudevent.CloudEventHeader{
 		DataContentType: "application/json",
-		ID:              ksuid.New().String(),
+		ID:              id,
 		Subject:         subject,
 		Source:          "dimo/integration/2lcaMFuCO0HJIUfdq8o780Kx5n3",
 		SpecVersion:     "1.0",
