@@ -147,6 +147,15 @@ func TestCloudEventConvert(t *testing.T) {
 				cloudEvent := hdrs[0]
 				assert.Equal(t, tt.expectedSubject, cloudEvent.Subject)
 				assert.Equal(t, tt.expectedProducer, cloudEvent.Producer)
+
+				// Status and fingerprint share the same ID; events gets a new one.
+				for i := 1; i < len(hdrs); i++ {
+					if hdrs[i].Type == "dimo.events" {
+						assert.NotEqual(t, hdrs[0].ID, hdrs[i].ID, "events header should have a different ID")
+					} else {
+						assert.Equal(t, hdrs[0].ID, hdrs[i].ID, "header %d should share ID with header 0", i)
+					}
+				}
 			}
 		})
 	}
