@@ -186,9 +186,9 @@ func ToEngineSecurityEvent(rawValue string) (vss.EventData, error) {
 		return vss.EventData{}, fmt.Errorf("could not parse uint from engine security event: %w", err)
 	}
 	if rawInt != 0 {
-		return vss.EventData{Name: EventNameEngineBlock, Tags: []string{vss.EventSecurityEngineBlockName}}, nil
+		return vss.EventData{Name: EventNameEngineBlock}, nil
 	}
-	return vss.EventData{Name: EventNameEngineUnblock, Tags: []string{vss.EventSecurityEngineUnblockName}}, nil
+	return vss.EventData{Name: EventNameEngineUnblock}, nil
 }
 
 // ToCorneringEventData parses a hex cornering value into EventData.
