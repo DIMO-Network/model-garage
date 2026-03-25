@@ -165,8 +165,9 @@ func ToChassisAxleRow1WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 	if err != nil {
 		return 0, err
 	}
+	cPsi := ConvertPSIToKPa(psi)
 
-	return ConvertPSIToKPa(psi), nil
+	return ignoreZero(cPsi, nil)
 }
 
 // ToChassisAxleRow1WheelLeftTirePressure1 converts data from field 'signals.965' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Left.Tire.Pressure' of type float64.
@@ -177,8 +178,9 @@ func ToChassisAxleRow1WheelLeftTirePressure1(originalDoc []byte, val string) (fl
 	if err != nil {
 		return 0, err
 	}
+	cPsi := ConvertPSIToKPa(psi)
 
-	return ConvertPSIToKPa(psi), nil
+	return ignoreZero(cPsi, nil)
 }
 
 // ToChassisAxleRow1WheelRightTirePressure0 converts data from field 'signals.961' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure' of type float64.
@@ -189,8 +191,9 @@ func ToChassisAxleRow1WheelRightTirePressure0(originalDoc []byte, val string) (f
 	if err != nil {
 		return 0, err
 	}
+	cPsi := ConvertPSIToKPa(psi)
 
-	return ConvertPSIToKPa(psi), nil
+	return ignoreZero(cPsi, nil)
 }
 
 // ToChassisAxleRow1WheelRightTirePressure1 converts data from field 'signals.966' of type string to 'Vehicle.Chassis.Axle.Row1.Wheel.Right.Tire.Pressure' of type float64.
@@ -201,8 +204,9 @@ func ToChassisAxleRow1WheelRightTirePressure1(originalDoc []byte, val string) (f
 	if err != nil {
 		return 0, err
 	}
+	cPsi := ConvertPSIToKPa(psi)
 
-	return ConvertPSIToKPa(psi), nil
+	return ignoreZero(cPsi, nil)
 }
 
 // ToChassisAxleRow2WheelLeftTirePressure0 converts data from field 'signals.962' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure' of type float64.
@@ -214,7 +218,9 @@ func ToChassisAxleRow2WheelLeftTirePressure0(originalDoc []byte, val string) (fl
 		return 0, err
 	}
 
-	return ConvertPSIToKPa(psi), nil
+	cPsi := ConvertPSIToKPa(psi)
+
+	return ignoreZero(cPsi, nil)
 }
 
 // ToChassisAxleRow2WheelLeftTirePressure1 converts data from field 'signals.967' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Left.Tire.Pressure' of type float64.
@@ -226,7 +232,9 @@ func ToChassisAxleRow2WheelLeftTirePressure1(originalDoc []byte, val string) (fl
 		return 0, err
 	}
 
-	return ConvertPSIToKPa(psi), nil
+	cPsi := ConvertPSIToKPa(psi)
+
+	return ignoreZero(cPsi, nil)
 }
 
 // ToChassisAxleRow2WheelRightTirePressure0 converts data from field 'signals.963' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure' of type float64.
@@ -238,7 +246,9 @@ func ToChassisAxleRow2WheelRightTirePressure0(originalDoc []byte, val string) (f
 		return 0, err
 	}
 
-	return ConvertPSIToKPa(psi), nil
+	cPsi := ConvertPSIToKPa(psi)
+
+	return ignoreZero(cPsi, nil)
 }
 
 // ToChassisAxleRow2WheelRightTirePressure1 converts data from field 'signals.968' of type string to 'Vehicle.Chassis.Axle.Row2.Wheel.Right.Tire.Pressure' of type float64.
@@ -250,7 +260,9 @@ func ToChassisAxleRow2WheelRightTirePressure1(originalDoc []byte, val string) (f
 		return 0, err
 	}
 
-	return ConvertPSIToKPa(psi), nil
+	cPsi := ConvertPSIToKPa(psi)
+
+	return ignoreZero(cPsi, nil)
 }
 
 // ToChassisAxleRow3Weight0 converts data from field 'signals.53' of type string to 'Vehicle.Chassis.Axle.Row3.Weight' of type float64.
