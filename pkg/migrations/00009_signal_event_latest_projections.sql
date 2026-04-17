@@ -74,10 +74,13 @@ ALTER TABLE signal DROP PROJECTION IF EXISTS signal_latest_by_subject_source_nam
 ALTER TABLE event DROP PROJECTION IF EXISTS event_latest_by_subject_source_name;
 -- +goose StatementEnd
 
+-- Drop the per-table override and fall back to the server default
+-- (currently 'ignore' on DIMO's cluster), matching the pre-migration state.
+
 -- +goose StatementBegin
-ALTER TABLE signal MODIFY SETTING deduplicate_merge_projection_mode = 'throw';
+ALTER TABLE signal RESET SETTING deduplicate_merge_projection_mode;
 -- +goose StatementEnd
 
 -- +goose StatementBegin
-ALTER TABLE event MODIFY SETTING deduplicate_merge_projection_mode = 'throw';
+ALTER TABLE event RESET SETTING deduplicate_merge_projection_mode;
 -- +goose StatementEnd
