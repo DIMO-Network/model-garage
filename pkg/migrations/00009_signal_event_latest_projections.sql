@@ -13,12 +13,12 @@ ALTER TABLE signal MODIFY SETTING deduplicate_merge_projection_mode = 'rebuild';
 ALTER TABLE event MODIFY SETTING deduplicate_merge_projection_mode = 'rebuild';
 -- +goose StatementEnd
 
--- Aggregating projection that answers "latest value per signal name" and
--- "last seen" queries from a few rows per (subject, source, name) rather
--- than a full-history scan of the signal table. The argMaxIf/maxIf
--- aggregates on value_location exclude (0, 0) points so the projection can
--- serve the location-latest query directly. The count() piggybacks data
--- summary use cases.
+-- Aggregating projection that answers "latest value per signal name",
+-- "last seen", and per-name summary (count + min/max timestamp) queries
+-- from a few rows per (subject, source, name) rather than a full-history
+-- scan of the signal table. The argMaxIf/maxIf aggregates on value_location
+-- exclude (0, 0) points so the projection can serve the location-latest
+-- query directly. min(timestamp) + count() serve data summary use cases.
 
 -- +goose StatementBegin
 ALTER TABLE signal ADD PROJECTION signal_latest_by_subject_source_name (
@@ -27,6 +27,7 @@ ALTER TABLE signal ADD PROJECTION signal_latest_by_subject_source_name (
         source,
         name,
         max(timestamp),
+        min(timestamp),
         argMax(value_number, timestamp),
         argMax(value_string, timestamp),
         argMaxIf(value_location, timestamp, (value_location.latitude != 0) OR (value_location.longitude != 0)),
@@ -51,6 +52,7 @@ ALTER TABLE event ADD PROJECTION event_latest_by_subject_source_name (
         source,
         name,
         max(timestamp),
+        min(timestamp),
         argMax(producer, timestamp),
         argMax(cloud_event_id, timestamp),
         count()
