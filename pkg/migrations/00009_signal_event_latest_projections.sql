@@ -21,7 +21,7 @@ ALTER TABLE event MODIFY SETTING deduplicate_merge_projection_mode = 'rebuild';
 -- query directly. min(timestamp) + count() serve data summary use cases.
 
 -- +goose StatementBegin
-ALTER TABLE signal ADD PROJECTION signal_latest_by_subject_source_name (
+ALTER TABLE signal ADD PROJECTION IF NOT EXISTS signal_latest_by_subject_source_name (
     SELECT
         subject,
         source,
@@ -40,13 +40,13 @@ ALTER TABLE signal ADD PROJECTION signal_latest_by_subject_source_name (
 -- +goose StatementEnd
 
 -- +goose StatementBegin
-ALTER TABLE signal MATERIALIZE PROJECTION signal_latest_by_subject_source_name;
+ALTER TABLE signal MATERIALIZE PROJECTION IF EXISTS signal_latest_by_subject_source_name;
 -- +goose StatementEnd
 
 -- Same shape for the event table (no value_ columns on events).
 
 -- +goose StatementBegin
-ALTER TABLE event ADD PROJECTION event_latest_by_subject_source_name (
+ALTER TABLE event ADD PROJECTION IF NOT EXISTS event_latest_by_subject_source_name (
     SELECT
         subject,
         source,
@@ -61,7 +61,7 @@ ALTER TABLE event ADD PROJECTION event_latest_by_subject_source_name (
 -- +goose StatementEnd
 
 -- +goose StatementBegin
-ALTER TABLE event MATERIALIZE PROJECTION event_latest_by_subject_source_name;
+ALTER TABLE event MATERIALIZE PROJECTION IF EXISTS event_latest_by_subject_source_name;
 -- +goose StatementEnd
 
 -- +goose Down
