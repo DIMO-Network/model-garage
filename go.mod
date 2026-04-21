@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/99designs/gqlgen v0.17.87
-	github.com/DIMO-Network/clickhouse-infra v0.0.7
+	github.com/DIMO-Network/clickhouse-infra v0.0.8
 	github.com/DIMO-Network/cloudevent v0.2.6
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/ethereum/go-ethereum v1.17.1

@@ -16,9 +16,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func testCHSettings() config.Settings {
+	return config.Settings{
+		Password: "test-password",
+	}
+}
+
 func TestSignalMigration(t *testing.T) {
 	ctx := context.Background()
-	chcontainer, err := container.CreateClickHouseContainer(ctx, config.Settings{})
+	chcontainer, err := container.CreateClickHouseContainer(ctx, testCHSettings())
 	require.NoError(t, err, "Failed to create clickhouse container")
 
 	defer chcontainer.Terminate(ctx)
@@ -58,9 +64,160 @@ func TestSignalMigration(t *testing.T) {
 	assert.NoError(t, err, "Failed to close clickhouse connection")
 }
 
+func TestSignalInsertAfterMigrations(t *testing.T) {
+	ctx := context.Background()
+	chcontainer, err := container.CreateClickHouseContainer(ctx, testCHSettings())
+	require.NoError(t, err, "Failed to create clickhouse container")
+
+	defer chcontainer.Terminate(ctx)
+
+	db, err := chcontainer.GetClickhouseAsDB()
+	require.NoError(t, err, "Failed to get clickhouse db")
+
+	err = migrations.RunGoose(ctx, []string{"up", "-v"}, db)
+	require.NoError(t, err, "Failed to run migration")
+
+	conn, err := chcontainer.GetClickHouseAsConn()
+	require.NoError(t, err, "Failed to get clickhouse connection")
+
+	signal := vss.Signal{
+		CloudEventHeader: cloudevent.CloudEventHeader{
+			Subject:  "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:22892",
+			Source:   "did:ethr:137:0xcd445F4c6bDAD32b68a2939b912150Fe3C88803E",
+			Producer: "did:key:z6MkiTBz1sZ4n4bipYw4v8M4y9Q7gL1Y9s9m4h7G9r2x3w1q",
+		},
+		Data: vss.SignalData{
+			Timestamp:    time.Now().UTC().Truncate(time.Microsecond),
+			Name:         vss.FieldSpeed,
+			ValueNumber:  42,
+			CloudEventID: "signal-insert-regression-test",
+		},
+	}
+
+	batch, err := conn.PrepareBatch(ctx, "INSERT INTO "+vss.TableName)
+	require.NoError(t, err, "Failed to prepare signal batch")
+	defer batch.Close()
+
+	err = batch.Append(vss.SignalToSlice(signal)...)
+	require.NoError(t, err, "Failed to append signal")
+
+	err = batch.Send()
+	require.NoError(t, err, "Failed to send signal")
+
+	rows, err := conn.Query(ctx, fmt.Sprintf("SELECT * FROM %s", vss.TableName))
+	require.NoError(t, err, "Failed to select signal")
+	defer rows.Close()
+
+	signals := []vss.Signal{}
+	for rows.Next() {
+		var signal vss.Signal
+		err = rows.Scan(
+			&signal.Subject,
+			&signal.Data.Timestamp,
+			&signal.Data.Name,
+			&signal.Source,
+			&signal.Producer,
+			&signal.Data.CloudEventID,
+			&signal.Data.ValueNumber,
+			&signal.Data.ValueString,
+			&signal.Data.ValueLocation,
+		)
+		require.NoError(t, err, "Failed to scan signal")
+		signals = append(signals, signal)
+	}
+
+	require.Equal(t, 1, len(signals), "Expected 1 signal")
+	assert.Truef(t, signal.Data.Timestamp.Equal(signals[0].Data.Timestamp), "Signal timestamp mismatch: %v != %v", signal.Data.Timestamp, signals[0].Data.Timestamp)
+	signal.Data.Timestamp = signals[0].Data.Timestamp
+	assert.Equal(t, signal, signals[0], "Signal mismatch")
+
+	err = db.Close()
+	assert.NoError(t, err, "Failed to close DB connection")
+	err = conn.Close()
+	assert.NoError(t, err, "Failed to close clickhouse connection")
+}
+
+func TestSignalLocationInsertAfterMigrations(t *testing.T) {
+	ctx := context.Background()
+	chcontainer, err := container.CreateClickHouseContainer(ctx, testCHSettings())
+	require.NoError(t, err, "Failed to create clickhouse container")
+
+	defer chcontainer.Terminate(ctx)
+
+	db, err := chcontainer.GetClickhouseAsDB()
+	require.NoError(t, err, "Failed to get clickhouse db")
+
+	err = migrations.RunGoose(ctx, []string{"up", "-v"}, db)
+	require.NoError(t, err, "Failed to run migration")
+
+	conn, err := chcontainer.GetClickHouseAsConn()
+	require.NoError(t, err, "Failed to get clickhouse connection")
+
+	signal := vss.Signal{
+		CloudEventHeader: cloudevent.CloudEventHeader{
+			Subject:  "did:erc721:137:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:22892",
+			Source:   "did:ethr:137:0xcd445F4c6bDAD32b68a2939b912150Fe3C88803E",
+			Producer: "did:key:z6MkiTBz1sZ4n4bipYw4v8M4y9Q7gL1Y9s9m4h7G9r2x3w1q",
+		},
+		Data: vss.SignalData{
+			Timestamp:    time.Now().UTC().Truncate(time.Microsecond),
+			Name:         "currentLocationCoordinates",
+			CloudEventID: "signal-location-insert-regression-test",
+			ValueLocation: vss.Location{
+				Latitude:  42.3314,
+				Longitude: -83.0458,
+				HDOP:      0.7,
+				Heading:   135.5,
+			},
+		},
+	}
+
+	batch, err := conn.PrepareBatch(ctx, "INSERT INTO "+vss.TableName)
+	require.NoError(t, err, "Failed to prepare signal batch")
+	defer batch.Close()
+
+	err = batch.Append(vss.SignalToSlice(signal)...)
+	require.NoError(t, err, "Failed to append signal")
+
+	err = batch.Send()
+	require.NoError(t, err, "Failed to send signal")
+
+	rows, err := conn.Query(ctx, fmt.Sprintf("SELECT * FROM %s WHERE name = '%s'", vss.TableName, signal.Data.Name))
+	require.NoError(t, err, "Failed to select signal")
+	defer rows.Close()
+
+	signals := []vss.Signal{}
+	for rows.Next() {
+		var signal vss.Signal
+		err = rows.Scan(
+			&signal.Subject,
+			&signal.Data.Timestamp,
+			&signal.Data.Name,
+			&signal.Source,
+			&signal.Producer,
+			&signal.Data.CloudEventID,
+			&signal.Data.ValueNumber,
+			&signal.Data.ValueString,
+			&signal.Data.ValueLocation,
+		)
+		require.NoError(t, err, "Failed to scan signal")
+		signals = append(signals, signal)
+	}
+
+	require.Equal(t, 1, len(signals), "Expected 1 signal")
+	assert.Truef(t, signal.Data.Timestamp.Equal(signals[0].Data.Timestamp), "Signal timestamp mismatch: %v != %v", signal.Data.Timestamp, signals[0].Data.Timestamp)
+	signal.Data.Timestamp = signals[0].Data.Timestamp
+	assert.Equal(t, signal, signals[0], "Signal mismatch")
+
+	err = db.Close()
+	assert.NoError(t, err, "Failed to close DB connection")
+	err = conn.Close()
+	assert.NoError(t, err, "Failed to close clickhouse connection")
+}
+
 func TestEventMigration(t *testing.T) {
 	ctx := context.Background()
-	chcontainer, err := container.CreateClickHouseContainer(ctx, config.Settings{})
+	chcontainer, err := container.CreateClickHouseContainer(ctx, testCHSettings())
 	require.NoError(t, err, "Failed to create clickhouse container")
 
 	defer chcontainer.Terminate(ctx)
