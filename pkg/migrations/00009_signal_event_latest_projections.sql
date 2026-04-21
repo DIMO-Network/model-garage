@@ -30,8 +30,8 @@ ALTER TABLE signal ADD PROJECTION signal_latest_by_subject_source_name (
         min(timestamp),
         argMax(value_number, timestamp),
         argMax(value_string, timestamp),
-        argMaxIf(value_location, timestamp, (value_location.latitude != 0) OR (value_location.longitude != 0)),
-        maxIf(timestamp, (value_location.latitude != 0) OR (value_location.longitude != 0)),
+        argMaxIf(value_location, timestamp, (tupleElement(value_location, 'latitude') != 0) OR (tupleElement(value_location, 'longitude') != 0)),
+        maxIf(timestamp, (tupleElement(value_location, 'latitude') != 0) OR (tupleElement(value_location, 'longitude') != 0)),
         argMax(producer, timestamp),
         argMax(cloud_event_id, timestamp),
         count()
