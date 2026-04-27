@@ -3,17 +3,17 @@ module github.com/DIMO-Network/model-garage
 go 1.25.0
 
 require (
-	github.com/99designs/gqlgen v0.17.87
+	github.com/99designs/gqlgen v0.17.90
 	github.com/DIMO-Network/clickhouse-infra v0.0.8
-	github.com/DIMO-Network/cloudevent v0.2.6
+	github.com/DIMO-Network/cloudevent v1.0.4
 	github.com/Masterminds/sprig/v3 v3.3.0
-	github.com/ethereum/go-ethereum v1.17.1
+	github.com/ethereum/go-ethereum v1.17.2
 	github.com/segmentio/ksuid v1.0.4
 	github.com/stretchr/testify v1.11.1
-	github.com/teslamotors/fleet-telemetry v0.8.0
+	github.com/teslamotors/fleet-telemetry v0.9.0
 	github.com/tidwall/gjson v1.18.0
-	golang.org/x/mod v0.33.0
-	golang.org/x/tools v0.42.0
+	golang.org/x/mod v0.35.0
+	golang.org/x/tools v0.43.0
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -68,7 +68,7 @@ require (
 	github.com/klauspost/compress v1.18.4 // indirect
 	github.com/lufia/plan9stats v0.0.0-20260216142805-b3301c5f2a88 // indirect
 	github.com/magiconair/properties v1.8.10 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-isatty v0.0.21 // indirect
 	github.com/mdelapenya/tlscert v0.2.0 // indirect
 	github.com/mfridman/interpolate v0.0.2 // indirect
 	github.com/mfridman/xflag v0.1.0 // indirect
@@ -118,12 +118,12 @@ require (
 	go.opentelemetry.io/otel/metric v1.42.0 // indirect
 	go.opentelemetry.io/otel/trace v1.42.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.48.0 // indirect
+	golang.org/x/crypto v0.49.0 // indirect
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
-	golang.org/x/net v0.50.0 // indirect
-	golang.org/x/sync v0.19.0 // indirect
-	golang.org/x/sys v0.41.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/net v0.52.0 // indirect
+	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sys v0.42.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20251222181119-0a764e51fe1b // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260217215200-42d3e9bedb6d // indirect
 	google.golang.org/grpc v1.79.1 // indirect
