@@ -149,6 +149,13 @@ func TestDecodeFingerprint_JapanVIN(t *testing.T) {
 			vinFrame2:   "3233373334202020",
 			vinFrame3:   "2000000000000000",
 		},
+		{
+			name:        "Japan VIN B6AW-0050615 with leading space padding",
+			expectedVIN: "B6AW-0050615",
+			vinFrame1:   "2020202020423641",
+			vinFrame2:   "572D303035303631",
+			vinFrame3:   "3500000000000000",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
