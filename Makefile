@@ -22,6 +22,8 @@ ifneq ($(TAG_COMMIT), $(shell git rev-parse HEAD))
 endif
 
 # Dependency versions
+# Pinned: 'latest' resolved to v2.12.2, whose tarball SHA256 doesn't match
+# the checksum baked into the upstream install script.
 GOLANGCI_VERSION := v2.11.4
 help:
 	@echo "Specify a subcommand:"
