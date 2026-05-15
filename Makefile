@@ -22,7 +22,9 @@ ifneq ($(TAG_COMMIT), $(shell git rev-parse HEAD))
 endif
 
 # Dependency versions
-GOLANGCI_VERSION := latest
+# Pinned: 'latest' resolved to v2.12.2, whose tarball SHA256 doesn't match
+# the checksum baked into the upstream install script.
+GOLANGCI_VERSION := v2.11.4
 help:
 	@echo "Specify a subcommand:"
 	@grep -hE '^[0-9a-zA-Z_-]+:.*?## .*$$' ${MAKEFILE_LIST} | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[0;36m%-20s\033[m %s\n", $$1, $$2}'
