@@ -72,13 +72,13 @@ GROUP BY subject, name, source;
 
 -- Operator backfill (run once, after applying, before telemetry-api switches):
 --
---   INSERT INTO signal_summary
+--   INSERT INTO signal_summary (subject, name, source, count, first_seen, last_seen)
 --   SELECT subject, name, source, toUInt64(count()), min(timestamp), max(timestamp)
 --   FROM signal GROUP BY subject, name, source
 --   SETTINGS max_execution_time = 0, max_memory_usage = 0,
 --            max_bytes_before_external_group_by = 32000000000;
 --
---   INSERT INTO event_summary
+--   INSERT INTO event_summary (subject, name, source, count, first_seen, last_seen)
 --   SELECT subject, name, source, toUInt64(count()), min(timestamp), max(timestamp)
 --   FROM event GROUP BY subject, name, source
 --   SETTINGS max_execution_time = 0, max_memory_usage = 0,

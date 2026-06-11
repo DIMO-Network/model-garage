@@ -73,25 +73,31 @@ WHERE (tupleElement(value_location, 'latitude') != 0) OR (tupleElement(value_loc
 -- the backfill is collapsed by the ReplacingMergeTree version. Operator SQL is
 -- documented in the implementation plan (Phase 2) and duplicated here:
 --
---   INSERT INTO signal_latest
---   SELECT subject, 0 AS kind, name, source,
---          max(timestamp) AS timestamp,
---          argMax(value_number, timestamp) AS value_number,
---          argMax(value_string, timestamp) AS value_string,
---          argMax(value_location, timestamp) AS value_location
+-- NOTE: do not alias the aggregates to source-column names (e.g.
+-- max(timestamp) AS timestamp): the alias shadows the column inside the other
+-- aggregates and ClickHouse rejects the query with "aggregate function found
+-- inside another aggregate function" (error 184). The explicit INSERT column
+-- list maps the SELECT positionally instead.
+--
+--   INSERT INTO signal_latest (subject, kind, name, source, timestamp, value_number, value_string, value_location)
+--   SELECT subject, 0, name, source,
+--          max(timestamp) AS ts,
+--          argMax(value_number, timestamp),
+--          argMax(value_string, timestamp),
+--          argMax(value_location, timestamp)
 --   FROM signal
 --   GROUP BY subject, name, source
 --   SETTINGS max_execution_time = 0, max_memory_usage = 0,
 --            max_bytes_before_external_group_by = 32000000000;
 --
---   INSERT INTO signal_latest
---   SELECT subject, 1 AS kind, name, source,
---          maxIf(timestamp, (tupleElement(value_location, 'latitude') != 0) OR (tupleElement(value_location, 'longitude') != 0)) AS timestamp,
---          0 AS value_number, '' AS value_string,
---          argMaxIf(value_location, timestamp, (tupleElement(value_location, 'latitude') != 0) OR (tupleElement(value_location, 'longitude') != 0)) AS value_location
+--   INSERT INTO signal_latest (subject, kind, name, source, timestamp, value_number, value_string, value_location)
+--   SELECT subject, 1, name, source,
+--          maxIf(timestamp, (tupleElement(value_location, 'latitude') != 0) OR (tupleElement(value_location, 'longitude') != 0)) AS ts,
+--          0, '',
+--          argMaxIf(value_location, timestamp, (tupleElement(value_location, 'latitude') != 0) OR (tupleElement(value_location, 'longitude') != 0))
 --   FROM signal
 --   GROUP BY subject, name, source
---   HAVING timestamp > toDateTime64(0, 6)
+--   HAVING ts > toDateTime64(0, 6)
 --   SETTINGS max_execution_time = 0, max_memory_usage = 0,
 --            max_bytes_before_external_group_by = 32000000000;
 
