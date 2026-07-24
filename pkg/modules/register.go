@@ -7,6 +7,7 @@ import (
 	"github.com/DIMO-Network/model-garage/pkg/autopi"
 	"github.com/DIMO-Network/model-garage/pkg/defaultmodule"
 	"github.com/DIMO-Network/model-garage/pkg/hashdog"
+	"github.com/DIMO-Network/model-garage/pkg/kaufmann"
 	"github.com/DIMO-Network/model-garage/pkg/ruptela"
 	"github.com/DIMO-Network/model-garage/pkg/tesla"
 	"github.com/ethereum/go-ethereum/common"
@@ -68,11 +69,16 @@ func RegisterDefaultModules(
 	fingerprintReg.Override(RuptelaSource.String(), ruptelaModule)
 	eventReg.Override(RuptelaSource.String(), ruptelaModule)
 
-	// Kaufmann
-	signalReg.Override(KaufmannSource.String(), ruptelaModule)
-	cloudEventReg.Override(KaufmannSource.String(), ruptelaModule)
-	fingerprintReg.Override(KaufmannSource.String(), ruptelaModule)
-	eventReg.Override(KaufmannSource.String(), ruptelaModule)
+	// Kaufmann — routes the "r/" family to ruptela and the "kam/" (Kamaleon)
+	// family to the default module, by ds. DIS overrides the CloudEvent
+	// registration with a contract-configured instance (see
+	// cloudeventconvert.go); the zero-value module here suffices for the
+	// signal/event/fingerprint registries, which don't build DIDs.
+	kaufmannModule := &kaufmann.Module{}
+	signalReg.Override(KaufmannSource.String(), kaufmannModule)
+	cloudEventReg.Override(KaufmannSource.String(), kaufmannModule)
+	fingerprintReg.Override(KaufmannSource.String(), kaufmannModule)
+	eventReg.Override(KaufmannSource.String(), kaufmannModule)
 
 	// HashDog
 	hashDogModule := &hashdog.Module{}
