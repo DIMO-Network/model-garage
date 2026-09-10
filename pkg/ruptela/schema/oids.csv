@@ -732,8 +732,8 @@ Remark: if spraying only liquid this value is 100.",No,No,Yes,No,No,No,Yes,Yes,N
 514,TK Touchprint input 6,2,Signed int.,-32751,32767,0.1,°F,"0x8000 – probe error,
 0x8001 – ADC driver is not ready yet,
 0x8002 – data not available",Input can be configured as probe or switch,No,Yes,Yes,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,Yes,No,No,No,Yes,No,,,,
-515,CAN EV State of charge % (SOC),1,Unsigned int.,0,255,0.5,%,0xFF,Remaining charge percentage for battery 1,No,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
-516,CAN EV Distance until recharge,2,Unsigned int.,0,65535,-,km,0xFFFF,Remaining distance for battery 1,No,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
+515,CAN EV State of charge % (SOC),1,Unsigned int.,0,255,0.5,%,"0xFF, 0",Remaining charge percentage for battery 1,No,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
+516,CAN EV Distance until recharge,2,Unsigned int.,0,65535,-,km,"0xFFFF, 0",Remaining distance for battery 1,No,No,Yes,No,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
 517,CAN EV Battery charging state,1,Unsigned int.,0,255,-,-,0xFF,"Charging status for battery 1:
 1 - Charging
 0 - Not charging
@@ -1165,7 +1165,7 @@ IO elements 684 and 685 (""iQFreeze errors"") should be combined (8B + 8B) and s
 717,Last snapshot info,8,Unsigned int.,0x00,0xFFFFFFFFFFFFFFFF,-,-,-,"First byte is reserved (00), second and third bytes represent alert ID, fourth byte represents the source ID of file (00 - Camera A folder on SD card, 01 - Camera B folder on SD card, 02 - Port A camera, 03 - Port B camera, 04 - fatigue sensor), last four bytes represent filename (hexadecimal timestamp of time when the picture was taken)",No,Yes,No,No,No,No,Yes,Yes,Yes,No,No,No,No,No,No,No,No,Yes,Yes,Yes,No,No,Yes,Yes,,,,
 718,Fatigue sensor snapshot on SD card,1,Unsigned int.,0x00,0xFF,-,-,-,Number of snapshots done since the last record was generated.,No,Yes,Yes,No,No,No,Yes,Yes,Yes,No,No,No,No,No,No,No,No,Yes,Yes,Yes,No,No,Yes,Yes,,,,
 719,DOUT activation by Rollover,1,Unsigned int.,0,3,-,-,-,0 - DOUT activtion mechanism is disabled; 1 - DOUT activation mechanism is enabled; 2 - DOUT is activated; 3 - DOUT is deactivated;,No,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes,Yes,,,,
-720,CAN EV Battery2 State of charge % (SOC),1,Unsigned int.,0,255,0.5; 0,%,0xFF,Remaining charge percentage for battery 2,No,No,Yes,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
+720,CAN EV Battery2 State of charge % (SOC),1,Unsigned int.,0,255,0.5; 0,%,"0xFF, 0",Remaining charge percentage for battery 2,No,No,Yes,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
 721,CAN EV Battery2 charging state,1,Unsigned int.,0,255,1; 0,-,0xFF,Charging status for battery 2,No,Yes,Yes,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,Yes,Yes,,,,
 722,OBD EV State of charge % (SOC),1,Unsigned int.,0,255,1; 0,%,-,Remaining electrical vehicle battery level percentage (OBD),No,No,Yes,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,Yes,No,No,No,No,,,,
 723,OBD EV Distance until recharge,2,Unsigned int.,0,65535,1; 0,km,-,Remaining electrical vehicle driving distance in kilometers (OBD),No,No,Yes,No,Yes,Yes,No,No,Yes,No,No,No,No,No,No,No,No,No,No,Yes,No,No,No,No,,,,
