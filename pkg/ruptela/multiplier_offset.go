@@ -1727,7 +1727,7 @@ func Convert515(rawValue string) (float64, error) {
 	}
 
 	// Check if the value is in the error set.
-	if slices.Contains([]uint64{255}, rawInt) {
+	if slices.Contains([]uint64{255, 0}, rawInt) {
 		return 0, errNotFound
 	}
 	// Check if the value is less than the minimum value.
@@ -1759,7 +1759,7 @@ func Convert516(rawValue string) (float64, error) {
 	}
 
 	// Check if the value is in the error set.
-	if slices.Contains([]uint64{65535}, rawInt) {
+	if slices.Contains([]uint64{65535, 0}, rawInt) {
 		return 0, errNotFound
 	}
 	// Check if the value is less than the minimum value.
@@ -2125,7 +2125,7 @@ func Convert720(rawValue string) (float64, error) {
 	}
 
 	// Check if the value is in the error set.
-	if slices.Contains([]uint64{255}, rawInt) {
+	if slices.Contains([]uint64{255, 0}, rawInt) {
 		return 0, errNotFound
 	}
 	// Check if the value is less than the minimum value.
