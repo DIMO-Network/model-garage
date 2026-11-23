@@ -53,5 +53,5 @@ func currentLocationCoordinatesFromV1Data(jsonData []byte) (vss.Location, error)
 	if !pos.Exists() {
 		return vss.Location{}, errNotFound
 	}
-	return posToLocation(pos)
+	return posToLocation(pos, statusHDOPScale)
 }

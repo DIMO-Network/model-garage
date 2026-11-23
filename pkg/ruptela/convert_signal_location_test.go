@@ -48,14 +48,16 @@ func expectedLocationSignals(baseHeader cloudevent.CloudEventHeader) []vss.Signa
 		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 43.2699983, Longitude: -71.50142, HDOP: 0}}},
 		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts, Name: vss.FieldCurrentLocationHeading, ValueNumber: 197.3}},
 		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 1.2}},
-		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 44.2699983, Longitude: -71.50142, HDOP: 0.1}}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 44.2699983, Longitude: -71.50142, HDOP: 0.6}}},
 		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second), Name: vss.FieldCurrentLocationHeading, ValueNumber: 93.9}},
 		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationAltitude, ValueNumber: 0.2}},
-		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 45.2699983, Longitude: -71.50142, HDOP: 0.2}}},
+		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationCoordinates, ValueLocation: vss.Location{Latitude: 45.2699983, Longitude: -71.50142, HDOP: 1.4}}},
 		{CloudEventHeader: baseHeader, Data: vss.SignalData{Timestamp: ts.Add(time.Second * 2), Name: vss.FieldCurrentLocationHeading, ValueNumber: 3.59}},
 	}
 }
 
+// r/v0/loc reports hdop in hundredths: on the same GPS sample, r/v0/s pos.hdop 6 appears here as 60.
+// hdop 0 means the device has no GPS fix; it is passed through as HDOP 0 on purpose.
 var locationInputJSON = `
 	{
 		"subject": "did:erc721:1:0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF:33",
@@ -73,7 +75,7 @@ var locationInputJSON = `
 				{
 					"alt": 12,
 					"dir": 9390,
-					"hdop": 1,
+					"hdop": 60,
 					"lat": 442699983,
 					"lon": -715014200,
 					"ts": 1727360341
@@ -81,7 +83,7 @@ var locationInputJSON = `
 				{
 					"alt": 2,
 					"dir": 359,
-					"hdop": 2,
+					"hdop": 140,
 					"lat": 452699983,
 					"lon": -715014200,
 					"ts": 1727360342
