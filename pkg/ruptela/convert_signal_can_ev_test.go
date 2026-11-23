@@ -84,6 +84,21 @@ func TestCANEVNonZeroStillConverts(t *testing.T) {
 	require.Equal(t, float64(31), got[vss.FieldPowertrainTractionBatteryRange])
 }
 
+// OBD element 723 reports km (oids.csv: multiplier 1, unit km) and Vehicle.Powertrain.TractionBattery.Range
+// is in km, so the value passes through. 0x13C is a real reading from a 2026 Honda CR-V.
+func TestOBDEVRangeIsKilometers(t *testing.T) {
+	t.Parallel()
+	event := canEVPayload(t, map[string]string{
+		"409": "1",
+		"723": "13C", // OBD EV distance until recharge: 316 km
+	})
+
+	signals, err := ruptela.SignalsFromV1Payload(event)
+	require.NoError(t, err)
+
+	require.Equal(t, float64(316), signalValues(signals)[vss.FieldPowertrainTractionBatteryRange])
+}
+
 func TestCANEVBattery2ZeroIsNotAvailable(t *testing.T) {
 	t.Parallel()
 	event := canEVPayload(t, map[string]string{

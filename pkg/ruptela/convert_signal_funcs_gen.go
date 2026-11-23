@@ -883,12 +883,8 @@ func ToPowertrainTractionBatteryChargingPower0(originalDoc []byte, val string) (
 // Vehicle.Powertrain.TractionBattery.Range: Remaining range in kilometers using only battery.
 // Unit: 'km'
 func ToPowertrainTractionBatteryRange0(originalDoc []byte, val string) (float64, error) {
-	floatValKm, err := Convert723(val)
-	if err != nil {
-		return 0, err
-	}
-	// convert km to m
-	return floatValKm / 1000, nil
+	// Element 723 is already in km, the unit of Vehicle.Powertrain.TractionBattery.Range.
+	return Convert723(val)
 }
 
 // ToPowertrainTractionBatteryRange1 converts data from field 'signals.516' of type string to 'Vehicle.Powertrain.TractionBattery.Range' of type float64.
