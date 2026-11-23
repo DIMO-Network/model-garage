@@ -74,7 +74,7 @@ func SignalsFromLocationPayload(event cloudevent.RawEvent) ([]vss.Signal, error)
 			return true
 		})
 		// Special case location.
-		if coordLoc, err := posToLocation(sigData); err == nil {
+		if coordLoc, err := posToLocation(sigData, locationHDOPScale); err == nil {
 			sd := vss.SignalData{
 				Name:         vss.FieldCurrentLocationCoordinates,
 				Timestamp:    ts,
@@ -124,17 +124,28 @@ func NameFromV2Signal(sigResult gjson.Result) (string, error) {
 	return signalName.String(), nil
 }
 
+const (
+	// statusHDOPScale is the divisor for r/v0/s pos.hdop, which follows the Ruptela record header
+	// (protocol 1.131 §1.2.10: "Value is multiplied by 10").
+	statusHDOPScale = 10
+	// locationHDOPScale is the divisor for r/v0/loc samples. The 1 Hz location array is a DIMO
+	// firmware extension outside the Ruptela protocol; it reports hdop in hundredths, so the same
+	// GPS sample reads 6 in r/v0/s and 60 in r/v0/loc.
+	locationHDOPScale = 100
+)
+
 // posToLocation converts a gjson.Result representing an Ruptela location object with lat, lon,
-// and optional hdop fields into a vss.Location.
+// and optional hdop fields into a vss.Location. hdopScale is the payload's hdop divisor
+// (statusHDOPScale or locationHDOPScale).
 //
 // If lat or lon are absent or equal to the sentinel value -0x80000000 then this function returns
 // errNotFound. If hdop is absent or equal to the sentinel 0xff then HDOP is set to zero.
-// Appropriate scaling factors are applied.
+// A literal hdop of 0 means the device has no GPS fix; it is passed through as HDOP 0 on purpose.
 //
 // This function is outside of the code generation regime because it combines two or three fields
 // of a Ruptela location object into one, and these fields can appear in at least two kinds of
 // locations in JSON, depending on the dataversion.
-func posToLocation(loc gjson.Result) (vss.Location, error) {
+func posToLocation(loc gjson.Result, hdopScale float64) (vss.Location, error) {
 	latResult := loc.Get("lat")
 	lonResult := loc.Get("lon")
 	if !latResult.Exists() || latResult.Value() == nil || !lonResult.Exists() || lonResult.Value() == nil {
@@ -159,7 +170,7 @@ func posToLocation(loc gjson.Result) (vss.Location, error) {
 			return vss.Location{}, fmt.Errorf("%w, field 'hdop' is not of type 'float64' got '%v' of type '%T'", convert.InvalidTypeError(), hdopResult.Value(), hdopResult.Value())
 		}
 		if hdopVal != 0xff {
-			hdop = hdopVal / 10
+			hdop = hdopVal / hdopScale
 		}
 	}
 	return vss.Location{
