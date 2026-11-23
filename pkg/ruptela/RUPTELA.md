@@ -53,7 +53,7 @@ Ruptela provides data through multiple channels:
 2. **CAN Signals** - Direct CAN bus data (also prefixed with `signals.`)
 3. **Position Data** - GPS data (prefixed with `pos.`)
    - HDOP: r/v0/s pos.hdop is in tenths (Ruptela Protocol 1.131 §1.2.10); r/v0/loc hdop is in hundredths (DIMO firmware extension). 0 means no GPS fix and is passed through as HDOP 0.
-   - Status records captured while the device was offline (signals.418 == "0") do not emit position signals: the R1 sends them later stamped with the send time. This is temporary until the ingest lambda re-dates them to their capture time.
+   - Status records captured while the device was offline (signals.418 == "0") are buffered and sent after it reconnects. The ingest lambda re-dates them to their capture time from element 525 (uptime), so their positions are converted like any other.
 4. **DTC Codes** - Diagnostic trouble codes (`dtc_codes`)
 
 ### Multiplier and Offset
